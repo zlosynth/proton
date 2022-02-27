@@ -7,3 +7,4 @@ backwards compatibility.
 ## Unreleased
 
 * Initialize the project with READMEs and licensing.
+* Add schetch of the front panel.
