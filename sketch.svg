@@ -26,11 +26,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4142136"
-     inkscape:cx="-39.59798"
-     inkscape:cy="284.61048"
+     inkscape:zoom="1"
+     inkscape:cx="-73.999998"
+     inkscape:cy="205.49999"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer7"
      inkscape:document-rotation="0"
      showgrid="false"
      inkscape:window-width="1916"
@@ -752,7 +752,7 @@
      style="display:inline">
     <g
        id="g1465"
-       transform="matrix(0.24383466,-0.99415625,0.99415625,0.24383466,-15.223567,88.061121)">
+       transform="matrix(0.24383466,-0.99415625,0.99415625,0.24383466,-15.048639,88.371245)">
       <g
          id="g16654"
          transform="rotate(-176.58392,30.195161,18.5791)">
@@ -771,7 +771,7 @@
     </g>
     <g
        id="g3140"
-       transform="matrix(0.92769636,0,0,0.92769636,17.772987,2.5376191)"
+       transform="matrix(0.92769636,0,0,0.92769636,16.332825,-3.6792333)"
        style="stroke:#333333">
       <circle
          cx="-22.997816"
@@ -794,7 +794,7 @@
     </g>
     <g
        id="g4470-6"
-       transform="translate(12.65316,49.259844)"
+       transform="translate(12.828088,49.569968)"
        style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
        inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/labels.png"
        inkscape:export-xdpi="899.98114"
@@ -877,7 +877,7 @@
        inkscape:label="Hershey Text"
        style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="g147767"
-       transform="translate(52.119755,0.71921247)"
+       transform="translate(52.294683,1.0293367)"
        inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/labels.png"
        inkscape:export-xdpi="899.98114"
        inkscape:export-ydpi="899.98114">
@@ -1938,18 +1938,18 @@
       </g>
     </g>
     <rect
-       style="fill:#1a1a1a;stroke:#000000;stroke-width:0.2;stroke-linecap:square"
-       id="rect1828"
-       width="41.415176"
-       height="18.360033"
-       x="4.5424137"
-       y="9.3188753" />
-    <rect
        style="fill:#000000;stroke:#000000;stroke-width:0.2;stroke-linecap:square"
        id="rect2446"
        width="13.14665"
        height="0.77750283"
-       x="5.2559834"
-       y="31.878092" />
+       x="32.25428"
+       y="16.343161" />
+    <rect
+       style="display:inline;fill:#1a1a1a;stroke:#000000;stroke-width:0.107598;stroke-linecap:square"
+       id="rect1828-5-4"
+       width="21.592402"
+       height="10.192402"
+       x="5.7457757"
+       y="13.476188" />
   </g>
 </svg>
