@@ -26,9 +26,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.70710678"
-     inkscape:cx="197.9899"
-     inkscape:cy="147.78532"
+     inkscape:zoom="1.2043618"
+     inkscape:cx="-58.952385"
+     inkscape:cy="254.49163"
      inkscape:document-units="mm"
      inkscape:current-layer="layer7"
      inkscape:document-rotation="0"
@@ -171,6 +171,10 @@
        position="33.750913,66.256769"
        orientation="0,-1"
        id="guide30043" />
+    <sodipodi:guide
+       position="6.7419048,49.948067"
+       orientation="0,-1"
+       id="guide5667" />
   </sodipodi:namedview>
   <metadata
      id="metadata5">
@@ -405,10 +409,6 @@
           </g>
         </g>
       </g>
-      <path
-         style="display:inline;fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m 31.859406,119.67912 h 7.028732"
-         id="path22422-3-1-9-8" />
     </g>
     <g
        inkscape:groupmode="layer"
@@ -819,15 +819,15 @@
      inkscape:label="graphical"
      style="display:inline">
     <rect
-       style="fill:#fff6d5;stroke:none;stroke-width:0.251024;stroke-linecap:square"
+       style="fill:#fff6d5;stroke:none;stroke-width:0.24656;stroke-linecap:square"
        id="rect1254"
-       width="50.584373"
-       height="106.14724"
-       x="0.041878819"
-       y="11.186554" />
+       width="47.523998"
+       height="109"
+       x="1.4889066"
+       y="9.7601757" />
     <g
        id="g1465"
-       transform="matrix(0.24383466,-0.99415625,0.99415625,0.24383466,-15.597161,88.534427)">
+       transform="matrix(0.24383466,-0.99415625,0.99415625,0.24383466,-15.597161,88.208168)">
       <g
          id="g16654"
          transform="rotate(-176.58392,30.195161,18.5791)">
@@ -850,7 +850,7 @@
        width="27.299999"
        height="27.799999"
        x="2.2108517"
-       y="11.317097" />
+       y="10.363231" />
     <circle
        cx="-37.946217"
        cy="-42.279861"
@@ -871,7 +871,7 @@
        id="path3048" />
     <g
        id="g4470-6"
-       transform="translate(12.279566,49.73315)"
+       transform="translate(12.279566,49.406891)"
        style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
        inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/labels.png"
        inkscape:export-xdpi="899.98114"
@@ -904,7 +904,7 @@
     </g>
     <g
        id="g18475-2"
-       transform="translate(0.837925,9.5851552)"
+       transform="translate(-0.64917012,8.1454167)"
        inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
        inkscape:export-xdpi="300.05603"
        inkscape:export-ydpi="300.05603"
@@ -937,7 +937,7 @@
     </g>
     <g
        id="g18868-8"
-       transform="translate(-5.756812,9.324675)"
+       transform="translate(-4.2679054,7.8849365)"
        inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
        inkscape:export-xdpi="300.05603"
        inkscape:export-ydpi="300.05603"
@@ -970,7 +970,7 @@
     </g>
     <g
        id="g18906-6"
-       transform="translate(-5.6977307,106.41947)"
+       transform="translate(-4.2088241,107.86034)"
        inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
        inkscape:export-xdpi="300.05603"
        inkscape:export-ydpi="300.05603"
@@ -1003,7 +1003,7 @@
     </g>
     <g
        id="g18944-6"
-       transform="translate(35.511069,-7.715887)"
+       transform="translate(34.023974,-6.2750143)"
        inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
        inkscape:export-xdpi="300.05603"
        inkscape:export-ydpi="300.05603"
@@ -1040,680 +1040,6 @@
        id="id_V/Oct"
        style="fill:#000000;stroke:#f6f5f4;stroke-width:1.25"
        r="2.375" />
-    <g
-       id="g4470-6-68-4"
-       transform="translate(7.0951368,98.574088)"
-       style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
-       inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
-       inkscape:export-xdpi="300.05603"
-       inkscape:export-ydpi="300.05603">
-      <path
-         style="fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -3.0435722,13.312797 h 2"
-         id="path3194-7-8-9" />
-      <path
-         style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -2.0435722,12.312797 v 2"
-         id="path3194-3-5-43-5"
-         sodipodi:nodetypes="cc" />
-    </g>
-    <g
-       id="g2066"
-       transform="translate(-3.7785469,-1.2336657)">
-      <path
-         sodipodi:type="star"
-         sodipodi:cx="18.936201"
-         sodipodi:cy="113.1658"
-         sodipodi:arg1="0"
-         sodipodi:arg2="1"
-         inkscape:rounded="0"
-         sodipodi:sides="3"
-         sodipodi:r1="4"
-         sodipodi:r2="4"
-         style="display:inline;fill:#9a9996;stroke:#9a9996;stroke-width:0.1"
-         id="path879"
-         inkscape:flatsided="false"
-         inkscape:randomized="0"
-         d="m 22.936201,113.1658 -1.838791,3.36589 -4.161209,0.0982 -1.995546,-3.27538 1.995546,-3.65282 3.834336,-0.0905 z" />
-      <circle
-         cx="18.936201"
-         cy="113.16577"
-         r="2.375"
-         id="circle883"
-         style="display:inline;fill:#000000;stroke:#f6f5f4;stroke-width:1.25" />
-    </g>
-    <g
-       id="g4470-6-68-0"
-       transform="translate(17.203453,98.574088)"
-       style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
-       inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
-       inkscape:export-xdpi="300.05603"
-       inkscape:export-ydpi="300.05603">
-      <path
-         style="fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -3.0435722,13.312797 h 2"
-         id="path3194-7-8-4" />
-      <path
-         style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -2.0435722,12.312797 v 2"
-         id="path3194-3-5-43-8"
-         sodipodi:nodetypes="cc" />
-    </g>
-    <g
-       id="g2070"
-       transform="translate(-5.0361358,-1.2336657)">
-      <path
-         sodipodi:type="star"
-         sodipodi:cx="30.302107"
-         sodipodi:cy="113.1658"
-         sodipodi:arg1="0"
-         sodipodi:arg2="1"
-         inkscape:rounded="0"
-         sodipodi:sides="3"
-         sodipodi:r1="4"
-         sodipodi:r2="4"
-         style="fill:#9a9996;stroke:#9a9996;stroke-width:0.1"
-         id="path855"
-         inkscape:flatsided="false"
-         inkscape:randomized="0"
-         d="m 34.302107,113.1658 -1.838791,3.36589 -4.161209,0.0982 -1.995546,-3.27538 1.995546,-3.65282 3.834336,-0.0905 z" />
-      <circle
-         cx="30.302107"
-         cy="113.16577"
-         r="2.375"
-         id="circle859"
-         style="fill:#000000;stroke:#f6f5f4;stroke-width:1.25" />
-    </g>
-    <g
-       id="g4470-6-68-7"
-       transform="translate(27.311771,98.574088)"
-       style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
-       inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
-       inkscape:export-xdpi="300.05603"
-       inkscape:export-ydpi="300.05603">
-      <path
-         style="fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -3.0435722,13.312797 h 2"
-         id="path3194-7-8-1" />
-      <path
-         style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -2.0435722,12.312797 v 2"
-         id="path3194-3-5-43-7"
-         sodipodi:nodetypes="cc" />
-    </g>
-    <g
-       id="g6290"
-       transform="translate(0.40011689)">
-      <path
-         sodipodi:type="star"
-         sodipodi:cx="41.277378"
-         sodipodi:cy="113.1658"
-         sodipodi:arg1="0"
-         sodipodi:arg2="1"
-         inkscape:rounded="0"
-         sodipodi:sides="3"
-         sodipodi:r1="4"
-         sodipodi:r2="4"
-         style="display:inline;fill:#9a9996;stroke:#9a9996;stroke-width:0.1"
-         id="path867"
-         inkscape:flatsided="false"
-         inkscape:randomized="0"
-         transform="translate(-6.3032054,-1.2336657)"
-         d="m 45.277378,113.1658 -1.838791,3.36589 -4.161209,0.0982 -1.995546,-3.27538 1.995546,-3.65282 3.834336,-0.0905 z" />
-      <circle
-         cx="34.974174"
-         cy="111.93211"
-         r="2.375"
-         id="circle871"
-         style="display:inline;fill:#000000;stroke:#f6f5f4;stroke-width:1.25" />
-    </g>
-    <g
-       id="g4470-6-68-27"
-       transform="translate(37.420085,98.574088)"
-       style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
-       inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
-       inkscape:export-xdpi="300.05603"
-       inkscape:export-ydpi="300.05603">
-      <path
-         style="fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -3.0435722,13.312797 h 2"
-         id="path3194-7-8-2" />
-      <path
-         style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -2.0435722,12.312797 v 2"
-         id="path3194-3-5-43-2"
-         sodipodi:nodetypes="cc" />
-    </g>
-    <path
-       sodipodi:type="star"
-       sodipodi:cx="41.26474"
-       sodipodi:cy="98.485931"
-       sodipodi:arg1="0"
-       sodipodi:arg2="1"
-       inkscape:rounded="0"
-       sodipodi:sides="3"
-       sodipodi:r1="4"
-       sodipodi:r2="4"
-       style="display:inline;fill:#9a9996;stroke:#9a9996;stroke-width:0.1"
-       id="path915"
-       inkscape:flatsided="false"
-       inkscape:randomized="0"
-       transform="translate(4.2178649,13.305888)"
-       d="m 45.26474,98.485931 -1.838791,3.365889 -4.161209,0.0982 -1.995546,-3.275378 1.995546,-3.652822 3.834336,-0.0905 z" />
-    <circle
-       cx="45.482609"
-       cy="111.79182"
-       id="circle919"
-       style="display:inline;fill:#000000;stroke:#f6f5f4;stroke-width:1.25"
-       r="2.375" />
-    <g
-       id="g4470-6-68-61"
-       transform="translate(47.528404,98.574088)"
-       style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
-       inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
-       inkscape:export-xdpi="300.05603"
-       inkscape:export-ydpi="300.05603">
-      <path
-         style="fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -3.0435722,13.312797 h 2"
-         id="path3194-7-8-0" />
-      <path
-         style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -2.0435722,12.312797 v 2"
-         id="path3194-3-5-43-61"
-         sodipodi:nodetypes="cc" />
-    </g>
-    <g
-       id="g2054"
-       transform="translate(-2.5554422,-1.3663227)">
-      <path
-         sodipodi:type="star"
-         sodipodi:cx="7.6047797"
-         sodipodi:cy="98.485931"
-         sodipodi:arg1="0"
-         sodipodi:arg2="1"
-         inkscape:rounded="0"
-         sodipodi:sides="3"
-         sodipodi:r1="4"
-         sodipodi:r2="4"
-         style="display:inline;fill:#9a9996;stroke:#9a9996;stroke-width:0.1"
-         id="path891"
-         inkscape:flatsided="false"
-         inkscape:randomized="0"
-         d="m 11.60478,98.485931 -1.8387911,3.365889 -4.1612092,0.0982 -1.9955456,-3.275378 1.9955456,-3.652822 3.8343364,-0.0905 z" />
-      <circle
-         cx="7.6047797"
-         cy="98.485931"
-         r="2.375"
-         id="circle895"
-         style="display:inline;fill:#000000;stroke:#f6f5f4;stroke-width:1.25" />
-    </g>
-    <g
-       id="g4470-6-68-6"
-       transform="translate(7.0951369,83.76156)"
-       style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
-       inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
-       inkscape:export-xdpi="300.05603"
-       inkscape:export-ydpi="300.05603">
-      <path
-         style="fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -3.0435722,13.312797 h 2"
-         id="path3194-7-8-8" />
-      <path
-         style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -2.0435722,12.312797 v 2"
-         id="path3194-3-5-43-9"
-         sodipodi:nodetypes="cc" />
-    </g>
-    <g
-       id="g2058"
-       transform="translate(-3.7784077,-1.3663227)">
-      <path
-         sodipodi:type="star"
-         sodipodi:cx="18.936062"
-         sodipodi:cy="98.485931"
-         sodipodi:arg1="0"
-         sodipodi:arg2="1"
-         inkscape:rounded="0"
-         sodipodi:sides="3"
-         sodipodi:r1="4"
-         sodipodi:r2="4"
-         style="display:inline;fill:#9a9996;stroke:#9a9996;stroke-width:0.1"
-         id="path903"
-         inkscape:flatsided="false"
-         inkscape:randomized="0"
-         d="m 22.936062,98.485931 -1.838791,3.365889 -4.161209,0.0982 -1.995546,-3.275378 1.995546,-3.652822 3.834336,-0.0905 z" />
-      <circle
-         cx="18.936062"
-         cy="98.485931"
-         r="2.375"
-         id="circle907"
-         style="display:inline;fill:#000000;stroke:#f6f5f4;stroke-width:1.25" />
-    </g>
-    <g
-       id="g4470-6-68-2"
-       transform="translate(17.203454,83.76156)"
-       style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
-       inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
-       inkscape:export-xdpi="300.05603"
-       inkscape:export-ydpi="300.05603">
-      <path
-         style="fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -3.0435722,13.312797 h 2"
-         id="path3194-7-8-6" />
-      <path
-         style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -2.0435722,12.312797 v 2"
-         id="path3194-3-5-43-6"
-         sodipodi:nodetypes="cc" />
-    </g>
-    <g
-       id="g2070-6"
-       transform="translate(-5.0361358,-15.905876)"
-       style="display:inline">
-      <path
-         sodipodi:type="star"
-         sodipodi:cx="30.302107"
-         sodipodi:cy="113.1658"
-         sodipodi:arg1="0"
-         sodipodi:arg2="1"
-         inkscape:rounded="0"
-         sodipodi:sides="3"
-         sodipodi:r1="4"
-         sodipodi:r2="4"
-         style="fill:#9a9996;stroke:#9a9996;stroke-width:0.1"
-         id="path855-6"
-         inkscape:flatsided="false"
-         inkscape:randomized="0"
-         d="m 34.302107,113.1658 -1.838791,3.36589 -4.161209,0.0982 -1.995546,-3.27538 1.995546,-3.65282 3.834336,-0.0905 z" />
-      <circle
-         cx="30.302107"
-         cy="113.16577"
-         r="2.375"
-         id="circle859-4"
-         style="fill:#000000;stroke:#f6f5f4;stroke-width:1.25" />
-    </g>
-    <g
-       id="g4470-6-68-7-9"
-       transform="translate(27.311771,83.901877)"
-       style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
-       inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
-       inkscape:export-xdpi="300.05603"
-       inkscape:export-ydpi="300.05603">
-      <path
-         style="fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -3.0435722,13.312797 h 2"
-         id="path3194-7-8-1-5" />
-      <path
-         style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -2.0435722,12.312797 v 2"
-         id="path3194-3-5-43-7-0"
-         sodipodi:nodetypes="cc" />
-    </g>
-    <g
-       id="g6290-4"
-       transform="translate(0.40011688,-14.672211)"
-       style="display:inline">
-      <path
-         sodipodi:type="star"
-         sodipodi:cx="41.277378"
-         sodipodi:cy="113.1658"
-         sodipodi:arg1="0"
-         sodipodi:arg2="1"
-         inkscape:rounded="0"
-         sodipodi:sides="3"
-         sodipodi:r1="4"
-         sodipodi:r2="4"
-         style="display:inline;fill:#9a9996;stroke:#9a9996;stroke-width:0.1"
-         id="path867-8"
-         inkscape:flatsided="false"
-         inkscape:randomized="0"
-         transform="translate(-6.3032054,-1.2336657)"
-         d="m 45.277378,113.1658 -1.838791,3.36589 -4.161209,0.0982 -1.995546,-3.27538 1.995546,-3.65282 3.834336,-0.0905 z" />
-      <circle
-         cx="34.974174"
-         cy="111.93211"
-         r="2.375"
-         id="circle871-7"
-         style="display:inline;fill:#000000;stroke:#f6f5f4;stroke-width:1.25" />
-    </g>
-    <g
-       id="g4470-6-68-27-1"
-       transform="translate(37.420085,83.901877)"
-       style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
-       inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
-       inkscape:export-xdpi="300.05603"
-       inkscape:export-ydpi="300.05603">
-      <path
-         style="fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -3.0435722,13.312797 h 2"
-         id="path3194-7-8-2-7" />
-      <path
-         style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -2.0435722,12.312797 v 2"
-         id="path3194-3-5-43-2-2"
-         sodipodi:nodetypes="cc" />
-    </g>
-    <path
-       sodipodi:type="star"
-       sodipodi:cx="41.26474"
-       sodipodi:cy="98.485931"
-       sodipodi:arg1="0"
-       sodipodi:arg2="1"
-       inkscape:rounded="0"
-       sodipodi:sides="3"
-       sodipodi:r1="4"
-       sodipodi:r2="4"
-       style="display:inline;fill:#9a9996;stroke:#9a9996;stroke-width:0.1"
-       id="path915-7"
-       inkscape:flatsided="false"
-       inkscape:randomized="0"
-       transform="translate(4.2178649,-1.3663227)"
-       d="m 45.26474,98.485931 -1.838791,3.365889 -4.161209,0.0982 -1.995546,-3.275378 1.995546,-3.652822 3.834336,-0.0905 z" />
-    <circle
-       cx="45.482609"
-       cy="97.119621"
-       id="circle919-2"
-       style="display:inline;fill:#000000;stroke:#f6f5f4;stroke-width:1.25"
-       r="2.375" />
-    <g
-       id="g4470-6-68-61-2"
-       transform="translate(47.528404,83.901877)"
-       style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
-       inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
-       inkscape:export-xdpi="300.05603"
-       inkscape:export-ydpi="300.05603">
-      <path
-         style="fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -3.0435722,13.312797 h 2"
-         id="path3194-7-8-0-6" />
-      <path
-         style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -2.0435722,12.312797 v 2"
-         id="path3194-3-5-43-61-1"
-         sodipodi:nodetypes="cc" />
-    </g>
-    <g
-       id="g2054-9"
-       transform="translate(-2.5554422,-15.952708)"
-       style="display:inline">
-      <path
-         sodipodi:type="star"
-         sodipodi:cx="7.6047797"
-         sodipodi:cy="98.485931"
-         sodipodi:arg1="0"
-         sodipodi:arg2="1"
-         inkscape:rounded="0"
-         sodipodi:sides="3"
-         sodipodi:r1="4"
-         sodipodi:r2="4"
-         style="display:inline;fill:#9a9996;stroke:#9a9996;stroke-width:0.1"
-         id="path891-7"
-         inkscape:flatsided="false"
-         inkscape:randomized="0"
-         d="m 11.60478,98.485931 -1.8387911,3.365889 -4.1612092,0.0982 -1.9955456,-3.275378 1.9955456,-3.652822 3.8343364,-0.0905 z" />
-      <circle
-         cx="7.6047797"
-         cy="98.485931"
-         r="2.375"
-         id="circle895-7"
-         style="display:inline;fill:#000000;stroke:#f6f5f4;stroke-width:1.25" />
-    </g>
-    <g
-       id="g4470-6-68-6-6"
-       transform="translate(7.0951371,69.175175)"
-       style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
-       inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
-       inkscape:export-xdpi="300.05603"
-       inkscape:export-ydpi="300.05603">
-      <path
-         style="fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -3.0435722,13.312797 h 2"
-         id="path3194-7-8-8-7" />
-      <path
-         style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -2.0435722,12.312797 v 2"
-         id="path3194-3-5-43-9-3"
-         sodipodi:nodetypes="cc" />
-    </g>
-    <g
-       id="g4470-6-68-6-6-7"
-       transform="translate(14.103343,-0.44150291)"
-       style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
-       inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
-       inkscape:export-xdpi="300.05603"
-       inkscape:export-ydpi="300.05603">
-      <path
-         style="fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -3.0435722,13.312797 h 2"
-         id="path3194-7-8-8-7-6" />
-      <path
-         style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -2.0435722,12.312797 v 2"
-         id="path3194-3-5-43-9-3-3"
-         sodipodi:nodetypes="cc" />
-    </g>
-    <g
-       id="g2058-6"
-       transform="translate(-3.7784077,-15.952708)"
-       style="display:inline">
-      <path
-         sodipodi:type="star"
-         sodipodi:cx="18.936062"
-         sodipodi:cy="98.485931"
-         sodipodi:arg1="0"
-         sodipodi:arg2="1"
-         inkscape:rounded="0"
-         sodipodi:sides="3"
-         sodipodi:r1="4"
-         sodipodi:r2="4"
-         style="display:inline;fill:#9a9996;stroke:#9a9996;stroke-width:0.1"
-         id="path903-5"
-         inkscape:flatsided="false"
-         inkscape:randomized="0"
-         d="m 22.936062,98.485931 -1.838791,3.365889 -4.161209,0.0982 -1.995546,-3.275378 1.995546,-3.652822 3.834336,-0.0905 z" />
-      <circle
-         cx="18.936062"
-         cy="98.485931"
-         r="2.375"
-         id="circle907-6"
-         style="display:inline;fill:#000000;stroke:#f6f5f4;stroke-width:1.25" />
-    </g>
-    <g
-       id="g4470-6-68-2-3"
-       transform="translate(17.203454,69.175175)"
-       style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
-       inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
-       inkscape:export-xdpi="300.05603"
-       inkscape:export-ydpi="300.05603">
-      <path
-         style="fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -3.0435722,13.312797 h 2"
-         id="path3194-7-8-6-9" />
-      <path
-         style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -2.0435722,12.312797 v 2"
-         id="path3194-3-5-43-6-4"
-         sodipodi:nodetypes="cc" />
-    </g>
-    <g
-       id="g2070-6-8"
-       transform="translate(-5.0361358,-30.492261)"
-       style="display:inline">
-      <path
-         sodipodi:type="star"
-         sodipodi:cx="30.302107"
-         sodipodi:cy="113.1658"
-         sodipodi:arg1="0"
-         sodipodi:arg2="1"
-         inkscape:rounded="0"
-         sodipodi:sides="3"
-         sodipodi:r1="4"
-         sodipodi:r2="4"
-         style="fill:#9a9996;stroke:#9a9996;stroke-width:0.1"
-         id="path855-6-8"
-         inkscape:flatsided="false"
-         inkscape:randomized="0"
-         d="m 34.302107,113.1658 -1.838791,3.36589 -4.161209,0.0982 -1.995546,-3.27538 1.995546,-3.65282 3.834336,-0.0905 z" />
-      <circle
-         cx="30.302107"
-         cy="113.16577"
-         r="2.375"
-         id="circle859-4-5"
-         style="fill:#000000;stroke:#f6f5f4;stroke-width:1.25" />
-    </g>
-    <g
-       id="g4470-6-68-7-9-0"
-       transform="translate(27.311771,69.315492)"
-       style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
-       inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
-       inkscape:export-xdpi="300.05603"
-       inkscape:export-ydpi="300.05603">
-      <path
-         style="fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -3.0435722,13.312797 h 2"
-         id="path3194-7-8-1-5-9" />
-      <path
-         style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -2.0435722,12.312797 v 2"
-         id="path3194-3-5-43-7-0-6"
-         sodipodi:nodetypes="cc" />
-    </g>
-    <g
-       id="g6290-4-3"
-       transform="translate(0.40011688,-29.258596)"
-       style="display:inline">
-      <path
-         sodipodi:type="star"
-         sodipodi:cx="41.277378"
-         sodipodi:cy="113.1658"
-         sodipodi:arg1="0"
-         sodipodi:arg2="1"
-         inkscape:rounded="0"
-         sodipodi:sides="3"
-         sodipodi:r1="4"
-         sodipodi:r2="4"
-         style="display:inline;fill:#9a9996;stroke:#9a9996;stroke-width:0.1"
-         id="path867-8-8"
-         inkscape:flatsided="false"
-         inkscape:randomized="0"
-         transform="translate(-6.3032054,-1.2336657)"
-         d="m 45.277378,113.1658 -1.838791,3.36589 -4.161209,0.0982 -1.995546,-3.27538 1.995546,-3.65282 3.834336,-0.0905 z" />
-      <circle
-         cx="34.974174"
-         cy="111.93211"
-         r="2.375"
-         id="circle871-7-5"
-         style="display:inline;fill:#000000;stroke:#f6f5f4;stroke-width:1.25" />
-    </g>
-    <g
-       id="g4470-6-68-27-1-6"
-       transform="translate(37.420085,69.315492)"
-       style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
-       inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
-       inkscape:export-xdpi="300.05603"
-       inkscape:export-ydpi="300.05603">
-      <path
-         style="fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -3.0435722,13.312797 h 2"
-         id="path3194-7-8-2-7-1" />
-      <path
-         style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -2.0435722,12.312797 v 2"
-         id="path3194-3-5-43-2-2-1"
-         sodipodi:nodetypes="cc" />
-    </g>
-    <path
-       sodipodi:type="star"
-       sodipodi:cx="41.26474"
-       sodipodi:cy="98.485931"
-       sodipodi:arg1="0"
-       sodipodi:arg2="1"
-       inkscape:rounded="0"
-       sodipodi:sides="3"
-       sodipodi:r1="4"
-       sodipodi:r2="4"
-       style="display:inline;fill:#9a9996;stroke:#9a9996;stroke-width:0.1"
-       id="path915-7-5"
-       inkscape:flatsided="false"
-       inkscape:randomized="0"
-       transform="translate(4.2178649,-15.952708)"
-       d="m 45.26474,98.485931 -1.838791,3.365889 -4.161209,0.0982 -1.995546,-3.275378 1.995546,-3.652822 3.834336,-0.0905 z" />
-    <circle
-       cx="45.482609"
-       cy="82.533234"
-       id="circle919-2-9"
-       style="display:inline;fill:#000000;stroke:#f6f5f4;stroke-width:1.25"
-       r="2.375" />
-    <g
-       id="g4470-6-68-61-2-8"
-       transform="translate(47.528404,69.315492)"
-       style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
-       inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
-       inkscape:export-xdpi="300.05603"
-       inkscape:export-ydpi="300.05603">
-      <path
-         style="fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -3.0435722,13.312797 h 2"
-         id="path3194-7-8-0-6-4" />
-      <path
-         style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -2.0435722,12.312797 v 2"
-         id="path3194-3-5-43-61-1-8"
-         sodipodi:nodetypes="cc" />
-    </g>
-    <rect
-       style="fill:#000000;stroke:#000000;stroke-width:0.319996;stroke-linecap:square"
-       id="rect2446"
-       width="12.580004"
-       height="2.0800035"
-       x="31.575809"
-       y="18.279417" />
-    <rect
-       style="display:inline;fill:#1a1a1a;stroke:#000000;stroke-width:1.1;stroke-linecap:square;stroke-miterlimit:4;stroke-dasharray:none"
-       id="rect1828-5-4"
-       width="21.592402"
-       height="10.192402"
-       x="5.0646496"
-       y="16.625839" />
-    <rect
-       style="display:inline;fill:none;stroke:#ff00ff;stroke-width:1.1;stroke-linecap:square;stroke-miterlimit:4;stroke-dasharray:none"
-       id="rect1828-5-4-9"
-       width="21.592402"
-       height="10.192402"
-       x="5.0646496"
-       y="16.625839" />
-    <g
-       inkscape:label="Hershey Text"
-       style="display:inline;fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-       id="g22218-4"
-       transform="translate(48.978224,45.009846)">
-      <g
-         transform="translate(-46.423,59.3921)"
-         id="g22216-9"
-         style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
-        <path
-           d="M 129,15.8 V 655 h 32 L 365,97.6 570,652 h 22 V 18.9"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
-           transform="scale(0.00264583,-0.00264583)"
-           id="path22208-0" />
-        <path
-           d="M 132,18.9 V 652"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
-           transform="matrix(0.00264583,0,0,-0.00264583,1.9341,0)"
-           id="path22210-9" />
-        <path
-           d="M 132,31.5 V 646 h 177 l 72,-19 54,-29 37,-37 45,-73 15,-82 v -50 l -3,-66 -9,-76 -25,-53 -45,-66.5 -69,-40.9 -66,-19 -50,-3.1 H 135"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
-           transform="matrix(0.00264583,0,0,-0.00264583,2.64318,0)"
-           id="path22212-1" />
-        <path
-           d="M 132,18.9 V 652"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
-           transform="matrix(0.00264583,0,0,-0.00264583,4.30212,0)"
-           id="path22214-7" />
-      </g>
-    </g>
     <g
        id="g68731"
        transform="translate(0,14.787632)">
@@ -1753,166 +1079,1003 @@
          d="m 2.8743121,104.8931 h 4.353138"
          id="path22422" />
     </g>
-    <path
-       style="display:inline;fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 24.597951,104.8931 h 1.327953"
-       id="path22422-3" />
-    <path
-       style="display:inline;fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 12.399495,104.8931 h 5.520774"
-       id="path22422-3-1" />
-    <path
-       style="display:inline;fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 34.055293,104.87347 h 2.64244"
-       id="path22422-5-6" />
     <g
-       inkscape:label="Hershey Text"
-       style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-       id="g48577"
-       transform="translate(58.253226,21.965833)">
+       id="g4470-6-68-4"
+       transform="translate(7.0929096,98.619317)"
+       style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
+       inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
+       inkscape:export-xdpi="300.05603"
+       inkscape:export-ydpi="300.05603">
+      <path
+         style="fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -3.0435722,13.312797 h 2"
+         id="path3194-7-8-9" />
+      <path
+         style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -2.0435722,12.312797 v 2"
+         id="path3194-3-5-43-5"
+         sodipodi:nodetypes="cc" />
+    </g>
+    <g
+       id="g3589">
       <g
-         transform="translate(-46.1021,82.4534)"
-         id="g48575"
-         style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
+         id="g2066"
+         transform="translate(-3.7785469,-1.2336657)">
         <path
-           d="M 346,315 H 520 V 81.9 L 479,53.6 391,22.1 328,18.9 265,31.5 208,63 l -66,76 -44.4,94 -9.4,110 12.8,107 41,95 66,72 66,32 76,13 82,-13 50,-28 35,-29"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
-           transform="scale(0.00264583,-0.00264583)"
-           id="path48567" />
-        <path
-           d="M 41,15.8 277,662 416,255 H 132 416 L 501,15.8"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
-           transform="matrix(0.00264583,0,0,-0.00264583,1.651,0)"
-           id="path48569" />
-        <path
-           d="M 274,22.1 V 649 H 56.7 495"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
-           transform="matrix(0.00264583,0,0,-0.00264583,3.10091,0)"
-           id="path48571" />
-        <path
-           d="M 466,31.5 H 132 V 356 H 410 132 v 287 h 322"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
-           transform="matrix(0.00264583,0,0,-0.00264583,4.55083,0)"
-           id="path48573" />
+           sodipodi:type="star"
+           sodipodi:cx="18.936201"
+           sodipodi:cy="113.1658"
+           sodipodi:arg1="0"
+           sodipodi:arg2="1"
+           inkscape:rounded="0"
+           sodipodi:sides="3"
+           sodipodi:r1="4"
+           sodipodi:r2="4"
+           style="display:inline;fill:#9a9996;stroke:#9a9996;stroke-width:0.1"
+           id="path879"
+           inkscape:flatsided="false"
+           inkscape:randomized="0"
+           d="m 22.936201,113.1658 -1.838791,3.36589 -4.161209,0.0982 -1.995546,-3.27538 1.995546,-3.65282 3.834336,-0.0905 z" />
+        <circle
+           cx="18.936201"
+           cy="113.16577"
+           r="2.375"
+           id="circle883"
+           style="display:inline;fill:#000000;stroke:#f6f5f4;stroke-width:1.25" />
+      </g>
+      <g
+         inkscape:label="Hershey Text"
+         style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         id="g48689"
+         transform="translate(73.084447,62.954336)">
+        <g
+           transform="translate(-61.5348,56.261)"
+           id="g48687"
+           style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
+          <path
+             d="M 41,15.8 277,662 416,255 H 132 416 L 501,15.8"
+             style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+             transform="scale(0.00264583,-0.00264583)"
+             id="path48677" />
+          <path
+             d="M 135,655 V 217 l 10,-56 28,-60 38,-41.1 57,-31.5 53,-12.6 66,9.4 67,34.7 47,57.1 22,50 6,69 v 416"
+             style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+             transform="matrix(0.00264583,0,0,-0.00264583,1.44991,0)"
+             id="path48679" />
+          <path
+             d="M 132,31.5 V 646 h 177 l 72,-19 54,-29 37,-37 45,-73 15,-82 v -50 l -3,-66 -9,-76 -25,-53 -45,-66.5 -69,-40.9 -66,-19 -50,-3.1 H 135"
+             style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+             transform="matrix(0.00264583,0,0,-0.00264583,3.20145,0)"
+             id="path48681" />
+          <path
+             d="M 132,18.9 V 652"
+             style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+             transform="matrix(0.00264583,0,0,-0.00264583,4.86039,0)"
+             id="path48683" />
+          <path
+             d="m 334,22.1 82,12.5 82,53.6 56,84.8 29,111 v 103 l -16,85 -31,70 -51,66 -69,41 -70,13 -59,-10 -67,-25 -62,-54 -48,-91 -15.5,-72 -3.1,-108 12.6,-82 31,-75 45,-59.9 50,-41 54,-18.9 50,-3.1"
+             style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+             transform="matrix(0.00264583,0,0,-0.00264583,5.56947,0)"
+             id="path48685" />
+        </g>
       </g>
     </g>
     <g
-       inkscape:label="Hershey Text"
-       style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-       id="g48609"
-       transform="translate(41.506515,-18.558637)">
+       id="g4470-6-68-0"
+       transform="translate(17.201227,98.619317)"
+       style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
+       inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
+       inkscape:export-xdpi="300.05603"
+       inkscape:export-ydpi="300.05603">
+      <path
+         style="fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -3.0435722,13.312797 h 2"
+         id="path3194-7-8-4" />
+      <path
+         style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -2.0435722,12.312797 v 2"
+         id="path3194-3-5-43-8"
+         sodipodi:nodetypes="cc" />
+    </g>
+    <g
+       id="g3577">
       <g
-         transform="translate(-37.9717,108.403)"
-         id="g48607"
-         style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
+         id="g2070"
+         transform="translate(-5.0361358,-1.2336657)">
         <path
-           d="m 520,97.6 -66,-50.4 -89,-31.4 -88,12.6 -82,44 -63,75.6 -31,79 -9.6,119 9.6,111 41,91 63,69 72,35 82,6 73,-15 50,-32 16,-19"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
-           transform="scale(0.00264583,-0.00264583)"
-           id="path48603" />
-        <path
-           d="M 44.1,655 255,18.9 466,652"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
-           transform="matrix(0.00264583,0,0,-0.00264583,1.55839,0)"
-           id="path48605" />
+           sodipodi:type="star"
+           sodipodi:cx="30.302107"
+           sodipodi:cy="113.1658"
+           sodipodi:arg1="0"
+           sodipodi:arg2="1"
+           inkscape:rounded="0"
+           sodipodi:sides="3"
+           sodipodi:r1="4"
+           sodipodi:r2="4"
+           style="fill:#9a9996;stroke:#9a9996;stroke-width:0.1"
+           id="path855"
+           inkscape:flatsided="false"
+           inkscape:randomized="0"
+           d="m 34.302107,113.1658 -1.838791,3.36589 -4.161209,0.0982 -1.995546,-3.27538 1.995546,-3.65282 3.834336,-0.0905 z" />
+        <circle
+           cx="30.302107"
+           cy="113.16577"
+           r="2.375"
+           id="circle859"
+           style="fill:#000000;stroke:#f6f5f4;stroke-width:1.25" />
+      </g>
+      <g
+         inkscape:label="Hershey Text"
+         style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         id="g77903"
+         transform="translate(70.044587,14.780137)">
+        <g
+           transform="translate(-45.8745,104.415)"
+           id="g77901"
+           style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
+          <path
+             d="m 220,504 v 32 l 32,62 32,32 62,32 h 126 l 64,-32 31,-32 31,-62 V 472 L 567,410 504,315 189,0 h 441"
+             style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+             transform="scale(0.00264583,-0.00264583)"
+             id="path77899" />
+        </g>
       </g>
     </g>
     <g
-       inkscape:label="Hershey Text"
-       style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-       id="g48617"
-       transform="translate(60.658563,3.5909292)">
+       id="g4470-6-68-7"
+       transform="translate(27.309544,98.619317)"
+       style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
+       inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
+       inkscape:export-xdpi="300.05603"
+       inkscape:export-ydpi="300.05603">
+      <path
+         style="fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -3.0435722,13.312797 h 2"
+         id="path3194-7-8-1" />
+      <path
+         style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -2.0435722,12.312797 v 2"
+         id="path3194-3-5-43-7"
+         sodipodi:nodetypes="cc" />
+    </g>
+    <g
+       id="g3569">
+      <path
+         style="display:inline;fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 31.859406,119.67912 h 7.028732"
+         id="path22422-3-1-9-8" />
       <g
-         transform="translate(-26.7988,100.824)"
-         id="g48615"
-         style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
+         id="g6290"
+         transform="translate(0.40011689)">
         <path
-           d="m 520,97.6 -66,-50.4 -89,-31.4 -88,12.6 -82,44 -63,75.6 -31,79 -9.6,119 9.6,111 41,91 63,69 72,35 82,6 73,-15 50,-32 16,-19"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
-           transform="scale(0.00264583,-0.00264583)"
-           id="path48611" />
-        <path
-           d="M 44.1,655 255,18.9 466,652"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
-           transform="matrix(0.00264583,0,0,-0.00264583,1.55839,0)"
-           id="path48613" />
+           sodipodi:type="star"
+           sodipodi:cx="41.277378"
+           sodipodi:cy="113.1658"
+           sodipodi:arg1="0"
+           sodipodi:arg2="1"
+           inkscape:rounded="0"
+           sodipodi:sides="3"
+           sodipodi:r1="4"
+           sodipodi:r2="4"
+           style="display:inline;fill:#9a9996;stroke:#9a9996;stroke-width:0.1"
+           id="path867"
+           inkscape:flatsided="false"
+           inkscape:randomized="0"
+           transform="translate(-6.3032054,-1.2336657)"
+           d="m 45.277378,113.1658 -1.838791,3.36589 -4.161209,0.0982 -1.995546,-3.27538 1.995546,-3.65282 3.834336,-0.0905 z" />
+        <circle
+           cx="34.974174"
+           cy="111.93211"
+           r="2.375"
+           id="circle871"
+           style="display:inline;fill:#000000;stroke:#f6f5f4;stroke-width:1.25" />
+      </g>
+      <g
+         inkscape:label="Hershey Text"
+         style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         id="g48661"
+         transform="translate(74.787179,67.716836)">
+        <g
+           transform="translate(-43.0209,51.4985)"
+           id="g48659"
+           style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
+          <path
+             d="M 41,15.8 277,662 416,255 H 132 416 L 501,15.8"
+             style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+             transform="scale(0.00264583,-0.00264583)"
+             id="path48649" />
+          <path
+             d="M 135,655 V 217 l 10,-56 28,-60 38,-41.1 57,-31.5 53,-12.6 66,9.4 67,34.7 47,57.1 22,50 6,69 v 416"
+             style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+             transform="matrix(0.00264583,0,0,-0.00264583,1.44991,0)"
+             id="path48651" />
+          <path
+             d="M 132,31.5 V 646 h 177 l 72,-19 54,-29 37,-37 45,-73 15,-82 v -50 l -3,-66 -9,-76 -25,-53 -45,-66.5 -69,-40.9 -66,-19 -50,-3.1 H 135"
+             style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+             transform="matrix(0.00264583,0,0,-0.00264583,3.20145,0)"
+             id="path48653" />
+          <path
+             d="M 132,18.9 V 652"
+             style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+             transform="matrix(0.00264583,0,0,-0.00264583,4.86039,0)"
+             id="path48655" />
+          <path
+             d="m 334,22.1 82,12.5 82,53.6 56,84.8 29,111 v 103 l -16,85 -31,70 -51,66 -69,41 -70,13 -59,-10 -67,-25 -62,-54 -48,-91 -15.5,-72 -3.1,-108 12.6,-82 31,-75 45,-59.9 50,-41 54,-18.9 50,-3.1"
+             style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+             transform="matrix(0.00264583,0,0,-0.00264583,5.56947,0)"
+             id="path48657" />
+        </g>
       </g>
     </g>
     <g
+       id="g4470-6-68-27"
+       transform="translate(37.41786,98.619317)"
+       style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
+       inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
+       inkscape:export-xdpi="300.05603"
+       inkscape:export-ydpi="300.05603">
+      <path
+         style="fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -3.0435722,13.312797 h 2"
+         id="path3194-7-8-2" />
+      <path
+         style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -2.0435722,12.312797 v 2"
+         id="path3194-3-5-43-2"
+         sodipodi:nodetypes="cc" />
+    </g>
+    <path
+       sodipodi:type="star"
+       sodipodi:cx="41.26474"
+       sodipodi:cy="98.485931"
+       sodipodi:arg1="0"
+       sodipodi:arg2="1"
+       inkscape:rounded="0"
+       sodipodi:sides="3"
+       sodipodi:r1="4"
+       sodipodi:r2="4"
+       style="display:inline;fill:#9a9996;stroke:#9a9996;stroke-width:0.1"
+       id="path915"
+       inkscape:flatsided="false"
+       inkscape:randomized="0"
+       transform="translate(4.2178649,13.305888)"
+       d="m 45.26474,98.485931 -1.838791,3.365889 -4.161209,0.0982 -1.995546,-3.275378 1.995546,-3.652822 3.834336,-0.0905 z" />
+    <circle
+       cx="45.482609"
+       cy="111.79182"
+       id="circle919"
+       style="display:inline;fill:#000000;stroke:#f6f5f4;stroke-width:1.25"
+       r="2.375" />
+    <g
        inkscape:label="Hershey Text"
        style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-       id="g48661"
-       transform="translate(74.787179,67.716836)">
+       id="g77891"
+       transform="translate(96.17642,24.846837)">
       <g
-         transform="translate(-43.0209,51.4985)"
-         id="g48659"
+         transform="translate(-51.7897,94.3483)"
+         id="g77889"
          style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
         <path
-           d="M 41,15.8 277,662 416,255 H 132 416 L 501,15.8"
+           d="m 220,504 v 32 l 32,62 32,32 62,32 h 126 l 64,-32 31,-32 31,-62 V 472 L 567,410 504,315 189,0 h 441"
            style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
            transform="scale(0.00264583,-0.00264583)"
-           id="path48649" />
+           id="path77887" />
+      </g>
+    </g>
+    <path
+       style="display:inline;fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 44.820856,119.67912 h 1.327953"
+       id="path22422-3-6" />
+    <g
+       id="g4470-6-68-61"
+       transform="translate(47.526181,98.619317)"
+       style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
+       inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
+       inkscape:export-xdpi="300.05603"
+       inkscape:export-ydpi="300.05603">
+      <path
+         style="fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -3.0435722,13.312797 h 2"
+         id="path3194-7-8-0" />
+      <path
+         style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -2.0435722,12.312797 v 2"
+         id="path3194-3-5-43-61"
+         sodipodi:nodetypes="cc" />
+    </g>
+    <g
+       id="g2054"
+       transform="translate(-2.5554422,-1.4936601)">
+      <path
+         sodipodi:type="star"
+         sodipodi:cx="7.6047797"
+         sodipodi:cy="98.485931"
+         sodipodi:arg1="0"
+         sodipodi:arg2="1"
+         inkscape:rounded="0"
+         sodipodi:sides="3"
+         sodipodi:r1="4"
+         sodipodi:r2="4"
+         style="display:inline;fill:#9a9996;stroke:#9a9996;stroke-width:0.1"
+         id="path891"
+         inkscape:flatsided="false"
+         inkscape:randomized="0"
+         d="m 11.60478,98.485931 -1.8387911,3.365889 -4.1612092,0.0982 -1.9955456,-3.275378 1.9955456,-3.652822 3.8343364,-0.0905 z" />
+      <circle
+         cx="7.6047797"
+         cy="98.485931"
+         r="2.375"
+         id="circle895"
+         style="display:inline;fill:#000000;stroke:#f6f5f4;stroke-width:1.25" />
+    </g>
+    <g
+       inkscape:label="Hershey Text"
+       style="display:inline;fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       id="g22218-4"
+       transform="translate(48.978224,44.882509)">
+      <g
+         transform="translate(-46.423,59.3921)"
+         id="g22216-9"
+         style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
         <path
-           d="M 135,655 V 217 l 10,-56 28,-60 38,-41.1 57,-31.5 53,-12.6 66,9.4 67,34.7 47,57.1 22,50 6,69 v 416"
+           d="M 129,15.8 V 655 h 32 L 365,97.6 570,652 h 22 V 18.9"
            style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
-           transform="matrix(0.00264583,0,0,-0.00264583,1.44991,0)"
-           id="path48651" />
-        <path
-           d="M 132,31.5 V 646 h 177 l 72,-19 54,-29 37,-37 45,-73 15,-82 v -50 l -3,-66 -9,-76 -25,-53 -45,-66.5 -69,-40.9 -66,-19 -50,-3.1 H 135"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
-           transform="matrix(0.00264583,0,0,-0.00264583,3.20145,0)"
-           id="path48653" />
+           transform="scale(0.00264583,-0.00264583)"
+           id="path22208-0" />
         <path
            d="M 132,18.9 V 652"
            style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
-           transform="matrix(0.00264583,0,0,-0.00264583,4.86039,0)"
-           id="path48655" />
-        <path
-           d="m 334,22.1 82,12.5 82,53.6 56,84.8 29,111 v 103 l -16,85 -31,70 -51,66 -69,41 -70,13 -59,-10 -67,-25 -62,-54 -48,-91 -15.5,-72 -3.1,-108 12.6,-82 31,-75 45,-59.9 50,-41 54,-18.9 50,-3.1"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
-           transform="matrix(0.00264583,0,0,-0.00264583,5.56947,0)"
-           id="path48657" />
-      </g>
-    </g>
-    <g
-       inkscape:label="Hershey Text"
-       style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-       id="g48689"
-       transform="translate(73.084447,62.954336)">
-      <g
-         transform="translate(-61.5348,56.261)"
-         id="g48687"
-         style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
-        <path
-           d="M 41,15.8 277,662 416,255 H 132 416 L 501,15.8"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
-           transform="scale(0.00264583,-0.00264583)"
-           id="path48677" />
-        <path
-           d="M 135,655 V 217 l 10,-56 28,-60 38,-41.1 57,-31.5 53,-12.6 66,9.4 67,34.7 47,57.1 22,50 6,69 v 416"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
-           transform="matrix(0.00264583,0,0,-0.00264583,1.44991,0)"
-           id="path48679" />
+           transform="matrix(0.00264583,0,0,-0.00264583,1.9341,0)"
+           id="path22210-9" />
         <path
            d="M 132,31.5 V 646 h 177 l 72,-19 54,-29 37,-37 45,-73 15,-82 v -50 l -3,-66 -9,-76 -25,-53 -45,-66.5 -69,-40.9 -66,-19 -50,-3.1 H 135"
            style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
-           transform="matrix(0.00264583,0,0,-0.00264583,3.20145,0)"
-           id="path48681" />
+           transform="matrix(0.00264583,0,0,-0.00264583,2.64318,0)"
+           id="path22212-1" />
         <path
            d="M 132,18.9 V 652"
            style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
-           transform="matrix(0.00264583,0,0,-0.00264583,4.86039,0)"
-           id="path48683" />
-        <path
-           d="m 334,22.1 82,12.5 82,53.6 56,84.8 29,111 v 103 l -16,85 -31,70 -51,66 -69,41 -70,13 -59,-10 -67,-25 -62,-54 -48,-91 -15.5,-72 -3.1,-108 12.6,-82 31,-75 45,-59.9 50,-41 54,-18.9 50,-3.1"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
-           transform="matrix(0.00264583,0,0,-0.00264583,5.56947,0)"
-           id="path48685" />
+           transform="matrix(0.00264583,0,0,-0.00264583,4.30212,0)"
+           id="path22214-7" />
       </g>
     </g>
+    <g
+       id="g4470-6-68-6"
+       transform="translate(7.0951369,83.67949)"
+       style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
+       inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
+       inkscape:export-xdpi="300.05603"
+       inkscape:export-ydpi="300.05603">
+      <path
+         style="fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -3.0435722,13.312797 h 2"
+         id="path3194-7-8-8" />
+      <path
+         style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -2.0435722,12.312797 v 2"
+         id="path3194-3-5-43-9"
+         sodipodi:nodetypes="cc" />
+    </g>
+    <g
+       id="g4020"
+       transform="translate(0,-0.12733738)">
+      <g
+         id="g2058"
+         transform="translate(-3.7784077,-1.3663227)">
+        <path
+           sodipodi:type="star"
+           sodipodi:cx="18.936062"
+           sodipodi:cy="98.485931"
+           sodipodi:arg1="0"
+           sodipodi:arg2="1"
+           inkscape:rounded="0"
+           sodipodi:sides="3"
+           sodipodi:r1="4"
+           sodipodi:r2="4"
+           style="display:inline;fill:#9a9996;stroke:#9a9996;stroke-width:0.1"
+           id="path903"
+           inkscape:flatsided="false"
+           inkscape:randomized="0"
+           d="m 22.936062,98.485931 -1.838791,3.365889 -4.161209,0.0982 -1.995546,-3.275378 1.995546,-3.652822 3.834336,-0.0905 z" />
+        <circle
+           cx="18.936062"
+           cy="98.485931"
+           r="2.375"
+           id="circle907"
+           style="display:inline;fill:#000000;stroke:#f6f5f4;stroke-width:1.25" />
+      </g>
+      <path
+         style="display:inline;fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 12.399495,104.8931 h 5.520774"
+         id="path22422-3-1" />
+      <g
+         inkscape:label="Hershey Text"
+         style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         id="g48577"
+         transform="translate(58.253226,21.965833)">
+        <g
+           transform="translate(-46.1021,82.4534)"
+           id="g48575"
+           style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
+          <path
+             d="M 346,315 H 520 V 81.9 L 479,53.6 391,22.1 328,18.9 265,31.5 208,63 l -66,76 -44.4,94 -9.4,110 12.8,107 41,95 66,72 66,32 76,13 82,-13 50,-28 35,-29"
+             style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+             transform="scale(0.00264583,-0.00264583)"
+             id="path48567" />
+          <path
+             d="M 41,15.8 277,662 416,255 H 132 416 L 501,15.8"
+             style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+             transform="matrix(0.00264583,0,0,-0.00264583,1.651,0)"
+             id="path48569" />
+          <path
+             d="M 274,22.1 V 649 H 56.7 495"
+             style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+             transform="matrix(0.00264583,0,0,-0.00264583,3.10091,0)"
+             id="path48571" />
+          <path
+             d="M 466,31.5 H 132 V 356 H 410 132 v 287 h 322"
+             style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+             transform="matrix(0.00264583,0,0,-0.00264583,4.55083,0)"
+             id="path48573" />
+        </g>
+      </g>
+    </g>
+    <g
+       id="g4470-6-68-2"
+       transform="translate(17.202898,83.67949)"
+       style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
+       inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
+       inkscape:export-xdpi="300.05603"
+       inkscape:export-ydpi="300.05603">
+      <path
+         style="fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -3.0435722,13.312797 h 2"
+         id="path3194-7-8-6" />
+      <path
+         style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -2.0435722,12.312797 v 2"
+         id="path3194-3-5-43-6"
+         sodipodi:nodetypes="cc" />
+    </g>
+    <g
+       id="g4008"
+       transform="translate(0,-0.26765469)">
+      <g
+         id="g2070-6"
+         transform="translate(-5.0361358,-15.905876)"
+         style="display:inline">
+        <path
+           sodipodi:type="star"
+           sodipodi:cx="30.302107"
+           sodipodi:cy="113.1658"
+           sodipodi:arg1="0"
+           sodipodi:arg2="1"
+           inkscape:rounded="0"
+           sodipodi:sides="3"
+           sodipodi:r1="4"
+           sodipodi:r2="4"
+           style="fill:#9a9996;stroke:#9a9996;stroke-width:0.1"
+           id="path855-6"
+           inkscape:flatsided="false"
+           inkscape:randomized="0"
+           d="m 34.302107,113.1658 -1.838791,3.36589 -4.161209,0.0982 -1.995546,-3.27538 1.995546,-3.65282 3.834336,-0.0905 z" />
+        <circle
+           cx="30.302107"
+           cy="113.16577"
+           r="2.375"
+           id="circle859-4"
+           style="fill:#000000;stroke:#f6f5f4;stroke-width:1.25" />
+      </g>
+      <path
+         style="display:inline;fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 24.597951,104.8931 h 1.327953"
+         id="path22422-3" />
+      <g
+         inkscape:label="Hershey Text"
+         style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         id="g77909"
+         transform="translate(55.723487,0.59694769)">
+        <g
+           transform="translate(-31.5534,103.802)"
+           id="g77907"
+           style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
+          <path
+             d="m 220,504 v 32 l 32,62 32,32 62,32 h 126 l 64,-32 31,-32 31,-62 V 472 L 567,410 504,315 189,0 h 441"
+             style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+             transform="scale(0.00264583,-0.00264583)"
+             id="path77905" />
+        </g>
+      </g>
+    </g>
+    <g
+       id="g4470-6-68-7-9"
+       transform="translate(27.310659,83.67949)"
+       style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
+       inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
+       inkscape:export-xdpi="300.05603"
+       inkscape:export-ydpi="300.05603">
+      <path
+         style="fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -3.0435722,13.312797 h 2"
+         id="path3194-7-8-1-5" />
+      <path
+         style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -2.0435722,12.312797 v 2"
+         id="path3194-3-5-43-7-0"
+         sodipodi:nodetypes="cc" />
+    </g>
+    <g
+       id="g3999"
+       transform="translate(0,-0.26765399)">
+      <g
+         id="g6290-4"
+         transform="translate(0.40011688,-14.672211)"
+         style="display:inline">
+        <path
+           sodipodi:type="star"
+           sodipodi:cx="41.277378"
+           sodipodi:cy="113.1658"
+           sodipodi:arg1="0"
+           sodipodi:arg2="1"
+           inkscape:rounded="0"
+           sodipodi:sides="3"
+           sodipodi:r1="4"
+           sodipodi:r2="4"
+           style="display:inline;fill:#9a9996;stroke:#9a9996;stroke-width:0.1"
+           id="path867-8"
+           inkscape:flatsided="false"
+           inkscape:randomized="0"
+           transform="translate(-6.3032054,-1.2336657)"
+           d="m 45.277378,113.1658 -1.838791,3.36589 -4.161209,0.0982 -1.995546,-3.27538 1.995546,-3.65282 3.834336,-0.0905 z" />
+        <circle
+           cx="34.974174"
+           cy="111.93211"
+           r="2.375"
+           id="circle871-7"
+           style="display:inline;fill:#000000;stroke:#f6f5f4;stroke-width:1.25" />
+      </g>
+      <path
+         style="display:inline;fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 34.055293,104.87347 h 2.64244"
+         id="path22422-5-6" />
+      <g
+         inkscape:label="Hershey Text"
+         style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         id="g48617"
+         transform="translate(60.658563,3.5909292)">
+        <g
+           transform="translate(-26.7988,100.824)"
+           id="g48615"
+           style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
+          <path
+             d="m 520,97.6 -66,-50.4 -89,-31.4 -88,12.6 -82,44 -63,75.6 -31,79 -9.6,119 9.6,111 41,91 63,69 72,35 82,6 73,-15 50,-32 16,-19"
+             style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+             transform="scale(0.00264583,-0.00264583)"
+             id="path48611" />
+          <path
+             d="M 44.1,655 255,18.9 466,652"
+             style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+             transform="matrix(0.00264583,0,0,-0.00264583,1.55839,0)"
+             id="path48613" />
+        </g>
+      </g>
+    </g>
+    <g
+       id="g4470-6-68-27-1"
+       transform="translate(37.418418,83.67949)"
+       style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
+       inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
+       inkscape:export-xdpi="300.05603"
+       inkscape:export-ydpi="300.05603">
+      <path
+         style="fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -3.0435722,13.312797 h 2"
+         id="path3194-7-8-2-7" />
+      <path
+         style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -2.0435722,12.312797 v 2"
+         id="path3194-3-5-43-2-2"
+         sodipodi:nodetypes="cc" />
+    </g>
+    <path
+       sodipodi:type="star"
+       sodipodi:cx="41.26474"
+       sodipodi:cy="98.485931"
+       sodipodi:arg1="0"
+       sodipodi:arg2="1"
+       inkscape:rounded="0"
+       sodipodi:sides="3"
+       sodipodi:r1="4"
+       sodipodi:r2="4"
+       style="display:inline;fill:#9a9996;stroke:#9a9996;stroke-width:0.1"
+       id="path915-7"
+       inkscape:flatsided="false"
+       inkscape:randomized="0"
+       transform="translate(4.2178649,-1.4936601)"
+       d="m 45.26474,98.485931 -1.838791,3.365889 -4.161209,0.0982 -1.995546,-3.275378 1.995546,-3.652822 3.834336,-0.0905 z" />
+    <circle
+       cx="45.482609"
+       cy="96.992287"
+       id="circle919-2"
+       style="display:inline;fill:#000000;stroke:#f6f5f4;stroke-width:1.25"
+       r="2.375" />
+    <g
+       inkscape:label="Hershey Text"
+       style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       id="g77897"
+       transform="translate(82.81342,9.0509099)">
+      <g
+         transform="translate(-38.4267,95.2207)"
+         id="g77895"
+         style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
+        <path
+           d="m 220,504 v 32 l 32,62 32,32 62,32 h 126 l 64,-32 31,-32 31,-62 V 472 L 567,410 504,315 189,0 h 441"
+           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+           transform="scale(0.00264583,-0.00264583)"
+           id="path77893" />
+      </g>
+    </g>
+    <path
+       style="display:inline;fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 44.820856,104.74613 h 1.327953"
+       id="path22422-3-9" />
+    <g
+       id="g4470-6-68-61-2"
+       transform="translate(47.526181,83.67949)"
+       style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
+       inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
+       inkscape:export-xdpi="300.05603"
+       inkscape:export-ydpi="300.05603">
+      <path
+         style="fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -3.0435722,13.312797 h 2"
+         id="path3194-7-8-0-6" />
+      <path
+         style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -2.0435722,12.312797 v 2"
+         id="path3194-3-5-43-61-1"
+         sodipodi:nodetypes="cc" />
+    </g>
+    <path
+       sodipodi:type="star"
+       sodipodi:cx="7.6047797"
+       sodipodi:cy="98.485931"
+       sodipodi:arg1="0"
+       sodipodi:arg2="1"
+       inkscape:rounded="0"
+       sodipodi:sides="3"
+       sodipodi:r1="4"
+       sodipodi:r2="4"
+       style="display:inline;fill:#9a9996;stroke:#9a9996;stroke-width:0.1"
+       id="path891-7"
+       inkscape:flatsided="false"
+       inkscape:randomized="0"
+       d="m 11.60478,98.485931 -1.8387911,3.365889 -4.1612092,0.0982 -1.9955456,-3.275378 1.9955456,-3.652822 3.8343364,-0.0905 z"
+       transform="translate(-2.5554422,-16.29366)" />
+    <circle
+       cx="5.0493374"
+       cy="82.192268"
+       r="2.375"
+       id="circle895-7"
+       style="display:inline;fill:#000000;stroke:#f6f5f4;stroke-width:1.25" />
+    <g
+       transform="translate(3.534815,89.503411)"
+       id="g48607"
+       style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none">
+      <path
+         d="m 520,97.6 -66,-50.4 -89,-31.4 -88,12.6 -82,44 -63,75.6 -31,79 -9.6,119 9.6,111 41,91 63,69 72,35 82,6 73,-15 50,-32 16,-19"
+         style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+         transform="scale(0.00264583,-0.00264583)"
+         id="path48603" />
+      <path
+         d="M 44.1,655 255,18.9 466,652"
+         style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+         transform="matrix(0.00264583,0,0,-0.00264583,1.55839,0)"
+         id="path48605" />
+    </g>
+    <g
+       id="g4470-6-68-6-6"
+       transform="translate(7.0929096,68.879487)"
+       style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
+       inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
+       inkscape:export-xdpi="300.05603"
+       inkscape:export-ydpi="300.05603">
+      <path
+         style="fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -3.0435722,13.312797 h 2"
+         id="path3194-7-8-8-7" />
+      <path
+         style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -2.0435722,12.312797 v 2"
+         id="path3194-3-5-43-9-3"
+         sodipodi:nodetypes="cc" />
+    </g>
+    <g
+       id="g4470-6-68-6-6-7"
+       transform="translate(14.103343,-1.3953689)"
+       style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
+       inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
+       inkscape:export-xdpi="300.05603"
+       inkscape:export-ydpi="300.05603">
+      <path
+         style="fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -3.0435722,13.312797 h 2"
+         id="path3194-7-8-8-7-6" />
+      <path
+         style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -2.0435722,12.312797 v 2"
+         id="path3194-3-5-43-9-3-3"
+         sodipodi:nodetypes="cc" />
+    </g>
+    <g
+       id="g4048"
+       transform="translate(0,-0.34095208)">
+      <g
+         id="g2058-6"
+         transform="translate(-3.7784077,-15.952708)"
+         style="display:inline">
+        <path
+           sodipodi:type="star"
+           sodipodi:cx="18.936062"
+           sodipodi:cy="98.485931"
+           sodipodi:arg1="0"
+           sodipodi:arg2="1"
+           inkscape:rounded="0"
+           sodipodi:sides="3"
+           sodipodi:r1="4"
+           sodipodi:r2="4"
+           style="display:inline;fill:#9a9996;stroke:#9a9996;stroke-width:0.1"
+           id="path903-5"
+           inkscape:flatsided="false"
+           inkscape:randomized="0"
+           d="m 22.936062,98.485931 -1.838791,3.365889 -4.161209,0.0982 -1.995546,-3.275378 1.995546,-3.652822 3.834336,-0.0905 z" />
+        <circle
+           cx="18.936062"
+           cy="98.485931"
+           r="2.375"
+           id="circle907-6"
+           style="display:inline;fill:#000000;stroke:#f6f5f4;stroke-width:1.25" />
+      </g>
+      <g
+         inkscape:label="Hershey Text"
+         style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         id="g77867"
+         transform="translate(68.37897,12.423681)">
+        <g
+           transform="translate(-54.3172,77.4047)"
+           id="g77865"
+           style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
+          <path
+             d="m 220,504 v 32 l 32,62 32,32 62,32 h 126 l 64,-32 31,-32 31,-62 V 472 L 567,410 504,315 189,0 h 441"
+             style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+             transform="scale(0.00264583,-0.00264583)"
+             id="path77863" />
+        </g>
+      </g>
+    </g>
+    <g
+       id="g4470-6-68-2-3"
+       transform="translate(17.201227,68.879487)"
+       style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
+       inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
+       inkscape:export-xdpi="300.05603"
+       inkscape:export-ydpi="300.05603">
+      <path
+         style="fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -3.0435722,13.312797 h 2"
+         id="path3194-7-8-6-9" />
+      <path
+         style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -2.0435722,12.312797 v 2"
+         id="path3194-3-5-43-6-4"
+         sodipodi:nodetypes="cc" />
+    </g>
+    <g
+       id="g4056"
+       transform="translate(0,-0.48126969)">
+      <g
+         id="g2070-6-8"
+         transform="translate(-5.0361358,-30.492261)"
+         style="display:inline">
+        <path
+           sodipodi:type="star"
+           sodipodi:cx="30.302107"
+           sodipodi:cy="113.1658"
+           sodipodi:arg1="0"
+           sodipodi:arg2="1"
+           inkscape:rounded="0"
+           sodipodi:sides="3"
+           sodipodi:r1="4"
+           sodipodi:r2="4"
+           style="fill:#9a9996;stroke:#9a9996;stroke-width:0.1"
+           id="path855-6-8"
+           inkscape:flatsided="false"
+           inkscape:randomized="0"
+           d="m 34.302107,113.1658 -1.838791,3.36589 -4.161209,0.0982 -1.995546,-3.27538 1.995546,-3.65282 3.834336,-0.0905 z" />
+        <circle
+           cx="30.302107"
+           cy="113.16577"
+           r="2.375"
+           id="circle859-4-5"
+           style="fill:#000000;stroke:#f6f5f4;stroke-width:1.25" />
+      </g>
+      <g
+         inkscape:label="Hershey Text"
+         style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         id="g77873"
+         transform="translate(66.811231,12.794181)">
+        <g
+           transform="translate(-42.6265,77.0342)"
+           id="g77871"
+           style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
+          <path
+             d="M 252,662 H 598 L 410,410 h 94 l 63,-32 31,-32 32,-94 V 189 L 598,94.5 536,31.5 441,0 H 346 L 252,31.5 220,63 189,126"
+             style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+             transform="scale(0.00264583,-0.00264583)"
+             id="path77869" />
+        </g>
+      </g>
+    </g>
+    <g
+       id="g4470-6-68-7-9-0"
+       transform="translate(27.309544,68.879487)"
+       style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
+       inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
+       inkscape:export-xdpi="300.05603"
+       inkscape:export-ydpi="300.05603">
+      <path
+         style="fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -3.0435722,13.312797 h 2"
+         id="path3194-7-8-1-5-9" />
+      <path
+         style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -2.0435722,12.312797 v 2"
+         id="path3194-3-5-43-7-0-6"
+         sodipodi:nodetypes="cc" />
+    </g>
+    <g
+       id="g4064"
+       transform="translate(0,-0.48126899)">
+      <g
+         id="g6290-4-3"
+         transform="translate(0.40011688,-29.258596)"
+         style="display:inline">
+        <path
+           sodipodi:type="star"
+           sodipodi:cx="41.277378"
+           sodipodi:cy="113.1658"
+           sodipodi:arg1="0"
+           sodipodi:arg2="1"
+           inkscape:rounded="0"
+           sodipodi:sides="3"
+           sodipodi:r1="4"
+           sodipodi:r2="4"
+           style="display:inline;fill:#9a9996;stroke:#9a9996;stroke-width:0.1"
+           id="path867-8-8"
+           inkscape:flatsided="false"
+           inkscape:randomized="0"
+           transform="translate(-6.3032054,-1.2336657)"
+           d="m 45.277378,113.1658 -1.838791,3.36589 -4.161209,0.0982 -1.995546,-3.27538 1.995546,-3.65282 3.834336,-0.0905 z" />
+        <circle
+           cx="34.974174"
+           cy="111.93211"
+           r="2.375"
+           id="circle871-7-5"
+           style="display:inline;fill:#000000;stroke:#f6f5f4;stroke-width:1.25" />
+      </g>
+      <g
+         inkscape:label="Hershey Text"
+         style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         id="g77879"
+         transform="translate(85.07173,2.0086811)">
+        <g
+           transform="translate(-50.8303,87.8197)"
+           id="g77877"
+           style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
+          <path
+             d="M 504,662 189,220 H 662 M 504,662 V 0"
+             style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+             transform="scale(0.00264583,-0.00264583)"
+             id="path77875" />
+        </g>
+      </g>
+    </g>
+    <g
+       id="g4470-6-68-27-1-6"
+       transform="translate(37.41786,68.879487)"
+       style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
+       inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
+       inkscape:export-xdpi="300.05603"
+       inkscape:export-ydpi="300.05603">
+      <path
+         style="fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -3.0435722,13.312797 h 2"
+         id="path3194-7-8-2-7-1" />
+      <path
+         style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -2.0435722,12.312797 v 2"
+         id="path3194-3-5-43-2-2-1"
+         sodipodi:nodetypes="cc" />
+    </g>
+    <path
+       sodipodi:type="star"
+       sodipodi:cx="41.26474"
+       sodipodi:cy="98.485931"
+       sodipodi:arg1="0"
+       sodipodi:arg2="1"
+       inkscape:rounded="0"
+       sodipodi:sides="3"
+       sodipodi:r1="4"
+       sodipodi:r2="4"
+       style="display:inline;fill:#9a9996;stroke:#9a9996;stroke-width:0.1"
+       id="path915-7-5"
+       inkscape:flatsided="false"
+       inkscape:randomized="0"
+       transform="translate(4.2178649,-16.29366)"
+       d="m 45.26474,98.485931 -1.838791,3.365889 -4.161209,0.0982 -1.995546,-3.275378 1.995546,-3.652822 3.834336,-0.0905 z" />
+    <circle
+       cx="45.482609"
+       cy="82.192284"
+       id="circle919-2-9"
+       style="display:inline;fill:#000000;stroke:#f6f5f4;stroke-width:1.25"
+       r="2.375" />
+    <g
+       inkscape:label="Hershey Text"
+       style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       id="g77885"
+       transform="translate(84.896564,2.041929)">
+      <g
+         transform="translate(-40.4952,87.4455)"
+         id="g77883"
+         style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
+        <path
+           d="M 567,662 H 252 l -32,-284 32,32 94,31 h 95 l 95,-31 62,-64 32,-94 V 189 L 598,94.5 536,31.5 441,0 H 346 L 252,31.5 220,63 189,126"
+           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+           transform="scale(0.00264583,-0.00264583)"
+           id="path77881" />
+      </g>
+    </g>
+    <g
+       id="g4470-6-68-61-2-8"
+       transform="translate(47.526181,68.879487)"
+       style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-opacity:1"
+       inkscape:export-filename="/home/phoracek/code/zlosynth/private/supporting/achordion_prototyping_panel/drilling.png"
+       inkscape:export-xdpi="300.05603"
+       inkscape:export-ydpi="300.05603">
+      <path
+         style="fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -3.0435722,13.312797 h 2"
+         id="path3194-7-8-0-6-4" />
+      <path
+         style="display:inline;fill:#ff0000;stroke:#ff00ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -2.0435722,12.312797 v 2"
+         id="path3194-3-5-43-61-1-8"
+         sodipodi:nodetypes="cc" />
+    </g>
+    <rect
+       style="fill:#000000;stroke:#000000;stroke-width:0.319996;stroke-linecap:square"
+       id="rect2446"
+       width="12.580004"
+       height="2.0800035"
+       x="31.575809"
+       y="17.325552" />
+    <rect
+       style="display:inline;fill:#1a1a1a;stroke:#000000;stroke-width:1.1;stroke-linecap:square;stroke-miterlimit:4;stroke-dasharray:none"
+       id="rect1828-5-4"
+       width="21.592402"
+       height="10.192402"
+       x="5.0646496"
+       y="15.671973" />
+    <rect
+       style="display:inline;fill:none;stroke:#ff00ff;stroke-width:1.1;stroke-linecap:square;stroke-miterlimit:4;stroke-dasharray:none"
+       id="rect1828-5-4-9"
+       width="21.592402"
+       height="10.192402"
+       x="5.0646496"
+       y="15.671973" />
     <path
        style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-       d="m 47.799682,18.331868 h -1.237048 l -0.471229,0.47123 v 1.503872 h 1.706748 z"
+       d="m 47.799682,17.378002 h -1.237048 l -0.471229,0.47123 v 1.503872 h 1.706748 z"
        id="path61782" />
     <g
        id="g4470-6-1"
@@ -1931,142 +2094,6 @@
          id="path3194-3-5-5"
          sodipodi:nodetypes="cc" />
     </g>
-    <g
-       inkscape:label="Hershey Text"
-       style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-       id="g77867"
-       transform="translate(68.37897,12.423681)">
-      <g
-         transform="translate(-54.3172,77.4047)"
-         id="g77865"
-         style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
-        <path
-           d="m 220,504 v 32 l 32,62 32,32 62,32 h 126 l 64,-32 31,-32 31,-62 V 472 L 567,410 504,315 189,0 h 441"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
-           transform="scale(0.00264583,-0.00264583)"
-           id="path77863" />
-      </g>
-    </g>
-    <g
-       inkscape:label="Hershey Text"
-       style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-       id="g77873"
-       transform="translate(66.811231,12.794181)">
-      <g
-         transform="translate(-42.6265,77.0342)"
-         id="g77871"
-         style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
-        <path
-           d="M 252,662 H 598 L 410,410 h 94 l 63,-32 31,-32 32,-94 V 189 L 598,94.5 536,31.5 441,0 H 346 L 252,31.5 220,63 189,126"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
-           transform="scale(0.00264583,-0.00264583)"
-           id="path77869" />
-      </g>
-    </g>
-    <g
-       inkscape:label="Hershey Text"
-       style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-       id="g77879"
-       transform="translate(85.07173,2.0086811)">
-      <g
-         transform="translate(-50.8303,87.8197)"
-         id="g77877"
-         style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
-        <path
-           d="M 504,662 189,220 H 662 M 504,662 V 0"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
-           transform="scale(0.00264583,-0.00264583)"
-           id="path77875" />
-      </g>
-    </g>
-    <g
-       inkscape:label="Hershey Text"
-       style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-       id="g77885"
-       transform="translate(84.896564,2.3828811)">
-      <g
-         transform="translate(-40.4952,87.4455)"
-         id="g77883"
-         style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
-        <path
-           d="M 567,662 H 252 l -32,-284 32,32 94,31 h 95 l 95,-31 62,-64 32,-94 V 189 L 598,94.5 536,31.5 441,0 H 346 L 252,31.5 220,63 189,126"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
-           transform="scale(0.00264583,-0.00264583)"
-           id="path77881" />
-      </g>
-    </g>
-    <g
-       inkscape:label="Hershey Text"
-       style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-       id="g77891"
-       transform="translate(96.17642,24.846837)">
-      <g
-         transform="translate(-51.7897,94.3483)"
-         id="g77889"
-         style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
-        <path
-           d="m 220,504 v 32 l 32,62 32,32 62,32 h 126 l 64,-32 31,-32 31,-62 V 472 L 567,410 504,315 189,0 h 441"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
-           transform="scale(0.00264583,-0.00264583)"
-           id="path77887" />
-      </g>
-    </g>
-    <g
-       inkscape:label="Hershey Text"
-       style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-       id="g77897"
-       transform="translate(82.81342,9.1782473)">
-      <g
-         transform="translate(-38.4267,95.2207)"
-         id="g77895"
-         style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
-        <path
-           d="m 220,504 v 32 l 32,62 32,32 62,32 h 126 l 64,-32 31,-32 31,-62 V 472 L 567,410 504,315 189,0 h 441"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
-           transform="scale(0.00264583,-0.00264583)"
-           id="path77893" />
-      </g>
-    </g>
-    <g
-       inkscape:label="Hershey Text"
-       style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-       id="g77903"
-       transform="translate(70.044587,14.780137)">
-      <g
-         transform="translate(-45.8745,104.415)"
-         id="g77901"
-         style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
-        <path
-           d="m 220,504 v 32 l 32,62 32,32 62,32 h 126 l 64,-32 31,-32 31,-62 V 472 L 567,410 504,315 189,0 h 441"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
-           transform="scale(0.00264583,-0.00264583)"
-           id="path77899" />
-      </g>
-    </g>
-    <g
-       inkscape:label="Hershey Text"
-       style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-       id="g77909"
-       transform="translate(55.723487,0.59694769)">
-      <g
-         transform="translate(-31.5534,103.802)"
-         id="g77907"
-         style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
-        <path
-           d="m 220,504 v 32 l 32,62 32,32 62,32 h 126 l 64,-32 31,-32 31,-62 V 472 L 567,410 504,315 189,0 h 441"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
-           transform="scale(0.00264583,-0.00264583)"
-           id="path77905" />
-      </g>
-    </g>
-    <path
-       style="display:inline;fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 44.820856,104.87347 h 1.327953"
-       id="path22422-3-9" />
-    <path
-       style="display:inline;fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 44.820856,119.67912 h 1.327953"
-       id="path22422-3-6" />
     <path
        style="display:inline;fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 32.713483,65.082164 c 0,0 0.01982,-1.279889 -0.01335,-2.300416 -0.03313,-1.020528 2.247162,0.0089 0.491174,0.591722 1.906458,0.184918 0.592955,1.535296 -0.07804,0.962064"
@@ -2074,7 +2101,7 @@
        sodipodi:nodetypes="czcc" />
     <path
        style="display:inline;fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 11.009273,72.37694 c -0.551996,1.537626 -0.403778,1.878631 -0.899897,2.015308 -1.2512368,0.344702 -0.9081613,-2.423103 0.167559,-1.868874 0.428087,0.220556 0.276646,1.147467 0.547472,1.693758 0.08571,0.17288 0.337773,0.138139 0.337773,0.138139"
+       d="m 11.009273,72.050681 c -0.551996,1.537626 -0.403778,1.878631 -0.899897,2.015308 -1.2512368,0.344702 -0.9081613,-2.423103 0.167559,-1.868874 0.428087,0.220556 0.276646,1.147467 0.547472,1.693758 0.08571,0.17288 0.337773,0.138139 0.337773,0.138139"
        id="path21660-4-8"
        sodipodi:nodetypes="csssc" />
   </g>
@@ -2084,7 +2111,7 @@
      inkscape:label="outlines">
     <g
        id="g65142"
-       transform="translate(9.5601988,-2.0258226)"
+       transform="translate(9.5601988,-2.9796886)"
        style="display:inline">
       <circle
          style="fill:#ff00ff;stroke:none;stroke-width:1.03125;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
@@ -2101,7 +2128,7 @@
     </g>
     <g
        id="g65142-4"
-       transform="translate(33.360198,-2.0258226)"
+       transform="translate(33.360198,-2.9796886)"
        style="display:inline">
       <circle
          style="fill:#ff00ff;stroke:none;stroke-width:1.03125;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
@@ -2118,7 +2145,7 @@
     </g>
     <g
        id="g65142-0"
-       transform="translate(9.5601988,22.274177)"
+       transform="translate(9.5601988,21.320311)"
        style="display:inline">
       <circle
          style="fill:#ff00ff;stroke:none;stroke-width:1.03125;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
@@ -2135,7 +2162,7 @@
     </g>
     <g
        id="g65142-44"
-       transform="translate(33.360198,22.274177)"
+       transform="translate(33.360198,21.320311)"
        style="display:inline">
       <circle
          style="fill:#ff00ff;stroke:none;stroke-width:1.03125;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
