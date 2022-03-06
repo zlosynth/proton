@@ -5,7 +5,7 @@ $Descr A3 16535 11693
 encoding utf-8
 Sheet 1 1
 Title "Proton"
-Date "2022-02-27"
+Date "2022-03-06"
 Rev "v0.1.0"
 Comp "Petr Horáček"
 Comment1 "petr@zlosynth.com"
@@ -127,7 +127,7 @@ F 3 "" H 15325 2150 50  0001 C CNN
 	1    15325 2150
 	1    0    0    -1  
 $EndComp
-Text GLabel 13150 4725 2    50   Output ~ 0
+Text GLabel 13275 7825 2    50   Output ~ 0
 CV1
 Text GLabel 15550 4700 2    50   Output ~ 0
 CV2
@@ -199,18 +199,18 @@ Connection ~ 14750 4325
 $Comp
 L power:GND #PWR069
 U 1 1 62785C53
-P 14225 4775
-F 0 "#PWR069" H 14225 4525 50  0001 C CNN
-F 1 "GND" H 14230 4602 50  0000 C CNN
-F 2 "" H 14225 4775 50  0001 C CNN
-F 3 "" H 14225 4775 50  0001 C CNN
-	1    14225 4775
+P 11825 4800
+F 0 "#PWR069" H 11825 4550 50  0001 C CNN
+F 1 "GND" H 11830 4627 50  0000 C CNN
+F 2 "" H 11825 4800 50  0001 C CNN
+F 3 "" H 11825 4800 50  0001 C CNN
+	1    11825 4800
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	14150 4700 14225 4700
+	11750 4725 11825 4725
 Wire Wire Line
-	14225 4700 14225 4775
+	11825 4725 11825 4800
 Wire Wire Line
 	14650 4150 14750 4150
 Connection ~ 14750 4150
@@ -292,18 +292,18 @@ Connection ~ 12350 4350
 $Comp
 L power:GND #PWR054
 U 1 1 628CA6ED
-P 11825 4800
-F 0 "#PWR054" H 11825 4550 50  0001 C CNN
-F 1 "GND" H 11830 4627 50  0000 C CNN
-F 2 "" H 11825 4800 50  0001 C CNN
-F 3 "" H 11825 4800 50  0001 C CNN
-	1    11825 4800
+P 14225 6375
+F 0 "#PWR054" H 14225 6125 50  0001 C CNN
+F 1 "GND" H 14230 6202 50  0000 C CNN
+F 2 "" H 14225 6375 50  0001 C CNN
+F 3 "" H 14225 6375 50  0001 C CNN
+	1    14225 6375
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	11750 4725 11825 4725
+	14150 6300 14225 6300
 Wire Wire Line
-	11825 4725 11825 4800
+	14225 6300 14225 6375
 Wire Wire Line
 	12250 4175 12350 4175
 Connection ~ 12350 4175
@@ -706,18 +706,18 @@ Connection ~ 12350 5750
 Wire Wire Line
 	12250 5750 12350 5750
 Wire Wire Line
-	11825 6300 11825 6375
+	14225 4700 14225 4775
 Wire Wire Line
-	11750 6300 11825 6300
+	14150 4700 14225 4700
 $Comp
 L power:GND #PWR055
 U 1 1 62A09985
-P 11825 6375
-F 0 "#PWR055" H 11825 6125 50  0001 C CNN
-F 1 "GND" H 11830 6202 50  0000 C CNN
-F 2 "" H 11825 6375 50  0001 C CNN
-F 3 "" H 11825 6375 50  0001 C CNN
-	1    11825 6375
+P 14225 4775
+F 0 "#PWR055" H 14225 4525 50  0001 C CNN
+F 1 "GND" H 14230 4602 50  0000 C CNN
+F 2 "" H 14225 4775 50  0001 C CNN
+F 3 "" H 14225 4775 50  0001 C CNN
+	1    14225 4775
 	1    0    0    -1  
 $EndComp
 Connection ~ 12350 5925
@@ -856,34 +856,12 @@ $EndComp
 $Comp
 L Connector:AudioJack2_SwitchT J19
 U 1 1 61394827
-P 13950 6200
-F 0 "J19" H 13771 6133 50  0000 R CNN
-F 1 "Jack" H 13771 6224 50  0000 R CNN
-F 2 "Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles" H 13950 6200 50  0001 C CNN
-F 3 "~" H 13950 6200 50  0001 C CNN
-	1    13950 6200
-	1    0    0    1   
-$EndComp
-$Comp
-L Connector:AudioJack2_SwitchT J18
-U 1 1 613BBCE7
-P 13950 4600
-F 0 "J18" H 13771 4533 50  0000 R CNN
-F 1 "Jack" H 13771 4624 50  0000 R CNN
-F 2 "Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles" H 13950 4600 50  0001 C CNN
-F 3 "~" H 13950 4600 50  0001 C CNN
-	1    13950 4600
-	1    0    0    1   
-$EndComp
-$Comp
-L Connector:AudioJack2_SwitchT J14
-U 1 1 613BD26F
-P 11550 4625
-F 0 "J14" H 11371 4558 50  0000 R CNN
-F 1 "Jack" H 11371 4649 50  0000 R CNN
-F 2 "Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles" H 11550 4625 50  0001 C CNN
-F 3 "~" H 11550 4625 50  0001 C CNN
-	1    11550 4625
+P 11550 6200
+F 0 "J19" H 11371 6133 50  0000 R CNN
+F 1 "Jack" H 11371 6224 50  0000 R CNN
+F 2 "Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles" H 11550 6200 50  0001 C CNN
+F 3 "~" H 11550 6200 50  0001 C CNN
+	1    11550 6200
 	1    0    0    1   
 $EndComp
 $Comp
@@ -922,114 +900,34 @@ F 3 "" H 11975 8625 50  0001 C CNN
 	1    11975 8625
 	1    0    0    -1  
 $EndComp
-Text GLabel 11750 4225 0    50   Input ~ 0
+Text GLabel 14150 5800 0    50   Input ~ 0
 PROBE
 Wire Wire Line
-	14225 6300 14225 6375
+	11825 6300 11825 6375
 Wire Wire Line
-	14150 6300 14225 6300
+	11750 6300 11825 6300
 $Comp
 L power:GND #PWR070
 U 1 1 62825235
-P 14225 6375
-F 0 "#PWR070" H 14225 6125 50  0001 C CNN
-F 1 "GND" H 14230 6202 50  0000 C CNN
-F 2 "" H 14225 6375 50  0001 C CNN
-F 3 "" H 14225 6375 50  0001 C CNN
-	1    14225 6375
+P 11825 6375
+F 0 "#PWR070" H 11825 6125 50  0001 C CNN
+F 1 "GND" H 11830 6202 50  0000 C CNN
+F 2 "" H 11825 6375 50  0001 C CNN
+F 3 "" H 11825 6375 50  0001 C CNN
+	1    11825 6375
 	1    0    0    -1  
 $EndComp
 Text Notes 14550 5550 0    50   ~ 0
 -5.0 to 5.0
-$Comp
-L Connector:AudioJack2_SwitchT J15
-U 1 1 6136E350
-P 11550 6200
-F 0 "J15" H 11371 6133 50  0000 R CNN
-F 1 "Jack" H 11371 6224 50  0000 R CNN
-F 2 "Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles" H 11550 6200 50  0001 C CNN
-F 3 "~" H 11550 6200 50  0001 C CNN
-	1    11550 6200
-	1    0    0    1   
-$EndComp
-Text GLabel 14150 5800 0    50   Input ~ 0
+Text GLabel 11750 5800 0    50   Input ~ 0
 PROBE
-Text GLabel 14150 4200 0    50   Input ~ 0
+Text GLabel 11750 4225 0    50   Input ~ 0
 PROBE
 $Comp
 L Device:R_Small R58
 U 1 1 61C62E2D
-P 14200 5950
-F 0 "R58" H 14325 5975 50  0000 C CNN
-F 1 "10k" H 14325 5900 50  0000 C CNN
-F 2 "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" H 14200 5950 50  0001 C CNN
-F 3 "~" H 14200 5950 50  0001 C CNN
-F 4 "" H 14200 5950 50  0001 C CNN "LCSC Part #"
-F 5 "C25744" H 14200 5950 50  0001 C CNN "LCSC"
-F 6 "1" H 14200 5950 50  0001 C CNN "Order Qty"
-F 7 "CR0603-FX-1002ELF" H 14200 5950 50  0001 C CNN "Mfr Part Number"
-	1    14200 5950
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	11750 6100 11800 6100
-Wire Wire Line
-	11800 6100 11800 6050
-Wire Wire Line
-	11800 5850 11800 5800
-Wire Wire Line
-	11800 5800 11750 5800
-$Comp
-L Device:R_Small R57
-U 1 1 61C81B7B
-P 14200 4350
-F 0 "R57" H 14325 4375 50  0000 C CNN
-F 1 "10k" H 14325 4300 50  0000 C CNN
-F 2 "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" H 14200 4350 50  0001 C CNN
-F 3 "~" H 14200 4350 50  0001 C CNN
-F 4 "" H 14200 4350 50  0001 C CNN "LCSC Part #"
-F 5 "C25744" H 14200 4350 50  0001 C CNN "LCSC"
-F 6 "1" H 14200 4350 50  0001 C CNN "Order Qty"
-F 7 "CR0603-FX-1002ELF" H 14200 4350 50  0001 C CNN "Mfr Part Number"
-	1    14200 4350
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	11750 4525 11800 4525
-Wire Wire Line
-	11800 4525 11800 4475
-Wire Wire Line
-	11800 4275 11800 4225
-Wire Wire Line
-	11800 4225 11750 4225
-$Comp
-L Device:R_Small R45
-U 1 1 61CA219B
-P 11800 4375
-F 0 "R45" H 11925 4400 50  0000 C CNN
-F 1 "10k" H 11925 4325 50  0000 C CNN
-F 2 "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" H 11800 4375 50  0001 C CNN
-F 3 "~" H 11800 4375 50  0001 C CNN
-F 4 "" H 11800 4375 50  0001 C CNN "LCSC Part #"
-F 5 "C25744" H 11800 4375 50  0001 C CNN "LCSC"
-F 6 "1" H 11800 4375 50  0001 C CNN "Order Qty"
-F 7 "CR0603-FX-1002ELF" H 11800 4375 50  0001 C CNN "Mfr Part Number"
-	1    11800 4375
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	14150 4500 14200 4500
-Wire Wire Line
-	14200 4500 14200 4450
-Wire Wire Line
-	14200 4250 14200 4200
-Wire Wire Line
-	14200 4200 14150 4200
-$Comp
-L Device:R_Small R46
-U 1 1 61CC46F2
 P 11800 5950
-F 0 "R46" H 11925 5975 50  0000 C CNN
+F 0 "R58" H 11925 5975 50  0000 C CNN
 F 1 "10k" H 11925 5900 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" H 11800 5950 50  0001 C CNN
 F 3 "~" H 11800 5950 50  0001 C CNN
@@ -1041,6 +939,29 @@ F 7 "CR0603-FX-1002ELF" H 11800 5950 50  0001 C CNN "Mfr Part Number"
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
+	14150 4500 14200 4500
+Wire Wire Line
+	14200 4500 14200 4450
+Wire Wire Line
+	14200 4250 14200 4200
+Wire Wire Line
+	14200 4200 14150 4200
+$Comp
+L Device:R_Small R57
+U 1 1 61C81B7B
+P 11800 4375
+F 0 "R57" H 11925 4400 50  0000 C CNN
+F 1 "10k" H 11925 4325 50  0000 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" H 11800 4375 50  0001 C CNN
+F 3 "~" H 11800 4375 50  0001 C CNN
+F 4 "" H 11800 4375 50  0001 C CNN "LCSC Part #"
+F 5 "C25744" H 11800 4375 50  0001 C CNN "LCSC"
+F 6 "1" H 11800 4375 50  0001 C CNN "Order Qty"
+F 7 "CR0603-FX-1002ELF" H 11800 4375 50  0001 C CNN "Mfr Part Number"
+	1    11800 4375
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
 	14150 6100 14200 6100
 Wire Wire Line
 	14200 6100 14200 6050
@@ -1048,6 +969,52 @@ Wire Wire Line
 	14200 5850 14200 5800
 Wire Wire Line
 	14200 5800 14150 5800
+$Comp
+L Device:R_Small R45
+U 1 1 61CA219B
+P 14200 5950
+F 0 "R45" H 14325 5975 50  0000 C CNN
+F 1 "10k" H 14325 5900 50  0000 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" H 14200 5950 50  0001 C CNN
+F 3 "~" H 14200 5950 50  0001 C CNN
+F 4 "" H 14200 5950 50  0001 C CNN "LCSC Part #"
+F 5 "C25744" H 14200 5950 50  0001 C CNN "LCSC"
+F 6 "1" H 14200 5950 50  0001 C CNN "Order Qty"
+F 7 "CR0603-FX-1002ELF" H 14200 5950 50  0001 C CNN "Mfr Part Number"
+	1    14200 5950
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	11750 4525 11800 4525
+Wire Wire Line
+	11800 4525 11800 4475
+Wire Wire Line
+	11800 4275 11800 4225
+Wire Wire Line
+	11800 4225 11750 4225
+$Comp
+L Device:R_Small R46
+U 1 1 61CC46F2
+P 14200 4350
+F 0 "R46" H 14325 4375 50  0000 C CNN
+F 1 "10k" H 14325 4300 50  0000 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" H 14200 4350 50  0001 C CNN
+F 3 "~" H 14200 4350 50  0001 C CNN
+F 4 "" H 14200 4350 50  0001 C CNN "LCSC Part #"
+F 5 "C25744" H 14200 4350 50  0001 C CNN "LCSC"
+F 6 "1" H 14200 4350 50  0001 C CNN "Order Qty"
+F 7 "CR0603-FX-1002ELF" H 14200 4350 50  0001 C CNN "Mfr Part Number"
+	1    14200 4350
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	11750 6100 11800 6100
+Wire Wire Line
+	11800 6100 11800 6050
+Wire Wire Line
+	11800 5850 11800 5800
+Wire Wire Line
+	11800 5800 11750 5800
 Connection ~ 15325 8950
 Wire Wire Line
 	15475 8950 15475 8900
@@ -1120,10 +1087,6 @@ F 7 "1" H 14975 9050 50  0001 C CNN "Order Qty"
 	3    14975 9050
 	0    1    1    0   
 $EndComp
-Text GLabel 2350 2375 0    50   Input ~ 0
-CV5
-Text GLabel 2350 2675 0    50   Input ~ 0
-CV4
 $Comp
 L Device:Ferrite_Bead_Small FB1
 U 1 1 611CC9CE
@@ -1301,7 +1264,7 @@ U 1 1 60A5352E
 P 13825 1200
 F 0 "J17" H 13875 1617 50  0000 C CNN
 F 1 "Power" H 13875 1526 50  0000 C CNN
-F 2 "Connector_IDC:IDC-Header_2x05_P2.54mm_Vertical" H 13825 1200 50  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_2x05_P2.54mm_Vertical" H 13825 1200 50  0001 C CNN
 F 3 "" H 13825 1200 50  0001 C CNN
 F 4 "87914-1016" H 13825 1200 50  0001 C CNN "Mfr Part Number"
 F 5 "1" H 13825 1200 50  0001 C CNN "Order Qty"
@@ -1358,12 +1321,12 @@ PROBE
 $Comp
 L Connector:AudioJack2_SwitchT J16
 U 1 1 61345E67
-P 11700 7725
-F 0 "J16" H 11521 7658 50  0000 R CNN
-F 1 "Jack" H 11521 7749 50  0000 R CNN
-F 2 "Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles" H 11700 7725 50  0001 C CNN
-F 3 "~" H 11700 7725 50  0001 C CNN
-	1    11700 7725
+P 13950 6200
+F 0 "J16" H 13771 6133 50  0000 R CNN
+F 1 "Jack" H 13771 6224 50  0000 R CNN
+F 2 "Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles" H 13950 6200 50  0001 C CNN
+F 3 "~" H 13950 6200 50  0001 C CNN
+	1    13950 6200
 	1    0    0    1   
 $EndComp
 Wire Wire Line
@@ -1385,7 +1348,7 @@ Text Notes 12275 7075 0    50   ~ 0
 -5.0 to 5.0
 Wire Wire Line
 	12075 7225 12075 7275
-Text GLabel 13275 7825 2    50   Output ~ 0
+Text GLabel 13150 4725 2    50   Output ~ 0
 CV5
 Wire Wire Line
 	12075 7275 12175 7275
@@ -1523,13 +1486,13 @@ F 7 "1" H 12875 7825 50  0001 C CNN "Order Qty"
 	1    12875 7825
 	1    0    0    1   
 $EndComp
-Text GLabel 11750 5800 0    50   Input ~ 0
+Text GLabel 14150 4200 0    50   Input ~ 0
 PROBE
-Text GLabel 2350 2775 0    50   Input ~ 0
+Text GLabel 2350 2675 0    50   Input ~ 0
 CV3
-Text GLabel 2350 2475 0    50   Input ~ 0
-CV2
 Text GLabel 2350 2575 0    50   Input ~ 0
+CV2
+Text GLabel 2350 2375 0    50   Input ~ 0
 CV1
 $Comp
 L power:GND #PWR01
@@ -1758,17 +1721,17 @@ Wire Wire Line
 	7425 1500 7425 1550
 Text GLabel 7350 1300 2    50   Input ~ 0
 ENC1_CLICK
-Text GLabel 4350 2675 2    50   Input ~ 0
+Text GLabel 2350 2875 0    50   Input ~ 0
 ENC1_CLICK
-Text GLabel 4350 2775 2    50   Input ~ 0
+Text GLabel 4350 2375 2    50   Input ~ 0
 ENC2_CLICK
-Text GLabel 2350 3375 0    50   Input ~ 0
+Text GLabel 2350 2975 0    50   Input ~ 0
 ENC1_A
-Text GLabel 2350 3475 0    50   Input ~ 0
+Text GLabel 2350 3375 0    50   Input ~ 0
 ENC1_B
-Text GLabel 2350 3575 0    50   Input ~ 0
+Text GLabel 4350 1975 2    50   Input ~ 0
 ENC2_A
-Text GLabel 2350 3675 0    50   Input ~ 0
+Text GLabel 4350 1875 2    50   Input ~ 0
 ENC2_B
 $Comp
 L power:+3.3V #PWR046
@@ -1939,13 +1902,13 @@ Text Notes 14525 3950 0    50   ~ 0
 Text Notes 12150 3975 0    50   ~ 0
 -5.0 to 5.0
 Wire Wire Line
-	14150 4600 14450 4600
-Wire Wire Line
 	11750 4625 12050 4625
 Wire Wire Line
 	14150 6200 14450 6200
 Wire Wire Line
 	11750 6200 12050 6200
+Wire Wire Line
+	14150 4600 14450 4600
 Wire Wire Line
 	11900 7725 12175 7725
 Wire Wire Line
@@ -2368,17 +2331,6 @@ Wire Wire Line
 	8625 3925 8725 3925
 Wire Wire Line
 	8625 3575 8625 3925
-$Comp
-L Connector:AudioJack2_SwitchT J7
-U 1 1 62240738
-P 9225 3925
-F 0 "J7" H 9045 3858 50  0000 R CNN
-F 1 "Jack" H 9045 3949 50  0000 R CNN
-F 2 "Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles" H 9225 3925 50  0001 C CNN
-F 3 "~" H 9225 3925 50  0001 C CNN
-	1    9225 3925
-	-1   0    0    1   
-$EndComp
 Wire Wire Line
 	7525 3825 7425 3825
 Wire Wire Line
@@ -2422,7 +2374,7 @@ F 7 "CR0603-FX-4702ELF" H 8225 3575 50  0001 C CNN "Mfr Part Number"
 	1    8225 3575
 	0    -1   -1   0   
 $EndComp
-Text GLabel 4725 1400 0    50   Input ~ 0
+Text GLabel 2350 3675 0    50   Input ~ 0
 GATE1
 $Comp
 L Device:R_Small R21
@@ -2478,17 +2430,6 @@ Wire Wire Line
 	8625 4900 8725 4900
 Wire Wire Line
 	8625 4550 8625 4900
-$Comp
-L Connector:AudioJack2_SwitchT J8
-U 1 1 6230F7D6
-P 9225 4900
-F 0 "J8" H 9045 4833 50  0000 R CNN
-F 1 "Jack" H 9045 4924 50  0000 R CNN
-F 2 "Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles" H 9225 4900 50  0001 C CNN
-F 3 "~" H 9225 4900 50  0001 C CNN
-	1    9225 4900
-	-1   0    0    1   
-$EndComp
 Wire Wire Line
 	7525 4800 7425 4800
 Wire Wire Line
@@ -2532,7 +2473,7 @@ F 7 "CR0603-FX-4702ELF" H 8225 4550 50  0001 C CNN "Mfr Part Number"
 	1    8225 4550
 	0    -1   -1   0   
 $EndComp
-Text GLabel 4725 1525 0    50   Input ~ 0
+Text GLabel 2350 3775 0    50   Input ~ 0
 GATE2
 $Comp
 L Amplifier_Operational:TL074 U1
@@ -3182,36 +3123,6 @@ Text GLabel 11900 7325 0    50   Input ~ 0
 PROBE
 Wire Wire Line
 	6250 8925 6250 9000
-Text GLabel 2925 10275 0    50   BiDi ~ 0
-GPIO1
-Text GLabel 2925 10375 0    50   BiDi ~ 0
-GPIO2
-Text GLabel 2925 10475 0    50   BiDi ~ 0
-GPIO3
-Text GLabel 2925 10575 0    50   BiDi ~ 0
-GPIO4
-$Comp
-L power:GND #PWR07
-U 1 1 633EA0D3
-P 2925 10175
-F 0 "#PWR07" H 2925 9925 50  0001 C CNN
-F 1 "GND" V 2925 9975 50  0000 C CNN
-F 2 "" H 2925 10175 50  0001 C CNN
-F 3 "" H 2925 10175 50  0001 C CNN
-	1    2925 10175
-	0    1    1    0   
-$EndComp
-$Comp
-L Connector_Generic:Conn_01x05 J3
-U 1 1 633DA76C
-P 3125 10375
-F 0 "J3" H 3205 10417 50  0000 L CNN
-F 1 "Debug" H 3205 10326 50  0000 L CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical" H 3125 10375 50  0001 C CNN
-F 3 "~" H 3125 10375 50  0001 C CNN
-	1    3125 10375
-	1    0    0    -1  
-$EndComp
 $Comp
 L Amplifier_Operational:TL074 U2
 U 2 1 6381CB06
@@ -3603,7 +3514,7 @@ F 7 "CR0603-FX-4702ELF" H 7125 7150 50  0001 C CNN "Mfr Part Number"
 	0    -1   -1   0   
 $EndComp
 Text GLabel 6325 7375 0    50   Input ~ 0
-DAC1
+DAC2
 Wire Wire Line
 	6725 7150 6725 7375
 Connection ~ 7525 7475
@@ -3765,9 +3676,9 @@ F 3 "http://www.ti.com/lit/ds/symlink/tl071.pdf" H 8375 7775 50  0001 C CNN
 	4    8325 7575
 	1    0    0    1   
 $EndComp
-Text GLabel 2350 1875 0    50   Input ~ 0
-AUDIO_IN1
 Text GLabel 2350 1975 0    50   Input ~ 0
+AUDIO_IN1
+Text GLabel 2350 1875 0    50   Input ~ 0
 AUDIO_IN2
 Text GLabel 2350 3075 0    50   Output ~ 0
 DAC1
@@ -3779,7 +3690,7 @@ U 1 1 643C8ECF
 P 1950 5500
 F 0 "J1" H 1575 5575 50  0000 C CNN
 F 1 "Jack" H 1550 5500 50  0000 C CNN
-F 2 "Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles" H 1950 5500 50  0001 C CNN
+F 2 "Custom:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles_Stereo" H 1950 5500 50  0001 C CNN
 F 3 "~" H 1950 5500 50  0001 C CNN
 	1    1950 5500
 	1    0    0    -1  
@@ -3930,135 +3841,217 @@ MIDI_IN
 $Comp
 L Connector:AudioJack3 J4
 U 1 1 62259CCE
-P 3300 7275
-F 0 "J4" H 2950 7225 50  0000 C CNN
-F 1 "Jack" H 2925 7300 50  0000 C CNN
-F 2 "Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles" H 3300 7275 50  0001 C CNN
-F 3 "~" H 3300 7275 50  0001 C CNN
-	1    3300 7275
+P 3275 7725
+F 0 "J4" H 2925 7675 50  0000 C CNN
+F 1 "Jack" H 2900 7750 50  0000 C CNN
+F 2 "Custom:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles_Stereo" H 3275 7725 50  0001 C CNN
+F 3 "~" H 3275 7725 50  0001 C CNN
+	1    3275 7725
 	-1   0    0    1   
 $EndComp
 $Comp
 L Device:R_Small R3
 U 1 1 6225C4CA
-P 2925 7175
-F 0 "R3" V 3075 7175 50  0000 C CNN
-F 1 "10R" V 3000 7175 50  0000 C CNN
-F 2 "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" H 2925 7175 50  0001 C CNN
-F 3 "~" H 2925 7175 50  0001 C CNN
-F 4 "" H 2925 7175 50  0001 C CNN "LCSC Part #"
-F 5 "C25819" H 2925 7175 50  0001 C CNN "LCSC"
-F 6 "1" H 2925 7175 50  0001 C CNN "Order Qty"
-F 7 "CR0603-FX-4702ELF" H 2925 7175 50  0001 C CNN "Mfr Part Number"
-	1    2925 7175
+P 2900 7625
+F 0 "R3" V 3050 7625 50  0000 C CNN
+F 1 "10R" V 2975 7625 50  0000 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" H 2900 7625 50  0001 C CNN
+F 3 "~" H 2900 7625 50  0001 C CNN
+F 4 "" H 2900 7625 50  0001 C CNN "LCSC Part #"
+F 5 "C25819" H 2900 7625 50  0001 C CNN "LCSC"
+F 6 "1" H 2900 7625 50  0001 C CNN "Order Qty"
+F 7 "CR0603-FX-4702ELF" H 2900 7625 50  0001 C CNN "Mfr Part Number"
+	1    2900 7625
 	0    -1   -1   0   
 $EndComp
 Wire Wire Line
-	3100 7175 3025 7175
-Text GLabel 2750 7175 0    50   Input ~ 0
+	3075 7625 3000 7625
+Text GLabel 2725 7625 0    50   Input ~ 0
 MIDI_OUT
 Wire Wire Line
-	2825 7175 2750 7175
+	2800 7625 2725 7625
 Wire Wire Line
-	3100 7275 2275 7275
+	3075 7725 2250 7725
 Wire Wire Line
-	2275 7275 2275 7100
+	2250 7725 2250 7550
 $Comp
 L Device:R_Small R1
 U 1 1 62344E02
-P 2275 7000
-F 0 "R1" H 2400 7025 50  0000 C CNN
-F 1 "33R" H 2400 6950 50  0000 C CNN
-F 2 "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" H 2275 7000 50  0001 C CNN
-F 3 "~" H 2275 7000 50  0001 C CNN
-F 4 "" H 2275 7000 50  0001 C CNN "LCSC Part #"
-F 5 "C25744" H 2275 7000 50  0001 C CNN "LCSC"
-F 6 "1" H 2275 7000 50  0001 C CNN "Order Qty"
-F 7 "CR0603-FX-1002ELF" H 2275 7000 50  0001 C CNN "Mfr Part Number"
-	1    2275 7000
+P 2250 7450
+F 0 "R1" H 2375 7475 50  0000 C CNN
+F 1 "33R" H 2375 7400 50  0000 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" H 2250 7450 50  0001 C CNN
+F 3 "~" H 2250 7450 50  0001 C CNN
+F 4 "" H 2250 7450 50  0001 C CNN "LCSC Part #"
+F 5 "C25744" H 2250 7450 50  0001 C CNN "LCSC"
+F 6 "1" H 2250 7450 50  0001 C CNN "Order Qty"
+F 7 "CR0603-FX-1002ELF" H 2250 7450 50  0001 C CNN "Mfr Part Number"
+	1    2250 7450
 	1    0    0    -1  
 $EndComp
 $Comp
 L power:+3.3V #PWR04
 U 1 1 62347ABE
-P 2275 6900
-F 0 "#PWR04" H 2275 6750 50  0001 C CNN
-F 1 "+3.3V" H 2175 7050 50  0000 L CNN
-F 2 "" H 2275 6900 50  0001 C CNN
-F 3 "" H 2275 6900 50  0001 C CNN
-	1    2275 6900
+P 2250 7350
+F 0 "#PWR04" H 2250 7200 50  0001 C CNN
+F 1 "+3.3V" H 2150 7500 50  0000 L CNN
+F 2 "" H 2250 7350 50  0001 C CNN
+F 3 "" H 2250 7350 50  0001 C CNN
+	1    2250 7350
 	1    0    0    -1  
 $EndComp
 $Comp
 L power:GND #PWR010
 U 1 1 62348CF9
-P 3050 7425
-F 0 "#PWR010" H 3050 7175 50  0001 C CNN
-F 1 "GND" H 3050 7250 50  0000 C CNN
-F 2 "" H 3050 7425 50  0001 C CNN
-F 3 "" H 3050 7425 50  0001 C CNN
-	1    3050 7425
+P 3025 7875
+F 0 "#PWR010" H 3025 7625 50  0001 C CNN
+F 1 "GND" H 3025 7700 50  0000 C CNN
+F 2 "" H 3025 7875 50  0001 C CNN
+F 3 "" H 3025 7875 50  0001 C CNN
+	1    3025 7875
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	3100 7375 3050 7375
+	3075 7825 3025 7825
 Wire Wire Line
-	3050 7375 3050 7425
-Text GLabel 2350 2875 0    50   Output ~ 0
+	3025 7825 3025 7875
+Text GLabel 2350 3575 0    50   Output ~ 0
 MIDI_OUT
-Text GLabel 2350 2975 0    50   Input ~ 0
+Text GLabel 2350 3475 0    50   Input ~ 0
 MIDI_IN
-$Comp
-L Connector_Generic:Conn_01x04 J2
-U 1 1 628297E0
-P 2625 8850
-F 0 "J2" H 2750 8875 50  0000 C CNN
-F 1 "OLED" H 2800 8775 50  0000 C CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical" H 2625 8850 50  0001 C CNN
-F 3 "~" H 2625 8850 50  0001 C CNN
-	1    2625 8850
-	-1   0    0    -1  
-$EndComp
-Text GLabel 2825 8950 2    50   Input ~ 0
-OLED_SCL
-Text GLabel 2825 9050 2    50   Input ~ 0
-OLED_SDA
-Text Label 2825 8750 0    50   ~ 0
+Text Label 3450 9900 0    50   ~ 0
 OLED_VCC
 Wire Wire Line
-	2825 8750 3375 8750
+	2900 9900 3450 9900
 Wire Wire Line
-	3375 8750 3375 8650
-Text Label 2825 8850 0    50   ~ 0
+	3450 9900 3450 9800
+Text Label 3450 10000 0    50   ~ 0
 OLED_GND
 Wire Wire Line
-	2825 8850 3375 8850
+	2900 10000 3450 10000
 Wire Wire Line
-	3375 8850 3375 8925
+	3450 10000 3450 10075
 $Comp
 L power:GND #PWR013
 U 1 1 62918437
-P 3375 8925
-F 0 "#PWR013" H 3375 8675 50  0001 C CNN
-F 1 "GND" H 3375 8750 50  0000 C CNN
-F 2 "" H 3375 8925 50  0001 C CNN
-F 3 "" H 3375 8925 50  0001 C CNN
-	1    3375 8925
+P 3450 10075
+F 0 "#PWR013" H 3450 9825 50  0001 C CNN
+F 1 "GND" H 3450 9900 50  0000 C CNN
+F 2 "" H 3450 10075 50  0001 C CNN
+F 3 "" H 3450 10075 50  0001 C CNN
+	1    3450 10075
 	1    0    0    -1  
 $EndComp
 $Comp
 L power:+3.3V #PWR012
 U 1 1 6291ED1A
-P 3375 8650
-F 0 "#PWR012" H 3375 8500 50  0001 C CNN
-F 1 "+3.3V" H 3275 8800 50  0000 L CNN
-F 2 "" H 3375 8650 50  0001 C CNN
-F 3 "" H 3375 8650 50  0001 C CNN
-	1    3375 8650
+P 3450 9800
+F 0 "#PWR012" H 3450 9650 50  0001 C CNN
+F 1 "+3.3V" H 3350 9950 50  0000 L CNN
+F 2 "" H 3450 9800 50  0001 C CNN
+F 3 "" H 3450 9800 50  0001 C CNN
+	1    3450 9800
 	1    0    0    -1  
 $EndComp
-Text GLabel 4350 2275 2    50   Output ~ 0
-OLED_SCL
-Text GLabel 4350 2375 2    50   Output ~ 0
-OLED_SDA
+$Comp
+L Connector:AudioJack2_SwitchT J15
+U 1 1 6136E350
+P 13950 4600
+F 0 "J15" H 13771 4533 50  0000 R CNN
+F 1 "Jack" H 13771 4624 50  0000 R CNN
+F 2 "Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles" H 13950 4600 50  0001 C CNN
+F 3 "~" H 13950 4600 50  0001 C CNN
+	1    13950 4600
+	1    0    0    1   
+$EndComp
+$Comp
+L Connector:AudioJack2_SwitchT J18
+U 1 1 613BBCE7
+P 11550 4625
+F 0 "J18" H 11371 4558 50  0000 R CNN
+F 1 "Jack" H 11371 4649 50  0000 R CNN
+F 2 "Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles" H 11550 4625 50  0001 C CNN
+F 3 "~" H 11550 4625 50  0001 C CNN
+	1    11550 4625
+	1    0    0    1   
+$EndComp
+$Comp
+L Connector:AudioJack2_SwitchT J14
+U 1 1 613BD26F
+P 11700 7725
+F 0 "J14" H 11521 7658 50  0000 R CNN
+F 1 "Jack" H 11521 7749 50  0000 R CNN
+F 2 "Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles" H 11700 7725 50  0001 C CNN
+F 3 "~" H 11700 7725 50  0001 C CNN
+	1    11700 7725
+	1    0    0    1   
+$EndComp
+$Comp
+L Connector_Generic:Conn_01x07 J2
+U 1 1 62421960
+P 2700 9700
+F 0 "J2" H 2825 9650 50  0000 C CNN
+F 1 "OLED" H 2875 9750 50  0000 C CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_1x07_P2.54mm_Vertical" H 2700 9700 50  0001 C CNN
+F 3 "~" H 2700 9700 50  0001 C CNN
+	1    2700 9700
+	-1   0    0    1   
+$EndComp
+Text GLabel 2900 9400 2    50   Input ~ 0
+OLED_SCK
+Text GLabel 2900 9500 2    50   Input ~ 0
+OLED_DATA
+Text GLabel 2900 9600 2    50   Input ~ 0
+OLED_RST
+Text GLabel 2900 9700 2    50   Input ~ 0
+OLED_CMD
+Text GLabel 2900 9800 2    50   Input ~ 0
+OLED_CS
+Text GLabel 4350 2975 2    50   Input ~ 0
+OLED_DATA
+Text GLabel 4350 1575 2    50   Input ~ 0
+OLED_RST
+Text GLabel 4350 2875 2    50   Input ~ 0
+OLED_CMD
+Text GLabel 4350 2675 2    50   Input ~ 0
+OLED_CS
+Text GLabel 4350 2775 2    50   Input ~ 0
+OLED_SCK
+Wire Wire Line
+	10500 4450 10500 4400
+$Comp
+L Connector:AudioJack2_SwitchT J7
+U 1 1 62240738
+P 9225 3925
+F 0 "J7" H 9045 3858 50  0000 R CNN
+F 1 "Jack" H 9045 3949 50  0000 R CNN
+F 2 "Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles" H 9225 3925 50  0001 C CNN
+F 3 "~" H 9225 3925 50  0001 C CNN
+	1    9225 3925
+	-1   0    0    1   
+$EndComp
+$Comp
+L Connector:AudioJack2_SwitchT J8
+U 1 1 6230F7D6
+P 9225 4900
+F 0 "J8" H 9045 4833 50  0000 R CNN
+F 1 "Jack" H 9045 4924 50  0000 R CNN
+F 2 "Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles" H 9225 4900 50  0001 C CNN
+F 3 "~" H 9225 4900 50  0001 C CNN
+	1    9225 4900
+	-1   0    0    1   
+$EndComp
+Text GLabel 2350 2775 0    50   Input ~ 0
+CV4
+Text GLabel 2350 2475 0    50   Input ~ 0
+CV5
+NoConn ~ 9875 8950
+NoConn ~ 9800 10350
+NoConn ~ 9150 6175
+NoConn ~ 9125 7475
+NoConn ~ 4350 1375
+NoConn ~ 4350 1475
+NoConn ~ 4350 2275
+NoConn ~ 9025 3825
+NoConn ~ 9025 4800
 $EndSCHEMATC
