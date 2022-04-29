@@ -9,3 +9,7 @@ readme = "../README.md"
 publish = false
 
 [dependencies]
+micromath = "2"
+
+[dev-dependencies]
+approx = "0.4"
