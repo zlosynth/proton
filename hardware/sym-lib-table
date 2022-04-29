@@ -1,3 +1,4 @@
 (sym_lib_table
-  (lib (name DaisySeed)(type Legacy)(uri ${KIPRJMOD}/DaisySeed.lib)(options "")(descr ""))
+  (lib (name "DaisySeed")(type "Legacy")(uri "${KIPRJMOD}/DaisySeed.lib")(options "")(descr ""))
+  (lib (name "Module-rescue")(type "Legacy")(uri "${KIPRJMOD}/Module-rescue.lib")(options "")(descr ""))
 )
