@@ -2,6 +2,11 @@
 
 Playground module for eurorack prototyping.
 
+# Development
+
+See [DEVELOPMENT.md](DEVELOPMENT.md) to find some basic commands to interact
+with the project.
+
 # License
 
 Software of Achordion is distributed under the terms of the General Public
