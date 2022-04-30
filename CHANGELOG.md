@@ -6,6 +6,8 @@ backwards compatibility.
 
 ## Unreleased
 
+## 0.1.0
+
 * Initialize the project with READMEs and licensing.
 * Add schetch of the front panel.
 * Prepare schematics of the module.
