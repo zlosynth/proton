@@ -19,13 +19,13 @@ impl ControlInput {
 }
 
 #[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
-pub enum NoConsumer {}
+pub enum ControlInputConsumer {}
 
 #[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
 pub struct ControlInputProducer;
 
 impl Node<[f32; 32]> for ControlInput {
-    type Consumer = NoConsumer;
+    type Consumer = ControlInputConsumer;
     type Producer = ControlInputProducer;
 
     fn read(&self, _producer: Self::Producer) -> [f32; 32] {

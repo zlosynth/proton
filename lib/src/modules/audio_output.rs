@@ -22,11 +22,11 @@ impl AudioOutput {
 pub struct AudioOutputConsumer;
 
 #[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
-pub enum NoProducer {}
+pub enum AudioOutputProducer {}
 
 impl Node<[f32; 32]> for AudioOutput {
     type Consumer = AudioOutputConsumer;
-    type Producer = NoProducer;
+    type Producer = AudioOutputProducer;
 
     fn write(&mut self, _consumer: Self::Consumer, input: [f32; 32]) {
         *self.buffer.borrow_mut() = input;
