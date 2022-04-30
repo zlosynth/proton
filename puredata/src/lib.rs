@@ -12,7 +12,7 @@ mod log;
 
 use std::os::raw::{c_int, c_void};
 
-use proton_lib::engine::Engine;
+use proton_lib::core::engine::Engine;
 
 static mut CLASS: Option<*mut pd_sys::_class> = None;
 
