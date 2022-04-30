@@ -7,7 +7,7 @@ backwards compatibility.
 ## Unreleased
 
 * Introduce signal buffer abstraction.
-* Abstract cells used to access internal audio output data.
+* Abstract cells used to access internal audio output and control input data.
 
 ## 0.1.0
 

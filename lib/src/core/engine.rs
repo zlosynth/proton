@@ -1,6 +1,3 @@
-use alloc::rc::Rc;
-use core::cell::RefCell;
-
 use graphity::NodeIndex;
 
 use crate::core::signal::Signal;
@@ -17,7 +14,7 @@ graphity!(
 
 pub struct Engine {
     graph: Graph,
-    control_input_buffer: Rc<RefCell<f32>>,
+    control_input_cell: ControlInputCell,
     audio_output_cell: AudioOutputCell,
 }
 
@@ -26,7 +23,7 @@ impl Engine {
     pub fn new() -> Self {
         let mut graph = Graph::new();
 
-        let (control_input, control_input_buffer) = ControlInput::new();
+        let (control_input, control_input_cell) = ControlInput::new();
         let (audio_output, audio_output_cell) = AudioOutput::new();
         let oscillator = Oscillator::new();
 
@@ -45,13 +42,13 @@ impl Engine {
 
         Self {
             graph,
-            control_input_buffer,
+            control_input_cell,
             audio_output_cell,
         }
     }
 
     pub fn set_control(&mut self, value: f32) {
-        *self.control_input_buffer.borrow_mut() = value;
+        self.control_input_cell.set(value);
     }
 
     pub fn tick(&mut self) {
