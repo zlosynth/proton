@@ -10,3 +10,5 @@ backwards compatibility.
 * Add schetch of the front panel.
 * Prepare schematics of the module.
 * Design the PCB of the module.
+* Implement basic saw oscillator.
+* Introduce pure data external for testing.
