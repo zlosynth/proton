@@ -6,6 +6,8 @@ backwards compatibility.
 
 ## Unreleased
 
+* Introduce signal buffer abstraction.
+
 ## 0.1.0
 
 * Initialize the project with READMEs and licensing.

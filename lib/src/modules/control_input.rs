@@ -3,6 +3,8 @@ use core::cell::RefCell;
 
 use graphity::Node;
 
+use crate::core::signal::Signal;
+
 pub struct ControlInput {
     buffer: Rc<RefCell<f32>>,
 }
@@ -24,11 +26,11 @@ pub enum ControlInputConsumer {}
 #[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
 pub struct ControlInputProducer;
 
-impl Node<[f32; 32]> for ControlInput {
+impl Node<Signal> for ControlInput {
     type Consumer = ControlInputConsumer;
     type Producer = ControlInputProducer;
 
-    fn read(&self, _producer: Self::Producer) -> [f32; 32] {
-        [*self.buffer.borrow(); 32]
+    fn read(&self, _producer: Self::Producer) -> Signal {
+        Signal::from_control(*self.buffer.borrow())
     }
 }

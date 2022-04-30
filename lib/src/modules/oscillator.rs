@@ -1,5 +1,6 @@
 use graphity::Node;
 
+use crate::core::signal::Signal;
 use crate::primitives;
 
 pub struct Oscillator {
@@ -25,16 +26,16 @@ pub enum OscillatorConsumer {
 #[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
 pub struct OscillatorProducer;
 
-impl Node<[f32; 32]> for Oscillator {
+impl Node<Signal> for Oscillator {
     type Consumer = OscillatorConsumer;
     type Producer = OscillatorProducer;
 
-    fn write(&mut self, _consumer: Self::Consumer, input: [f32; 32]) {
-        self.oscillator.frequency = input[0];
+    fn write(&mut self, _consumer: Self::Consumer, input: Signal) {
+        self.oscillator.frequency = input.as_control();
     }
 
-    fn read(&self, _producer: Self::Producer) -> [f32; 32] {
-        self.buffer
+    fn read(&self, _producer: Self::Producer) -> Signal {
+        Signal::from_audio(self.buffer)
     }
 
     fn tick(&mut self) {

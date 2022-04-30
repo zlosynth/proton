@@ -3,12 +3,13 @@ use core::cell::RefCell;
 
 use graphity::NodeIndex;
 
+use crate::core::signal::Signal;
 use crate::modules::audio_output::*;
 use crate::modules::control_input::*;
 use crate::modules::oscillator::*;
 
 graphity!(
-    Graph<[f32; 32]>;
+    Graph<Signal>;
     ControlInput = {ControlInput, ControlInputConsumer, ControlInputProducer},
     AudioOutput = {AudioOutput, AudioOutputConsumer, AudioOutputProducer},
     Oscillator = {Oscillator, OscillatorConsumer, OscillatorProducer},
