@@ -9,7 +9,8 @@ extern crate graphity;
 #[macro_use]
 extern crate approx;
 
-pub mod core;
+pub mod instrument;
 
+mod core;
 mod modules;
 mod primitives;

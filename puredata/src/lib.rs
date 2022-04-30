@@ -12,14 +12,14 @@ mod log;
 
 use std::os::raw::{c_int, c_void};
 
-use proton_lib::core::engine::Engine;
+use proton_lib::instrument::Instrument;
 
 static mut CLASS: Option<*mut pd_sys::_class> = None;
 
 #[repr(C)]
 struct Class {
     pd_obj: pd_sys::t_object,
-    engine: Option<Engine>,
+    instrument: Option<Instrument>,
     signal_dummy: f32,
 }
 
@@ -60,8 +60,8 @@ unsafe fn create_class() -> *mut pd_sys::_class {
 unsafe extern "C" fn new() -> *mut c_void {
     let class = pd_sys::pd_new(CLASS.unwrap()) as *mut Class;
 
-    let engine = Engine::new();
-    (*class).engine = Some(engine);
+    let instrument = Instrument::new();
+    (*class).instrument = Some(instrument);
 
     pd_sys::outlet_new(&mut (*class).pd_obj, &mut pd_sys::s_signal);
 
@@ -87,7 +87,7 @@ unsafe fn register_float_method(
 
 unsafe extern "C" fn set_control(class: *mut Class, value: pd_sys::t_float) {
     (*class)
-        .engine
+        .instrument
         .as_mut()
         .unwrap()
         .set_control(value.clamp(0.0, 21000.0));
@@ -103,8 +103,8 @@ fn perform(
     assert!(outlets[0].len() % BUFFER_LEN == 0);
 
     for chunk_index in 0..outlets[0].len() / BUFFER_LEN {
-        class.engine.as_mut().unwrap().tick();
-        let buffer = class.engine.as_mut().unwrap().get_audio();
+        class.instrument.as_mut().unwrap().tick();
+        let buffer = class.instrument.as_mut().unwrap().get_audio();
         let start = chunk_index * BUFFER_LEN;
         outlets[0][start..(BUFFER_LEN + start)].clone_from_slice(&buffer[..BUFFER_LEN]);
     }
