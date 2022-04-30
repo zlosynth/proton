@@ -19,8 +19,6 @@ static mut CLASS: Option<*mut pd_sys::_class> = None;
 #[repr(C)]
 struct Class {
     pd_obj: pd_sys::t_object,
-    solo_outlet: *mut pd_sys::_outlet,
-    chord_outlet: *mut pd_sys::_outlet,
     engine: Option<Engine>,
     signal_dummy: f32,
 }
@@ -36,7 +34,7 @@ pub unsafe extern "C" fn proton_tilde_setup() {
         receiver = Class,
         dummy_offset = offset_of!(Class => signal_dummy),
         number_of_inlets = 1,
-        number_of_outlets = 3,
+        number_of_outlets = 1,
         callback = perform
     );
 
@@ -63,12 +61,9 @@ unsafe extern "C" fn new() -> *mut c_void {
     let class = pd_sys::pd_new(CLASS.unwrap()) as *mut Class;
 
     let engine = Engine::new();
-
     (*class).engine = Some(engine);
 
     pd_sys::outlet_new(&mut (*class).pd_obj, &mut pd_sys::s_signal);
-    (*class).solo_outlet = pd_sys::outlet_new(&mut (*class).pd_obj, &mut pd_sys::s_signal);
-    (*class).chord_outlet = pd_sys::outlet_new(&mut (*class).pd_obj, &mut pd_sys::s_signal);
 
     class as *mut c_void
 }
