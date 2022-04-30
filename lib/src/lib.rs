@@ -12,5 +12,6 @@ extern crate approx;
 pub mod instrument;
 
 mod core;
+mod display;
 mod modules;
 mod primitives;

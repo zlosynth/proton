@@ -12,14 +12,20 @@ mod log;
 
 use std::os::raw::{c_int, c_void};
 
+use embedded_graphics_core::geometry::Size;
+use embedded_graphics_core::pixelcolor::BinaryColor;
+use embedded_graphics_simulator::{OutputSettingsBuilder, SimulatorDisplay, Window};
+
 use proton_lib::instrument::Instrument;
 
 static mut CLASS: Option<*mut pd_sys::_class> = None;
 
+static mut WINDOW: Option<Window> = None;
+
 #[repr(C)]
 struct Class {
     pd_obj: pd_sys::t_object,
-    instrument: Option<Instrument>,
+    instrument: Option<Instrument<SimulatorDisplay<BinaryColor>>>,
     signal_dummy: f32,
 }
 
@@ -37,6 +43,10 @@ pub unsafe extern "C" fn proton_tilde_setup() {
         number_of_outlets = 1,
         callback = perform
     );
+
+    // TODO: Function to init, like for class
+    let window = Window::new("", &OutputSettingsBuilder::new().scale(2).build());
+    WINDOW = Some(window);
 
     register_float_method(class, "control", set_control);
 }
@@ -60,8 +70,16 @@ unsafe fn create_class() -> *mut pd_sys::_class {
 unsafe extern "C" fn new() -> *mut c_void {
     let class = pd_sys::pd_new(CLASS.unwrap()) as *mut Class;
 
-    let instrument = Instrument::new();
+    let mut instrument = Instrument::new();
+    let display = SimulatorDisplay::new(Size::new(128, 64));
+    instrument.register_display(display);
     (*class).instrument = Some(instrument);
+
+    (*class).instrument.as_mut().unwrap().update_display();
+    WINDOW
+        .as_mut()
+        .unwrap()
+        .update((*class).instrument.as_mut().unwrap().mut_display());
 
     pd_sys::outlet_new(&mut (*class).pd_obj, &mut pd_sys::s_signal);
 

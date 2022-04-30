@@ -15,3 +15,5 @@ crate-type = ["cdylib"]
 pd-sys = "0.1.0"
 proton-lib = { path = "../lib" }
 field-offset = "0.3"
+embedded-graphics-simulator = "0.3"
+embedded-graphics-core = "0.3"
