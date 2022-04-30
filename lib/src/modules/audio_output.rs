@@ -5,18 +5,18 @@ use graphity::Node;
 
 use crate::core::signal::Signal;
 
+type Buffer = [f32; 32];
+
 pub struct AudioOutput {
-    buffer: Rc<RefCell<[f32; 32]>>,
+    cell: AudioOutputCell,
 }
 
 #[allow(clippy::new_without_default)]
 impl AudioOutput {
-    pub fn new() -> (Self, Rc<RefCell<[f32; 32]>>) {
-        let buffer = Rc::new(RefCell::new([0.0; 32]));
-        let audio_output = Self {
-            buffer: Rc::clone(&buffer),
-        };
-        (audio_output, buffer)
+    pub fn new() -> (Self, AudioOutputCell) {
+        let (cell_a, cell_b) = AudioOutputCell::new_pair();
+        let audio_output = Self { cell: cell_a };
+        (audio_output, cell_b)
     }
 }
 
@@ -31,6 +31,31 @@ impl Node<Signal> for AudioOutput {
     type Producer = AudioOutputProducer;
 
     fn write(&mut self, _consumer: Self::Consumer, input: Signal) {
-        *self.buffer.borrow_mut() = input.as_audio();
+        self.cell.set(input.as_audio());
+    }
+}
+
+pub struct AudioOutputCell {
+    cell: Rc<RefCell<Buffer>>,
+}
+
+#[allow(clippy::new_without_default)]
+impl AudioOutputCell {
+    fn new_pair() -> (Self, Self) {
+        let cell_a = Self {
+            cell: Rc::new(RefCell::new(Buffer::default())),
+        };
+        let cell_b = Self {
+            cell: Rc::clone(&cell_a.cell),
+        };
+        (cell_a, cell_b)
+    }
+
+    pub fn get(&self) -> Buffer {
+        *self.cell.borrow()
+    }
+
+    fn set(&mut self, value: Buffer) {
+        *self.cell.borrow_mut() = value;
     }
 }

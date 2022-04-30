@@ -18,7 +18,7 @@ graphity!(
 pub struct Engine {
     graph: Graph,
     control_input_buffer: Rc<RefCell<f32>>,
-    audio_output_buffer: Rc<RefCell<[f32; 32]>>,
+    audio_output_cell: AudioOutputCell,
 }
 
 #[allow(clippy::new_without_default)]
@@ -27,7 +27,7 @@ impl Engine {
         let mut graph = Graph::new();
 
         let (control_input, control_input_buffer) = ControlInput::new();
-        let (audio_output, audio_output_buffer) = AudioOutput::new();
+        let (audio_output, audio_output_cell) = AudioOutput::new();
         let oscillator = Oscillator::new();
 
         let control_input = graph.add_node(control_input);
@@ -46,7 +46,7 @@ impl Engine {
         Self {
             graph,
             control_input_buffer,
-            audio_output_buffer,
+            audio_output_cell,
         }
     }
 
@@ -59,7 +59,7 @@ impl Engine {
     }
 
     pub fn get_audio(&self) -> [f32; 32] {
-        *self.audio_output_buffer.borrow()
+        self.audio_output_cell.get()
     }
 }
 
