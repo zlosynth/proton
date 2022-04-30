@@ -10,8 +10,7 @@ extern crate graphity;
 extern crate approx;
 
 // TODO: Make it private out it has a user in the package
-pub mod modules;
-// TODO: Make it private out it has a user in the package
-pub mod core;
+pub mod engine;
 
+mod modules;
 mod primitives;

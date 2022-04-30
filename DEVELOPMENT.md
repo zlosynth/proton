@@ -8,6 +8,12 @@ Run formatting, linter and unit tests:
 make
 ```
 
+Run the module via Pure Data:
+
+```sh
+make puredata
+```
+
 And more under `hack/` and in the `Makefile`.
 
 ## Gerbers, BOM and CPL

@@ -1,0 +1,17 @@
+[package]
+authors = ["Petr Horáček <hrck@protonmail.com>"]
+name = "proton-puredata"
+version = "0.1.0"
+edition = "2021"
+license = "GPL-3.0-or-later"
+repository = "https://github.com/zlosynth/proton"
+readme = "../README.md"
+publish = false
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+pd-sys = "0.1.0"
+proton-lib = { path = "../lib" }
+field-offset = "0.3"
