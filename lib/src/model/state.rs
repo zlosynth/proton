@@ -69,12 +69,22 @@ impl<CI: Copy, PI: Copy> Socket<CI, PI> {
 
 #[derive(Clone, PartialEq)]
 pub struct Patch<CI, PI> {
-    pub source: PI,
-    pub source_module_name: &'static str,
-    pub source_module_index: usize,
-    pub source_attribute_name: &'static str,
-    pub destination: CI,
-    pub destination_module_name: &'static str,
-    pub destination_module_index: usize,
-    pub destination_attribute_name: &'static str,
+    pub source: Option<Source<PI>>,
+    pub destination: Option<Destination<CI>>,
+}
+
+#[derive(Clone, PartialEq)]
+pub struct Source<PI> {
+    pub producer: PI,
+    pub module_name: &'static str,
+    pub module_index: usize,
+    pub attribute_name: &'static str,
+}
+
+#[derive(Clone, PartialEq)]
+pub struct Destination<CI> {
+    pub consumer: CI,
+    pub module_name: &'static str,
+    pub module_index: usize,
+    pub attribute_name: &'static str,
 }

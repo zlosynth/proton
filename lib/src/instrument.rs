@@ -8,7 +8,7 @@ use crate::core::signal::Signal;
 use crate::display::Display;
 use crate::model::action::Action;
 use crate::model::reduce::reduce;
-use crate::model::state::{Attribute, Module, Patch, Socket, State, View};
+use crate::model::state::{Attribute, Destination, Module, Patch, Socket, Source, State};
 use crate::modules::audio_output::*;
 use crate::modules::control_input::*;
 use crate::modules::oscillator::*;
@@ -96,14 +96,18 @@ impl<D> Instrument<D> {
             state.modules[2].attributes[0].socket.consumer(),
         );
         state.patches.push(Patch {
-            source: state.modules[0].attributes[0].socket.producer(),
-            source_module_name: state.modules[0].name,
-            source_module_index: state.modules[0].index,
-            source_attribute_name: state.modules[0].attributes[0].name,
-            destination: state.modules[2].attributes[0].socket.consumer(),
-            destination_module_name: state.modules[2].name,
-            destination_module_index: state.modules[2].index,
-            destination_attribute_name: state.modules[2].attributes[0].name,
+            source: Some(Source {
+                producer: state.modules[0].attributes[0].socket.producer(),
+                module_name: state.modules[0].name,
+                module_index: state.modules[0].index,
+                attribute_name: state.modules[0].attributes[0].name,
+            }),
+            destination: Some(Destination {
+                consumer: state.modules[2].attributes[0].socket.consumer(),
+                module_name: state.modules[2].name,
+                module_index: state.modules[2].index,
+                attribute_name: state.modules[2].attributes[0].name,
+            }),
         });
 
         graph.must_add_edge(
@@ -111,14 +115,18 @@ impl<D> Instrument<D> {
             state.modules[1].attributes[0].socket.consumer(),
         );
         state.patches.push(Patch {
-            source: state.modules[2].attributes[1].socket.producer(),
-            source_module_name: state.modules[2].name,
-            source_module_index: state.modules[2].index,
-            source_attribute_name: state.modules[2].attributes[1].name,
-            destination: state.modules[1].attributes[0].socket.consumer(),
-            destination_module_name: state.modules[1].name,
-            destination_module_index: state.modules[1].index,
-            destination_attribute_name: state.modules[1].attributes[0].name,
+            source: Some(Source {
+                producer: state.modules[2].attributes[1].socket.producer(),
+                module_name: state.modules[2].name,
+                module_index: state.modules[2].index,
+                attribute_name: state.modules[2].attributes[1].name,
+            }),
+            destination: Some(Destination {
+                consumer: state.modules[1].attributes[0].socket.consumer(),
+                module_name: state.modules[1].name,
+                module_index: state.modules[1].index,
+                attribute_name: state.modules[1].attributes[0].name,
+            }),
         });
 
         Self {

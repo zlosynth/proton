@@ -96,19 +96,17 @@ fn draw_module<NI, CI, PI, D: DrawTarget<Color = BinaryColor>>(
     selected: bool,
     display: &mut D,
 ) {
-    let highlight = if selected {
-        Highlight::Yes
-    } else {
-        Highlight::No
-    };
-
     let x = PADDING_LEFT;
     let y = FONT_HEIGHT * (index + 1) as i32 - 1;
-    draw_text(module.name, x, y, highlight, display);
 
-    let name_width = FONT_WIDTH * 3;
-    let x = x + name_width;
-    draw_text(I32_TO_STR[module.index], x, y, highlight, display);
+    let mut cursor = if selected {
+        Cursor::new(x, y, display).with_highlight()
+    } else {
+        Cursor::new(x, y, display)
+    };
+
+    cursor.write(module.name);
+    cursor.write(I32_TO_STR[module.index]);
 }
 
 fn draw_modules_scroll_bar<NI, CI, PI, D: DrawTarget<Color = BinaryColor>>(
@@ -145,29 +143,24 @@ fn draw_attribute<CI, PI, D: DrawTarget<Color = BinaryColor>>(
     selected: bool,
     display: &mut D,
 ) {
-    let highlight = if selected {
-        Highlight::Yes
-    } else {
-        Highlight::No
-    };
-
     let x = PADDING_LEFT + 34;
     let y = FONT_HEIGHT * (index + 1) as i32 - 1;
 
-    if attribute.connected {
-        draw_text(">", x, y, highlight, display);
+    let mut cursor = if selected {
+        Cursor::new(x, y, display).with_highlight()
     } else {
-        draw_text(" ", x, y, highlight, display);
+        Cursor::new(x, y, display)
+    };
+
+    if attribute.connected {
+        cursor.write(">");
+    } else {
+        cursor.write(" ");
     }
 
-    let x = x + FONT_WIDTH;
-    draw_text(attribute.name, x, y, highlight, display);
-
-    let x = x + FONT_WIDTH * attribute.name.len() as i32;
-    draw_text(" ", x, y, highlight, display);
-
-    let x = x + FONT_WIDTH;
-    draw_text(attribute.value, x, y, highlight, display);
+    cursor.write(attribute.name);
+    cursor.write(" ");
+    cursor.write(attribute.value);
 }
 
 fn selected_attribute_to_page(selected_attribute: usize) -> usize {
@@ -219,35 +212,19 @@ fn draw_patch<CI, PI, D: DrawTarget<Color = BinaryColor>>(
     let x = PADDING_LEFT;
     let y = FONT_HEIGHT * (index + 1) as i32 - 1;
 
-    draw_text(patch.source_module_name, x, y, Highlight::No, display);
-    let x = x + FONT_WIDTH * patch.source_module_name.len() as i32;
+    let source = patch.source.as_ref().unwrap();
+    let destination = patch.destination.as_ref().unwrap();
 
-    let index = I32_TO_STR[patch.source_module_index];
-    draw_text(index, x, y, Highlight::No, display);
-    let x = x + FONT_WIDTH * index.len() as i32;
-
-    draw_text(".", x, y, Highlight::No, display);
-    let x = x + FONT_WIDTH;
-
-    draw_text(patch.source_attribute_name, x, y, Highlight::No, display);
-    let x = x + FONT_WIDTH * patch.source_attribute_name.len() as i32;
-
-    let x = x + 2;
-    draw_text("-", x, y, Highlight::No, display);
-    let x = x + FONT_WIDTH + 2;
-
-    draw_text(patch.destination_module_name, x, y, Highlight::No, display);
-    let x = x + FONT_WIDTH * patch.destination_module_name.len() as i32;
-
-    let index = I32_TO_STR[patch.destination_module_index];
-    draw_text(index, x, y, Highlight::No, display);
-    let x = x + FONT_WIDTH * index.len() as i32;
-
-    draw_text(".", x, y, Highlight::No, display);
-    let x = x + FONT_WIDTH;
-
-    draw_text(patch.destination_attribute_name, x, y, Highlight::No, display);
-    let x = x + FONT_WIDTH * patch.destination_attribute_name.len() as i32;
+    let mut cursor = Cursor::new(x, y, display);
+    cursor.write(source.module_name);
+    cursor.write(I32_TO_STR[source.module_index]);
+    cursor.write(".");
+    cursor.write(source.attribute_name);
+    cursor.write("--");
+    cursor.write(destination.module_name);
+    cursor.write(I32_TO_STR[destination.module_index]);
+    cursor.write(".");
+    cursor.write(destination.attribute_name);
 }
 
 #[derive(Clone, Copy)]
@@ -290,4 +267,37 @@ fn draw_blank<D: DrawTarget<Color = BinaryColor>>(display: &mut D) {
     .draw(display)
     .ok()
     .unwrap();
+}
+
+struct Cursor<'a, D> {
+    x: i32,
+    y: i32,
+    display: &'a mut D,
+    highlighted: bool,
+}
+
+impl<'a, D: DrawTarget<Color = BinaryColor>> Cursor<'a, D> {
+    fn new(x: i32, y: i32, display: &'a mut D) -> Self {
+        Self {
+            x,
+            y,
+            display,
+            highlighted: false,
+        }
+    }
+
+    fn with_highlight(mut self) -> Self {
+        self.highlighted = true;
+        self
+    }
+
+    fn write(&mut self, value: &'static str) {
+        let highlight = if self.highlighted {
+            Highlight::Yes
+        } else {
+            Highlight::No
+        };
+        draw_text(value, self.x, self.y, highlight, self.display);
+        self.x += FONT_WIDTH * value.len() as i32;
+    }
 }
