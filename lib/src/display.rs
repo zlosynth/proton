@@ -12,7 +12,7 @@ use embedded_graphics::{
 };
 use embedded_graphics_core::draw_target::DrawTarget;
 
-use crate::store::{Module, Store};
+use crate::store::{Consumer, Module, Store};
 
 const PADDING_LEFT: i32 = 5;
 const FONT_HEIGHT: i32 = 12;
@@ -48,41 +48,59 @@ where
                 Module {
                     name: "ENV",
                     index: 2,
+                    consumers: vec![
+                        Consumer { name: "A" },
+                        Consumer { name: "B" },
+                        Consumer { name: "C" },
+                        Consumer { name: "D" },
+                    ],
                 },
                 Module {
                     name: "MIX",
                     index: 1,
+                    consumers: vec![],
                 },
                 Module {
                     name: "OSC",
                     index: 3,
+                    consumers: vec![],
                 },
                 Module {
                     name: ">CV",
                     index: 9,
+                    consumers: vec![],
                 },
                 Module {
                     name: "<AO",
                     index: 1,
+                    consumers: vec![],
                 },
                 Module {
                     name: "FOL",
                     index: 3,
+                    consumers: vec![],
                 },
                 Module {
                     name: "DIS",
                     index: 3,
+                    consumers: vec![],
                 },
             ],
-            selected_module: 6,
+            selected_module: 0,
         };
 
         let modules_page = selected_module_to_page(store.selected_module);
 
         let (list_start, list_stop) = range_for_modules_page(&store.modules, modules_page);
         for (i, module) in store.modules[list_start..=list_stop].iter().enumerate() {
-            let highlight = list_start + i == store.selected_module;
-            draw_module(module, i, highlight, &mut self.display);
+            let selected = list_start + i == store.selected_module;
+            draw_module(module, i, selected, &mut self.display);
+
+            if selected {
+                for (i, consumer) in module.consumers.iter().enumerate() {
+                    draw_consumer(consumer, i, &mut self.display);
+                }
+            }
         }
 
         draw_modules_scroll_bar(&store.modules, modules_page, &mut self.display);
@@ -177,4 +195,14 @@ fn draw_modules_scroll_bar<D: DrawTarget<Color = BinaryColor>>(
 
 fn selected_module_to_page(selected_module: usize) -> usize {
     (selected_module as f32 / MODULES_PER_PAGE as f32).floor() as usize
+}
+
+fn draw_consumer<D: DrawTarget<Color = BinaryColor>>(
+    consumer: &Consumer,
+    index: usize,
+    display: &mut D,
+) {
+    let x = PADDING_LEFT + 40;
+    let y = FONT_HEIGHT * (index + 1) as i32 - 1;
+    draw_text(consumer.name, x, y, display);
 }

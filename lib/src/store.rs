@@ -8,4 +8,9 @@ pub struct Store {
 pub struct Module {
     pub name: &'static str,
     pub index: usize,
+    pub consumers: Vec<Consumer>,
+}
+
+pub struct Consumer {
+    pub name: &'static str,
 }
