@@ -5,7 +5,7 @@ use embedded_graphics_core::pixelcolor::BinaryColor;
 
 use crate::core::engine::Engine;
 use crate::display::Display;
-use crate::store::{Attribute, Module, Store};
+use crate::model::store::{Attribute, Module, Store};
 
 pub struct Instrument<D> {
     engine: Engine,

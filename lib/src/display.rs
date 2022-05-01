@@ -10,7 +10,7 @@ use embedded_graphics::{
 };
 use embedded_graphics_core::draw_target::DrawTarget;
 
-use crate::store::{Attribute, Module, Store};
+use crate::model::store::{Attribute, Module, Store};
 
 const PADDING_LEFT: i32 = 5;
 const FONT_HEIGHT: i32 = 12;
