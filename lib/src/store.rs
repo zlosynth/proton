@@ -8,10 +8,10 @@ pub struct Store {
 pub struct Module {
     pub name: &'static str,
     pub index: usize,
-    pub consumers: Vec<Consumer>,
+    pub attributes: Vec<Attribute>,
     pub selected_attribute: usize,
 }
 
-pub struct Consumer {
+pub struct Attribute {
     pub name: &'static str,
 }

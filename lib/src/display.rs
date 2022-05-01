@@ -12,12 +12,13 @@ use embedded_graphics::{
 };
 use embedded_graphics_core::draw_target::DrawTarget;
 
-use crate::store::{Consumer, Module, Store};
+use crate::store::{Attribute, Module, Store};
 
 const PADDING_LEFT: i32 = 5;
 const FONT_HEIGHT: i32 = 12;
 const FONT_WIDTH: i32 = 6;
 const MODULES_PER_PAGE: usize = 5;
+const ATTRIBUTES_PER_PAGE: usize = 5;
 const DISPLAY_HEIGHT: i32 = 64;
 
 const I32_TO_STR: [&str; 100] = [
@@ -48,48 +49,52 @@ where
                 Module {
                     name: "ENV",
                     index: 2,
-                    consumers: vec![
-                        Consumer { name: "A" },
-                        Consumer { name: "B" },
-                        Consumer { name: "C" },
-                        Consumer { name: "D" },
+                    attributes: vec![
+                        Attribute { name: "A" },
+                        Attribute { name: "B" },
+                        Attribute { name: "C" },
+                        Attribute { name: "D" },
+                        Attribute { name: "E" },
+                        Attribute { name: "F" },
+                        Attribute { name: "G" },
+                        Attribute { name: "H" },
                     ],
-                    selected_attribute: 1,
+                    selected_attribute: 5,
                 },
                 Module {
                     name: "MIX",
                     index: 1,
-                    consumers: vec![],
+                    attributes: vec![],
                     selected_attribute: 0,
                 },
                 Module {
                     name: "OSC",
                     index: 3,
-                    consumers: vec![],
+                    attributes: vec![],
                     selected_attribute: 0,
                 },
                 Module {
                     name: ">CV",
                     index: 9,
-                    consumers: vec![],
+                    attributes: vec![],
                     selected_attribute: 0,
                 },
                 Module {
                     name: "<AO",
                     index: 1,
-                    consumers: vec![],
+                    attributes: vec![],
                     selected_attribute: 0,
                 },
                 Module {
                     name: "FOL",
                     index: 3,
-                    consumers: vec![],
+                    attributes: vec![],
                     selected_attribute: 0,
                 },
                 Module {
                     name: "DIS",
                     index: 3,
-                    consumers: vec![],
+                    attributes: vec![],
                     selected_attribute: 0,
                 },
             ],
@@ -104,9 +109,12 @@ where
             draw_module(module, i, selected, &mut self.display);
 
             if selected {
-                for (i, consumer) in module.consumers.iter().enumerate() {
-                    let selected = i == module.selected_attribute;
-                    draw_consumer(consumer, i, selected, &mut self.display);
+                let attributes_page = selected_attribute_to_page(module.selected_attribute);
+                let (list_start, list_stop) =
+                    range_for_attributes_page(&module.attributes, attributes_page);
+                for (i, attribute) in module.attributes[list_start..=list_stop].iter().enumerate() {
+                    let selected = list_start + i == module.selected_attribute;
+                    draw_attribute(attribute, i, selected, &mut self.display);
                 }
             }
         }
@@ -205,8 +213,8 @@ fn selected_module_to_page(selected_module: usize) -> usize {
     (selected_module as f32 / MODULES_PER_PAGE as f32).floor() as usize
 }
 
-fn draw_consumer<D: DrawTarget<Color = BinaryColor>>(
-    consumer: &Consumer,
+fn draw_attribute<D: DrawTarget<Color = BinaryColor>>(
+    attribute: &Attribute,
     index: usize,
     selected: bool,
     display: &mut D,
@@ -215,8 +223,21 @@ fn draw_consumer<D: DrawTarget<Color = BinaryColor>>(
     let y = FONT_HEIGHT * (index + 1) as i32 - 1;
 
     if selected {
-        draw_highlighted_text(consumer.name, x, y, display);
+        draw_highlighted_text(attribute.name, x, y, display);
     } else {
-        draw_text(consumer.name, x, y, display);
+        draw_text(attribute.name, x, y, display);
     }
+}
+
+fn selected_attribute_to_page(selected_attribute: usize) -> usize {
+    (selected_attribute as f32 / ATTRIBUTES_PER_PAGE as f32).floor() as usize
+}
+
+fn range_for_attributes_page(attributes: &[Attribute], attributes_page: usize) -> (usize, usize) {
+    let list_start = attributes_page * ATTRIBUTES_PER_PAGE;
+    let list_stop = usize::min(
+        (attributes_page + 1) * ATTRIBUTES_PER_PAGE,
+        attributes.len(),
+    ) - 1;
+    (list_start, list_stop)
 }
