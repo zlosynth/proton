@@ -4,7 +4,7 @@ use micromath::F32Ext;
 use alloc::vec;
 
 use embedded_graphics::{
-    mono_font::{ascii::FONT_6X12, MonoTextStyle},
+    mono_font::{ascii::FONT_6X12, MonoTextStyle, MonoTextStyleBuilder},
     pixelcolor::BinaryColor,
     prelude::*,
     primitives::{Line, PrimitiveStyle},
@@ -43,11 +43,13 @@ where
                 Module { name: "DIS" },
             ],
             modules_page: 0,
+            selected_module: 3,
         };
 
         let (list_start, list_stop) = range_for_modules_page(&store.modules, store.modules_page);
         for (i, module) in store.modules[list_start..=list_stop].iter().enumerate() {
-            draw_module(module, i, &mut self.display);
+            let highlight = list_start + i == store.selected_module;
+            draw_module(module, i, highlight, &mut self.display);
         }
 
         draw_modules_scroll_bar(&store.modules, store.modules_page, &mut self.display);
@@ -60,15 +62,28 @@ fn range_for_modules_page(modules: &[Module], modules_page: usize) -> (usize, us
     (list_start, list_stop)
 }
 
-fn draw_module<D: DrawTarget<Color = BinaryColor>>(module: &Module, index: usize, display: &mut D) {
-    Text::new(
-        module.name,
-        Point::new(PADDING_LEFT, FONT_HEIGHT * (index + 1) as i32 - 1),
-        MonoTextStyle::new(&FONT_6X12, BinaryColor::On),
-    )
-    .draw(display)
-    .ok()
-    .unwrap();
+fn draw_module<D: DrawTarget<Color = BinaryColor>>(
+    module: &Module,
+    index: usize,
+    highlight: bool,
+    display: &mut D,
+) {
+    let position = Point::new(PADDING_LEFT, FONT_HEIGHT * (index + 1) as i32 - 1);
+    let text = if highlight {
+        let style = MonoTextStyleBuilder::new()
+            .font(&FONT_6X12)
+            .text_color(BinaryColor::Off)
+            .background_color(BinaryColor::On)
+            .build();
+        Text::new(module.name, position, style)
+    } else {
+        Text::new(
+            module.name,
+            position,
+            MonoTextStyle::new(&FONT_6X12, BinaryColor::On),
+        )
+    };
+    text.draw(display).ok().unwrap();
 }
 
 fn draw_modules_scroll_bar<D: DrawTarget<Color = BinaryColor>>(
