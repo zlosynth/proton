@@ -51,16 +51,16 @@ where
                     name: "ENV",
                     index: 2,
                     attributes: vec![
-                        Attribute { name: "A" },
-                        Attribute { name: "B" },
-                        Attribute { name: "C" },
-                        Attribute { name: "D" },
-                        Attribute { name: "E" },
-                        Attribute { name: "F" },
-                        Attribute { name: "G" },
-                        Attribute { name: "H" },
+                        Attribute {
+                            name: "A",
+                            connected: true,
+                        },
+                        Attribute {
+                            name: "B",
+                            connected: false,
+                        },
                     ],
-                    selected_attribute: 5,
+                    selected_attribute: 1,
                 },
                 Module {
                     name: "MIX",
@@ -134,57 +134,22 @@ fn range_for_modules_page(modules: &[Module], modules_page: usize) -> (usize, us
 fn draw_module<D: DrawTarget<Color = BinaryColor>>(
     module: &Module,
     index: usize,
-    highlight: bool,
+    selected: bool,
     display: &mut D,
 ) {
+    let highlight = if selected {
+        Highlight::Yes
+    } else {
+        Highlight::No
+    };
+
     let x = PADDING_LEFT;
     let y = FONT_HEIGHT * (index + 1) as i32 - 1;
-    if highlight {
-        draw_highlighted_text(module.name, x, y, display);
-    } else {
-        draw_text(module.name, x, y, display);
-    }
+    draw_text(module.name, x, y, highlight, display);
 
     let name_width = FONT_WIDTH * 3;
     let x = x + name_width;
-    if highlight {
-        draw_highlighted_text(I32_TO_STR[module.index], x, y, display);
-    } else {
-        draw_text(I32_TO_STR[module.index], x, y, display);
-    }
-}
-
-fn draw_text<D: DrawTarget<Color = BinaryColor>>(
-    text: &'static str,
-    x: i32,
-    y: i32,
-    display: &mut D,
-) {
-    Text::new(
-        text,
-        Point::new(x, y),
-        MonoTextStyle::new(&FONT_6X12, BinaryColor::On),
-    )
-    .draw(display)
-    .ok()
-    .unwrap();
-}
-
-fn draw_highlighted_text<D: DrawTarget<Color = BinaryColor>>(
-    text: &'static str,
-    x: i32,
-    y: i32,
-    display: &mut D,
-) {
-    let style = MonoTextStyleBuilder::new()
-        .font(&FONT_6X12)
-        .text_color(BinaryColor::Off)
-        .background_color(BinaryColor::On)
-        .build();
-    Text::new(text, Point::new(x, y), style)
-        .draw(display)
-        .ok()
-        .unwrap();
+    draw_text(I32_TO_STR[module.index], x, y, highlight, display);
 }
 
 fn draw_modules_scroll_bar<D: DrawTarget<Color = BinaryColor>>(
@@ -221,14 +186,23 @@ fn draw_attribute<D: DrawTarget<Color = BinaryColor>>(
     selected: bool,
     display: &mut D,
 ) {
+    let highlight = if selected {
+        Highlight::Yes
+    } else {
+        Highlight::No
+    };
+
     let x = PADDING_LEFT + 40;
     let y = FONT_HEIGHT * (index + 1) as i32 - 1;
 
-    if selected {
-        draw_highlighted_text(attribute.name, x, y, display);
+    if attribute.connected {
+        draw_text(">", x, y, highlight, display);
     } else {
-        draw_text(attribute.name, x, y, display);
+        draw_text(" ", x, y, highlight, display);
     }
+
+    let x = x + FONT_WIDTH;
+    draw_text(attribute.name, x, y, highlight, display);
 }
 
 fn selected_attribute_to_page(selected_attribute: usize) -> usize {
@@ -267,4 +241,42 @@ fn draw_attributes_scroll_bar<D: DrawTarget<Color = BinaryColor>>(
         .draw(display)
         .ok()
         .unwrap();
+}
+
+#[derive(Clone, Copy)]
+enum Highlight {
+    Yes,
+    No,
+}
+
+fn draw_text<D: DrawTarget<Color = BinaryColor>>(
+    text: &'static str,
+    x: i32,
+    y: i32,
+    highlighted: Highlight,
+    display: &mut D,
+) {
+    match highlighted {
+        Highlight::Yes => {
+            let style = MonoTextStyleBuilder::new()
+                .font(&FONT_6X12)
+                .text_color(BinaryColor::Off)
+                .background_color(BinaryColor::On)
+                .build();
+            Text::new(text, Point::new(x, y), style)
+                .draw(display)
+                .ok()
+                .unwrap();
+        }
+        Highlight::No => {
+            Text::new(
+                text,
+                Point::new(x, y),
+                MonoTextStyle::new(&FONT_6X12, BinaryColor::On),
+            )
+            .draw(display)
+            .ok()
+            .unwrap();
+        }
+    }
 }

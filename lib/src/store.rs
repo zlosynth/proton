@@ -14,4 +14,5 @@ pub struct Module {
 
 pub struct Attribute {
     pub name: &'static str,
+    pub connected: bool,
 }
