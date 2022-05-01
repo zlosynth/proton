@@ -51,6 +51,7 @@ pub unsafe extern "C" fn proton_tilde_setup() {
     window.update(instrument.mut_display());
 
     register_float_method(class, "control", set_control);
+    register_symbol_method(class, "au", alpha_up);
     register_symbol_method(class, "ad", alpha_down);
     register_symbol_method(class, "ac", alpha_click);
 
@@ -120,6 +121,15 @@ unsafe extern "C" fn set_control(_class: *mut Class, value: pd_sys::t_float) {
         .as_mut()
         .unwrap()
         .set_control(value.clamp(0.0, 21000.0));
+}
+
+unsafe extern "C" fn alpha_up(_class: *mut Class) {
+    INSTRUMENT.as_mut().unwrap().alpha_up();
+    INSTRUMENT.as_mut().unwrap().update_display();
+    WINDOW
+        .as_mut()
+        .unwrap()
+        .update(INSTRUMENT.as_mut().unwrap().mut_display());
 }
 
 unsafe extern "C" fn alpha_down(_class: *mut Class) {

@@ -150,6 +150,7 @@
 #X msg 60 87 control \$1;
 #X msg 194 241 ad;
 #X msg 194 217 ac;
+#X msg 194 193 au;
 #X connect 1 0 0 0;
 #X connect 1 0 0 1;
 #X connect 2 0 9 0;
@@ -160,3 +161,4 @@
 #X connect 9 0 7 0;
 #X connect 10 0 7 0;
 #X connect 11 0 7 0;
+#X connect 12 0 7 0;

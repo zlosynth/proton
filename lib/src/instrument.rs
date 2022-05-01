@@ -150,6 +150,10 @@ impl<D> Instrument<D> {
         self.audio_output_cell.get()
     }
 
+    pub fn alpha_up(&mut self) {
+        reduce(&mut self.state, Action::AlphaUp);
+    }
+
     pub fn alpha_down(&mut self) {
         reduce(&mut self.state, Action::AlphaDown);
     }
