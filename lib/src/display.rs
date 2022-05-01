@@ -10,7 +10,7 @@ use embedded_graphics::{
 };
 use embedded_graphics_core::draw_target::DrawTarget;
 
-use crate::model::store::{Attribute, Module, Store};
+use crate::model::state::{Attribute, Module, State};
 
 const PADDING_LEFT: i32 = 5;
 const FONT_HEIGHT: i32 = 12;
@@ -42,12 +42,12 @@ where
         Self { display }
     }
 
-    pub fn update(&mut self, store: &Store) {
-        let modules_page = selected_module_to_page(store.selected_module);
+    pub fn update(&mut self, state: &State) {
+        let modules_page = selected_module_to_page(state.selected_module);
 
-        let (list_start, list_stop) = range_for_modules_page(&store.modules, modules_page);
-        for (i, module) in store.modules[list_start..=list_stop].iter().enumerate() {
-            let selected = list_start + i == store.selected_module;
+        let (list_start, list_stop) = range_for_modules_page(&state.modules, modules_page);
+        for (i, module) in state.modules[list_start..=list_stop].iter().enumerate() {
+            let selected = list_start + i == state.selected_module;
             draw_module(module, i, selected, &mut self.display);
 
             if selected {
@@ -62,7 +62,7 @@ where
             }
         }
 
-        draw_modules_scroll_bar(&store.modules, modules_page, &mut self.display);
+        draw_modules_scroll_bar(&state.modules, modules_page, &mut self.display);
     }
 }
 

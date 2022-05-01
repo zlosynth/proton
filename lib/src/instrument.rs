@@ -5,12 +5,12 @@ use embedded_graphics_core::pixelcolor::BinaryColor;
 
 use crate::core::engine::Engine;
 use crate::display::Display;
-use crate::model::store::{Attribute, Module, Store};
+use crate::model::state::{Attribute, Module, State};
 
 pub struct Instrument<D> {
     engine: Engine,
     display: Option<Display<D>>,
-    store: Store,
+    state: State,
 }
 
 #[allow(clippy::new_without_default)]
@@ -19,7 +19,7 @@ impl<D> Instrument<D> {
         Self {
             engine: Engine::new(),
             display: None,
-            store: Store {
+            state: State {
                 modules: vec![
                     Module {
                         name: "ENV",
@@ -103,7 +103,7 @@ where
     }
 
     pub fn update_display(&mut self) {
-        self.display.as_mut().unwrap().update(&self.store);
+        self.display.as_mut().unwrap().update(&self.state);
     }
 
     pub fn mut_display(&mut self) -> &mut D {

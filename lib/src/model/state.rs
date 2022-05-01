@@ -1,6 +1,6 @@
 use alloc::vec::Vec;
 
-pub struct Store {
+pub struct State {
     pub modules: Vec<Module>,
     pub selected_module: usize,
 }
