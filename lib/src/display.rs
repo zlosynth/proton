@@ -99,12 +99,7 @@ fn draw_module<NI, CI, PI, D: DrawTarget<Color = BinaryColor>>(
     let x = PADDING_LEFT;
     let y = FONT_HEIGHT * (index + 1) as i32 - 1;
 
-    let mut cursor = if selected {
-        Cursor::new(x, y, display).with_highlight()
-    } else {
-        Cursor::new(x, y, display)
-    };
-
+    let mut cursor = Cursor::new(x, y, display).with_highlight(selected);
     cursor.write(module.name);
     cursor.write(I32_TO_STR[module.index]);
 }
@@ -146,11 +141,7 @@ fn draw_attribute<CI, PI, D: DrawTarget<Color = BinaryColor>>(
     let x = PADDING_LEFT + 34;
     let y = FONT_HEIGHT * (index + 1) as i32 - 1;
 
-    let mut cursor = if selected {
-        Cursor::new(x, y, display).with_highlight()
-    } else {
-        Cursor::new(x, y, display)
-    };
+    let mut cursor = Cursor::new(x, y, display).with_highlight(selected);
 
     if attribute.connected {
         cursor.write(">");
@@ -220,42 +211,13 @@ fn draw_patch<CI, PI, D: DrawTarget<Color = BinaryColor>>(
     cursor.write(I32_TO_STR[source.module_index]);
     cursor.write(".");
     cursor.write(source.attribute_name);
-    cursor.write("--");
+    cursor.space(2);
+    cursor.write("-");
+    cursor.space(2);
     cursor.write(destination.module_name);
     cursor.write(I32_TO_STR[destination.module_index]);
     cursor.write(".");
     cursor.write(destination.attribute_name);
-}
-
-#[derive(Clone, Copy)]
-enum Highlight {
-    Yes,
-    No,
-}
-
-fn draw_text<D: DrawTarget<Color = BinaryColor>>(
-    text: &'static str,
-    x: i32,
-    y: i32,
-    highlighted: Highlight,
-    display: &mut D,
-) {
-    let style = match highlighted {
-        Highlight::Yes => MonoTextStyleBuilder::new()
-            .font(&FONT_6X12)
-            .text_color(BinaryColor::Off)
-            .background_color(BinaryColor::On)
-            .build(),
-        Highlight::No => MonoTextStyleBuilder::new()
-            .font(&FONT_6X12)
-            .text_color(BinaryColor::On)
-            .background_color(BinaryColor::Off)
-            .build(),
-    };
-    Text::new(text, Point::new(x, y), style)
-        .draw(display)
-        .ok()
-        .unwrap();
 }
 
 fn draw_blank<D: DrawTarget<Color = BinaryColor>>(display: &mut D) {
@@ -286,18 +248,58 @@ impl<'a, D: DrawTarget<Color = BinaryColor>> Cursor<'a, D> {
         }
     }
 
-    fn with_highlight(mut self) -> Self {
-        self.highlighted = true;
+    fn with_highlight(mut self, highlighted: bool) -> Self {
+        self.highlighted = highlighted;
         self
     }
 
     fn write(&mut self, value: &'static str) {
-        let highlight = if self.highlighted {
-            Highlight::Yes
-        } else {
-            Highlight::No
-        };
-        draw_text(value, self.x, self.y, highlight, self.display);
+        draw_text(value, self.x, self.y, self.highlighted, self.display);
         self.x += FONT_WIDTH * value.len() as i32;
     }
+
+    fn space(&mut self, distance: i32) {
+        let color = if self.highlighted {
+            BinaryColor::On
+        } else {
+            BinaryColor::Off
+        };
+
+        Rectangle::new(
+            Point::new(self.x, self.y),
+            Size::new((self.x + distance) as u32, (self.y + FONT_HEIGHT) as u32),
+        )
+        .into_styled(PrimitiveStyle::with_fill(color))
+        .draw(self.display)
+        .ok()
+        .unwrap();
+
+        self.x += distance;
+    }
+}
+
+fn draw_text<D: DrawTarget<Color = BinaryColor>>(
+    text: &'static str,
+    x: i32,
+    y: i32,
+    highlighted: bool,
+    display: &mut D,
+) {
+    let style = if highlighted {
+        MonoTextStyleBuilder::new()
+            .font(&FONT_6X12)
+            .text_color(BinaryColor::Off)
+            .background_color(BinaryColor::On)
+            .build()
+    } else {
+        MonoTextStyleBuilder::new()
+            .font(&FONT_6X12)
+            .text_color(BinaryColor::On)
+            .background_color(BinaryColor::Off)
+            .build()
+    };
+    Text::new(text, Point::new(x, y), style)
+        .draw(display)
+        .ok()
+        .unwrap();
 }
