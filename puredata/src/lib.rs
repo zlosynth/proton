@@ -44,7 +44,6 @@ pub unsafe extern "C" fn proton_tilde_setup() {
         callback = perform
     );
 
-    // TODO: Function to init, like for class
     let window = Window::new("", &OutputSettingsBuilder::new().scale(2).build());
     WINDOW = Some(window);
 

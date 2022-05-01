@@ -54,10 +54,12 @@ where
                         Attribute {
                             name: "A",
                             connected: true,
+                            value: "100% +0.50 ",
                         },
                         Attribute {
                             name: "B",
                             connected: false,
+                            value: "0.58       ",
                         },
                     ],
                     selected_attribute: 1,
@@ -192,7 +194,7 @@ fn draw_attribute<D: DrawTarget<Color = BinaryColor>>(
         Highlight::No
     };
 
-    let x = PADDING_LEFT + 40;
+    let x = PADDING_LEFT + 34;
     let y = FONT_HEIGHT * (index + 1) as i32 - 1;
 
     if attribute.connected {
@@ -203,6 +205,12 @@ fn draw_attribute<D: DrawTarget<Color = BinaryColor>>(
 
     let x = x + FONT_WIDTH;
     draw_text(attribute.name, x, y, highlight, display);
+
+    let x = x + FONT_WIDTH;
+    draw_text(" ", x, y, highlight, display);
+
+    let x = x + FONT_WIDTH;
+    draw_text(attribute.value, x, y, highlight, display);
 }
 
 fn selected_attribute_to_page(selected_attribute: usize) -> usize {
