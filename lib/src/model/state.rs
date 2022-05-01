@@ -7,6 +7,7 @@ pub struct State<NI, CI, PI> {
     pub modules: Vec<Module<NI, CI, PI>>,
     pub selected_module: usize,
     pub patches: Vec<Patch<CI, PI>>,
+    pub selected_patch: usize,
 }
 
 #[derive(Clone, Copy, PartialEq)]
@@ -22,6 +23,7 @@ impl<NI, CI, PI> Default for State<NI, CI, PI> {
             modules: vec![],
             selected_module: 0,
             patches: vec![],
+            selected_patch: 1,
         }
     }
 }

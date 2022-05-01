@@ -76,7 +76,8 @@ where
 
     fn update_patches<NI, CI, PI>(&mut self, state: &State<NI, CI, PI>) {
         for (i, patch) in state.patches.iter().enumerate() {
-            draw_patch(patch, i, &mut self.display);
+            let selected = i == state.selected_patch;
+            draw_patch(patch, i, selected, &mut self.display);
         }
     }
 }
@@ -198,6 +199,7 @@ fn draw_attributes_scroll_bar<CI, PI, D: DrawTarget<Color = BinaryColor>>(
 fn draw_patch<CI, PI, D: DrawTarget<Color = BinaryColor>>(
     patch: &Patch<CI, PI>,
     index: usize,
+    selected: bool,
     display: &mut D,
 ) {
     let x = PADDING_LEFT;
@@ -206,7 +208,7 @@ fn draw_patch<CI, PI, D: DrawTarget<Color = BinaryColor>>(
     let source = patch.source.as_ref().unwrap();
     let destination = patch.destination.as_ref().unwrap();
 
-    let mut cursor = Cursor::new(x, y, display);
+    let mut cursor = Cursor::new(x, y, display).with_highlight(selected);
     cursor.write(source.module_name);
     cursor.write(I32_TO_STR[source.module_index]);
     cursor.write(".");
@@ -266,8 +268,8 @@ impl<'a, D: DrawTarget<Color = BinaryColor>> Cursor<'a, D> {
         };
 
         Rectangle::new(
-            Point::new(self.x, self.y),
-            Size::new((self.x + distance) as u32, (self.y + FONT_HEIGHT) as u32),
+            Point::new(self.x, self.y - 9),
+            Size::new(distance as u32, FONT_HEIGHT as u32),
         )
         .into_styled(PrimitiveStyle::with_fill(color))
         .draw(self.display)
