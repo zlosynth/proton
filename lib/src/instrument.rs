@@ -5,7 +5,7 @@ use embedded_graphics_core::pixelcolor::BinaryColor;
 use graphity::NodeIndex;
 
 use crate::display::Display;
-use crate::model::state::{Attribute, Module, State};
+use crate::model::state::{Attribute, Module, Socket, State};
 
 use crate::core::signal::Signal;
 use crate::modules::audio_output::*;
@@ -44,43 +44,28 @@ impl<D> Instrument<D> {
         // Pretend initialization
         let control_input = graph.add_node(control_input);
         state.modules.push(Module {
+            handle: control_input,
             name: ">CV",
             index: 1,
-            attributes: vec![
-                Attribute {
-                    name: "AMP",
-                    value: "100%",
-                    connected: false,
-                },
-                Attribute {
-                    name: "OFS",
-                    value: "0.4",
-                    connected: false,
-                },
-                Attribute {
-                    name: "OUT",
-                    value: "",
-                    connected: false,
-                },
-            ],
+            attributes: vec![Attribute {
+                socket: Socket::Producer(control_input.producer(ControlInputProducer)),
+                name: "OUT",
+                value: "",
+                connected: false,
+            }],
             selected_attribute: 0,
         });
         let audio_output = graph.add_node(audio_output);
         state.modules.push(Module {
+            handle: audio_output,
             name: "<AU",
             index: 1,
-            attributes: vec![
-                Attribute {
-                    name: "AMP",
-                    value: "100%",
-                    connected: false,
-                },
-                Attribute {
-                    name: "IN",
-                    value: "",
-                    connected: false,
-                },
-            ],
+            attributes: vec![Attribute {
+                socket: Socket::Consumer(audio_output.consumer(AudioOutputConsumer)),
+                name: "IN",
+                value: "",
+                connected: false,
+            }],
             selected_attribute: 0,
         });
 
@@ -88,20 +73,18 @@ impl<D> Instrument<D> {
         let oscillator = Oscillator::new();
         let oscillator = graph.add_node(oscillator);
         state.modules.push(Module {
+            handle: oscillator,
             name: "OSC",
             index: 1,
             attributes: vec![
                 Attribute {
+                    socket: Socket::Consumer(oscillator.consumer(OscillatorConsumer::Frequency)),
                     name: "FRQ",
                     value: "16000",
                     connected: false,
                 },
                 Attribute {
-                    name: "AMP",
-                    value: "100%",
-                    connected: false,
-                },
-                Attribute {
+                    socket: Socket::Producer(oscillator.producer(OscillatorProducer)),
                     name: "OUT",
                     value: "",
                     connected: false,
@@ -112,12 +95,12 @@ impl<D> Instrument<D> {
 
         // Pretend store load / user interaction
         graph.must_add_edge(
-            control_input.producer(ControlInputProducer),
-            oscillator.consumer(OscillatorConsumer::Frequency),
+            state.modules[0].attributes[0].socket.producer(),
+            state.modules[2].attributes[0].socket.consumer(),
         );
         graph.must_add_edge(
-            oscillator.producer(OscillatorProducer),
-            audio_output.consumer(AudioOutputConsumer),
+            state.modules[2].attributes[1].socket.producer(),
+            state.modules[1].attributes[0].socket.consumer(),
         );
 
         Self {
