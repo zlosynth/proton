@@ -19,6 +19,7 @@ const FONT_HEIGHT: i32 = 12;
 const FONT_WIDTH: i32 = 6;
 const MODULES_PER_PAGE: usize = 5;
 const ATTRIBUTES_PER_PAGE: usize = 5;
+const DISPLAY_WIDTH: i32 = 128;
 const DISPLAY_HEIGHT: i32 = 64;
 
 const I32_TO_STR: [&str; 100] = [
@@ -116,6 +117,7 @@ where
                     let selected = list_start + i == module.selected_attribute;
                     draw_attribute(attribute, i, selected, &mut self.display);
                 }
+                draw_attributes_scroll_bar(&module.attributes, attributes_page, &mut self.display);
             }
         }
 
@@ -240,4 +242,29 @@ fn range_for_attributes_page(attributes: &[Attribute], attributes_page: usize) -
         attributes.len(),
     ) - 1;
     (list_start, list_stop)
+}
+
+fn draw_attributes_scroll_bar<D: DrawTarget<Color = BinaryColor>>(
+    attributes: &[Attribute],
+    attributes_page: usize,
+    display: &mut D,
+) {
+    let sections = (attributes.len() as f32 / ATTRIBUTES_PER_PAGE as f32).ceil() as i32;
+    let section_height = DISPLAY_HEIGHT / sections;
+
+    let line_start = attributes_page as i32 * section_height;
+
+    let is_last_section = attributes_page == sections as usize - 1;
+    let line_stop = if is_last_section {
+        DISPLAY_HEIGHT
+    } else {
+        (attributes_page + 1) as i32 * section_height - 1
+    };
+
+    let x = DISPLAY_WIDTH - 1;
+    Line::new(Point::new(x, line_start), Point::new(x, line_stop))
+        .into_styled(PrimitiveStyle::with_stroke(BinaryColor::On, 1))
+        .draw(display)
+        .ok()
+        .unwrap();
 }
