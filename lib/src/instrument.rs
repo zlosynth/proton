@@ -21,7 +21,7 @@ graphity!(
 
 pub struct Instrument<D> {
     display: Option<Display<D>>,
-    state: State,
+    state: State<__NodeIndex, __ConsumerIndex, __ProducerIndex>,
 
     graph: Graph,
     control_input_cell: ControlInputCell,

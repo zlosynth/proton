@@ -1,40 +1,36 @@
 use alloc::vec::Vec;
 
-use crate::instrument::__ConsumerIndex as ConsumerIndex;
-use crate::instrument::__NodeIndex as NodeIndex;
-use crate::instrument::__ProducerIndex as ProducerIndex;
-
 #[derive(Clone, PartialEq)]
-pub struct State {
-    pub modules: Vec<Module>,
+pub struct State<NI, CI, PI> {
+    pub modules: Vec<Module<NI, CI, PI>>,
     pub selected_module: usize,
 }
 
 #[derive(Clone, PartialEq)]
-pub struct Module {
-    pub handle: NodeIndex,
+pub struct Module<NI, CI, PI> {
+    pub handle: NI,
     pub name: &'static str,
     pub index: usize,
-    pub attributes: Vec<Attribute>,
+    pub attributes: Vec<Attribute<CI, PI>>,
     pub selected_attribute: usize,
 }
 
 #[derive(Clone, PartialEq)]
-pub struct Attribute {
-    pub socket: Socket,
+pub struct Attribute<CI, PI> {
+    pub socket: Socket<CI, PI>,
     pub name: &'static str,
     pub connected: bool,
     pub value: &'static str,
 }
 
 #[derive(Clone, PartialEq)]
-pub enum Socket {
-    Consumer(ConsumerIndex),
-    Producer(ProducerIndex),
+pub enum Socket<CI, PI> {
+    Consumer(CI),
+    Producer(PI),
 }
 
-impl Socket {
-    pub fn consumer(&self) -> ConsumerIndex {
+impl<CI: Copy, PI: Copy> Socket<CI, PI> {
+    pub fn consumer(&self) -> CI {
         if let Socket::Consumer(consumer) = self {
             *consumer
         } else {
@@ -42,7 +38,7 @@ impl Socket {
         }
     }
 
-    pub fn producer(&self) -> ProducerIndex {
+    pub fn producer(&self) -> PI {
         if let Socket::Producer(producer) = self {
             *producer
         } else {

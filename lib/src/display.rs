@@ -42,7 +42,7 @@ where
         Self { display }
     }
 
-    pub fn update(&mut self, state: &State) {
+    pub fn update<NI, CI, PI>(&mut self, state: &State<NI, CI, PI>) {
         let modules_page = selected_module_to_page(state.selected_module);
 
         let (list_start, list_stop) = range_for_modules_page(&state.modules, modules_page);
@@ -66,14 +66,17 @@ where
     }
 }
 
-fn range_for_modules_page(modules: &[Module], modules_page: usize) -> (usize, usize) {
+fn range_for_modules_page<NI, CI, PI>(
+    modules: &[Module<NI, CI, PI>],
+    modules_page: usize,
+) -> (usize, usize) {
     let list_start = modules_page * MODULES_PER_PAGE;
     let list_stop = usize::min((modules_page + 1) * MODULES_PER_PAGE, modules.len()) - 1;
     (list_start, list_stop)
 }
 
-fn draw_module<D: DrawTarget<Color = BinaryColor>>(
-    module: &Module,
+fn draw_module<NI, CI, PI, D: DrawTarget<Color = BinaryColor>>(
+    module: &Module<NI, CI, PI>,
     index: usize,
     selected: bool,
     display: &mut D,
@@ -93,8 +96,8 @@ fn draw_module<D: DrawTarget<Color = BinaryColor>>(
     draw_text(I32_TO_STR[module.index], x, y, highlight, display);
 }
 
-fn draw_modules_scroll_bar<D: DrawTarget<Color = BinaryColor>>(
-    modules: &[Module],
+fn draw_modules_scroll_bar<NI, CI, PI, D: DrawTarget<Color = BinaryColor>>(
+    modules: &[Module<NI, CI, PI>],
     modules_page: usize,
     display: &mut D,
 ) {
@@ -121,8 +124,8 @@ fn selected_module_to_page(selected_module: usize) -> usize {
     (selected_module as f32 / MODULES_PER_PAGE as f32).floor() as usize
 }
 
-fn draw_attribute<D: DrawTarget<Color = BinaryColor>>(
-    attribute: &Attribute,
+fn draw_attribute<CI, PI, D: DrawTarget<Color = BinaryColor>>(
+    attribute: &Attribute<CI, PI>,
     index: usize,
     selected: bool,
     display: &mut D,
@@ -156,7 +159,10 @@ fn selected_attribute_to_page(selected_attribute: usize) -> usize {
     (selected_attribute as f32 / ATTRIBUTES_PER_PAGE as f32).floor() as usize
 }
 
-fn range_for_attributes_page(attributes: &[Attribute], attributes_page: usize) -> (usize, usize) {
+fn range_for_attributes_page<CI, PI>(
+    attributes: &[Attribute<CI, PI>],
+    attributes_page: usize,
+) -> (usize, usize) {
     let list_start = attributes_page * ATTRIBUTES_PER_PAGE;
     let list_stop = usize::min(
         (attributes_page + 1) * ATTRIBUTES_PER_PAGE,
@@ -165,8 +171,8 @@ fn range_for_attributes_page(attributes: &[Attribute], attributes_page: usize) -
     (list_start, list_stop)
 }
 
-fn draw_attributes_scroll_bar<D: DrawTarget<Color = BinaryColor>>(
-    attributes: &[Attribute],
+fn draw_attributes_scroll_bar<CI, PI, D: DrawTarget<Color = BinaryColor>>(
+    attributes: &[Attribute<CI, PI>],
     attributes_page: usize,
     display: &mut D,
 ) {
