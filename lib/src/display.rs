@@ -50,7 +50,7 @@ where
             let selected = list_start + i == state.selected_module;
             draw_module(module, i, selected, &mut self.display);
 
-            if selected {
+            if selected && !module.attributes.is_empty() {
                 let attributes_page = selected_attribute_to_page(module.selected_attribute);
                 let (list_start, list_stop) =
                     range_for_attributes_page(&module.attributes, attributes_page);
@@ -145,7 +145,7 @@ fn draw_attribute<D: DrawTarget<Color = BinaryColor>>(
     let x = x + FONT_WIDTH;
     draw_text(attribute.name, x, y, highlight, display);
 
-    let x = x + FONT_WIDTH;
+    let x = x + FONT_WIDTH * attribute.name.len() as i32;
     draw_text(" ", x, y, highlight, display);
 
     let x = x + FONT_WIDTH;

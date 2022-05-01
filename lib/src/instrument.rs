@@ -31,75 +31,86 @@ pub struct Instrument<D> {
 #[allow(clippy::new_without_default)]
 impl<D> Instrument<D> {
     pub fn new() -> Self {
-        let state = State {
-            modules: vec![
-                Module {
-                    name: "ENV",
-                    index: 2,
-                    attributes: vec![
-                        Attribute {
-                            name: "A",
-                            connected: true,
-                            value: "100% +0.50 ",
-                        },
-                        Attribute {
-                            name: "B",
-                            connected: false,
-                            value: "0.58       ",
-                        },
-                    ],
-                    selected_attribute: 1,
-                },
-                Module {
-                    name: "MIX",
-                    index: 1,
-                    attributes: vec![],
-                    selected_attribute: 0,
-                },
-                Module {
-                    name: "OSC",
-                    index: 3,
-                    attributes: vec![],
-                    selected_attribute: 0,
-                },
-                Module {
-                    name: ">CV",
-                    index: 9,
-                    attributes: vec![],
-                    selected_attribute: 0,
-                },
-                Module {
-                    name: "<AO",
-                    index: 1,
-                    attributes: vec![],
-                    selected_attribute: 0,
-                },
-                Module {
-                    name: "FOL",
-                    index: 3,
-                    attributes: vec![],
-                    selected_attribute: 0,
-                },
-                Module {
-                    name: "DIS",
-                    index: 3,
-                    attributes: vec![],
-                    selected_attribute: 0,
-                },
-            ],
-            selected_module: 0,
+        let mut state = State {
+            modules: vec![],
+            selected_module: 2,
         };
 
         let mut graph = Graph::new();
 
         let (control_input, control_input_cell) = ControlInput::new();
         let (audio_output, audio_output_cell) = AudioOutput::new();
-        let oscillator = Oscillator::new();
 
+        // Pretend initialization
         let control_input = graph.add_node(control_input);
+        state.modules.push(Module {
+            name: ">CV",
+            index: 1,
+            attributes: vec![
+                Attribute {
+                    name: "AMP",
+                    value: "100%",
+                    connected: false,
+                },
+                Attribute {
+                    name: "OFS",
+                    value: "0.4",
+                    connected: false,
+                },
+                Attribute {
+                    name: "OUT",
+                    value: "",
+                    connected: false,
+                },
+            ],
+            selected_attribute: 0,
+        });
         let audio_output = graph.add_node(audio_output);
-        let oscillator = graph.add_node(oscillator);
+        state.modules.push(Module {
+            name: "<AU",
+            index: 1,
+            attributes: vec![
+                Attribute {
+                    name: "AMP",
+                    value: "100%",
+                    connected: false,
+                },
+                Attribute {
+                    name: "IN",
+                    value: "",
+                    connected: false,
+                },
+            ],
+            selected_attribute: 0,
+        });
 
+        // Pretend store load / user interaction
+        let oscillator = Oscillator::new();
+        let oscillator = graph.add_node(oscillator);
+        state.modules.push(Module {
+            name: "OSC",
+            index: 1,
+            attributes: vec![
+                Attribute {
+                    name: "FRQ",
+                    value: "16000",
+                    connected: false,
+                },
+                Attribute {
+                    name: "AMP",
+                    value: "100%",
+                    connected: false,
+                },
+                Attribute {
+                    name: "OUT",
+                    value: "",
+                    connected: false,
+                },
+            ],
+            selected_attribute: 0,
+        });
+
+        // Pretend store load / user interaction
         graph.must_add_edge(
             control_input.producer(ControlInputProducer),
             oscillator.consumer(OscillatorConsumer::Frequency),
