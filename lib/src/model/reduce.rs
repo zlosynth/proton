@@ -4,6 +4,7 @@ use super::state::*;
 pub fn reduce<NI, CI, PI>(state: &mut State<NI, CI, PI>, action: Action) {
     match action {
         Action::AlphaDown => reduce_alpha_down(state),
+        Action::AlphaClick => reduce_alpha_click(state),
     }
 }
 
@@ -14,6 +15,13 @@ fn reduce_alpha_down<NI, CI, PI>(state: &mut State<NI, CI, PI>) {
 
     state.selected_module += 1;
     state.selected_module %= state.modules.len();
+}
+
+fn reduce_alpha_click<NI, CI, PI>(state: &mut State<NI, CI, PI>) {
+    state.view = match state.view {
+        View::Modules => View::Patches,
+        View::Patches => View::Modules,
+    };
 }
 
 #[cfg(test)]
@@ -106,5 +114,15 @@ mod tests {
         reduce(&mut state, Action::AlphaDown);
         reduce(&mut state, Action::AlphaDown);
         assert_eq!(state.selected_module, 0);
+    }
+
+    #[test]
+    fn alpha_click_toggles_between_modules_and_patches() {
+        let mut state = State::<__NodeIndex, __ConsumerIndex, __ProducerIndex>::default();
+        assert!(matches!(state.view, View::Modules));
+        reduce(&mut state, Action::AlphaClick);
+        assert!(matches!(state.view, View::Patches));
+        reduce(&mut state, Action::AlphaClick);
+        assert!(matches!(state.view, View::Modules));
     }
 }
