@@ -8,4 +8,5 @@ pub struct Store {
 
 pub struct Module {
     pub name: &'static str,
+    pub index: usize,
 }

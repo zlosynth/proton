@@ -16,8 +16,19 @@ use crate::store::{Module, Store};
 
 const PADDING_LEFT: i32 = 5;
 const FONT_HEIGHT: i32 = 12;
+const FONT_WIDTH: i32 = 6;
 const MODULES_PER_PAGE: usize = 5;
 const DISPLAY_HEIGHT: i32 = 64;
+
+const I32_TO_STR: [&str; 100] = [
+    "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15",
+    "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31",
+    "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47",
+    "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63",
+    "64", "65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79",
+    "80", "81", "82", "83", "84", "85", "86", "87", "88", "89", "90", "91", "92", "93", "94", "95",
+    "96", "97", "98", "99",
+];
 
 pub struct Display<D> {
     pub display: D,
@@ -34,13 +45,34 @@ where
     pub fn update(&mut self) {
         let store = Store {
             modules: vec![
-                Module { name: "ENV" },
-                Module { name: "MIX" },
-                Module { name: "OSC" },
-                Module { name: ">CV" },
-                Module { name: "<AO" },
-                Module { name: "FOL" },
-                Module { name: "DIS" },
+                Module {
+                    name: "ENV",
+                    index: 2,
+                },
+                Module {
+                    name: "MIX",
+                    index: 1,
+                },
+                Module {
+                    name: "OSC",
+                    index: 3,
+                },
+                Module {
+                    name: ">CV",
+                    index: 9,
+                },
+                Module {
+                    name: "<AO",
+                    index: 1,
+                },
+                Module {
+                    name: "FOL",
+                    index: 3,
+                },
+                Module {
+                    name: "DIS",
+                    index: 3,
+                },
             ],
             modules_page: 0,
             selected_module: 3,
@@ -74,6 +106,14 @@ fn draw_module<D: DrawTarget<Color = BinaryColor>>(
         draw_highlighted_text(module.name, x, y, display);
     } else {
         draw_text(module.name, x, y, display);
+    }
+
+    let name_width = FONT_WIDTH * 3;
+    let x = x + name_width;
+    if highlight {
+        draw_highlighted_text(I32_TO_STR[module.index], x, y, display);
+    } else {
+        draw_text(I32_TO_STR[module.index], x, y, display);
     }
 }
 
