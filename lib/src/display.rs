@@ -68,22 +68,46 @@ fn draw_module<D: DrawTarget<Color = BinaryColor>>(
     highlight: bool,
     display: &mut D,
 ) {
-    let position = Point::new(PADDING_LEFT, FONT_HEIGHT * (index + 1) as i32 - 1);
-    let text = if highlight {
-        let style = MonoTextStyleBuilder::new()
-            .font(&FONT_6X12)
-            .text_color(BinaryColor::Off)
-            .background_color(BinaryColor::On)
-            .build();
-        Text::new(module.name, position, style)
+    let x = PADDING_LEFT;
+    let y = FONT_HEIGHT * (index + 1) as i32 - 1;
+    if highlight {
+        draw_highlighted_text(module.name, x, y, display);
     } else {
-        Text::new(
-            module.name,
-            position,
-            MonoTextStyle::new(&FONT_6X12, BinaryColor::On),
-        )
-    };
-    text.draw(display).ok().unwrap();
+        draw_text(module.name, x, y, display);
+    }
+}
+
+fn draw_text<D: DrawTarget<Color = BinaryColor>>(
+    text: &'static str,
+    x: i32,
+    y: i32,
+    display: &mut D,
+) {
+    Text::new(
+        text,
+        Point::new(x, y),
+        MonoTextStyle::new(&FONT_6X12, BinaryColor::On),
+    )
+    .draw(display)
+    .ok()
+    .unwrap();
+}
+
+fn draw_highlighted_text<D: DrawTarget<Color = BinaryColor>>(
+    text: &'static str,
+    x: i32,
+    y: i32,
+    display: &mut D,
+) {
+    let style = MonoTextStyleBuilder::new()
+        .font(&FONT_6X12)
+        .text_color(BinaryColor::Off)
+        .background_color(BinaryColor::On)
+        .build();
+    Text::new(text, Point::new(x, y), style)
+        .draw(display)
+        .ok()
+        .unwrap();
 }
 
 fn draw_modules_scroll_bar<D: DrawTarget<Color = BinaryColor>>(
