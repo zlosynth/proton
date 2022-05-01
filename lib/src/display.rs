@@ -10,7 +10,7 @@ use embedded_graphics::{
 };
 use embedded_graphics_core::draw_target::DrawTarget;
 
-use crate::model::state::{Attribute, Module, State};
+use crate::model::state::{Attribute, Module, Patch, State, View};
 
 const PADDING_LEFT: i32 = 5;
 const FONT_HEIGHT: i32 = 12;
@@ -45,6 +45,13 @@ where
     pub fn update<NI, CI, PI>(&mut self, state: &State<NI, CI, PI>) {
         draw_blank(&mut self.display);
 
+        match state.view {
+            View::Modules => self.update_modules(state),
+            View::Patches => self.update_patches(state),
+        }
+    }
+
+    fn update_modules<NI, CI, PI>(&mut self, state: &State<NI, CI, PI>) {
         let modules_page = selected_module_to_page(state.selected_module);
 
         let (list_start, list_stop) = range_for_modules_page(&state.modules, modules_page);
@@ -65,6 +72,12 @@ where
         }
 
         draw_modules_scroll_bar(&state.modules, modules_page, &mut self.display);
+    }
+
+    fn update_patches<NI, CI, PI>(&mut self, state: &State<NI, CI, PI>) {
+        for (i, patch) in state.patches.iter().enumerate() {
+            draw_patch(patch, i, &mut self.display);
+        }
     }
 }
 
@@ -196,6 +209,45 @@ fn draw_attributes_scroll_bar<CI, PI, D: DrawTarget<Color = BinaryColor>>(
         .draw(display)
         .ok()
         .unwrap();
+}
+
+fn draw_patch<CI, PI, D: DrawTarget<Color = BinaryColor>>(
+    patch: &Patch<CI, PI>,
+    index: usize,
+    display: &mut D,
+) {
+    let x = PADDING_LEFT;
+    let y = FONT_HEIGHT * (index + 1) as i32 - 1;
+
+    draw_text(patch.source_module_name, x, y, Highlight::No, display);
+    let x = x + FONT_WIDTH * patch.source_module_name.len() as i32;
+
+    let index = I32_TO_STR[patch.source_module_index];
+    draw_text(index, x, y, Highlight::No, display);
+    let x = x + FONT_WIDTH * index.len() as i32;
+
+    draw_text(".", x, y, Highlight::No, display);
+    let x = x + FONT_WIDTH;
+
+    draw_text(patch.source_attribute_name, x, y, Highlight::No, display);
+    let x = x + FONT_WIDTH * patch.source_attribute_name.len() as i32;
+
+    let x = x + 2;
+    draw_text("-", x, y, Highlight::No, display);
+    let x = x + FONT_WIDTH + 2;
+
+    draw_text(patch.destination_module_name, x, y, Highlight::No, display);
+    let x = x + FONT_WIDTH * patch.destination_module_name.len() as i32;
+
+    let index = I32_TO_STR[patch.destination_module_index];
+    draw_text(index, x, y, Highlight::No, display);
+    let x = x + FONT_WIDTH * index.len() as i32;
+
+    draw_text(".", x, y, Highlight::No, display);
+    let x = x + FONT_WIDTH;
+
+    draw_text(patch.destination_attribute_name, x, y, Highlight::No, display);
+    let x = x + FONT_WIDTH * patch.destination_attribute_name.len() as i32;
 }
 
 #[derive(Clone, Copy)]
