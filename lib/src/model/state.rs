@@ -4,11 +4,13 @@ use crate::instrument::__ConsumerIndex as ConsumerIndex;
 use crate::instrument::__NodeIndex as NodeIndex;
 use crate::instrument::__ProducerIndex as ProducerIndex;
 
+#[derive(Clone, PartialEq)]
 pub struct State {
     pub modules: Vec<Module>,
     pub selected_module: usize,
 }
 
+#[derive(Clone, PartialEq)]
 pub struct Module {
     pub handle: NodeIndex,
     pub name: &'static str,
@@ -17,6 +19,7 @@ pub struct Module {
     pub selected_attribute: usize,
 }
 
+#[derive(Clone, PartialEq)]
 pub struct Attribute {
     pub socket: Socket,
     pub name: &'static str,
@@ -24,6 +27,7 @@ pub struct Attribute {
     pub value: &'static str,
 }
 
+#[derive(Clone, PartialEq)]
 pub enum Socket {
     Consumer(ConsumerIndex),
     Producer(ProducerIndex),
