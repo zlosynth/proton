@@ -15,3 +15,4 @@ mod core;
 mod display;
 mod modules;
 mod primitives;
+mod store;
