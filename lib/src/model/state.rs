@@ -23,7 +23,7 @@ impl<NI, CI, PI> Default for State<NI, CI, PI> {
             modules: vec![],
             selected_module: 0,
             patches: vec![],
-            selected_patch: 1,
+            selected_patch: 0,
         }
     }
 }
