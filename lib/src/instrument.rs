@@ -4,10 +4,11 @@ use embedded_graphics_core::draw_target::DrawTarget;
 use embedded_graphics_core::pixelcolor::BinaryColor;
 use graphity::NodeIndex;
 
-use crate::display::Display;
-use crate::model::state::{Attribute, Module, Socket, State};
-
 use crate::core::signal::Signal;
+use crate::display::Display;
+use crate::model::action::Action;
+use crate::model::reduce::reduce;
+use crate::model::state::{Attribute, Module, Socket, State};
 use crate::modules::audio_output::*;
 use crate::modules::control_input::*;
 use crate::modules::oscillator::*;
@@ -122,6 +123,10 @@ impl<D> Instrument<D> {
 
     pub fn get_audio(&self) -> [f32; 32] {
         self.audio_output_cell.get()
+    }
+
+    pub fn alpha_down(&mut self) {
+        reduce(&mut self.state, Action::AlphaDown);
     }
 }
 

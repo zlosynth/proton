@@ -2,10 +2,10 @@
 use micromath::F32Ext;
 
 use embedded_graphics::{
-    mono_font::{ascii::FONT_6X12, MonoTextStyle, MonoTextStyleBuilder},
+    mono_font::{ascii::FONT_6X12, MonoTextStyleBuilder},
     pixelcolor::BinaryColor,
     prelude::*,
-    primitives::{Line, PrimitiveStyle},
+    primitives::{Line, PrimitiveStyle, Rectangle},
     text::Text,
 };
 use embedded_graphics_core::draw_target::DrawTarget;
@@ -43,6 +43,8 @@ where
     }
 
     pub fn update<NI, CI, PI>(&mut self, state: &State<NI, CI, PI>) {
+        draw_blank(&mut self.display);
+
         let modules_page = selected_module_to_page(state.selected_module);
 
         let (list_start, list_stop) = range_for_modules_page(&state.modules, modules_page);
@@ -209,27 +211,31 @@ fn draw_text<D: DrawTarget<Color = BinaryColor>>(
     highlighted: Highlight,
     display: &mut D,
 ) {
-    match highlighted {
-        Highlight::Yes => {
-            let style = MonoTextStyleBuilder::new()
-                .font(&FONT_6X12)
-                .text_color(BinaryColor::Off)
-                .background_color(BinaryColor::On)
-                .build();
-            Text::new(text, Point::new(x, y), style)
-                .draw(display)
-                .ok()
-                .unwrap();
-        }
-        Highlight::No => {
-            Text::new(
-                text,
-                Point::new(x, y),
-                MonoTextStyle::new(&FONT_6X12, BinaryColor::On),
-            )
-            .draw(display)
-            .ok()
-            .unwrap();
-        }
-    }
+    let style = match highlighted {
+        Highlight::Yes => MonoTextStyleBuilder::new()
+            .font(&FONT_6X12)
+            .text_color(BinaryColor::Off)
+            .background_color(BinaryColor::On)
+            .build(),
+        Highlight::No => MonoTextStyleBuilder::new()
+            .font(&FONT_6X12)
+            .text_color(BinaryColor::On)
+            .background_color(BinaryColor::Off)
+            .build(),
+    };
+    Text::new(text, Point::new(x, y), style)
+        .draw(display)
+        .ok()
+        .unwrap();
+}
+
+fn draw_blank<D: DrawTarget<Color = BinaryColor>>(display: &mut D) {
+    Rectangle::new(
+        Point::new(0, 0),
+        Size::new(DISPLAY_WIDTH as u32, DISPLAY_HEIGHT as u32),
+    )
+    .into_styled(PrimitiveStyle::with_fill(BinaryColor::Off))
+    .draw(display)
+    .ok()
+    .unwrap();
 }

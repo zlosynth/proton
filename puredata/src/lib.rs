@@ -48,6 +48,7 @@ pub unsafe extern "C" fn proton_tilde_setup() {
     WINDOW = Some(window);
 
     register_float_method(class, "control", set_control);
+    register_symbol_method(class, "ad", alpha_down);
 }
 
 unsafe fn create_class() -> *mut pd_sys::_class {
@@ -102,12 +103,36 @@ unsafe fn register_float_method(
     );
 }
 
+unsafe fn register_symbol_method(
+    class: *mut pd_sys::_class,
+    symbol: &str,
+    method: unsafe extern "C" fn(*mut Class),
+) {
+    pd_sys::class_addmethod(
+        class,
+        Some(std::mem::transmute::<unsafe extern "C" fn(*mut Class), _>(
+            method,
+        )),
+        pd_sys::gensym(cstr::cstr(symbol).as_ptr()),
+        0,
+    );
+}
+
 unsafe extern "C" fn set_control(class: *mut Class, value: pd_sys::t_float) {
     (*class)
         .instrument
         .as_mut()
         .unwrap()
         .set_control(value.clamp(0.0, 21000.0));
+}
+
+unsafe extern "C" fn alpha_down(class: *mut Class) {
+    (*class).instrument.as_mut().unwrap().alpha_down();
+    (*class).instrument.as_mut().unwrap().update_display();
+    WINDOW
+        .as_mut()
+        .unwrap()
+        .update((*class).instrument.as_mut().unwrap().mut_display());
 }
 
 fn perform(
