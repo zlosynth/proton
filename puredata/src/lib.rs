@@ -19,21 +19,18 @@ use embedded_graphics_simulator::{OutputSettingsBuilder, SimulatorDisplay, Windo
 use proton_lib::instrument::Instrument;
 
 static mut CLASS: Option<*mut pd_sys::_class> = None;
-
+static mut INSTRUMENT: Option<Instrument<SimulatorDisplay<BinaryColor>>> = None;
 static mut WINDOW: Option<Window> = None;
 
 #[repr(C)]
 struct Class {
     pd_obj: pd_sys::t_object,
-    instrument: Option<Instrument<SimulatorDisplay<BinaryColor>>>,
     signal_dummy: f32,
 }
 
 #[no_mangle]
 pub unsafe extern "C" fn proton_tilde_setup() {
     let class = create_class();
-
-    CLASS = Some(class);
 
     register_dsp_method!(
         class,
@@ -44,11 +41,21 @@ pub unsafe extern "C" fn proton_tilde_setup() {
         callback = perform
     );
 
-    let window = Window::new("", &OutputSettingsBuilder::new().scale(2).build());
-    WINDOW = Some(window);
+    let mut window = Window::new("", &OutputSettingsBuilder::new().scale(2).build());
+    let mut instrument = Instrument::new();
+
+    let display = SimulatorDisplay::new(Size::new(128, 64));
+    instrument.register_display(display);
+
+    instrument.update_display();
+    window.update(instrument.mut_display());
 
     register_float_method(class, "control", set_control);
     register_symbol_method(class, "ad", alpha_down);
+
+    CLASS = Some(class);
+    INSTRUMENT = Some(instrument);
+    WINDOW = Some(window);
 }
 
 unsafe fn create_class() -> *mut pd_sys::_class {
@@ -69,17 +76,6 @@ unsafe fn create_class() -> *mut pd_sys::_class {
 
 unsafe extern "C" fn new() -> *mut c_void {
     let class = pd_sys::pd_new(CLASS.unwrap()) as *mut Class;
-
-    let mut instrument = Instrument::new();
-    let display = SimulatorDisplay::new(Size::new(128, 64));
-    instrument.register_display(display);
-    (*class).instrument = Some(instrument);
-
-    (*class).instrument.as_mut().unwrap().update_display();
-    WINDOW
-        .as_mut()
-        .unwrap()
-        .update((*class).instrument.as_mut().unwrap().mut_display());
 
     pd_sys::outlet_new(&mut (*class).pd_obj, &mut pd_sys::s_signal);
 
@@ -118,25 +114,24 @@ unsafe fn register_symbol_method(
     );
 }
 
-unsafe extern "C" fn set_control(class: *mut Class, value: pd_sys::t_float) {
-    (*class)
-        .instrument
+unsafe extern "C" fn set_control(_class: *mut Class, value: pd_sys::t_float) {
+    INSTRUMENT
         .as_mut()
         .unwrap()
         .set_control(value.clamp(0.0, 21000.0));
 }
 
-unsafe extern "C" fn alpha_down(class: *mut Class) {
-    (*class).instrument.as_mut().unwrap().alpha_down();
-    (*class).instrument.as_mut().unwrap().update_display();
+unsafe extern "C" fn alpha_down(_class: *mut Class) {
+    INSTRUMENT.as_mut().unwrap().alpha_down();
+    INSTRUMENT.as_mut().unwrap().update_display();
     WINDOW
         .as_mut()
         .unwrap()
-        .update((*class).instrument.as_mut().unwrap().mut_display());
+        .update(INSTRUMENT.as_mut().unwrap().mut_display());
 }
 
-fn perform(
-    class: &mut Class,
+unsafe fn perform(
+    _class: &mut Class,
     _number_of_frames: usize,
     _inlets: &[&mut [pd_sys::t_float]],
     outlets: &mut [&mut [pd_sys::t_float]],
@@ -145,8 +140,8 @@ fn perform(
     assert!(outlets[0].len() % BUFFER_LEN == 0);
 
     for chunk_index in 0..outlets[0].len() / BUFFER_LEN {
-        class.instrument.as_mut().unwrap().tick();
-        let buffer = class.instrument.as_mut().unwrap().get_audio();
+        INSTRUMENT.as_mut().unwrap().tick();
+        let buffer = INSTRUMENT.as_mut().unwrap().get_audio();
         let start = chunk_index * BUFFER_LEN;
         outlets[0][start..(BUFFER_LEN + start)].clone_from_slice(&buffer[..BUFFER_LEN]);
     }
