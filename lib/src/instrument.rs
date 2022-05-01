@@ -1,12 +1,16 @@
+use alloc::vec;
+
 use embedded_graphics_core::draw_target::DrawTarget;
 use embedded_graphics_core::pixelcolor::BinaryColor;
 
 use crate::core::engine::Engine;
 use crate::display::Display;
+use crate::store::{Attribute, Module, Store};
 
 pub struct Instrument<D> {
     engine: Engine,
     display: Option<Display<D>>,
+    store: Store,
 }
 
 #[allow(clippy::new_without_default)]
@@ -15,6 +19,64 @@ impl<D> Instrument<D> {
         Self {
             engine: Engine::new(),
             display: None,
+            store: Store {
+                modules: vec![
+                    Module {
+                        name: "ENV",
+                        index: 2,
+                        attributes: vec![
+                            Attribute {
+                                name: "A",
+                                connected: true,
+                                value: "100% +0.50 ",
+                            },
+                            Attribute {
+                                name: "B",
+                                connected: false,
+                                value: "0.58       ",
+                            },
+                        ],
+                        selected_attribute: 1,
+                    },
+                    Module {
+                        name: "MIX",
+                        index: 1,
+                        attributes: vec![],
+                        selected_attribute: 0,
+                    },
+                    Module {
+                        name: "OSC",
+                        index: 3,
+                        attributes: vec![],
+                        selected_attribute: 0,
+                    },
+                    Module {
+                        name: ">CV",
+                        index: 9,
+                        attributes: vec![],
+                        selected_attribute: 0,
+                    },
+                    Module {
+                        name: "<AO",
+                        index: 1,
+                        attributes: vec![],
+                        selected_attribute: 0,
+                    },
+                    Module {
+                        name: "FOL",
+                        index: 3,
+                        attributes: vec![],
+                        selected_attribute: 0,
+                    },
+                    Module {
+                        name: "DIS",
+                        index: 3,
+                        attributes: vec![],
+                        selected_attribute: 0,
+                    },
+                ],
+                selected_module: 0,
+            },
         }
     }
 
@@ -41,7 +103,7 @@ where
     }
 
     pub fn update_display(&mut self) {
-        self.display.as_mut().unwrap().update();
+        self.display.as_mut().unwrap().update(&self.store);
     }
 
     pub fn mut_display(&mut self) -> &mut D {

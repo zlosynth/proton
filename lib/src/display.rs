@@ -1,8 +1,6 @@
 #[allow(unused_imports)]
 use micromath::F32Ext;
 
-use alloc::vec;
-
 use embedded_graphics::{
     mono_font::{ascii::FONT_6X12, MonoTextStyle, MonoTextStyleBuilder},
     pixelcolor::BinaryColor,
@@ -44,66 +42,7 @@ where
         Self { display }
     }
 
-    pub fn update(&mut self) {
-        let store = Store {
-            modules: vec![
-                Module {
-                    name: "ENV",
-                    index: 2,
-                    attributes: vec![
-                        Attribute {
-                            name: "A",
-                            connected: true,
-                            value: "100% +0.50 ",
-                        },
-                        Attribute {
-                            name: "B",
-                            connected: false,
-                            value: "0.58       ",
-                        },
-                    ],
-                    selected_attribute: 1,
-                },
-                Module {
-                    name: "MIX",
-                    index: 1,
-                    attributes: vec![],
-                    selected_attribute: 0,
-                },
-                Module {
-                    name: "OSC",
-                    index: 3,
-                    attributes: vec![],
-                    selected_attribute: 0,
-                },
-                Module {
-                    name: ">CV",
-                    index: 9,
-                    attributes: vec![],
-                    selected_attribute: 0,
-                },
-                Module {
-                    name: "<AO",
-                    index: 1,
-                    attributes: vec![],
-                    selected_attribute: 0,
-                },
-                Module {
-                    name: "FOL",
-                    index: 3,
-                    attributes: vec![],
-                    selected_attribute: 0,
-                },
-                Module {
-                    name: "DIS",
-                    index: 3,
-                    attributes: vec![],
-                    selected_attribute: 0,
-                },
-            ],
-            selected_module: 0,
-        };
-
+    pub fn update(&mut self, store: &Store) {
         let modules_page = selected_module_to_page(store.selected_module);
 
         let (list_start, list_stop) = range_for_modules_page(&store.modules, modules_page);
