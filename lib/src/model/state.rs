@@ -1,9 +1,19 @@
+use alloc::vec;
 use alloc::vec::Vec;
 
 #[derive(Clone, PartialEq)]
 pub struct State<NI, CI, PI> {
     pub modules: Vec<Module<NI, CI, PI>>,
     pub selected_module: usize,
+}
+
+impl<NI, CI, PI> Default for State<NI, CI, PI> {
+    fn default() -> Self {
+        Self {
+            modules: vec![],
+            selected_module: 0,
+        }
+    }
 }
 
 #[derive(Clone, PartialEq)]
