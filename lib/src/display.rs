@@ -74,17 +74,18 @@ where
                     index: 3,
                 },
             ],
-            modules_page: 0,
-            selected_module: 3,
+            selected_module: 6,
         };
 
-        let (list_start, list_stop) = range_for_modules_page(&store.modules, store.modules_page);
+        let modules_page = selected_module_to_page(store.selected_module);
+
+        let (list_start, list_stop) = range_for_modules_page(&store.modules, modules_page);
         for (i, module) in store.modules[list_start..=list_stop].iter().enumerate() {
             let highlight = list_start + i == store.selected_module;
             draw_module(module, i, highlight, &mut self.display);
         }
 
-        draw_modules_scroll_bar(&store.modules, store.modules_page, &mut self.display);
+        draw_modules_scroll_bar(&store.modules, modules_page, &mut self.display);
     }
 }
 
@@ -172,4 +173,8 @@ fn draw_modules_scroll_bar<D: DrawTarget<Color = BinaryColor>>(
         .draw(display)
         .ok()
         .unwrap();
+}
+
+fn selected_module_to_page(selected_module: usize) -> usize {
+    (selected_module as f32 / MODULES_PER_PAGE as f32).floor() as usize
 }
