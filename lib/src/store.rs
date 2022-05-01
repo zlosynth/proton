@@ -9,6 +9,7 @@ pub struct Module {
     pub name: &'static str,
     pub index: usize,
     pub consumers: Vec<Consumer>,
+    pub selected_attribute: usize,
 }
 
 pub struct Consumer {

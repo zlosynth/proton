@@ -54,36 +54,43 @@ where
                         Consumer { name: "C" },
                         Consumer { name: "D" },
                     ],
+                    selected_attribute: 1,
                 },
                 Module {
                     name: "MIX",
                     index: 1,
                     consumers: vec![],
+                    selected_attribute: 0,
                 },
                 Module {
                     name: "OSC",
                     index: 3,
                     consumers: vec![],
+                    selected_attribute: 0,
                 },
                 Module {
                     name: ">CV",
                     index: 9,
                     consumers: vec![],
+                    selected_attribute: 0,
                 },
                 Module {
                     name: "<AO",
                     index: 1,
                     consumers: vec![],
+                    selected_attribute: 0,
                 },
                 Module {
                     name: "FOL",
                     index: 3,
                     consumers: vec![],
+                    selected_attribute: 0,
                 },
                 Module {
                     name: "DIS",
                     index: 3,
                     consumers: vec![],
+                    selected_attribute: 0,
                 },
             ],
             selected_module: 0,
@@ -98,7 +105,8 @@ where
 
             if selected {
                 for (i, consumer) in module.consumers.iter().enumerate() {
-                    draw_consumer(consumer, i, &mut self.display);
+                    let selected = i == module.selected_attribute;
+                    draw_consumer(consumer, i, selected, &mut self.display);
                 }
             }
         }
@@ -200,9 +208,15 @@ fn selected_module_to_page(selected_module: usize) -> usize {
 fn draw_consumer<D: DrawTarget<Color = BinaryColor>>(
     consumer: &Consumer,
     index: usize,
+    selected: bool,
     display: &mut D,
 ) {
     let x = PADDING_LEFT + 40;
     let y = FONT_HEIGHT * (index + 1) as i32 - 1;
-    draw_text(consumer.name, x, y, display);
+
+    if selected {
+        draw_highlighted_text(consumer.name, x, y, display);
+    } else {
+        draw_text(consumer.name, x, y, display);
+    }
 }
