@@ -12,6 +12,7 @@ use crate::store::{Module, Store};
 
 const PADDING_LEFT: i32 = 5;
 const FONT_HEIGHT: i32 = 12;
+const MODULES_PER_PAGE: usize = 5;
 
 pub struct Display<D> {
     pub display: D,
@@ -31,12 +32,16 @@ where
                 Module { name: "ENV" },
                 Module { name: "MIX" },
                 Module { name: "OSC" },
-                Module { name: "CV" },
-                Module { name: "AUD" },
+                Module { name: ">CV" },
+                Module { name: "<AO" },
+                Module { name: "FOL" },
+                Module { name: "DIS" },
             ],
+            modules_page: 1,
         };
 
-        for (i, module) in store.modules.iter().enumerate() {
+        let (list_start, list_stop) = range_for_modules_page(&store.modules, store.modules_page);
+        for (i, module) in store.modules[list_start..=list_stop].iter().enumerate() {
             draw_module(module, i, &mut self.display);
         }
     }
@@ -51,4 +56,10 @@ fn draw_module<D: DrawTarget<Color = BinaryColor>>(module: &Module, index: usize
     .draw(display)
     .ok()
     .unwrap();
+}
+
+fn range_for_modules_page(modules: &[Module], modules_page: usize) -> (usize, usize) {
+    let list_start = modules_page * MODULES_PER_PAGE;
+    let list_stop = usize::min((modules_page + 1) * MODULES_PER_PAGE, modules.len()) - 1;
+    (list_start, list_stop)
 }
