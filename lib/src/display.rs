@@ -207,21 +207,27 @@ fn draw_patch<CI, PI, D: DrawTarget<Color = BinaryColor>>(
     let x = PADDING;
     let y = FONT_HEIGHT * (index + 1) as i32 - 1;
 
-    let source = patch.source.as_ref().unwrap();
-    let destination = patch.destination.as_ref().unwrap();
-
     let mut cursor = Cursor::new(x, y, display).with_highlight(selected);
-    cursor.write(source.module_name);
-    cursor.write(I32_TO_STR[source.module_index]);
-    cursor.write(".");
-    cursor.write(source.attribute_name);
+
+    if let Some(source) = patch.source.as_ref() {
+        cursor.write(source.module_name);
+        cursor.write(I32_TO_STR[source.module_index]);
+        cursor.write(".");
+        cursor.write(source.attribute_name);
+    }
+
+    cursor.space_until(DISPLAY_WIDTH / 2 - FONT_WIDTH / 2 - 2);
     cursor.space(2);
     cursor.write("-");
     cursor.space(2);
-    cursor.write(destination.module_name);
-    cursor.write(I32_TO_STR[destination.module_index]);
-    cursor.write(".");
-    cursor.write(destination.attribute_name);
+
+    if let Some(destination) = patch.destination.as_ref() {
+        cursor.write(destination.module_name);
+        cursor.write(I32_TO_STR[destination.module_index]);
+        cursor.write(".");
+        cursor.write(destination.attribute_name);
+    }
+
     cursor.space_until(DISPLAY_WIDTH - PADDING);
 }
 
