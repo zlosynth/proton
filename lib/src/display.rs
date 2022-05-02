@@ -10,7 +10,7 @@ use embedded_graphics::{
 };
 use embedded_graphics_core::draw_target::DrawTarget;
 
-use crate::model::state::{Attribute, Module, Patch, State, View};
+use crate::model::state::{Attribute, Module, Patch, Socket, State, View};
 
 const PADDING: i32 = 5;
 const FONT_HEIGHT: i32 = 12;
@@ -145,7 +145,10 @@ fn draw_attribute<CI, PI, D: DrawTarget<Color = BinaryColor>>(
     let mut cursor = Cursor::new(x, y, display).with_highlight(selected);
 
     if attribute.connected {
-        cursor.write(">");
+        match attribute.socket {
+            Socket::Consumer(_) => cursor.write(">"),
+            Socket::Producer(_) => cursor.write("<"),
+        }
     } else {
         cursor.write(" ");
     }
