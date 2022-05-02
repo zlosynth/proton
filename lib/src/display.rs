@@ -151,8 +151,6 @@ fn draw_attribute<CI, PI, D: DrawTarget<Color = BinaryColor>>(
     }
 
     cursor.write(attribute.name);
-    cursor.write(" ");
-    cursor.write(attribute.value);
     cursor.space_until(DISPLAY_WIDTH - PADDING);
 }
 

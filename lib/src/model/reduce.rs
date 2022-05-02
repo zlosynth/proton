@@ -108,7 +108,6 @@ mod tests {
             attributes: vec![Attribute {
                 socket: Socket::Producer(node1_handle.producer(TestProducer)),
                 name: "",
-                value: "",
                 connected: false,
             }],
             selected_attribute: 0,
@@ -122,7 +121,6 @@ mod tests {
             attributes: vec![Attribute {
                 socket: Socket::Consumer(node2_handle.consumer(TestConsumer)),
                 name: "",
-                value: "",
                 connected: false,
             }],
             selected_attribute: 0,

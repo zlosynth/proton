@@ -42,7 +42,6 @@ pub struct Attribute<CI, PI> {
     pub socket: Socket<CI, PI>,
     pub name: &'static str,
     pub connected: bool,
-    pub value: &'static str,
 }
 
 #[derive(Clone, PartialEq)]

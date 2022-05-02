@@ -47,8 +47,7 @@ impl<D> Instrument<D> {
             attributes: vec![Attribute {
                 socket: Socket::Producer(control_input.producer(ControlInputProducer)),
                 name: "OUT",
-                value: "",
-                connected: false,
+                connected: true,
             }],
             selected_attribute: 0,
         });
@@ -60,8 +59,7 @@ impl<D> Instrument<D> {
             attributes: vec![Attribute {
                 socket: Socket::Consumer(audio_output.consumer(AudioOutputConsumer)),
                 name: "IN",
-                value: "",
-                connected: false,
+                connected: true,
             }],
             selected_attribute: 0,
         });
@@ -77,14 +75,12 @@ impl<D> Instrument<D> {
                 Attribute {
                     socket: Socket::Consumer(oscillator.consumer(OscillatorConsumer::Frequency)),
                     name: "FRQ",
-                    value: "16000",
-                    connected: false,
+                    connected: true,
                 },
                 Attribute {
                     socket: Socket::Producer(oscillator.producer(OscillatorProducer)),
                     name: "OUT",
-                    value: "",
-                    connected: false,
+                    connected: true,
                 },
             ],
             selected_attribute: 0,
