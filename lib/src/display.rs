@@ -12,7 +12,7 @@ use embedded_graphics_core::draw_target::DrawTarget;
 
 use crate::model::state::{Attribute, Module, Patch, State, View};
 
-const PADDING_LEFT: i32 = 5;
+const PADDING: i32 = 5;
 const FONT_HEIGHT: i32 = 12;
 const FONT_WIDTH: i32 = 6;
 const MODULES_PER_PAGE: usize = 5;
@@ -97,7 +97,7 @@ fn draw_module<NI, CI, PI, D: DrawTarget<Color = BinaryColor>>(
     selected: bool,
     display: &mut D,
 ) {
-    let x = PADDING_LEFT;
+    let x = PADDING;
     let y = FONT_HEIGHT * (index + 1) as i32 - 1;
 
     let mut cursor = Cursor::new(x, y, display).with_highlight(selected);
@@ -139,7 +139,7 @@ fn draw_attribute<CI, PI, D: DrawTarget<Color = BinaryColor>>(
     selected: bool,
     display: &mut D,
 ) {
-    let x = PADDING_LEFT + 34;
+    let x = PADDING + 34;
     let y = FONT_HEIGHT * (index + 1) as i32 - 1;
 
     let mut cursor = Cursor::new(x, y, display).with_highlight(selected);
@@ -153,6 +153,7 @@ fn draw_attribute<CI, PI, D: DrawTarget<Color = BinaryColor>>(
     cursor.write(attribute.name);
     cursor.write(" ");
     cursor.write(attribute.value);
+    cursor.space_until(DISPLAY_WIDTH - PADDING);
 }
 
 fn selected_attribute_to_page(selected_attribute: usize) -> usize {
@@ -202,7 +203,7 @@ fn draw_patch<CI, PI, D: DrawTarget<Color = BinaryColor>>(
     selected: bool,
     display: &mut D,
 ) {
-    let x = PADDING_LEFT;
+    let x = PADDING;
     let y = FONT_HEIGHT * (index + 1) as i32 - 1;
 
     let source = patch.source.as_ref().unwrap();
@@ -220,6 +221,7 @@ fn draw_patch<CI, PI, D: DrawTarget<Color = BinaryColor>>(
     cursor.write(I32_TO_STR[destination.module_index]);
     cursor.write(".");
     cursor.write(destination.attribute_name);
+    cursor.space_until(DISPLAY_WIDTH - PADDING);
 }
 
 fn draw_blank<D: DrawTarget<Color = BinaryColor>>(display: &mut D) {
@@ -277,6 +279,11 @@ impl<'a, D: DrawTarget<Color = BinaryColor>> Cursor<'a, D> {
         .unwrap();
 
         self.x += distance;
+    }
+
+    fn space_until(&mut self, x: i32) {
+        let distance = x - self.x;
+        self.space(distance);
     }
 }
 
