@@ -8,6 +8,7 @@ backwards compatibility.
 
 * Introduce signal buffer abstraction.
 * Abstract cells used to access internal audio output and control input data.
+* Implement read-only UI for 128x64 OLED displays.
 
 ## 0.1.0
 
