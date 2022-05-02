@@ -67,24 +67,9 @@ impl<D> Instrument<D> {
         // Pretend store load / user interaction
         let oscillator = Oscillator::new();
         let oscillator = graph.add_node(oscillator);
-        state.modules.push(Module {
-            handle: oscillator,
-            name: "OSC",
-            index: 1,
-            attributes: vec![
-                Attribute {
-                    socket: Socket::Consumer(oscillator.consumer(OscillatorConsumer::Frequency)),
-                    name: "FRQ",
-                    connected: true,
-                },
-                Attribute {
-                    socket: Socket::Producer(oscillator.producer(OscillatorProducer)),
-                    name: "OUT",
-                    connected: true,
-                },
-            ],
-            selected_attribute: 0,
-        });
+        state
+            .modules
+            .push(crate::modules::oscillator::new_module(oscillator, 1));
 
         // Pretend store load / user interaction
         graph.must_add_edge(

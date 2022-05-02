@@ -1,6 +1,9 @@
+use alloc::vec;
+
 use graphity::Node;
 
 use crate::core::signal::Signal;
+use crate::model::state::*;
 use crate::primitives;
 
 pub struct Oscillator {
@@ -41,5 +44,31 @@ impl Node<Signal> for Oscillator {
     fn tick(&mut self) {
         let buffer = &mut self.buffer;
         self.oscillator.populate(buffer);
+    }
+}
+
+pub fn new_module<NI, CI, PI>(handle: NI, index: usize) -> Module<NI, CI, PI>
+where
+    NI: graphity::NodeIndex<ConsumerIndex = CI, ProducerIndex = PI>,
+    <NI as graphity::NodeIndex>::Consumer: core::convert::From<OscillatorConsumer>,
+    <NI as graphity::NodeIndex>::Producer: core::convert::From<OscillatorProducer>,
+{
+    Module {
+        handle,
+        name: "OSC",
+        index,
+        attributes: vec![
+            Attribute {
+                socket: Socket::Consumer(handle.consumer(OscillatorConsumer::Frequency)),
+                name: "FRQ",
+                connected: false,
+            },
+            Attribute {
+                socket: Socket::Producer(handle.producer(OscillatorProducer)),
+                name: "OUT",
+                connected: false,
+            },
+        ],
+        selected_attribute: 0,
     }
 }
