@@ -4,6 +4,7 @@ use embedded_graphics_core::draw_target::DrawTarget;
 use embedded_graphics_core::pixelcolor::BinaryColor;
 use graphity::NodeIndex;
 
+use crate::core::module::Module as _;
 use crate::core::signal::Signal;
 use crate::display::Display;
 use crate::model::action::Action;
@@ -17,7 +18,7 @@ graphity!(
     Graph<Signal>;
     ControlInput = {ControlInput, ControlInputConsumer, ControlInputProducer},
     AudioOutput = {AudioOutput, AudioOutputConsumer, AudioOutputProducer},
-    Oscillator = {Oscillator, OscillatorConsumer, OscillatorProducer},
+    OscillatorNode = {OscillatorNode, OscillatorConsumer, OscillatorProducer},
 );
 
 pub struct Instrument<D> {
@@ -65,11 +66,8 @@ impl<D> Instrument<D> {
         });
 
         // Pretend store load / user interaction
-        let oscillator = Oscillator::new();
-        let oscillator = graph.add_node(oscillator);
-        state
-            .modules
-            .push(crate::modules::oscillator::new_module(oscillator, 1));
+        let oscillator = Oscillator;
+        oscillator.register(&mut graph, &mut state);
 
         // Pretend store load / user interaction
         graph.must_add_edge(
