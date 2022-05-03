@@ -5,7 +5,7 @@ use embedded_graphics::{
     mono_font::{ascii::FONT_6X12, MonoTextStyleBuilder},
     pixelcolor::BinaryColor,
     prelude::*,
-    primitives::{Line, PrimitiveStyle, Rectangle},
+    primitives::{Line, PrimitiveStyle, Rectangle, Triangle},
     text::Text,
 };
 use embedded_graphics_core::draw_target::DrawTarget;
@@ -217,9 +217,7 @@ fn draw_patch<CI, PI, D: DrawTarget<Color = BinaryColor>>(
     }
 
     cursor.space_until(DISPLAY_WIDTH / 2 - FONT_WIDTH / 2 - 2);
-    cursor.space(2);
-    cursor.write("-");
-    cursor.space(2);
+    cursor.arrow_left();
 
     if let Some(destination) = patch.destination.as_ref() {
         cursor.write(destination.module_name);
@@ -291,6 +289,46 @@ impl<'a, D: DrawTarget<Color = BinaryColor>> Cursor<'a, D> {
     fn space_until(&mut self, x: i32) {
         let distance = x - self.x;
         self.space(distance);
+    }
+
+    fn arrow_left(&mut self) {
+        const WIDTH: i32 = 10;
+
+        let (background, foreground) = if self.highlighted {
+            (BinaryColor::On, BinaryColor::Off)
+        } else {
+            (BinaryColor::Off, BinaryColor::On)
+        };
+
+        Rectangle::new(
+            Point::new(self.x, self.y - 9),
+            Size::new(WIDTH as u32, FONT_HEIGHT as u32),
+        )
+        .into_styled(PrimitiveStyle::with_fill(background))
+        .draw(self.display)
+        .ok()
+        .unwrap();
+
+        Triangle::new(
+            Point::new(self.x + 2, self.y - 3),
+            Point::new(self.x + 4, self.y - 5),
+            Point::new(self.x + 4, self.y - 1),
+        )
+        .into_styled(PrimitiveStyle::with_fill(foreground))
+        .draw(self.display)
+        .ok()
+        .unwrap();
+
+        Line::new(
+            Point::new(self.x + 2, self.y - 3),
+            Point::new(self.x + 7, self.y - 3),
+        )
+        .into_styled(PrimitiveStyle::with_stroke(foreground, 1))
+        .draw(self.display)
+        .ok()
+        .unwrap();
+
+        self.x += WIDTH;
     }
 }
 
