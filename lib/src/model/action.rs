@@ -3,4 +3,5 @@ pub enum Action {
     AlphaUp,
     AlphaDown,
     AlphaClick,
+    AlphaHold,
 }

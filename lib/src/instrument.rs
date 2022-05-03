@@ -140,6 +140,10 @@ impl<D> Instrument<D> {
     pub fn alpha_click(&mut self) {
         reduce(&mut self.state, Action::AlphaClick);
     }
+
+    pub fn alpha_hold(&mut self) {
+        reduce(&mut self.state, Action::AlphaHold);
+    }
 }
 
 #[allow(clippy::new_without_default)]

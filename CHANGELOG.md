@@ -6,6 +6,8 @@ backwards compatibility.
 
 ## Unreleased
 
+* Implement disconnecting of patch source.
+
 ## 0.2.0
 
 * Introduce signal buffer abstraction.

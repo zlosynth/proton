@@ -1,11 +1,18 @@
+use core::cmp::PartialEq;
+
 use super::action::Action;
 use super::state::*;
 
-pub fn reduce<NI, CI, PI>(state: &mut State<NI, CI, PI>, action: Action) {
+pub fn reduce<NI, CI, PI>(state: &mut State<NI, CI, PI>, action: Action)
+where
+    CI: PartialEq + Copy,
+    PI: PartialEq + Copy,
+{
     match action {
         Action::AlphaUp => reduce_alpha_up(state),
         Action::AlphaDown => reduce_alpha_down(state),
         Action::AlphaClick => reduce_alpha_click(state),
+        Action::AlphaHold => reduce_alpha_hold(state),
     }
 }
 
@@ -53,6 +60,102 @@ fn reduce_alpha_click<NI, CI, PI>(state: &mut State<NI, CI, PI>) {
         View::Modules => View::Patches,
         View::Patches => View::Modules,
     };
+}
+
+// TODO: Return graph action
+fn reduce_alpha_hold<NI, CI, PI>(state: &mut State<NI, CI, PI>)
+where
+    CI: PartialEq + Copy,
+    PI: PartialEq + Copy,
+{
+    match state.view {
+        View::Modules => {
+            todo!();
+        }
+        View::Patches => {
+            if state.patches.is_empty() {
+                return;
+            }
+
+            let patch = &mut state.patches[state.selected_patch];
+            if patch.source.is_none() {
+                return;
+            }
+
+            let patch_producer = patch.source.as_ref().unwrap().producer;
+            let patch_consumer = patch.destination.as_ref().unwrap().consumer;
+
+            patch.source = None;
+
+            if find_connected_patch_with_producer(&state.patches, patch_producer).is_none() {
+                find_attribute_with_producer(&mut state.modules, patch_producer)
+                    .unwrap()
+                    .connected = false;
+            }
+
+            find_attribute_with_consumer(&mut state.modules, patch_consumer)
+                .unwrap()
+                .connected = false;
+        }
+    }
+}
+
+fn find_attribute_with_consumer<NI, CI, PI>(
+    modules: &mut [Module<NI, CI, PI>],
+    seeked_consumer: CI,
+) -> Option<&mut Attribute<CI, PI>>
+where
+    CI: PartialEq + Copy,
+{
+    modules
+        .iter_mut()
+        .flat_map(|m| m.attributes.iter_mut())
+        .find(|a| {
+            if let Socket::Consumer(attribute_consumer) = a.socket {
+                attribute_consumer == seeked_consumer
+            } else {
+                false
+            }
+        })
+}
+
+fn find_attribute_with_producer<NI, CI, PI>(
+    modules: &mut [Module<NI, CI, PI>],
+    seeked_producer: PI,
+) -> Option<&mut Attribute<CI, PI>>
+where
+    PI: PartialEq + Copy,
+{
+    modules
+        .iter_mut()
+        .flat_map(|m| m.attributes.iter_mut())
+        .find(|a| {
+            if let Socket::Producer(attribute_producer) = a.socket {
+                attribute_producer == seeked_producer
+            } else {
+                false
+            }
+        })
+}
+
+fn find_connected_patch_with_producer<CI, PI>(
+    patches: &[Patch<CI, PI>],
+    seeked_producer: PI,
+) -> Option<&Patch<CI, PI>>
+where
+    PI: PartialEq + Copy,
+{
+    patches.iter().find(|p| {
+        if p.destination.is_none() {
+            return false;
+        }
+
+        if let Some(source) = &p.source {
+            source.producer == seeked_producer
+        } else {
+            false
+        }
+    })
 }
 
 #[cfg(test)]
@@ -108,7 +211,7 @@ mod tests {
             attributes: vec![Attribute {
                 socket: Socket::Producer(node1_handle.producer(TestProducer)),
                 name: "",
-                connected: false,
+                connected: true,
             }],
             selected_attribute: 0,
         });
@@ -121,7 +224,7 @@ mod tests {
             attributes: vec![Attribute {
                 socket: Socket::Consumer(node2_handle.consumer(TestConsumer)),
                 name: "",
-                connected: false,
+                connected: true,
             }],
             selected_attribute: 0,
         });
@@ -139,6 +242,88 @@ mod tests {
             }),
             destination: Some(Destination {
                 consumer: node2_handle.consumer(TestConsumer),
+                module_name: "",
+                module_index: 0,
+                attribute_name: "",
+            }),
+        });
+    }
+
+    fn add_three_modules_and_two_patches(
+        graph: &mut TestGraph,
+        state: &mut State<__NodeIndex, __ConsumerIndex, __ProducerIndex>,
+    ) {
+        let node1_handle = graph.add_node(TestNode);
+        state.modules.push(Module {
+            handle: node1_handle,
+            name: "",
+            index: 1,
+            attributes: vec![Attribute {
+                socket: Socket::Producer(node1_handle.producer(TestProducer)),
+                name: "",
+                connected: true,
+            }],
+            selected_attribute: 0,
+        });
+
+        let node2_handle = graph.add_node(TestNode);
+        state.modules.push(Module {
+            handle: node2_handle,
+            name: "",
+            index: 1,
+            attributes: vec![Attribute {
+                socket: Socket::Consumer(node2_handle.consumer(TestConsumer)),
+                name: "",
+                connected: true,
+            }],
+            selected_attribute: 0,
+        });
+
+        let node3_handle = graph.add_node(TestNode);
+        state.modules.push(Module {
+            handle: node3_handle,
+            name: "",
+            index: 1,
+            attributes: vec![Attribute {
+                socket: Socket::Consumer(node3_handle.consumer(TestConsumer)),
+                name: "",
+                connected: true,
+            }],
+            selected_attribute: 0,
+        });
+
+        graph.must_add_edge(
+            node1_handle.producer(TestProducer),
+            node3_handle.consumer(TestConsumer),
+        );
+        state.patches.push(Patch {
+            source: Some(Source {
+                producer: node1_handle.producer(TestProducer),
+                module_name: "",
+                module_index: 0,
+                attribute_name: "",
+            }),
+            destination: Some(Destination {
+                consumer: node3_handle.consumer(TestConsumer),
+                module_name: "",
+                module_index: 0,
+                attribute_name: "",
+            }),
+        });
+
+        graph.must_add_edge(
+            node1_handle.producer(TestProducer),
+            node3_handle.consumer(TestConsumer),
+        );
+        state.patches.push(Patch {
+            source: Some(Source {
+                producer: node1_handle.producer(TestProducer),
+                module_name: "",
+                module_index: 0,
+                attribute_name: "",
+            }),
+            destination: Some(Destination {
+                consumer: node3_handle.consumer(TestConsumer),
                 module_name: "",
                 module_index: 0,
                 attribute_name: "",
@@ -328,5 +513,81 @@ mod tests {
         let original_selected_module = state.selected_module;
         reduce(&mut state, Action::AlphaDown);
         assert_eq!(state.selected_module, original_selected_module);
+    }
+
+    #[test]
+    fn when_holding_alpha_on_connected_patch_it_removes_source() {
+        let mut graph = TestGraph::new();
+        let mut state = State::<__NodeIndex, __ConsumerIndex, __ProducerIndex>::default();
+        add_two_modules_and_patch(&mut graph, &mut state);
+
+        state.view = View::Patches;
+        state.selected_patch = 0;
+
+        assert!(state.patches[0].source.is_some());
+        reduce(&mut state, Action::AlphaHold);
+        assert!(state.patches[0].source.is_none());
+    }
+
+    #[test]
+    fn when_holding_alpha_on_connected_patch_it_sets_consumer_disconnected() {
+        let mut graph = TestGraph::new();
+        let mut state = State::<__NodeIndex, __ConsumerIndex, __ProducerIndex>::default();
+        add_two_modules_and_patch(&mut graph, &mut state);
+
+        state.view = View::Patches;
+        state.selected_patch = 0;
+
+        assert!(state.modules[1].attributes[0].connected);
+        reduce(&mut state, Action::AlphaHold);
+        assert!(!state.modules[1].attributes[0].connected);
+    }
+
+    #[test]
+    fn when_holding_alpha_on_disconnected_patch_it_does_nothing() {
+        let mut graph = TestGraph::new();
+        let mut state = State::<__NodeIndex, __ConsumerIndex, __ProducerIndex>::default();
+        add_two_modules_and_patch(&mut graph, &mut state);
+
+        state.view = View::Patches;
+        state.selected_patch = 0;
+        reduce(&mut state, Action::AlphaHold);
+
+        let original_state = state.clone();
+        reduce(&mut state, Action::AlphaDown);
+        assert!(state == original_state);
+    }
+
+    #[test]
+    fn when_holding_alpha_on_one_of_many_patches_of_producer_it_keeps_producer_connected() {
+        let mut graph = TestGraph::new();
+        let mut state = State::<__NodeIndex, __ConsumerIndex, __ProducerIndex>::default();
+        add_three_modules_and_two_patches(&mut graph, &mut state);
+
+        state.view = View::Patches;
+
+        assert!(state.modules[0].attributes[0].connected);
+
+        state.selected_patch = 0;
+        reduce(&mut state, Action::AlphaHold);
+        assert!(state.modules[0].attributes[0].connected);
+
+        state.selected_patch = 1;
+        reduce(&mut state, Action::AlphaHold);
+        assert!(!state.modules[0].attributes[0].connected);
+    }
+
+    #[test]
+    fn when_holding_alpha_on_the_only_patch_of_producer_it_sets_producer_disconnected() {
+        let mut graph = TestGraph::new();
+        let mut state = State::<__NodeIndex, __ConsumerIndex, __ProducerIndex>::default();
+        add_two_modules_and_patch(&mut graph, &mut state);
+
+        state.view = View::Patches;
+        state.selected_patch = 0;
+
+        assert!(state.modules[0].attributes[0].connected);
+        reduce(&mut state, Action::AlphaHold);
+        assert!(!state.modules[0].attributes[0].connected);
     }
 }

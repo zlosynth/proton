@@ -151,6 +151,7 @@
 #X msg 194 241 ad;
 #X msg 194 217 ac;
 #X msg 194 193 au;
+#X msg 229 218 ah;
 #X connect 1 0 0 0;
 #X connect 1 0 0 1;
 #X connect 2 0 9 0;
@@ -162,3 +163,4 @@
 #X connect 10 0 7 0;
 #X connect 11 0 7 0;
 #X connect 12 0 7 0;
+#X connect 13 0 7 0;
