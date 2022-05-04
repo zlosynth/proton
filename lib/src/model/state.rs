@@ -50,11 +50,48 @@ pub struct Module<NI, CI, PI> {
     pub selected_attribute: usize,
 }
 
+#[cfg(test)]
+impl<NI, CI, PI> Module<NI, CI, PI> {
+    pub fn new_for_node(node: NI) -> Self {
+        Self {
+            handle: node,
+            name: "",
+            index: 0,
+            attributes: vec![],
+            selected_attribute: 0,
+        }
+    }
+
+    pub fn with_attribute(mut self, attribute: Attribute<CI, PI>) -> Self {
+        self.attributes.push(attribute);
+        self
+    }
+}
+
 #[derive(Clone, PartialEq)]
 pub struct Attribute<CI, PI> {
     pub socket: Socket<CI, PI>,
     pub name: &'static str,
     pub connected: bool,
+}
+
+#[cfg(test)]
+impl<CI, PI> Attribute<CI, PI> {
+    pub fn new_for_producer(producer: PI) -> Self {
+        Self {
+            socket: Socket::Producer(producer),
+            name: "",
+            connected: false,
+        }
+    }
+
+    pub fn new_for_consumer(consumer: CI) -> Self {
+        Self {
+            socket: Socket::Consumer(consumer),
+            name: "",
+            connected: false,
+        }
+    }
 }
 
 #[derive(Clone, PartialEq)]
@@ -87,6 +124,16 @@ pub struct Patch<CI, PI> {
     pub destination: Option<Destination<CI>>,
 }
 
+#[cfg(test)]
+impl<CI, PI> Patch<CI, PI> {
+    pub fn new_for_consumer(consumer: CI) -> Self {
+        Self {
+            source: None,
+            destination: Some(Destination::new_for_consumer(consumer)),
+        }
+    }
+}
+
 #[derive(Clone, PartialEq)]
 pub struct Source<PI> {
     pub producer: PI,
@@ -101,4 +148,16 @@ pub struct Destination<CI> {
     pub module_name: &'static str,
     pub module_index: usize,
     pub attribute_name: &'static str,
+}
+
+#[cfg(test)]
+impl<CI> Destination<CI> {
+    pub fn new_for_consumer(consumer: CI) -> Self {
+        Self {
+            consumer,
+            module_name: "",
+            module_index: 0,
+            attribute_name: "",
+        }
+    }
 }

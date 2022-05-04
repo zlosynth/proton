@@ -171,9 +171,6 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    use alloc::vec;
-
     use crate::graphity::NodeIndex;
     use graphity::Node;
 
@@ -195,425 +192,330 @@ mod tests {
         Node = {TestNode, TestConsumer, TestProducer},
     );
 
-    fn add_empty_module(
-        graph: &mut TestGraph,
-        state: &mut State<__NodeIndex, __ConsumerIndex, __ProducerIndex>,
-    ) {
-        let node_handle = graph.add_node(TestNode);
-        state.modules.push(Module {
-            handle: node_handle,
-            name: "",
-            index: 1,
-            attributes: vec![],
-            selected_attribute: 0,
-        });
+    struct TestContext {
+        graph: TestGraph,
+        pub state: State<__NodeIndex, __ConsumerIndex, __ProducerIndex>,
     }
 
-    fn add_two_modules_and_patch(
-        graph: &mut TestGraph,
-        state: &mut State<__NodeIndex, __ConsumerIndex, __ProducerIndex>,
-    ) {
-        let node1_handle = graph.add_node(TestNode);
-        state.modules.push(Module {
-            handle: node1_handle,
-            name: "",
-            index: 1,
-            attributes: vec![Attribute {
-                socket: Socket::Producer(node1_handle.producer(TestProducer)),
-                name: "",
-                connected: true,
-            }],
-            selected_attribute: 0,
-        });
+    impl TestContext {
+        fn new() -> Self {
+            let graph = TestGraph::new();
+            let state = State::<__NodeIndex, __ConsumerIndex, __ProducerIndex>::default();
+            Self { graph, state }
+        }
 
-        let node2_handle = graph.add_node(TestNode);
-        state.modules.push(Module {
-            handle: node2_handle,
-            name: "",
-            index: 1,
-            attributes: vec![Attribute {
-                socket: Socket::Consumer(node2_handle.consumer(TestConsumer)),
-                name: "",
-                connected: true,
-            }],
-            selected_attribute: 0,
-        });
+        fn with_two_modules(mut self) -> Self {
+            self.add_source_module();
+            self.add_destination_module();
+            self
+        }
 
-        graph.must_add_edge(
-            node1_handle.producer(TestProducer),
-            node2_handle.consumer(TestConsumer),
-        );
-        state.patches.push(Patch {
-            source: Some(Source {
-                producer: node1_handle.producer(TestProducer),
+        fn with_one_patch(mut self) -> Self {
+            let source = self.add_source_module();
+            let destination = self.add_destination_module();
+            self.add_patch(source, destination);
+            self
+        }
+
+        fn with_two_patches(mut self) -> Self {
+            let source = self.add_source_module();
+            let destination1 = self.add_destination_module();
+            let destination2 = self.add_destination_module();
+            self.add_patch(source, destination1);
+            self.add_patch(source, destination2);
+            self
+        }
+
+        fn add_source_module(&mut self) -> __NodeIndex {
+            let node_handle = self.graph.add_node(TestNode);
+            self.state
+                .modules
+                .push(Module::new_for_node(node_handle).with_attribute(
+                    Attribute::new_for_producer(node_handle.producer(TestProducer)),
+                ));
+            node_handle
+        }
+
+        fn add_destination_module(&mut self) -> __NodeIndex {
+            let node_handle = self.graph.add_node(TestNode);
+            self.state
+                .modules
+                .push(Module::new_for_node(node_handle).with_attribute(
+                    Attribute::new_for_consumer(node_handle.consumer(TestConsumer)),
+                ));
+            self.state
+                .patches
+                .push(Patch::new_for_consumer(node_handle.consumer(TestConsumer)));
+            node_handle
+        }
+
+        fn find_module_mut(
+            &mut self,
+            handle: __NodeIndex,
+        ) -> Option<&mut Module<__NodeIndex, __ConsumerIndex, __ProducerIndex>> {
+            self.state.modules.iter_mut().find(|m| m.handle == handle)
+        }
+
+        fn find_patch_mut(
+            &mut self,
+            consumer: __ConsumerIndex,
+        ) -> Option<&mut Patch<__ConsumerIndex, __ProducerIndex>> {
+            self.state.patches.iter_mut().find(|p| {
+                if let Some(destination) = &p.destination {
+                    destination.consumer == consumer
+                } else {
+                    false
+                }
+            })
+        }
+
+        fn add_patch(&mut self, source: __NodeIndex, destination: __NodeIndex) {
+            self.graph.must_add_edge(
+                source.producer(TestProducer),
+                destination.consumer(TestConsumer),
+            );
+            self.find_patch_mut(destination.consumer(TestConsumer))
+                .unwrap()
+                .source = Some(Source {
+                producer: source.producer(TestProducer),
                 module_name: "",
                 module_index: 0,
                 attribute_name: "",
-            }),
-            destination: Some(Destination {
-                consumer: node2_handle.consumer(TestConsumer),
-                module_name: "",
-                module_index: 0,
-                attribute_name: "",
-            }),
-        });
-    }
-
-    fn add_three_modules_and_two_patches(
-        graph: &mut TestGraph,
-        state: &mut State<__NodeIndex, __ConsumerIndex, __ProducerIndex>,
-    ) {
-        let node1_handle = graph.add_node(TestNode);
-        state.modules.push(Module {
-            handle: node1_handle,
-            name: "",
-            index: 1,
-            attributes: vec![Attribute {
-                socket: Socket::Producer(node1_handle.producer(TestProducer)),
-                name: "",
-                connected: true,
-            }],
-            selected_attribute: 0,
-        });
-
-        let node2_handle = graph.add_node(TestNode);
-        state.modules.push(Module {
-            handle: node2_handle,
-            name: "",
-            index: 1,
-            attributes: vec![Attribute {
-                socket: Socket::Consumer(node2_handle.consumer(TestConsumer)),
-                name: "",
-                connected: true,
-            }],
-            selected_attribute: 0,
-        });
-
-        let node3_handle = graph.add_node(TestNode);
-        state.modules.push(Module {
-            handle: node3_handle,
-            name: "",
-            index: 1,
-            attributes: vec![Attribute {
-                socket: Socket::Consumer(node3_handle.consumer(TestConsumer)),
-                name: "",
-                connected: true,
-            }],
-            selected_attribute: 0,
-        });
-
-        graph.must_add_edge(
-            node1_handle.producer(TestProducer),
-            node3_handle.consumer(TestConsumer),
-        );
-        state.patches.push(Patch {
-            source: Some(Source {
-                producer: node1_handle.producer(TestProducer),
-                module_name: "",
-                module_index: 0,
-                attribute_name: "",
-            }),
-            destination: Some(Destination {
-                consumer: node3_handle.consumer(TestConsumer),
-                module_name: "",
-                module_index: 0,
-                attribute_name: "",
-            }),
-        });
-
-        graph.must_add_edge(
-            node1_handle.producer(TestProducer),
-            node3_handle.consumer(TestConsumer),
-        );
-        state.patches.push(Patch {
-            source: Some(Source {
-                producer: node1_handle.producer(TestProducer),
-                module_name: "",
-                module_index: 0,
-                attribute_name: "",
-            }),
-            destination: Some(Destination {
-                consumer: node3_handle.consumer(TestConsumer),
-                module_name: "",
-                module_index: 0,
-                attribute_name: "",
-            }),
-        });
+            });
+            self.find_module_mut(source).unwrap().attributes[0].connected = true;
+            self.find_module_mut(destination).unwrap().attributes[0].connected = true;
+        }
     }
 
     #[test]
     fn when_clicked_alpha_toggles_between_modules_and_patches() {
-        let mut state = State::<__NodeIndex, __ConsumerIndex, __ProducerIndex>::default();
-        assert!(matches!(state.view, View::Modules));
-        reduce(&mut state, Action::AlphaClick);
-        assert!(matches!(state.view, View::Patches));
-        reduce(&mut state, Action::AlphaClick);
-        assert!(matches!(state.view, View::Modules));
+        let mut context = TestContext::new();
+        assert!(matches!(context.state.view, View::Modules));
+
+        reduce(&mut context.state, Action::AlphaClick);
+        assert!(matches!(context.state.view, View::Patches));
+
+        reduce(&mut context.state, Action::AlphaClick);
+        assert!(matches!(context.state.view, View::Modules));
     }
 
     #[test]
     fn when_modules_are_empty_alpha_up_does_nothing() {
-        let mut state = State::<__NodeIndex, __ConsumerIndex, __ProducerIndex>::default();
-        let original_selected_module = state.selected_module;
+        let mut context = TestContext::new();
+        let original_selected_module = context.state.selected_module;
 
-        reduce(&mut state, Action::AlphaUp);
-        assert!(state.selected_module == original_selected_module);
+        reduce(&mut context.state, Action::AlphaUp);
+        assert!(context.state.selected_module == original_selected_module);
     }
 
     #[test]
     fn when_at_the_top_of_modules_alpha_up_moves_to_last() {
-        let mut graph = TestGraph::new();
-        let mut state = State::<__NodeIndex, __ConsumerIndex, __ProducerIndex>::default();
-        add_empty_module(&mut graph, &mut state);
-        add_empty_module(&mut graph, &mut state);
-
-        assert_eq!(state.selected_module, 0);
-        reduce(&mut state, Action::AlphaUp);
-        assert_eq!(state.selected_module, 1);
+        let mut context = TestContext::new().with_two_modules();
+        assert_eq!(context.state.selected_module, 0);
+        reduce(&mut context.state, Action::AlphaUp);
+        assert_eq!(context.state.selected_module, 1);
     }
 
     #[test]
     fn when_at_the_bottom_of_modules_alpha_up_goes_to_previous() {
-        let mut graph = TestGraph::new();
-        let mut state = State::<__NodeIndex, __ConsumerIndex, __ProducerIndex>::default();
-        add_empty_module(&mut graph, &mut state);
-        add_empty_module(&mut graph, &mut state);
-        state.selected_module = 1;
+        let mut context = TestContext::new().with_two_modules();
+        context.state.selected_module = 1;
 
-        reduce(&mut state, Action::AlphaUp);
-        assert_eq!(state.selected_module, 0);
+        reduce(&mut context.state, Action::AlphaUp);
+        assert_eq!(context.state.selected_module, 0);
     }
 
     #[test]
     fn when_modules_are_empty_alpha_down_does_nothing() {
-        let mut state = State::<__NodeIndex, __ConsumerIndex, __ProducerIndex>::default();
-        let original_selected_module = state.selected_module;
+        let mut context = TestContext::new();
+        let original_selected_module = context.state.selected_module;
 
-        reduce(&mut state, Action::AlphaDown);
-        assert!(state.selected_module == original_selected_module);
+        reduce(&mut context.state, Action::AlphaDown);
+        assert!(context.state.selected_module == original_selected_module);
     }
 
     #[test]
     fn when_at_the_top_of_modules_alpha_down_moves_to_next() {
-        let mut graph = TestGraph::new();
-        let mut state = State::<__NodeIndex, __ConsumerIndex, __ProducerIndex>::default();
-        add_empty_module(&mut graph, &mut state);
-        add_empty_module(&mut graph, &mut state);
-
-        assert_eq!(state.selected_module, 0);
-        reduce(&mut state, Action::AlphaDown);
-        assert_eq!(state.selected_module, 1);
+        let mut context = TestContext::new().with_two_modules();
+        assert_eq!(context.state.selected_module, 0);
+        reduce(&mut context.state, Action::AlphaDown);
+        assert_eq!(context.state.selected_module, 1);
     }
 
     #[test]
     fn when_at_the_bottom_of_modules_alpha_down_goes_to_start() {
-        let mut graph = TestGraph::new();
-        let mut state = State::<__NodeIndex, __ConsumerIndex, __ProducerIndex>::default();
-        add_empty_module(&mut graph, &mut state);
-        add_empty_module(&mut graph, &mut state);
-        state.selected_module = 1;
+        let mut context = TestContext::new().with_two_modules();
+        context.state.selected_module = 1;
 
-        reduce(&mut state, Action::AlphaDown);
-        assert_eq!(state.selected_module, 0);
+        reduce(&mut context.state, Action::AlphaDown);
+        assert_eq!(context.state.selected_module, 0);
     }
 
     #[test]
     fn when_patches_are_empty_alpha_up_does_nothing() {
-        let mut state = State::<__NodeIndex, __ConsumerIndex, __ProducerIndex>::default();
-        state.view = View::Patches;
-        let original_selected_patch = state.selected_patch;
+        let mut context = TestContext::new();
+        context.state.view = View::Patches;
+        let original_selected_patch = context.state.selected_patch;
 
-        reduce(&mut state, Action::AlphaUp);
-        assert!(state.selected_patch == original_selected_patch);
+        reduce(&mut context.state, Action::AlphaUp);
+        assert!(context.state.selected_patch == original_selected_patch);
     }
 
     #[test]
     fn when_at_the_top_of_patches_alpha_up_moves_to_last() {
-        let mut graph = TestGraph::new();
-        let mut state = State::<__NodeIndex, __ConsumerIndex, __ProducerIndex>::default();
-        state.view = View::Patches;
-        add_two_modules_and_patch(&mut graph, &mut state);
-        add_two_modules_and_patch(&mut graph, &mut state);
+        let mut context = TestContext::new().with_two_patches();
+        context.state.view = View::Patches;
 
-        assert_eq!(state.selected_patch, 0);
-        reduce(&mut state, Action::AlphaUp);
-        assert_eq!(state.selected_patch, 1);
+        assert_eq!(context.state.selected_patch, 0);
+        reduce(&mut context.state, Action::AlphaUp);
+        assert_eq!(context.state.selected_patch, 1);
     }
 
     #[test]
     fn when_at_the_bottom_of_patches_alpha_up_goes_to_previous() {
-        let mut graph = TestGraph::new();
-        let mut state = State::<__NodeIndex, __ConsumerIndex, __ProducerIndex>::default();
-        state.view = View::Patches;
-        add_two_modules_and_patch(&mut graph, &mut state);
-        add_two_modules_and_patch(&mut graph, &mut state);
-        state.selected_patch = 1;
+        let mut context = TestContext::new().with_two_patches();
+        context.state.view = View::Patches;
+        context.state.selected_patch = 1;
 
-        reduce(&mut state, Action::AlphaUp);
-        assert_eq!(state.selected_patch, 0);
+        reduce(&mut context.state, Action::AlphaUp);
+        assert_eq!(context.state.selected_patch, 0);
     }
 
     #[test]
     fn when_patches_are_empty_alpha_down_does_nothing() {
-        let mut state = State::<__NodeIndex, __ConsumerIndex, __ProducerIndex>::default();
-        state.view = View::Patches;
-        let original_selected_patch = state.selected_patch;
+        let mut context = TestContext::new();
+        context.state.view = View::Patches;
+        let original_selected_patch = context.state.selected_patch;
 
-        reduce(&mut state, Action::AlphaDown);
-        assert!(state.selected_patch == original_selected_patch);
+        reduce(&mut context.state, Action::AlphaDown);
+        assert!(context.state.selected_patch == original_selected_patch);
     }
 
     #[test]
     fn when_at_the_top_of_patches_alpha_down_moves_to_next() {
-        let mut graph = TestGraph::new();
-        let mut state = State::<__NodeIndex, __ConsumerIndex, __ProducerIndex>::default();
-        state.view = View::Patches;
-        add_two_modules_and_patch(&mut graph, &mut state);
-        add_two_modules_and_patch(&mut graph, &mut state);
+        let mut context = TestContext::new().with_two_patches();
+        context.state.view = View::Patches;
 
-        assert_eq!(state.selected_patch, 0);
-        reduce(&mut state, Action::AlphaDown);
-        assert_eq!(state.selected_patch, 1);
+        assert_eq!(context.state.selected_patch, 0);
+        reduce(&mut context.state, Action::AlphaDown);
+        assert_eq!(context.state.selected_patch, 1);
     }
 
     #[test]
     fn when_at_the_bottom_of_patches_alpha_down_goes_to_start() {
-        let mut graph = TestGraph::new();
-        let mut state = State::<__NodeIndex, __ConsumerIndex, __ProducerIndex>::default();
-        state.view = View::Patches;
-        add_two_modules_and_patch(&mut graph, &mut state);
-        add_two_modules_and_patch(&mut graph, &mut state);
-        state.selected_patch = 1;
+        let mut context = TestContext::new().with_two_patches();
+        context.state.view = View::Patches;
+        context.state.selected_patch = 1;
 
-        reduce(&mut state, Action::AlphaDown);
-        assert_eq!(state.selected_patch, 0);
+        reduce(&mut context.state, Action::AlphaDown);
+        assert_eq!(context.state.selected_patch, 0);
     }
 
     #[test]
     fn when_turned_up_alpha_scrolls_only_selected_view() {
-        let mut graph = TestGraph::new();
-        let mut state = State::<__NodeIndex, __ConsumerIndex, __ProducerIndex>::default();
-        add_two_modules_and_patch(&mut graph, &mut state);
-        add_two_modules_and_patch(&mut graph, &mut state);
+        let mut context = TestContext::new().with_two_patches();
 
-        state.view = View::Modules;
-        let original_selected_patch = state.selected_patch;
-        reduce(&mut state, Action::AlphaUp);
-        assert_eq!(state.selected_patch, original_selected_patch);
+        context.state.view = View::Modules;
+        let original_selected_patch = context.state.selected_patch;
+        reduce(&mut context.state, Action::AlphaUp);
+        assert_eq!(context.state.selected_patch, original_selected_patch);
 
-        state.view = View::Patches;
-        let original_selected_module = state.selected_module;
-        reduce(&mut state, Action::AlphaUp);
-        assert_eq!(state.selected_module, original_selected_module);
+        context.state.view = View::Patches;
+        let original_selected_module = context.state.selected_module;
+        reduce(&mut context.state, Action::AlphaUp);
+        assert_eq!(context.state.selected_module, original_selected_module);
     }
 
     #[test]
     fn when_turned_down_alpha_scrolls_only_selected_view() {
-        let mut graph = TestGraph::new();
-        let mut state = State::<__NodeIndex, __ConsumerIndex, __ProducerIndex>::default();
-        add_two_modules_and_patch(&mut graph, &mut state);
-        add_two_modules_and_patch(&mut graph, &mut state);
+        let mut context = TestContext::new().with_two_patches();
 
-        state.view = View::Modules;
-        let original_selected_patch = state.selected_patch;
-        reduce(&mut state, Action::AlphaDown);
-        assert_eq!(state.selected_patch, original_selected_patch);
+        context.state.view = View::Modules;
+        let original_selected_patch = context.state.selected_patch;
+        reduce(&mut context.state, Action::AlphaDown);
+        assert_eq!(context.state.selected_patch, original_selected_patch);
 
-        state.view = View::Patches;
-        let original_selected_module = state.selected_module;
-        reduce(&mut state, Action::AlphaDown);
-        assert_eq!(state.selected_module, original_selected_module);
+        context.state.view = View::Patches;
+        let original_selected_module = context.state.selected_module;
+        reduce(&mut context.state, Action::AlphaDown);
+        assert_eq!(context.state.selected_module, original_selected_module);
     }
 
     #[test]
     fn when_holding_alpha_on_connected_patch_it_removes_source() {
-        let mut graph = TestGraph::new();
-        let mut state = State::<__NodeIndex, __ConsumerIndex, __ProducerIndex>::default();
-        add_two_modules_and_patch(&mut graph, &mut state);
+        let mut context = TestContext::new().with_one_patch();
+        context.state.view = View::Patches;
+        context.state.selected_patch = 0;
 
-        state.view = View::Patches;
-        state.selected_patch = 0;
-
-        assert!(state.patches[0].source.is_some());
-        reduce(&mut state, Action::AlphaHold);
-        assert!(state.patches[0].source.is_none());
+        assert!(context.state.patches[0].source.is_some());
+        reduce(&mut context.state, Action::AlphaHold);
+        assert!(context.state.patches[0].source.is_none());
     }
 
     #[test]
     fn when_holding_alpha_on_connected_patch_it_responses_with_delete_patch_reaction() {
-        let mut graph = TestGraph::new();
-        let mut state = State::<__NodeIndex, __ConsumerIndex, __ProducerIndex>::default();
-        add_two_modules_and_patch(&mut graph, &mut state);
+        let mut context = TestContext::new().with_one_patch();
+        context.state.view = View::Patches;
+        context.state.selected_patch = 0;
 
-        state.view = View::Patches;
-        state.selected_patch = 0;
+        let producer = context.state.patches[0].source.as_ref().unwrap().producer;
+        let consumer = context.state.patches[0]
+            .destination
+            .as_ref()
+            .unwrap()
+            .consumer;
 
-        let producer = state.patches[0].source.as_ref().unwrap().producer;
-        let consumer = state.patches[0].destination.as_ref().unwrap().consumer;
-
-        let reaction = reduce(&mut state, Action::AlphaHold).unwrap();
+        let reaction = reduce(&mut context.state, Action::AlphaHold).unwrap();
         assert!(reaction == Reaction::RemovePatch(producer, consumer));
     }
 
     #[test]
     fn when_holding_alpha_on_connected_patch_it_sets_consumer_disconnected() {
-        let mut graph = TestGraph::new();
-        let mut state = State::<__NodeIndex, __ConsumerIndex, __ProducerIndex>::default();
-        add_two_modules_and_patch(&mut graph, &mut state);
+        let mut context = TestContext::new().with_one_patch();
+        context.state.view = View::Patches;
+        context.state.selected_patch = 0;
 
-        state.view = View::Patches;
-        state.selected_patch = 0;
-
-        assert!(state.modules[1].attributes[0].connected);
-        reduce(&mut state, Action::AlphaHold);
-        assert!(!state.modules[1].attributes[0].connected);
+        assert!(context.state.modules[1].attributes[0].connected);
+        reduce(&mut context.state, Action::AlphaHold);
+        assert!(!context.state.modules[1].attributes[0].connected);
     }
 
     #[test]
     fn when_holding_alpha_on_disconnected_patch_it_does_nothing() {
-        let mut graph = TestGraph::new();
-        let mut state = State::<__NodeIndex, __ConsumerIndex, __ProducerIndex>::default();
-        add_two_modules_and_patch(&mut graph, &mut state);
+        let mut context = TestContext::new().with_two_modules();
+        context.state.view = View::Patches;
+        context.state.selected_patch = 0;
 
-        state.view = View::Patches;
-        state.selected_patch = 0;
-        reduce(&mut state, Action::AlphaHold);
-
-        let original_state = state.clone();
-        reduce(&mut state, Action::AlphaDown);
-        assert!(state == original_state);
+        let original_state = context.state.clone();
+        reduce(&mut context.state, Action::AlphaDown);
+        assert!(context.state == original_state);
     }
 
     #[test]
     fn when_holding_alpha_on_one_of_many_patches_of_producer_it_keeps_producer_connected() {
-        let mut graph = TestGraph::new();
-        let mut state = State::<__NodeIndex, __ConsumerIndex, __ProducerIndex>::default();
-        add_three_modules_and_two_patches(&mut graph, &mut state);
+        let mut context = TestContext::new().with_two_patches();
+        context.state.view = View::Patches;
 
-        state.view = View::Patches;
+        assert!(context.state.modules[0].attributes[0].connected);
 
-        assert!(state.modules[0].attributes[0].connected);
+        context.state.selected_patch = 0;
+        reduce(&mut context.state, Action::AlphaHold);
+        assert!(context.state.modules[0].attributes[0].connected);
 
-        state.selected_patch = 0;
-        reduce(&mut state, Action::AlphaHold);
-        assert!(state.modules[0].attributes[0].connected);
-
-        state.selected_patch = 1;
-        reduce(&mut state, Action::AlphaHold);
-        assert!(!state.modules[0].attributes[0].connected);
+        context.state.selected_patch = 1;
+        reduce(&mut context.state, Action::AlphaHold);
+        assert!(!context.state.modules[0].attributes[0].connected);
     }
 
     #[test]
     fn when_holding_alpha_on_the_only_patch_of_producer_it_sets_producer_disconnected() {
-        let mut graph = TestGraph::new();
-        let mut state = State::<__NodeIndex, __ConsumerIndex, __ProducerIndex>::default();
-        add_two_modules_and_patch(&mut graph, &mut state);
+        let mut context = TestContext::new().with_one_patch();
 
-        state.view = View::Patches;
-        state.selected_patch = 0;
+        context.state.view = View::Patches;
+        context.state.selected_patch = 0;
 
-        assert!(state.modules[0].attributes[0].connected);
-        reduce(&mut state, Action::AlphaHold);
-        assert!(!state.modules[0].attributes[0].connected);
+        assert!(context.state.modules[0].attributes[0].connected);
+        reduce(&mut context.state, Action::AlphaHold);
+        assert!(!context.state.modules[0].attributes[0].connected);
     }
 }
