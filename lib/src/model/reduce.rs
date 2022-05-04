@@ -1,9 +1,10 @@
 use core::cmp::PartialEq;
 
 use super::action::Action;
+use super::reaction::Reaction;
 use super::state::*;
 
-pub fn reduce<NI, CI, PI>(state: &mut State<NI, CI, PI>, action: Action)
+pub fn reduce<NI, CI, PI>(state: &mut State<NI, CI, PI>, action: Action) -> Option<Reaction<PI, CI>>
 where
     CI: PartialEq + Copy,
     PI: PartialEq + Copy,
@@ -16,11 +17,11 @@ where
     }
 }
 
-fn reduce_alpha_up<NI, CI, PI>(state: &mut State<NI, CI, PI>) {
+fn reduce_alpha_up<NI, CI, PI>(state: &mut State<NI, CI, PI>) -> Option<Reaction<PI, CI>> {
     match state.view {
         View::Modules => {
             if state.modules.is_empty() {
-                return;
+                return None;
             }
             state.selected_module = ((state.selected_module as i32 - 1)
                 .rem_euclid(state.modules.len() as i32))
@@ -28,42 +29,48 @@ fn reduce_alpha_up<NI, CI, PI>(state: &mut State<NI, CI, PI>) {
         }
         View::Patches => {
             if state.patches.is_empty() {
-                return;
+                return None;
             }
             state.selected_patch =
                 ((state.selected_patch as i32 - 1).rem_euclid(state.patches.len() as i32)) as usize;
         }
     }
+
+    None
 }
 
-fn reduce_alpha_down<NI, CI, PI>(state: &mut State<NI, CI, PI>) {
+fn reduce_alpha_down<NI, CI, PI>(state: &mut State<NI, CI, PI>) -> Option<Reaction<PI, CI>> {
     match state.view {
         View::Modules => {
             if state.modules.is_empty() {
-                return;
+                return None;
             }
             state.selected_module += 1;
             state.selected_module %= state.modules.len();
         }
         View::Patches => {
             if state.patches.is_empty() {
-                return;
+                return None;
             }
             state.selected_patch += 1;
             state.selected_patch %= state.patches.len();
         }
     }
+
+    None
 }
 
-fn reduce_alpha_click<NI, CI, PI>(state: &mut State<NI, CI, PI>) {
+fn reduce_alpha_click<NI, CI, PI>(state: &mut State<NI, CI, PI>) -> Option<Reaction<PI, CI>> {
     state.view = match state.view {
         View::Modules => View::Patches,
         View::Patches => View::Modules,
     };
+
+    None
 }
 
 // TODO: Return graph action
-fn reduce_alpha_hold<NI, CI, PI>(state: &mut State<NI, CI, PI>)
+fn reduce_alpha_hold<NI, CI, PI>(state: &mut State<NI, CI, PI>) -> Option<Reaction<PI, CI>>
 where
     CI: PartialEq + Copy,
     PI: PartialEq + Copy,
@@ -74,12 +81,13 @@ where
         }
         View::Patches => {
             if state.patches.is_empty() {
-                return;
+                return None;
             }
 
             let patch = &mut state.patches[state.selected_patch];
+            #[allow(clippy::question_mark)]
             if patch.source.is_none() {
-                return;
+                return None;
             }
 
             let patch_producer = patch.source.as_ref().unwrap().producer;
@@ -96,6 +104,8 @@ where
             find_attribute_with_consumer(&mut state.modules, patch_consumer)
                 .unwrap()
                 .connected = false;
+
+            Some(Reaction::RemovePatch(patch_producer, patch_consumer))
         }
     }
 }
@@ -527,6 +537,22 @@ mod tests {
         assert!(state.patches[0].source.is_some());
         reduce(&mut state, Action::AlphaHold);
         assert!(state.patches[0].source.is_none());
+    }
+
+    #[test]
+    fn when_holding_alpha_on_connected_patch_it_responses_with_delete_patch_reaction() {
+        let mut graph = TestGraph::new();
+        let mut state = State::<__NodeIndex, __ConsumerIndex, __ProducerIndex>::default();
+        add_two_modules_and_patch(&mut graph, &mut state);
+
+        state.view = View::Patches;
+        state.selected_patch = 0;
+
+        let producer = state.patches[0].source.as_ref().unwrap().producer;
+        let consumer = state.patches[0].destination.as_ref().unwrap().consumer;
+
+        let reaction = reduce(&mut state, Action::AlphaHold).unwrap();
+        assert!(reaction == Reaction::RemovePatch(producer, consumer));
     }
 
     #[test]

@@ -8,6 +8,7 @@ use crate::core::module::Module as _;
 use crate::core::signal::Signal;
 use crate::display::Display;
 use crate::model::action::Action;
+use crate::model::reaction::Reaction;
 use crate::model::reduce::reduce;
 use crate::model::state::{Attribute, Destination, Module, Patch, Socket, Source, State};
 use crate::modules::audio_output::*;
@@ -142,7 +143,10 @@ impl<D> Instrument<D> {
     }
 
     pub fn alpha_hold(&mut self) {
-        reduce(&mut self.state, Action::AlphaHold);
+        let reaction = reduce(&mut self.state, Action::AlphaHold);
+        if let Some(Reaction::RemovePatch(producer, consumer)) = reaction {
+            self.graph.remove_edge(producer, consumer);
+        }
     }
 }
 
