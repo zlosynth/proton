@@ -10,7 +10,7 @@ use embedded_graphics::{
 };
 use embedded_graphics_core::draw_target::DrawTarget;
 
-use crate::model::state::{Attribute, Module, Patch, Socket, State, View};
+use crate::model::state::{Attribute, Destination, Module, Patch, Socket, State, View, Source};
 
 const PADDING: i32 = 5;
 const FONT_HEIGHT: i32 = 12;
@@ -204,12 +204,23 @@ fn draw_patch<CI, PI, D: DrawTarget<Color = BinaryColor>>(
     selected: bool,
     display: &mut D,
 ) {
+    draw_destination(patch.destination.as_ref(), index, selected, display);
+    draw_arrow_left(index, selected, display);
+    draw_source(patch.source.as_ref(), index, selected, display);
+}
+
+fn draw_destination<CI, D: DrawTarget<Color = BinaryColor>>(
+    destination: Option<&Destination<CI>>,
+    index: usize,
+    selected: bool,
+    display: &mut D,
+) {
     let x = PADDING;
     let y = FONT_HEIGHT * (index + 1) as i32 - 1;
 
     let mut cursor = Cursor::new(x, y, display).with_highlight(selected);
 
-    if let Some(destination) = patch.destination.as_ref() {
+    if let Some(destination) = destination.as_ref() {
         cursor.write(destination.module_name);
         cursor.write(I32_TO_STR[destination.module_index]);
         cursor.write(".");
@@ -217,9 +228,20 @@ fn draw_patch<CI, PI, D: DrawTarget<Color = BinaryColor>>(
     }
 
     cursor.space_until(DISPLAY_WIDTH / 2 - FONT_WIDTH / 2 - 2);
-    cursor.arrow_left();
+}
 
-    if let Some(source) = patch.source.as_ref() {
+fn draw_source<CI, D: DrawTarget<Color = BinaryColor>>(
+    source: Option<&Source<CI>>,
+    index: usize,
+    selected: bool,
+    display: &mut D,
+) {
+    let x = DISPLAY_WIDTH - PADDING - FONT_WIDTH * 9;
+    let y = FONT_HEIGHT * (index + 1) as i32 - 1;
+
+    let mut cursor = Cursor::new(x, y, display).with_highlight(selected);
+
+    if let Some(source) = source.as_ref() {
         cursor.write(source.module_name);
         cursor.write(I32_TO_STR[source.module_index]);
         cursor.write(".");
@@ -227,6 +249,19 @@ fn draw_patch<CI, PI, D: DrawTarget<Color = BinaryColor>>(
     }
 
     cursor.space_until(DISPLAY_WIDTH - PADDING);
+}
+
+fn draw_arrow_left<D: DrawTarget<Color = BinaryColor>>(
+    index: usize,
+    selected: bool,
+    display: &mut D,
+) {
+    let x = DISPLAY_WIDTH / 2 - FONT_WIDTH / 2 - 2;
+    let y = FONT_HEIGHT * (index + 1) as i32 - 1;
+
+    let mut cursor = Cursor::new(x, y, display).with_highlight(selected);
+
+    cursor.arrow_left();
 }
 
 fn draw_blank<D: DrawTarget<Color = BinaryColor>>(display: &mut D) {
