@@ -109,6 +109,21 @@ impl<D> Instrument<D> {
             }),
         });
 
+        state.patch_edit_sources.push(Source {
+            producer: state.modules[0].attributes[0].socket.producer(),
+            module_name: state.modules[0].name,
+            module_index: state.modules[0].index,
+            attribute_name: state.modules[0].attributes[0].name,
+        });
+        state.patch_edit_sources.push(Source {
+            producer: state.modules[2].attributes[1].socket.producer(),
+            module_name: state.modules[2].name,
+            module_index: state.modules[2].index,
+            attribute_name: state.modules[2].attributes[1].name,
+        });
+        state.patch_edit = true;
+        state.patch_edit_selected_source = 1;
+
         Self {
             display: None,
             graph,

@@ -8,6 +8,15 @@ pub struct State<NI, CI, PI> {
     pub selected_module: usize,
     pub patches: Vec<Patch<CI, PI>>,
     pub selected_patch: usize,
+    // TODO:
+    // Add view of patch edit, that would hide all other destinations and all arrows, left stays highlighted
+    // On right side, the source that was selected keeps the arrow
+    // Right encoder scrolls through pages of sources, highlighting them
+    // Clicking or moving left encoder leaves the edit
+    // Clicking the right encoder selects source
+    pub patch_edit: bool,
+    pub patch_edit_sources: Vec<Source<PI>>,
+    pub patch_edit_selected_source: usize,
 }
 
 #[derive(Clone, Copy, PartialEq)]
@@ -24,6 +33,10 @@ impl<NI, CI, PI> Default for State<NI, CI, PI> {
             selected_module: 0,
             patches: vec![],
             selected_patch: 0,
+            // TODO
+            patch_edit: false,
+            patch_edit_sources: vec![],
+            patch_edit_selected_source: 0,
         }
     }
 }
