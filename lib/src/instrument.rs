@@ -82,12 +82,12 @@ impl<D> Instrument<D> {
                 module_index: state.modules[0].index,
                 attribute_name: state.modules[0].attributes[0].name,
             }),
-            destination: Some(Destination {
+            destination: Destination {
                 consumer: state.modules[2].attributes[0].socket.consumer(),
                 module_name: state.modules[2].name,
                 module_index: state.modules[2].index,
                 attribute_name: state.modules[2].attributes[0].name,
-            }),
+            },
         });
 
         graph.must_add_edge(
@@ -101,12 +101,12 @@ impl<D> Instrument<D> {
                 module_index: state.modules[2].index,
                 attribute_name: state.modules[2].attributes[1].name,
             }),
-            destination: Some(Destination {
+            destination: Destination {
                 consumer: state.modules[1].attributes[0].socket.consumer(),
                 module_name: state.modules[1].name,
                 module_index: state.modules[1].index,
                 attribute_name: state.modules[1].attributes[0].name,
-            }),
+            },
         });
 
         state.patch_edit_sources.push(Source {

@@ -121,7 +121,7 @@ impl<CI: Copy, PI: Copy> Socket<CI, PI> {
 #[derive(Clone, PartialEq)]
 pub struct Patch<CI, PI> {
     pub source: Option<Source<PI>>,
-    pub destination: Option<Destination<CI>>,
+    pub destination: Destination<CI>,
 }
 
 #[cfg(test)]
@@ -129,7 +129,7 @@ impl<CI, PI> Patch<CI, PI> {
     pub fn new_for_consumer(consumer: CI) -> Self {
         Self {
             source: None,
-            destination: Some(Destination::new_for_consumer(consumer)),
+            destination: Destination::new_for_consumer(consumer),
         }
     }
 }

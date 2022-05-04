@@ -91,7 +91,7 @@ where
             }
 
             let patch_producer = patch.source.as_ref().unwrap().producer;
-            let patch_consumer = patch.destination.as_ref().unwrap().consumer;
+            let patch_consumer = patch.destination.consumer;
 
             patch.source = None;
 
@@ -156,10 +156,6 @@ where
     PI: PartialEq + Copy,
 {
     patches.iter().find(|p| {
-        if p.destination.is_none() {
-            return false;
-        }
-
         if let Some(source) = &p.source {
             source.producer == seeked_producer
         } else {
@@ -260,13 +256,10 @@ mod tests {
             &mut self,
             consumer: __ConsumerIndex,
         ) -> Option<&mut Patch<__ConsumerIndex, __ProducerIndex>> {
-            self.state.patches.iter_mut().find(|p| {
-                if let Some(destination) = &p.destination {
-                    destination.consumer == consumer
-                } else {
-                    false
-                }
-            })
+            self.state
+                .patches
+                .iter_mut()
+                .find(|p| p.destination.consumer == consumer)
         }
 
         fn add_patch(&mut self, source: __NodeIndex, destination: __NodeIndex) {
@@ -459,11 +452,7 @@ mod tests {
         context.state.selected_patch = 0;
 
         let producer = context.state.patches[0].source.as_ref().unwrap().producer;
-        let consumer = context.state.patches[0]
-            .destination
-            .as_ref()
-            .unwrap()
-            .consumer;
+        let consumer = context.state.patches[0].destination.consumer;
 
         let reaction = reduce(&mut context.state, Action::AlphaHold).unwrap();
         assert!(reaction == Reaction::RemovePatch(producer, consumer));

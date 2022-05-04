@@ -79,7 +79,7 @@ where
             for (i, patch) in state.patches.iter().enumerate() {
                 let selected = i == state.selected_patch;
                 if selected {
-                    draw_destination(patch.destination.as_ref(), i, false, &mut self.display);
+                    draw_destination(&patch.destination, i, false, &mut self.display);
                     draw_arrow_left(i, false, &mut self.display);
                 }
             }
@@ -218,13 +218,13 @@ fn draw_patch<CI, PI, D: DrawTarget<Color = BinaryColor>>(
     selected: bool,
     display: &mut D,
 ) {
-    draw_destination(patch.destination.as_ref(), index, selected, display);
+    draw_destination(&patch.destination, index, selected, display);
     draw_arrow_left(index, selected, display);
     draw_source(patch.source.as_ref(), index, selected, display);
 }
 
 fn draw_destination<CI, D: DrawTarget<Color = BinaryColor>>(
-    destination: Option<&Destination<CI>>,
+    destination: &Destination<CI>,
     index: usize,
     selected: bool,
     display: &mut D,
@@ -234,12 +234,10 @@ fn draw_destination<CI, D: DrawTarget<Color = BinaryColor>>(
 
     let mut cursor = Cursor::new(x, y, display).with_highlight(selected);
 
-    if let Some(destination) = destination.as_ref() {
-        cursor.write(destination.module_name);
-        cursor.write(I32_TO_STR[destination.module_index]);
-        cursor.write(".");
-        cursor.write(destination.attribute_name);
-    }
+    cursor.write(destination.module_name);
+    cursor.write(I32_TO_STR[destination.module_index]);
+    cursor.write(".");
+    cursor.write(destination.attribute_name);
 
     cursor.space_until(DISPLAY_WIDTH / 2 - FONT_WIDTH / 2 - 2);
 }
