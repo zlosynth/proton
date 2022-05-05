@@ -5,4 +5,8 @@ pub enum Action {
     AlphaDown,
     AlphaClick,
     AlphaHold,
+    BetaUp,
+    BetaDown,
+    BetaClick,
+    BetaHold,
 }

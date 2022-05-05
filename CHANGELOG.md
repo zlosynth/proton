@@ -6,6 +6,7 @@ backwards compatibility.
 
 ## Unreleased
 
+* Implement menu for dynamic connecting of patches.
 * Implement disconnecting of patch source.
 
 ## 0.2.0

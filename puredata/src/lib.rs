@@ -55,6 +55,10 @@ pub unsafe extern "C" fn proton_tilde_setup() {
     register_symbol_method(class, "ad", alpha_down);
     register_symbol_method(class, "ac", alpha_click);
     register_symbol_method(class, "ah", alpha_hold);
+    register_symbol_method(class, "bu", beta_up);
+    register_symbol_method(class, "bd", beta_down);
+    register_symbol_method(class, "bc", beta_click);
+    register_symbol_method(class, "bh", beta_hold);
 
     CLASS = Some(class);
     INSTRUMENT = Some(instrument);
@@ -126,33 +130,45 @@ unsafe extern "C" fn set_control(_class: *mut Class, value: pd_sys::t_float) {
 
 unsafe extern "C" fn alpha_up(_class: *mut Class) {
     INSTRUMENT.as_mut().unwrap().alpha_up();
-    INSTRUMENT.as_mut().unwrap().update_display();
-    WINDOW
-        .as_mut()
-        .unwrap()
-        .update(INSTRUMENT.as_mut().unwrap().mut_display());
+    update_display();
 }
 
 unsafe extern "C" fn alpha_down(_class: *mut Class) {
     INSTRUMENT.as_mut().unwrap().alpha_down();
-    INSTRUMENT.as_mut().unwrap().update_display();
-    WINDOW
-        .as_mut()
-        .unwrap()
-        .update(INSTRUMENT.as_mut().unwrap().mut_display());
+    update_display();
 }
 
 unsafe extern "C" fn alpha_click(_class: *mut Class) {
     INSTRUMENT.as_mut().unwrap().alpha_click();
-    INSTRUMENT.as_mut().unwrap().update_display();
-    WINDOW
-        .as_mut()
-        .unwrap()
-        .update(INSTRUMENT.as_mut().unwrap().mut_display());
+    update_display();
 }
 
 unsafe extern "C" fn alpha_hold(_class: *mut Class) {
     INSTRUMENT.as_mut().unwrap().alpha_hold();
+    update_display();
+}
+
+unsafe extern "C" fn beta_up(_class: *mut Class) {
+    INSTRUMENT.as_mut().unwrap().beta_up();
+    update_display();
+}
+
+unsafe extern "C" fn beta_down(_class: *mut Class) {
+    INSTRUMENT.as_mut().unwrap().beta_down();
+    update_display();
+}
+
+unsafe extern "C" fn beta_click(_class: *mut Class) {
+    INSTRUMENT.as_mut().unwrap().beta_click();
+    update_display();
+}
+
+unsafe extern "C" fn beta_hold(_class: *mut Class) {
+    INSTRUMENT.as_mut().unwrap().beta_hold();
+    update_display();
+}
+
+unsafe extern "C" fn update_display() {
     INSTRUMENT.as_mut().unwrap().update_display();
     WINDOW
         .as_mut()

@@ -4,25 +4,29 @@ use alloc::vec::Vec;
 #[derive(Clone, PartialEq)]
 pub struct State<NI, CI, PI> {
     pub view: View,
+
     pub modules: Vec<Module<NI, CI, PI>>,
     pub selected_module: usize,
+
     pub patches: Vec<Patch<CI, PI>>,
     pub selected_patch: usize,
+
     // TODO:
     // Add view of patch edit, that would hide all other destinations and all arrows, left stays highlighted
     // On right side, the source that was selected keeps the arrow
     // Right encoder scrolls through pages of sources, highlighting them
     // Clicking or moving left encoder leaves the edit
     // Clicking the right encoder selects source
-    pub patch_edit: bool,
     pub patch_edit_sources: Vec<Source<PI>>,
     pub patch_edit_selected_source: usize,
+    pub patch_edit_origin: Option<View>,
 }
 
 #[derive(Clone, Copy, PartialEq)]
 pub enum View {
     Modules,
     Patches,
+    PatchEdit,
 }
 
 impl<NI, CI, PI> Default for State<NI, CI, PI> {
@@ -34,9 +38,9 @@ impl<NI, CI, PI> Default for State<NI, CI, PI> {
             patches: vec![],
             selected_patch: 0,
             // TODO
-            patch_edit: false,
             patch_edit_sources: vec![],
             patch_edit_selected_source: 0,
+            patch_edit_origin: None,
         }
     }
 }

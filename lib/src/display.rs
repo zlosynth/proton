@@ -48,6 +48,7 @@ where
         match state.view {
             View::Modules => self.update_modules(state),
             View::Patches => self.update_patches(state),
+            View::PatchEdit => self.update_patch_edit(state),
         }
     }
 
@@ -75,23 +76,23 @@ where
     }
 
     fn update_patches<NI, CI, PI>(&mut self, state: &State<NI, CI, PI>) {
-        if state.patch_edit {
-            for (i, patch) in state.patches.iter().enumerate() {
-                let selected = i == state.selected_patch;
-                if selected {
-                    draw_destination(&patch.destination, i, false, &mut self.display);
-                    draw_arrow_left(i, false, &mut self.display);
-                }
+        for (i, patch) in state.patches.iter().enumerate() {
+            let selected = i == state.selected_patch;
+            draw_patch(patch, i, selected, &mut self.display);
+        }
+    }
+
+    fn update_patch_edit<NI, CI, PI>(&mut self, state: &State<NI, CI, PI>) {
+        for (i, patch) in state.patches.iter().enumerate() {
+            let selected = i == state.selected_patch;
+            if selected {
+                draw_destination(&patch.destination, i, false, &mut self.display);
+                draw_arrow_left(i, false, &mut self.display);
             }
-            for (i, source) in state.patch_edit_sources.iter().enumerate() {
-                let selected = i == state.patch_edit_selected_source;
-                draw_source(Some(source), i, selected, &mut self.display);
-            }
-        } else {
-            for (i, patch) in state.patches.iter().enumerate() {
-                let selected = i == state.selected_patch;
-                draw_patch(patch, i, selected, &mut self.display);
-            }
+        }
+        for (i, source) in state.patch_edit_sources.iter().enumerate() {
+            let selected = i == state.patch_edit_selected_source;
+            draw_source(Some(source), i, selected, &mut self.display);
         }
     }
 }
