@@ -97,19 +97,27 @@ where
         draw_arrow_left(0, false, &mut self.display);
 
         let sources_page = selected_item_to_page(state.patch_edit_selected_source);
-        let (list_start, list_stop) = range_for_items_page(state.patch_edit_sources.len(), sources_page);
+        let (list_start, list_stop) =
+            range_for_items_page(state.patch_edit_sources.len(), sources_page);
 
-        for (i, source) in state.patch_edit_sources[list_start..=list_stop].iter().enumerate() {
+        for (i, source) in state.patch_edit_sources[list_start..=list_stop]
+            .iter()
+            .enumerate()
+        {
             let selected = list_start + i == state.patch_edit_selected_source;
             draw_source(Some(source), i, selected, &mut self.display);
         }
+
+        draw_scroll_bar(
+            Right,
+            state.patch_edit_sources.len(),
+            sources_page,
+            &mut self.display,
+        );
     }
 }
 
-fn range_for_items_page(
-    items_len: usize,
-    items_page: usize,
-) -> (usize, usize) {
+fn range_for_items_page(items_len: usize, items_page: usize) -> (usize, usize) {
     let list_start = items_page * LINES_PER_PAGE;
     let list_stop = usize::min((items_page + 1) * LINES_PER_PAGE, items_len) - 1;
     (list_start, list_stop)
