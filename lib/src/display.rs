@@ -16,7 +16,6 @@ const PADDING: i32 = 5;
 const FONT_HEIGHT: i32 = 12;
 const FONT_WIDTH: i32 = 6;
 const LINES_PER_PAGE: usize = 5;
-const ATTRIBUTES_PER_PAGE: usize = 5;
 const DISPLAY_WIDTH: i32 = 128;
 const DISPLAY_HEIGHT: i32 = 64;
 
@@ -68,11 +67,16 @@ where
                     let selected = list_start + i == module.selected_attribute;
                     draw_attribute(attribute, i, selected, &mut self.display);
                 }
-                draw_attributes_scroll_bar(&module.attributes, attributes_page, &mut self.display);
+                draw_scroll_bar(
+                    Right,
+                    module.attributes.len(),
+                    attributes_page,
+                    &mut self.display,
+                );
             }
         }
 
-        draw_modules_scroll_bar(&state.modules, modules_page, &mut self.display);
+        draw_scroll_bar(Left, state.modules.len(), modules_page, &mut self.display);
     }
 
     fn update_patches<NI, CI, PI>(&mut self, state: &State<NI, CI, PI>) {
@@ -83,6 +87,8 @@ where
             let selected = list_start + i == state.selected_patch;
             draw_patch(patch, i, selected, &mut self.display);
         }
+
+        draw_scroll_bar(Left, state.patches.len(), patches_page, &mut self.display);
     }
 
     fn update_patch_edit<NI, CI, PI>(&mut self, state: &State<NI, CI, PI>) {
@@ -129,24 +135,35 @@ fn draw_module<NI, CI, PI, D: DrawTarget<Color = BinaryColor>>(
     cursor.write(I32_TO_STR[module.index]);
 }
 
-fn draw_modules_scroll_bar<NI, CI, PI, D: DrawTarget<Color = BinaryColor>>(
-    modules: &[Module<NI, CI, PI>],
-    modules_page: usize,
+enum Side {
+    Left,
+    Right,
+}
+use Side::*;
+
+fn draw_scroll_bar<D: DrawTarget<Color = BinaryColor>>(
+    side: Side,
+    items_len: usize,
+    items_page: usize,
     display: &mut D,
 ) {
-    let sections = (modules.len() as f32 / LINES_PER_PAGE as f32).ceil() as i32;
+    let sections = (items_len as f32 / LINES_PER_PAGE as f32).ceil() as i32;
     let section_height = DISPLAY_HEIGHT / sections;
 
-    let line_start = modules_page as i32 * section_height;
+    let line_start = items_page as i32 * section_height;
 
-    let is_last_section = modules_page == sections as usize - 1;
+    let is_last_section = items_page == sections as usize - 1;
     let line_stop = if is_last_section {
         DISPLAY_HEIGHT
     } else {
-        (modules_page + 1) as i32 * section_height - 1
+        (items_page + 1) as i32 * section_height - 1
     };
 
-    Line::new(Point::new(0, line_start), Point::new(0, line_stop))
+    let x = match side {
+        Left => 0,
+        Right => DISPLAY_WIDTH - 1,
+    };
+    Line::new(Point::new(x, line_start), Point::new(x, line_stop))
         .into_styled(PrimitiveStyle::with_stroke(BinaryColor::On, 1))
         .draw(display)
         .ok()
@@ -182,44 +199,16 @@ fn draw_attribute<CI, PI, D: DrawTarget<Color = BinaryColor>>(
 }
 
 fn selected_attribute_to_page(selected_attribute: usize) -> usize {
-    (selected_attribute as f32 / ATTRIBUTES_PER_PAGE as f32).floor() as usize
+    (selected_attribute as f32 / LINES_PER_PAGE as f32).floor() as usize
 }
 
 fn range_for_attributes_page<CI, PI>(
     attributes: &[Attribute<CI, PI>],
     attributes_page: usize,
 ) -> (usize, usize) {
-    let list_start = attributes_page * ATTRIBUTES_PER_PAGE;
-    let list_stop = usize::min(
-        (attributes_page + 1) * ATTRIBUTES_PER_PAGE,
-        attributes.len(),
-    ) - 1;
+    let list_start = attributes_page * LINES_PER_PAGE;
+    let list_stop = usize::min((attributes_page + 1) * LINES_PER_PAGE, attributes.len()) - 1;
     (list_start, list_stop)
-}
-
-fn draw_attributes_scroll_bar<CI, PI, D: DrawTarget<Color = BinaryColor>>(
-    attributes: &[Attribute<CI, PI>],
-    attributes_page: usize,
-    display: &mut D,
-) {
-    let sections = (attributes.len() as f32 / ATTRIBUTES_PER_PAGE as f32).ceil() as i32;
-    let section_height = DISPLAY_HEIGHT / sections;
-
-    let line_start = attributes_page as i32 * section_height;
-
-    let is_last_section = attributes_page == sections as usize - 1;
-    let line_stop = if is_last_section {
-        DISPLAY_HEIGHT
-    } else {
-        (attributes_page + 1) as i32 * section_height - 1
-    };
-
-    let x = DISPLAY_WIDTH - 1;
-    Line::new(Point::new(x, line_start), Point::new(x, line_stop))
-        .into_styled(PrimitiveStyle::with_stroke(BinaryColor::On, 1))
-        .draw(display)
-        .ok()
-        .unwrap();
 }
 
 fn draw_patch<CI, PI, D: DrawTarget<Color = BinaryColor>>(
