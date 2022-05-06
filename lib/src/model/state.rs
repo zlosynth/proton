@@ -11,12 +11,6 @@ pub struct State<NI, CI, PI> {
     pub patches: Vec<Patch<CI, PI>>,
     pub selected_patch: usize,
 
-    // TODO:
-    // Add view of patch edit, that would hide all other destinations and all arrows, left stays highlighted
-    // On right side, the source that was selected keeps the arrow
-    // Right encoder scrolls through pages of sources, highlighting them
-    // Clicking or moving left encoder leaves the edit
-    // Clicking the right encoder selects source
     pub patch_edit_sources: Vec<Source<PI>>,
     pub patch_edit_selected_source: usize,
     pub patch_edit_origin: Option<View>,
