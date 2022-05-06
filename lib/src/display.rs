@@ -15,7 +15,7 @@ use crate::model::state::{Attribute, Destination, Module, Patch, Socket, Source,
 const PADDING: i32 = 5;
 const FONT_HEIGHT: i32 = 12;
 const FONT_WIDTH: i32 = 6;
-const MODULES_PER_PAGE: usize = 5;
+const LINES_PER_PAGE: usize = 5;
 const ATTRIBUTES_PER_PAGE: usize = 5;
 const DISPLAY_WIDTH: i32 = 128;
 const DISPLAY_HEIGHT: i32 = 64;
@@ -53,9 +53,9 @@ where
     }
 
     fn update_modules<NI, CI, PI>(&mut self, state: &State<NI, CI, PI>) {
-        let modules_page = selected_module_to_page(state.selected_module);
-
+        let modules_page = selected_item_to_page(state.selected_module);
         let (list_start, list_stop) = range_for_modules_page(&state.modules, modules_page);
+
         for (i, module) in state.modules[list_start..=list_stop].iter().enumerate() {
             let selected = list_start + i == state.selected_module;
             draw_module(module, i, selected, &mut self.display);
@@ -76,20 +76,20 @@ where
     }
 
     fn update_patches<NI, CI, PI>(&mut self, state: &State<NI, CI, PI>) {
-        for (i, patch) in state.patches.iter().enumerate() {
-            let selected = i == state.selected_patch;
+        let patches_page = selected_item_to_page(state.selected_patch);
+        let (list_start, list_stop) = range_for_patches_page(&state.patches, patches_page);
+
+        for (i, patch) in state.patches[list_start..=list_stop].iter().enumerate() {
+            let selected = list_start + i == state.selected_patch;
             draw_patch(patch, i, selected, &mut self.display);
         }
     }
 
     fn update_patch_edit<NI, CI, PI>(&mut self, state: &State<NI, CI, PI>) {
-        for (i, patch) in state.patches.iter().enumerate() {
-            let selected = i == state.selected_patch;
-            if selected {
-                draw_destination(&patch.destination, i, false, &mut self.display);
-                draw_arrow_left(i, false, &mut self.display);
-            }
-        }
+        let patch = &state.patches[state.selected_patch];
+        draw_destination(&patch.destination, 0, false, &mut self.display);
+        draw_arrow_left(0, false, &mut self.display);
+
         for (i, source) in state.patch_edit_sources.iter().enumerate() {
             let selected = i == state.patch_edit_selected_source;
             draw_source(Some(source), i, selected, &mut self.display);
@@ -101,8 +101,17 @@ fn range_for_modules_page<NI, CI, PI>(
     modules: &[Module<NI, CI, PI>],
     modules_page: usize,
 ) -> (usize, usize) {
-    let list_start = modules_page * MODULES_PER_PAGE;
-    let list_stop = usize::min((modules_page + 1) * MODULES_PER_PAGE, modules.len()) - 1;
+    let list_start = modules_page * LINES_PER_PAGE;
+    let list_stop = usize::min((modules_page + 1) * LINES_PER_PAGE, modules.len()) - 1;
+    (list_start, list_stop)
+}
+
+fn range_for_patches_page<CI, PI>(
+    patches: &[Patch<CI, PI>],
+    patches_page: usize,
+) -> (usize, usize) {
+    let list_start = patches_page * LINES_PER_PAGE;
+    let list_stop = usize::min((patches_page + 1) * LINES_PER_PAGE, patches.len()) - 1;
     (list_start, list_stop)
 }
 
@@ -125,7 +134,7 @@ fn draw_modules_scroll_bar<NI, CI, PI, D: DrawTarget<Color = BinaryColor>>(
     modules_page: usize,
     display: &mut D,
 ) {
-    let sections = (modules.len() as f32 / MODULES_PER_PAGE as f32).ceil() as i32;
+    let sections = (modules.len() as f32 / LINES_PER_PAGE as f32).ceil() as i32;
     let section_height = DISPLAY_HEIGHT / sections;
 
     let line_start = modules_page as i32 * section_height;
@@ -144,8 +153,8 @@ fn draw_modules_scroll_bar<NI, CI, PI, D: DrawTarget<Color = BinaryColor>>(
         .unwrap();
 }
 
-fn selected_module_to_page(selected_module: usize) -> usize {
-    (selected_module as f32 / MODULES_PER_PAGE as f32).floor() as usize
+fn selected_item_to_page(selected_item: usize) -> usize {
+    (selected_item as f32 / LINES_PER_PAGE as f32).floor() as usize
 }
 
 fn draw_attribute<CI, PI, D: DrawTarget<Color = BinaryColor>>(

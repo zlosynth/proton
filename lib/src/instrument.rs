@@ -57,7 +57,7 @@ impl<D> Instrument<D> {
         state.modules.push(Module {
             handle: audio_output,
             name: "<AU",
-            index: 1,
+            index: 0,
             attributes: vec![Attribute {
                 socket: Socket::Consumer(audio_output.consumer(AudioOutputConsumer)),
                 name: "IN",
@@ -108,6 +108,31 @@ impl<D> Instrument<D> {
                 attribute_name: state.modules[1].attributes[0].name,
             },
         });
+
+        for i in 3..8 {
+            let (audio_output, _audio_output_cell) = AudioOutput::new();
+            let audio_output = graph.add_node(audio_output);
+            state.modules.push(Module {
+                handle: audio_output,
+                name: "<AU",
+                index: i,
+                attributes: vec![Attribute {
+                    socket: Socket::Consumer(audio_output.consumer(AudioOutputConsumer)),
+                    name: "IN",
+                    connected: true,
+                }],
+                selected_attribute: 0,
+            });
+            state.patches.push(Patch {
+                source: None,
+                destination: Destination {
+                    consumer: state.modules[i].attributes[0].socket.consumer(),
+                    module_name: state.modules[i].name,
+                    module_index: state.modules[i].index,
+                    attribute_name: state.modules[i].attributes[0].name,
+                },
+            });
+        }
 
         Self {
             display: None,
