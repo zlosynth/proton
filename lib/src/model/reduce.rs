@@ -39,7 +39,7 @@ where
             Action::BetaUp => select_previous_source(state),
             Action::BetaDown => select_next_source(state),
             Action::BetaClick => connect_selected_source(state),
-            Action::BetaHold => todo!(),
+            Action::BetaHold => connect_selected_source(state),
         },
     }
 }
@@ -711,22 +711,24 @@ mod tests {
     }
 
     #[test]
-    fn given_patch_edit_view_when_clicks_beta_it_selects_source_and_exits_edit() {
-        let mut context = TestContext::new().with_two_modules();
+    fn given_patch_edit_view_when_clicks_or_holds_beta_it_selects_source_and_exits_edit() {
+        for action in [Action::BetaClick, Action::BetaHold] {
+            let mut context = TestContext::new().with_two_modules();
 
-        context.state.view = View::Patches;
-        context.state.selected_patch = 0;
+            context.state.view = View::Patches;
+            context.state.selected_patch = 0;
 
-        reduce(&mut context.state, Action::BetaClick);
-        assert!(context.state.patches[0].source.is_none());
-        let reaction = reduce(&mut context.state, Action::BetaClick).unwrap();
-        assert!(context.state.patches[0].source.is_some());
+            reduce(&mut context.state, Action::BetaClick);
+            assert!(context.state.patches[0].source.is_none());
+            let reaction = reduce(&mut context.state, action).unwrap();
+            assert!(context.state.patches[0].source.is_some());
 
-        let producer = context.state.patches[0].source.as_ref().unwrap().producer;
-        let consumer = context.state.patches[0].destination.consumer;
-        assert!(reaction == Reaction::ConnectPatch(producer, consumer));
+            let producer = context.state.patches[0].source.as_ref().unwrap().producer;
+            let consumer = context.state.patches[0].destination.consumer;
+            assert!(reaction == Reaction::ConnectPatch(producer, consumer));
 
-        assert!(context.state.view == View::Patches);
+            assert!(context.state.view == View::Patches);
+        }
     }
 
     #[test]
