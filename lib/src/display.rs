@@ -60,7 +60,7 @@ where
             draw_module(module, i, selected, &mut self.display);
 
             if selected && !module.attributes.is_empty() {
-                let attributes_page = selected_attribute_to_page(module.selected_attribute);
+                let attributes_page = selected_item_to_page(module.selected_attribute);
                 let (list_start, list_stop) =
                     range_for_attributes_page(&module.attributes, attributes_page);
                 for (i, attribute) in module.attributes[list_start..=list_stop].iter().enumerate() {
@@ -198,10 +198,6 @@ fn draw_attribute<CI, PI, D: DrawTarget<Color = BinaryColor>>(
 
     cursor.write(attribute.name);
     cursor.space_until(DISPLAY_WIDTH - PADDING);
-}
-
-fn selected_attribute_to_page(selected_attribute: usize) -> usize {
-    (selected_attribute as f32 / LINES_PER_PAGE as f32).floor() as usize
 }
 
 fn range_for_attributes_page<CI, PI>(
