@@ -134,6 +134,22 @@ impl<D> Instrument<D> {
             });
         }
 
+        for i in 8..12 {
+            let (control_input, _control_input_cell) = ControlInput::new();
+            let control_input = graph.add_node(control_input);
+            state.modules.push(Module {
+                handle: control_input,
+                name: ">CV",
+                index: i,
+                attributes: vec![Attribute {
+                    socket: Socket::Producer(control_input.producer(ControlInputProducer)),
+                    name: "OUT",
+                    connected: true,
+                }],
+                selected_attribute: 0,
+            });
+        }
+
         Self {
             display: None,
             graph,

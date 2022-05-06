@@ -53,7 +53,7 @@ where
 
     fn update_modules<NI, CI, PI>(&mut self, state: &State<NI, CI, PI>) {
         let modules_page = selected_item_to_page(state.selected_module);
-        let (list_start, list_stop) = range_for_modules_page(&state.modules, modules_page);
+        let (list_start, list_stop) = range_for_items_page(state.modules.len(), modules_page);
 
         for (i, module) in state.modules[list_start..=list_stop].iter().enumerate() {
             let selected = list_start + i == state.selected_module;
@@ -81,7 +81,7 @@ where
 
     fn update_patches<NI, CI, PI>(&mut self, state: &State<NI, CI, PI>) {
         let patches_page = selected_item_to_page(state.selected_patch);
-        let (list_start, list_stop) = range_for_patches_page(&state.patches, patches_page);
+        let (list_start, list_stop) = range_for_items_page(state.patches.len(), patches_page);
 
         for (i, patch) in state.patches[list_start..=list_stop].iter().enumerate() {
             let selected = list_start + i == state.selected_patch;
@@ -96,28 +96,22 @@ where
         draw_destination(&patch.destination, 0, false, &mut self.display);
         draw_arrow_left(0, false, &mut self.display);
 
-        for (i, source) in state.patch_edit_sources.iter().enumerate() {
-            let selected = i == state.patch_edit_selected_source;
+        let sources_page = selected_item_to_page(state.patch_edit_selected_source);
+        let (list_start, list_stop) = range_for_items_page(state.patch_edit_sources.len(), sources_page);
+
+        for (i, source) in state.patch_edit_sources[list_start..=list_stop].iter().enumerate() {
+            let selected = list_start + i == state.patch_edit_selected_source;
             draw_source(Some(source), i, selected, &mut self.display);
         }
     }
 }
 
-fn range_for_modules_page<NI, CI, PI>(
-    modules: &[Module<NI, CI, PI>],
-    modules_page: usize,
+fn range_for_items_page(
+    items_len: usize,
+    items_page: usize,
 ) -> (usize, usize) {
-    let list_start = modules_page * LINES_PER_PAGE;
-    let list_stop = usize::min((modules_page + 1) * LINES_PER_PAGE, modules.len()) - 1;
-    (list_start, list_stop)
-}
-
-fn range_for_patches_page<CI, PI>(
-    patches: &[Patch<CI, PI>],
-    patches_page: usize,
-) -> (usize, usize) {
-    let list_start = patches_page * LINES_PER_PAGE;
-    let list_stop = usize::min((patches_page + 1) * LINES_PER_PAGE, patches.len()) - 1;
+    let list_start = items_page * LINES_PER_PAGE;
+    let list_stop = usize::min((items_page + 1) * LINES_PER_PAGE, items_len) - 1;
     (list_start, list_stop)
 }
 
