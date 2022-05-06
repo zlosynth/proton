@@ -26,8 +26,8 @@ where
             Action::AlphaDown => select_next_patch(state),
             Action::AlphaClick => switch_to_modules(state),
             Action::AlphaHold => None,
-            Action::BetaUp => todo!(),
-            Action::BetaDown => todo!(),
+            Action::BetaUp => select_previous_patch(state),
+            Action::BetaDown => select_next_patch(state),
             Action::BetaClick => enter_patch_edit(state),
             Action::BetaHold => disconnect_source(state),
         },
@@ -447,63 +447,75 @@ mod tests {
     }
 
     #[test]
-    fn when_patches_are_empty_alpha_up_does_nothing() {
-        let mut context = TestContext::new();
-        context.state.view = View::Patches;
-        let original_selected_patch = context.state.selected_patch;
+    fn when_patches_are_empty_alpha_or_beta_up_does_nothing() {
+        for action in [Action::AlphaUp, Action::BetaUp] {
+            let mut context = TestContext::new();
+            context.state.view = View::Patches;
+            let original_selected_patch = context.state.selected_patch;
 
-        reduce(&mut context.state, Action::AlphaUp);
-        assert!(context.state.selected_patch == original_selected_patch);
+            reduce(&mut context.state, action);
+            assert!(context.state.selected_patch == original_selected_patch);
+        }
     }
 
     #[test]
-    fn when_at_the_top_of_patches_alpha_up_moves_to_last() {
-        let mut context = TestContext::new().with_two_patches();
-        context.state.view = View::Patches;
+    fn when_at_the_top_of_patches_alpha_or_beta_up_moves_to_last() {
+        for action in [Action::AlphaUp, Action::BetaUp] {
+            let mut context = TestContext::new().with_two_patches();
+            context.state.view = View::Patches;
 
-        assert_eq!(context.state.selected_patch, 0);
-        reduce(&mut context.state, Action::AlphaUp);
-        assert_eq!(context.state.selected_patch, 1);
+            assert_eq!(context.state.selected_patch, 0);
+            reduce(&mut context.state, action);
+            assert_eq!(context.state.selected_patch, 1);
+        }
     }
 
     #[test]
-    fn when_at_the_bottom_of_patches_alpha_up_goes_to_previous() {
-        let mut context = TestContext::new().with_two_patches();
-        context.state.view = View::Patches;
-        context.state.selected_patch = 1;
+    fn when_at_the_bottom_of_patches_alpha_or_beta_up_goes_to_previous() {
+        for action in [Action::AlphaUp, Action::BetaUp] {
+            let mut context = TestContext::new().with_two_patches();
+            context.state.view = View::Patches;
+            context.state.selected_patch = 1;
 
-        reduce(&mut context.state, Action::AlphaUp);
-        assert_eq!(context.state.selected_patch, 0);
+            reduce(&mut context.state, action);
+            assert_eq!(context.state.selected_patch, 0);
+        }
     }
 
     #[test]
-    fn when_patches_are_empty_alpha_down_does_nothing() {
-        let mut context = TestContext::new();
-        context.state.view = View::Patches;
-        let original_selected_patch = context.state.selected_patch;
+    fn when_patches_are_empty_alpha_or_beta_down_does_nothing() {
+        for action in [Action::AlphaDown, Action::BetaDown] {
+            let mut context = TestContext::new();
+            context.state.view = View::Patches;
+            let original_selected_patch = context.state.selected_patch;
 
-        reduce(&mut context.state, Action::AlphaDown);
-        assert!(context.state.selected_patch == original_selected_patch);
+            reduce(&mut context.state, action);
+            assert!(context.state.selected_patch == original_selected_patch);
+        }
     }
 
     #[test]
-    fn when_at_the_top_of_patches_alpha_down_moves_to_next() {
-        let mut context = TestContext::new().with_two_patches();
-        context.state.view = View::Patches;
+    fn when_at_the_top_of_patches_alpha_or_beta_down_moves_to_next() {
+        for action in [Action::AlphaDown, Action::BetaDown] {
+            let mut context = TestContext::new().with_two_patches();
+            context.state.view = View::Patches;
 
-        assert_eq!(context.state.selected_patch, 0);
-        reduce(&mut context.state, Action::AlphaDown);
-        assert_eq!(context.state.selected_patch, 1);
+            assert_eq!(context.state.selected_patch, 0);
+            reduce(&mut context.state, action);
+            assert_eq!(context.state.selected_patch, 1);
+        }
     }
 
     #[test]
-    fn when_at_the_bottom_of_patches_alpha_down_goes_to_start() {
-        let mut context = TestContext::new().with_two_patches();
-        context.state.view = View::Patches;
-        context.state.selected_patch = 1;
+    fn when_at_the_bottom_of_patches_alpha_or_beta_down_goes_to_start() {
+        for action in [Action::AlphaDown, Action::BetaDown] {
+            let mut context = TestContext::new().with_two_patches();
+            context.state.view = View::Patches;
+            context.state.selected_patch = 1;
 
-        reduce(&mut context.state, Action::AlphaDown);
-        assert_eq!(context.state.selected_patch, 0);
+            reduce(&mut context.state, action);
+            assert_eq!(context.state.selected_patch, 0);
+        }
     }
 
     #[test]
