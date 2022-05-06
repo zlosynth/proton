@@ -10,119 +10,95 @@ where
     CI: PartialEq + Copy,
     PI: PartialEq + Copy,
 {
-    // TODO: Flip this, check view first
-    match action {
-        Action::AlphaUp => reduce_alpha_up(state),
-        Action::AlphaDown => reduce_alpha_down(state),
-        Action::AlphaClick => reduce_alpha_click(state),
-        Action::AlphaHold => reduce_alpha_hold(state),
-        Action::BetaUp => match state.view {
-            View::PatchEdit => select_previous_source(state),
-            _ => todo!(),
+    match state.view {
+        View::Modules => match action {
+            Action::AlphaUp => select_previous_module(state),
+            Action::AlphaDown => select_next_module(state),
+            Action::AlphaClick => switch_to_patches(state),
+            Action::AlphaHold => todo!(),
+            Action::BetaUp => todo!(),
+            Action::BetaDown => todo!(),
+            Action::BetaClick => todo!(),
+            Action::BetaHold => todo!(),
         },
-        Action::BetaDown => match state.view {
-            View::PatchEdit => select_next_source(state),
-            _ => todo!(),
+        View::Patches => match action {
+            Action::AlphaUp => select_previous_patch(state),
+            Action::AlphaDown => select_next_patch(state),
+            Action::AlphaClick => switch_to_modules(state),
+            Action::AlphaHold => todo!(),
+            Action::BetaUp => todo!(),
+            Action::BetaDown => todo!(),
+            Action::BetaClick => enter_patch_edit(state),
+            Action::BetaHold => disconnect_source(state),
         },
-        Action::BetaClick => match state.view {
-            View::Patches => enter_patch_edit(state),
-            View::PatchEdit => connect_selected_source(state),
-            _ => todo!(),
-        },
-        Action::BetaHold => match state.view {
-            View::Patches => disconnect_source(state),
-            _ => todo!(),
+        View::PatchEdit => match action {
+            Action::AlphaUp => exit_patch_edit(state),
+            Action::AlphaDown => exit_patch_edit(state),
+            Action::AlphaClick => exit_patch_edit(state),
+            Action::AlphaHold => exit_patch_edit(state),
+            Action::BetaUp => select_previous_source(state),
+            Action::BetaDown => select_next_source(state),
+            Action::BetaClick => connect_selected_source(state),
+            Action::BetaHold => todo!(),
         },
     }
 }
 
-fn reduce_alpha_up<NI, CI, PI>(state: &mut State<NI, CI, PI>) -> Option<Reaction<PI, CI>> {
-    match state.view {
-        View::Modules => {
-            if state.modules.is_empty() {
-                return None;
-            }
-            state.selected_module = ((state.selected_module as i32 - 1)
-                .rem_euclid(state.modules.len() as i32))
-                as usize;
-        }
-        View::Patches => {
-            if state.patches.is_empty() {
-                return None;
-            }
-            state.selected_patch =
-                ((state.selected_patch as i32 - 1).rem_euclid(state.patches.len() as i32)) as usize;
-        }
-        View::PatchEdit => {
-            state.view = state.patch_edit_origin.unwrap();
-            state.patch_edit_sources = vec![];
-            state.patch_edit_origin = None;
-        }
-    }
-
+fn switch_to_modules<NI, CI, PI>(state: &mut State<NI, CI, PI>) -> Option<Reaction<PI, CI>> {
+    state.view = View::Modules;
     None
 }
 
-fn reduce_alpha_down<NI, CI, PI>(state: &mut State<NI, CI, PI>) -> Option<Reaction<PI, CI>> {
-    match state.view {
-        View::Modules => {
-            if state.modules.is_empty() {
-                return None;
-            }
-            state.selected_module += 1;
-            state.selected_module %= state.modules.len();
-        }
-        View::Patches => {
-            if state.patches.is_empty() {
-                return None;
-            }
-            state.selected_patch += 1;
-            state.selected_patch %= state.patches.len();
-        }
-        View::PatchEdit => {
-            state.view = state.patch_edit_origin.unwrap();
-            state.patch_edit_sources = vec![];
-            state.patch_edit_origin = None;
-        }
-    }
-
+fn switch_to_patches<NI, CI, PI>(state: &mut State<NI, CI, PI>) -> Option<Reaction<PI, CI>> {
+    state.view = View::Patches;
     None
 }
 
-fn reduce_alpha_click<NI, CI, PI>(state: &mut State<NI, CI, PI>) -> Option<Reaction<PI, CI>> {
-    state.view = match state.view {
-        View::Modules => View::Patches,
-        View::Patches => View::Modules,
-        View::PatchEdit => {
-            let view = state.patch_edit_origin.unwrap();
-            state.patch_edit_sources = vec![];
-            state.patch_edit_origin = None;
-            view
-        }
-    };
+fn select_previous_module<NI, CI, PI>(state: &mut State<NI, CI, PI>) -> Option<Reaction<PI, CI>> {
+    if state.modules.is_empty() {
+        return None;
+    }
 
+    state.selected_module =
+        ((state.selected_module as i32 - 1).rem_euclid(state.modules.len() as i32)) as usize;
     None
 }
 
-fn reduce_alpha_hold<NI, CI, PI>(state: &mut State<NI, CI, PI>) -> Option<Reaction<PI, CI>>
-where
-    CI: PartialEq + Copy,
-    PI: PartialEq + Copy,
-{
-    match state.view {
-        View::Modules => {
-            todo!();
-        }
-        View::Patches => {
-            todo!();
-        }
-        View::PatchEdit => {
-            state.view = state.patch_edit_origin.unwrap();
-            state.patch_edit_sources = vec![];
-            state.patch_edit_origin = None;
-            None
-        }
+fn select_next_module<NI, CI, PI>(state: &mut State<NI, CI, PI>) -> Option<Reaction<PI, CI>> {
+    if state.modules.is_empty() {
+        return None;
     }
+
+    state.selected_module += 1;
+    state.selected_module %= state.modules.len();
+    None
+}
+
+fn select_previous_patch<NI, CI, PI>(state: &mut State<NI, CI, PI>) -> Option<Reaction<PI, CI>> {
+    if state.patches.is_empty() {
+        return None;
+    }
+
+    state.selected_patch =
+        ((state.selected_patch as i32 - 1).rem_euclid(state.patches.len() as i32)) as usize;
+    None
+}
+
+fn select_next_patch<NI, CI, PI>(state: &mut State<NI, CI, PI>) -> Option<Reaction<PI, CI>> {
+    if state.patches.is_empty() {
+        return None;
+    }
+
+    state.selected_patch += 1;
+    state.selected_patch %= state.patches.len();
+    None
+}
+
+fn exit_patch_edit<NI, CI, PI>(state: &mut State<NI, CI, PI>) -> Option<Reaction<PI, CI>> {
+    state.view = state.patch_edit_origin.unwrap();
+    state.patch_edit_sources = vec![];
+    state.patch_edit_origin = None;
+    None
 }
 
 fn enter_patch_edit<NI, CI, PI>(state: &mut State<NI, CI, PI>) -> Option<Reaction<PI, CI>>
