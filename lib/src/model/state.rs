@@ -54,7 +54,6 @@ pub struct Module<NI, CI, PI> {
     pub persistent: bool,
 }
 
-#[cfg(test)]
 impl<NI, CI, PI> Module<NI, CI, PI> {
     pub fn new_for_node(node: NI) -> Self {
         Self {
@@ -65,6 +64,11 @@ impl<NI, CI, PI> Module<NI, CI, PI> {
             selected_attribute: 0,
             persistent: false,
         }
+    }
+
+    pub fn with_name(mut self, name: &'static str) -> Self {
+        self.name = name;
+        self
     }
 
     pub fn with_attribute(mut self, attribute: Attribute<CI, PI>) -> Self {
@@ -80,7 +84,6 @@ pub struct Attribute<CI, PI> {
     pub connected: bool,
 }
 
-#[cfg(test)]
 impl<CI, PI> Attribute<CI, PI> {
     pub fn new_for_producer(producer: PI) -> Self {
         Self {
@@ -96,6 +99,11 @@ impl<CI, PI> Attribute<CI, PI> {
             name: "",
             connected: false,
         }
+    }
+
+    pub fn with_name(mut self, name: &'static str) -> Self {
+        self.name = name;
+        self
     }
 }
 

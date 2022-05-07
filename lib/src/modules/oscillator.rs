@@ -1,4 +1,3 @@
-use alloc::vec;
 use alloc::vec::Vec;
 
 use graphity::signal::SignalGraph;
@@ -69,23 +68,10 @@ pub fn register<N, NI, CI, PI>(
         oscillator.consumer::<__Consumer>(OscillatorConsumer::Frequency.into());
     let producer = oscillator.producer::<__Producer>(OscillatorProducer.into());
 
-    modules.push(Module {
-        handle: oscillator,
-        name: "OSC",
-        index: 0,
-        attributes: vec![
-            Attribute {
-                socket: Socket::Consumer(consumer_frequency),
-                name: "FRQ",
-                connected: false,
-            },
-            Attribute {
-                socket: Socket::Producer(producer),
-                name: "OUT",
-                connected: false,
-            },
-        ],
-        selected_attribute: 0,
-        persistent: false,
-    });
+    modules.push(
+        Module::new_for_node(oscillator)
+            .with_name("OSC")
+            .with_attribute(Attribute::new_for_consumer(consumer_frequency).with_name("FRQ"))
+            .with_attribute(Attribute::new_for_producer(producer).with_name("OUT")),
+    );
 }

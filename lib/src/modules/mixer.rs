@@ -1,4 +1,3 @@
-use alloc::vec;
 use alloc::vec::Vec;
 
 use graphity::signal::SignalGraph;
@@ -77,28 +76,11 @@ pub fn register<N, NI, CI, PI>(
     let consumer_in2 = mixer.consumer::<__Consumer>(MixerConsumer::In2.into());
     let producer = mixer.producer::<__Producer>(MixerProducer.into());
 
-    modules.push(Module {
-        handle: mixer,
-        name: "MIX",
-        index: 0,
-        attributes: vec![
-            Attribute {
-                socket: Socket::Consumer(consumer_in1),
-                name: "IN1",
-                connected: false,
-            },
-            Attribute {
-                socket: Socket::Consumer(consumer_in2),
-                name: "IN2",
-                connected: false,
-            },
-            Attribute {
-                socket: Socket::Producer(producer),
-                name: "OUT",
-                connected: false,
-            },
-        ],
-        selected_attribute: 0,
-        persistent: false,
-    });
+    modules.push(
+        Module::new_for_node(mixer)
+            .with_name("MIX")
+            .with_attribute(Attribute::new_for_consumer(consumer_in1).with_name("IN1"))
+            .with_attribute(Attribute::new_for_consumer(consumer_in2).with_name("IN2"))
+            .with_attribute(Attribute::new_for_producer(producer).with_name("OUT")),
+    );
 }
