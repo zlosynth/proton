@@ -111,14 +111,6 @@ impl<CI: Copy, PI: Copy> Socket<CI, PI> {
             panic!();
         }
     }
-
-    pub fn producer(&self) -> PI {
-        if let Socket::Producer(producer) = self {
-            *producer
-        } else {
-            panic!();
-        }
-    }
 }
 
 #[derive(Clone, PartialEq)]

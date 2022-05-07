@@ -8,9 +8,8 @@ use crate::core::module::Module as _;
 use crate::core::signal::Signal;
 use crate::display::Display;
 use crate::model::action::Action;
-use crate::model::reaction::Reaction;
 use crate::model::reduce::reduce;
-use crate::model::state::{Attribute, Class, Destination, Module, Patch, Socket, State, View};
+use crate::model::state::{Attribute, Class, Destination, Module, Patch, Socket, State};
 use crate::modules::audio_output::*;
 use crate::modules::control_input::*;
 use crate::modules::oscillator::*;
@@ -123,41 +122,35 @@ impl<D> Instrument<D> {
     }
 
     pub fn alpha_up(&mut self) {
-        reduce(&mut self.state, Action::AlphaUp);
+        reduce(&mut self.graph, &mut self.state, Action::AlphaUp);
     }
 
     pub fn alpha_down(&mut self) {
-        reduce(&mut self.state, Action::AlphaDown);
+        reduce(&mut self.graph, &mut self.state, Action::AlphaDown);
     }
 
     pub fn alpha_click(&mut self) {
-        reduce(&mut self.state, Action::AlphaClick);
+        reduce(&mut self.graph, &mut self.state, Action::AlphaClick);
     }
 
     pub fn alpha_hold(&mut self) {
-        reduce(&mut self.state, Action::AlphaHold);
+        reduce(&mut self.graph, &mut self.state, Action::AlphaHold);
     }
 
     pub fn beta_up(&mut self) {
-        reduce(&mut self.state, Action::BetaUp);
+        reduce(&mut self.graph, &mut self.state, Action::BetaUp);
     }
 
     pub fn beta_down(&mut self) {
-        reduce(&mut self.state, Action::BetaDown);
+        reduce(&mut self.graph, &mut self.state, Action::BetaDown);
     }
 
     pub fn beta_click(&mut self) {
-        let reaction = reduce(&mut self.state, Action::BetaClick);
-        if let Some(Reaction::ConnectPatch(producer, consumer)) = reaction {
-            self.graph.must_add_edge(producer, consumer);
-        }
+        reduce(&mut self.graph, &mut self.state, Action::BetaClick);
     }
 
     pub fn beta_hold(&mut self) {
-        let reaction = reduce(&mut self.state, Action::BetaHold);
-        if let Some(Reaction::RemovePatch(producer, consumer)) = reaction {
-            self.graph.remove_edge(producer, consumer);
-        }
+        reduce(&mut self.graph, &mut self.state, Action::BetaHold);
     }
 }
 
