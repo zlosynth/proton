@@ -30,12 +30,12 @@ pub fn reduce<N, NI, C, CI, P, PI>(
             Action::AlphaUp => select_previous_module(state),
             Action::AlphaDown => select_next_module(state),
             Action::AlphaClick => switch_to_patches(state),
-            Action::AlphaHold => switch_to_module_add(state),
+            Action::AlphaHold => todo!(),
             Action::BetaUp => todo!(),
             Action::BetaDown => todo!(),
             Action::BetaClick => todo!(),
             Action::BetaHold => todo!(),
-            Action::BothClick => todo!(),
+            Action::BothClick => switch_to_module_add(state),
         },
         View::ModuleAdd => match action {
             Action::AlphaUp => select_previous_class(state),
@@ -46,7 +46,7 @@ pub fn reduce<N, NI, C, CI, P, PI>(
             Action::BetaDown => select_next_class(state),
             Action::BetaClick => instantiate_selected_class(registrator, graph, state),
             Action::BetaHold => switch_to_modules(state),
-            Action::BothClick => todo!(),
+            Action::BothClick => (),
         },
         View::Patches => match action {
             Action::AlphaUp => select_previous_patch(state),
@@ -57,7 +57,7 @@ pub fn reduce<N, NI, C, CI, P, PI>(
             Action::BetaDown => select_next_patch(state),
             Action::BetaClick => enter_patch_edit(state),
             Action::BetaHold => disconnect_source(graph, state),
-            Action::BothClick => todo!(),
+            Action::BothClick => (),
         },
         View::PatchEdit => match action {
             Action::AlphaUp => exit_patch_edit(state),
@@ -68,7 +68,7 @@ pub fn reduce<N, NI, C, CI, P, PI>(
             Action::BetaDown => select_next_source(state),
             Action::BetaClick => connect_selected_source(graph, state),
             Action::BetaHold => connect_selected_source(graph, state),
-            Action::BothClick => todo!(),
+            Action::BothClick => (),
         },
     }
 }
@@ -973,7 +973,7 @@ mod tests {
         let mut context = TestContext::new().with_two_patches();
         context.state.view = View::Modules;
 
-        context.reduce(Action::AlphaHold);
+        context.reduce(Action::BothClick);
         assert!(context.state.view == View::ModuleAdd);
     }
 
