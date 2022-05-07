@@ -5,8 +5,11 @@ use core::cmp::PartialEq;
 use super::action::Action;
 use super::state::*;
 
-pub type Registrator<N, NI, CI, PI> =
-    fn(&'static str, &mut graphity::signal::SignalGraph<N, NI, CI, PI>, &mut Vec<Module<NI, CI, PI>>);
+pub type Registrator<N, NI, CI, PI> = fn(
+    &'static str,
+    &mut graphity::signal::SignalGraph<N, NI, CI, PI>,
+    &mut Vec<Module<NI, CI, PI>>,
+);
 
 pub fn reduce<N, NI, C, CI, P, PI>(
     registrator: Registrator<N, NI, CI, PI>,
@@ -152,7 +155,11 @@ fn instantiate_selected_class<N, NI, C, CI, P, PI>(
     let class = &mut state.classes[state.selected_class];
     let original_modules_len = state.modules.len();
     registrator(class.name, graph, &mut state.modules);
-    debug_assert_eq!(state.modules.len(), original_modules_len + 1, "Registrator must add a single module");
+    debug_assert_eq!(
+        state.modules.len(),
+        original_modules_len + 1,
+        "Registrator must add a single module"
+    );
 
     let module = &state.modules[state.modules.len() - 1];
     for attribute in module.attributes.iter() {

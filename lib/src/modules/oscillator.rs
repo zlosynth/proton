@@ -1,5 +1,5 @@
-use alloc::vec::Vec;
 use alloc::vec;
+use alloc::vec::Vec;
 
 use graphity::signal::SignalGraph;
 use graphity::Node;
