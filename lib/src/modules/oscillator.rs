@@ -56,9 +56,9 @@ where
     NI: graphity::NodeIndex<ConsumerIndex = CI, ProducerIndex = PI>,
     CI: graphity::node::ConsumerIndex<NodeIndex = NI, Consumer = NI::Consumer>,
     PI: graphity::node::ProducerIndex<NodeIndex = NI, Producer = NI::Producer>,
-    N: core::convert::From<OscillatorNode>,
-    <NI as graphity::NodeIndex>::Consumer: core::convert::From<OscillatorConsumer>,
-    <NI as graphity::NodeIndex>::Producer: core::convert::From<OscillatorProducer>,
+    N: From<OscillatorNode>,
+    <NI as graphity::NodeIndex>::Consumer: From<OscillatorConsumer>,
+    <NI as graphity::NodeIndex>::Producer: From<OscillatorProducer>,
 {
     fn register(&self, graph: &mut SignalGraph<N, NI, CI, PI>, state: &mut State<NI, CI, PI>) {
         let oscillator = OscillatorNode::new();
