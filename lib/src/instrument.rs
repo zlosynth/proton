@@ -100,7 +100,6 @@ impl<D> Instrument<D> {
             name: "ATT",
             description: "Explanation",
         });
-        state.view = View::ModuleAdd;
 
         Self {
             display: None,

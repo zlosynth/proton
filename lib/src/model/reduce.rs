@@ -15,13 +15,22 @@ where
             Action::AlphaUp => select_previous_module(state),
             Action::AlphaDown => select_next_module(state),
             Action::AlphaClick => switch_to_patches(state),
-            Action::AlphaHold => None,
+            Action::AlphaHold => switch_to_module_add(state),
             Action::BetaUp => todo!(),
             Action::BetaDown => todo!(),
             Action::BetaClick => todo!(),
             Action::BetaHold => todo!(),
         },
-        View::ModuleAdd => None,
+        View::ModuleAdd => match action {
+            Action::AlphaUp => select_previous_class(state),
+            Action::AlphaDown => select_next_class(state),
+            Action::AlphaClick => todo!(),
+            Action::AlphaHold => switch_to_modules(state),
+            Action::BetaUp => select_previous_class(state),
+            Action::BetaDown => select_next_class(state),
+            Action::BetaClick => todo!(),
+            Action::BetaHold => switch_to_modules(state),
+        },
         View::Patches => match action {
             Action::AlphaUp => select_previous_patch(state),
             Action::AlphaDown => select_next_patch(state),
@@ -52,6 +61,11 @@ fn switch_to_modules<NI, CI, PI>(state: &mut State<NI, CI, PI>) -> Option<Reacti
 
 fn switch_to_patches<NI, CI, PI>(state: &mut State<NI, CI, PI>) -> Option<Reaction<PI, CI>> {
     state.view = View::Patches;
+    None
+}
+
+fn switch_to_module_add<NI, CI, PI>(state: &mut State<NI, CI, PI>) -> Option<Reaction<PI, CI>> {
+    state.view = View::ModuleAdd;
     None
 }
 
@@ -92,6 +106,26 @@ fn select_next_patch<NI, CI, PI>(state: &mut State<NI, CI, PI>) -> Option<Reacti
 
     state.selected_patch += 1;
     state.selected_patch %= state.patches.len();
+    None
+}
+
+fn select_previous_class<NI, CI, PI>(state: &mut State<NI, CI, PI>) -> Option<Reaction<PI, CI>> {
+    if state.classes.is_empty() {
+        return None;
+    }
+
+    state.selected_class =
+        ((state.selected_class as i32 - 1).rem_euclid(state.classes.len() as i32)) as usize;
+    None
+}
+
+fn select_next_class<NI, CI, PI>(state: &mut State<NI, CI, PI>) -> Option<Reaction<PI, CI>> {
+    if state.classes.is_empty() {
+        return None;
+    }
+
+    state.selected_class += 1;
+    state.selected_class %= state.classes.len();
     None
 }
 
@@ -323,6 +357,16 @@ mod tests {
             self.add_patch(source, destination1);
             self.add_patch(source, destination2);
             self
+        }
+
+        fn with_two_classes(mut self) -> Self {
+            self.add_class();
+            self.add_class();
+            self
+        }
+
+        fn add_class(&mut self) {
+            self.state.classes.push(Class{name: "", description: ""});
         }
 
         fn add_source_module(&mut self) -> __NodeIndex {
@@ -826,5 +870,73 @@ mod tests {
                     None
                 }
             })
+    }
+
+    #[test]
+    fn given_modules_view_when_holding_alpha_it_switches_to_module_add() {
+        let mut context = TestContext::new().with_two_patches();
+        context.state.view = View::Modules;
+
+        reduce(&mut context.state, Action::AlphaHold);
+        assert!(context.state.view == View::ModuleAdd);
+    }
+
+    #[test]
+    fn given_module_add_view_when_hold_alpha_or_beta_it_exits() {
+        for action in [Action::AlphaHold, Action::BetaHold] {
+            let mut context = TestContext::new();
+            context.state.view = View::ModuleAdd;
+
+            reduce(&mut context.state, action);
+            assert!(context.state.view == View::Modules);
+        }
+    }
+
+    #[test]
+    fn given_module_add_view_on_bottom_when_alpha_or_beta_down_it_moves_to_beginning() {
+        for action in [Action::AlphaDown, Action::BetaDown] {
+            let mut context = TestContext::new().with_two_classes();
+            context.state.view = View::ModuleAdd;
+
+            context.state.selected_class = 1;
+            reduce(&mut context.state, action);
+            assert_eq!(context.state.selected_class, 0);
+        }
+    }
+
+    #[test]
+    fn given_module_add_view_on_top_when_alpha_or_beta_down_it_moves_to_next() {
+        for action in [Action::AlphaDown, Action::BetaDown] {
+            let mut context = TestContext::new().with_two_classes();
+            context.state.view = View::ModuleAdd;
+
+            assert_eq!(context.state.selected_class, 0);
+            reduce(&mut context.state, action);
+            assert_eq!(context.state.selected_class, 1);
+        }
+    }
+
+    #[test]
+    fn given_module_add_view_on_top_when_alpha_or_beta_up_it_moves_to_last() {
+        for action in [Action::AlphaUp, Action::BetaUp] {
+            let mut context = TestContext::new().with_two_classes();
+            context.state.view = View::ModuleAdd;
+
+            assert_eq!(context.state.selected_class, 0);
+            reduce(&mut context.state, action);
+            assert_eq!(context.state.selected_class, 1);
+        }
+    }
+
+    #[test]
+    fn given_module_add_view_on_top_when_alpha_or_beta_up_it_moves_to_previous() {
+        for action in [Action::AlphaUp, Action::BetaUp] {
+            let mut context = TestContext::new().with_two_classes();
+            context.state.view = View::ModuleAdd;
+
+            context.state.selected_class = 1;
+            reduce(&mut context.state, action);
+            assert_eq!(context.state.selected_class, 0);
+        }
     }
 }
