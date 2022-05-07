@@ -99,5 +99,6 @@ pub fn register<N, NI, CI, PI>(
             },
         ],
         selected_attribute: 0,
+        persistent: false,
     });
 }

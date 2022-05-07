@@ -30,7 +30,7 @@ pub fn reduce<N, NI, C, CI, P, PI>(
             Action::AlphaUp => select_previous_module(state),
             Action::AlphaDown => select_next_module(state),
             Action::AlphaClick => switch_to_patches(state),
-            Action::AlphaHold => todo!(),
+            Action::AlphaHold => remove_module(state),
             Action::BetaUp => todo!(),
             Action::BetaDown => todo!(),
             Action::BetaClick => todo!(),
@@ -182,6 +182,15 @@ fn instantiate_selected_class<N, NI, C, CI, P, PI>(
 
     state.view = View::Modules;
     state.selected_module = state.modules.len() - 1;
+}
+
+fn remove_module<NI, CI, PI>(state: &mut State<NI, CI, PI>) {
+    if state.modules[state.selected_module].persistent {
+        return;
+    }
+
+    state.modules.remove(state.selected_module);
+    state.selected_module = usize::min(state.selected_module, state.modules.len() - 1);
 }
 
 fn exit_patch_edit<NI, CI, PI>(state: &mut State<NI, CI, PI>) {
@@ -1054,5 +1063,40 @@ mod tests {
                 context.state.modules.len() - 1
             );
         }
+    }
+
+    #[test]
+    fn given_modules_view_selected_regular_module_when_holds_alpha_it_removes_the_module() {
+        let mut context = TestContext::new().with_two_modules();
+        context.state.view = View::Modules;
+
+        let original_modules_len = context.state.modules.len();
+        context.reduce(Action::AlphaHold);
+        assert_eq!(context.state.modules.len(), original_modules_len - 1);
+    }
+
+    #[test]
+    fn given_modules_view_selected_last_module_when_holds_alpha_it_removes_it_and_selects_previous()
+    {
+        let mut context = TestContext::new().with_two_modules();
+        context.state.view = View::Modules;
+        context.state.selected_module = context.state.modules.len() - 1;
+
+        context.reduce(Action::AlphaHold);
+        assert_eq!(
+            context.state.selected_module,
+            context.state.modules.len() - 1
+        );
+    }
+
+    #[test]
+    fn given_modules_view_selected_persistent_module_when_holds_alpha_it_does_nothing() {
+        let mut context = TestContext::new().with_two_modules();
+        context.state.view = View::Modules;
+        context.state.modules[0].persistent = true;
+
+        let original_modules_len = context.state.modules.len();
+        context.reduce(Action::AlphaHold);
+        assert_eq!(context.state.modules.len(), original_modules_len);
     }
 }

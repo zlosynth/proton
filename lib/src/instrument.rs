@@ -76,6 +76,7 @@ impl<D> Instrument<D> {
                 connected: true,
             }],
             selected_attribute: 0,
+            persistent: true,
         });
         let control_input = graph.add_node(control2_input);
         state.modules.push(Module {
@@ -88,6 +89,7 @@ impl<D> Instrument<D> {
                 connected: true,
             }],
             selected_attribute: 0,
+            persistent: true,
         });
         let audio_output = graph.add_node(audio_output);
         state.modules.push(Module {
@@ -100,6 +102,7 @@ impl<D> Instrument<D> {
                 connected: true,
             }],
             selected_attribute: 0,
+            persistent: true,
         });
         state.patches.push(Patch {
             source: None,

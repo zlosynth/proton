@@ -51,6 +51,7 @@ pub struct Module<NI, CI, PI> {
     pub index: usize,
     pub attributes: Vec<Attribute<CI, PI>>,
     pub selected_attribute: usize,
+    pub persistent: bool,
 }
 
 #[cfg(test)]
@@ -62,6 +63,7 @@ impl<NI, CI, PI> Module<NI, CI, PI> {
             index: 0,
             attributes: vec![],
             selected_attribute: 0,
+            persistent: false,
         }
     }
 
