@@ -35,6 +35,7 @@ pub fn reduce<N, NI, C, CI, P, PI>(
             Action::BetaDown => todo!(),
             Action::BetaClick => todo!(),
             Action::BetaHold => todo!(),
+            Action::BothClick => todo!(),
         },
         View::ModuleAdd => match action {
             Action::AlphaUp => select_previous_class(state),
@@ -45,6 +46,7 @@ pub fn reduce<N, NI, C, CI, P, PI>(
             Action::BetaDown => select_next_class(state),
             Action::BetaClick => instantiate_selected_class(registrator, graph, state),
             Action::BetaHold => switch_to_modules(state),
+            Action::BothClick => todo!(),
         },
         View::Patches => match action {
             Action::AlphaUp => select_previous_patch(state),
@@ -55,6 +57,7 @@ pub fn reduce<N, NI, C, CI, P, PI>(
             Action::BetaDown => select_next_patch(state),
             Action::BetaClick => enter_patch_edit(state),
             Action::BetaHold => disconnect_source(graph, state),
+            Action::BothClick => todo!(),
         },
         View::PatchEdit => match action {
             Action::AlphaUp => exit_patch_edit(state),
@@ -65,6 +68,7 @@ pub fn reduce<N, NI, C, CI, P, PI>(
             Action::BetaDown => select_next_source(state),
             Action::BetaClick => connect_selected_source(graph, state),
             Action::BetaHold => connect_selected_source(graph, state),
+            Action::BothClick => todo!(),
         },
     }
 }

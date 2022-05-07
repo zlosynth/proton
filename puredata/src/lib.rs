@@ -60,6 +60,7 @@ pub unsafe extern "C" fn proton_tilde_setup() {
     register_symbol_method(class, "bd", beta_down);
     register_symbol_method(class, "bc", beta_click);
     register_symbol_method(class, "bh", beta_hold);
+    register_symbol_method(class, "abc", both_click);
 
     CLASS = Some(class);
     INSTRUMENT = Some(instrument);
@@ -173,6 +174,11 @@ unsafe extern "C" fn beta_click(_class: *mut Class) {
 
 unsafe extern "C" fn beta_hold(_class: *mut Class) {
     INSTRUMENT.as_mut().unwrap().beta_hold();
+    update_display();
+}
+
+unsafe extern "C" fn both_click(_class: *mut Class) {
+    INSTRUMENT.as_mut().unwrap().both_click();
     update_display();
 }
 

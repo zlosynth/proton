@@ -178,6 +178,10 @@ impl<D> Instrument<D> {
         self.reduce(Action::BetaHold);
     }
 
+    pub fn both_click(&mut self) {
+        self.reduce(Action::BothClick);
+    }
+
     fn reduce(&mut self, action: Action) {
         reduce::<__Node, __NodeIndex, __Consumer, __ConsumerIndex, __Producer, __ProducerIndex>(
             register,

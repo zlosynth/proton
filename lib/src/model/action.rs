@@ -9,4 +9,5 @@ pub enum Action {
     BetaDown,
     BetaClick,
     BetaHold,
+    BothClick,
 }
