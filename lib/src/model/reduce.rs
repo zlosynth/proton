@@ -1,10 +1,15 @@
 use alloc::vec;
+use alloc::vec::Vec;
 use core::cmp::PartialEq;
 
 use super::action::Action;
 use super::state::*;
 
-pub fn reduce<N, NI, CI, PI>(
+pub type Registrator<N, NI, CI, PI> =
+    fn(&'static str, &mut graphity::signal::SignalGraph<N, NI, CI, PI>, &mut Vec<Module<NI, CI, PI>>);
+
+pub fn reduce<N, NI, C, CI, P, PI>(
+    registrator: Registrator<N, NI, CI, PI>,
     graph: &mut graphity::signal::SignalGraph<N, NI, CI, PI>,
     state: &mut State<NI, CI, PI>,
     action: Action,
@@ -13,6 +18,9 @@ pub fn reduce<N, NI, CI, PI>(
     NI: graphity::NodeIndex<ProducerIndex = PI, ConsumerIndex = CI>,
     CI: graphity::node::ConsumerIndex<NodeIndex = NI, Consumer = NI::Consumer>,
     PI: graphity::node::ProducerIndex<NodeIndex = NI, Producer = NI::Producer>,
+    N: From<N>,
+    <NI as graphity::NodeIndex>::Consumer: From<C>,
+    <NI as graphity::NodeIndex>::Producer: From<P>,
 {
     match state.view {
         View::Modules => match action {
@@ -28,11 +36,11 @@ pub fn reduce<N, NI, CI, PI>(
         View::ModuleAdd => match action {
             Action::AlphaUp => select_previous_class(state),
             Action::AlphaDown => select_next_class(state),
-            Action::AlphaClick => todo!("instantiate_selected_class(state)"),
+            Action::AlphaClick => instantiate_selected_class(registrator, graph, state),
             Action::AlphaHold => switch_to_modules(state),
             Action::BetaUp => select_previous_class(state),
             Action::BetaDown => select_next_class(state),
-            Action::BetaClick => todo!("instantiate_selected_class(state)"),
+            Action::BetaClick => instantiate_selected_class(registrator, graph, state),
             Action::BetaHold => switch_to_modules(state),
         },
         View::Patches => match action {
@@ -124,25 +132,46 @@ fn select_next_class<NI, CI, PI>(state: &mut State<NI, CI, PI>) {
     state.selected_class %= state.classes.len();
 }
 
-// fn instantiate_selected_class<NI, CI, PI>(state: &mut State<NI, CI, PI>)  {
-//     if state.classes.is_empty() {
-//         return;
-//     }
+fn instantiate_selected_class<N, NI, C, CI, P, PI>(
+    registrator: Registrator<N, NI, CI, PI>,
+    graph: &mut graphity::signal::SignalGraph<N, NI, CI, PI>,
+    state: &mut State<NI, CI, PI>,
+) where
+    N: graphity::NodeWrapper<Class = NI::Class, Consumer = NI::Consumer, Producer = NI::Producer>,
+    NI: graphity::NodeIndex<ConsumerIndex = CI, ProducerIndex = PI>,
+    CI: graphity::node::ConsumerIndex<NodeIndex = NI, Consumer = NI::Consumer>,
+    PI: graphity::node::ProducerIndex<NodeIndex = NI, Producer = NI::Producer>,
+    N: From<N>,
+    <NI as graphity::NodeIndex>::Consumer: From<C>,
+    <NI as graphity::NodeIndex>::Producer: From<P>,
+{
+    if state.classes.is_empty() {
+        return;
+    }
 
-// //     let class = &mut state.classes[state.selected_class];
-// //     class.register(&mut graph, &mut state);
-// // state.patches.push(Patch {
-// //         source: None,
-// //         destination: Destination {
-// //             consumer: state.modules[2].attributes[0].socket.consumer(),
-// //             module_name: state.modules[2].name,
-// //             module_index: state.modules[2].index,
-// //             attribute_name: state.modules[2].attributes[0].name,
-// //         },
-// //     });
+    let class = &mut state.classes[state.selected_class];
+    let original_modules_len = state.modules.len();
+    registrator(class.name, graph, &mut state.modules);
+    debug_assert_eq!(state.modules.len(), original_modules_len + 1, "Registrator must add a single module");
 
-//     // TODO: Reaction to add a new node to the graph
-// }
+    let module = &state.modules[state.modules.len() - 1];
+    for attribute in module.attributes.iter() {
+        if let Socket::Consumer(consumer) = attribute.socket {
+            state.patches.push(Patch {
+                source: None,
+                destination: Destination {
+                    consumer,
+                    module_name: module.name,
+                    module_index: module.index,
+                    attribute_name: attribute.name,
+                },
+            });
+        }
+    }
+
+    state.view = View::Modules;
+    state.selected_module = state.modules.len() - 1;
+}
 
 fn exit_patch_edit<NI, CI, PI>(state: &mut State<NI, CI, PI>) {
     state.view = state.patch_edit_origin.unwrap();
@@ -344,6 +373,31 @@ mod tests {
         Node = {TestNode, TestConsumer, TestProducer},
     );
 
+    pub fn register<N, NI, CI, PI>(
+        _name: &'static str,
+        graph: &mut graphity::signal::SignalGraph<N, NI, CI, PI>,
+        modules: &mut Vec<Module<NI, CI, PI>>,
+    ) where
+        N: graphity::NodeWrapper<
+            Class = NI::Class,
+            Consumer = NI::Consumer,
+            Producer = NI::Producer,
+        >,
+        NI: graphity::NodeIndex<ConsumerIndex = CI, ProducerIndex = PI>,
+        CI: graphity::node::ConsumerIndex<NodeIndex = NI, Consumer = NI::Consumer>,
+        PI: graphity::node::ProducerIndex<NodeIndex = NI, Producer = NI::Producer>,
+        N: From<__Node>,
+        <NI as graphity::NodeIndex>::Consumer: From<__Consumer>,
+        <NI as graphity::NodeIndex>::Producer: From<__Producer>,
+    {
+        let node = graph.add_node::<__Node>(TestNode.into());
+        modules.push(
+            Module::new_for_node(node).with_attribute(Attribute::new_for_consumer(
+                node.consumer::<__Consumer>(TestConsumer.into()),
+            )),
+        );
+    }
+
     struct TestContext {
         graph: TestGraph,
         pub state: State<__NodeIndex, __ConsumerIndex, __ProducerIndex>,
@@ -447,6 +501,15 @@ mod tests {
             self.find_module_mut(source).unwrap().attributes[0].connected = true;
             self.find_module_mut(destination).unwrap().attributes[0].connected = true;
         }
+
+        fn reduce(&mut self, action: Action) {
+            reduce::<__Node, __NodeIndex, __Consumer, __ConsumerIndex, __Producer, __ProducerIndex>(
+                register,
+                &mut self.graph,
+                &mut self.state,
+                action,
+            );
+        }
     }
 
     #[test]
@@ -454,10 +517,10 @@ mod tests {
         let mut context = TestContext::new();
         assert!(matches!(context.state.view, View::Modules));
 
-        reduce(&mut context.graph, &mut context.state, Action::AlphaClick);
+        context.reduce(Action::AlphaClick);
         assert!(matches!(context.state.view, View::Patches));
 
-        reduce(&mut context.graph, &mut context.state, Action::AlphaClick);
+        context.reduce(Action::AlphaClick);
         assert!(matches!(context.state.view, View::Modules));
     }
 
@@ -466,7 +529,7 @@ mod tests {
         let mut context = TestContext::new();
         let original_selected_module = context.state.selected_module;
 
-        reduce(&mut context.graph, &mut context.state, Action::AlphaUp);
+        context.reduce(Action::AlphaUp);
         assert!(context.state.selected_module == original_selected_module);
     }
 
@@ -474,7 +537,7 @@ mod tests {
     fn when_at_the_top_of_modules_alpha_up_moves_to_last() {
         let mut context = TestContext::new().with_two_modules();
         assert_eq!(context.state.selected_module, 0);
-        reduce(&mut context.graph, &mut context.state, Action::AlphaUp);
+        context.reduce(Action::AlphaUp);
         assert_eq!(context.state.selected_module, 1);
     }
 
@@ -483,7 +546,7 @@ mod tests {
         let mut context = TestContext::new().with_two_modules();
         context.state.selected_module = 1;
 
-        reduce(&mut context.graph, &mut context.state, Action::AlphaUp);
+        context.reduce(Action::AlphaUp);
         assert_eq!(context.state.selected_module, 0);
     }
 
@@ -492,7 +555,7 @@ mod tests {
         let mut context = TestContext::new();
         let original_selected_module = context.state.selected_module;
 
-        reduce(&mut context.graph, &mut context.state, Action::AlphaDown);
+        context.reduce(Action::AlphaDown);
         assert!(context.state.selected_module == original_selected_module);
     }
 
@@ -500,7 +563,7 @@ mod tests {
     fn when_at_the_top_of_modules_alpha_down_moves_to_next() {
         let mut context = TestContext::new().with_two_modules();
         assert_eq!(context.state.selected_module, 0);
-        reduce(&mut context.graph, &mut context.state, Action::AlphaDown);
+        context.reduce(Action::AlphaDown);
         assert_eq!(context.state.selected_module, 1);
     }
 
@@ -509,7 +572,7 @@ mod tests {
         let mut context = TestContext::new().with_two_modules();
         context.state.selected_module = 1;
 
-        reduce(&mut context.graph, &mut context.state, Action::AlphaDown);
+        context.reduce(Action::AlphaDown);
         assert_eq!(context.state.selected_module, 0);
     }
 
@@ -520,7 +583,7 @@ mod tests {
             context.state.view = View::Patches;
             let original_selected_patch = context.state.selected_patch;
 
-            reduce(&mut context.graph, &mut context.state, action);
+            context.reduce(action);
             assert!(context.state.selected_patch == original_selected_patch);
         }
     }
@@ -532,7 +595,7 @@ mod tests {
             context.state.view = View::Patches;
 
             assert_eq!(context.state.selected_patch, 0);
-            reduce(&mut context.graph, &mut context.state, action);
+            context.reduce(action);
             assert_eq!(context.state.selected_patch, 1);
         }
     }
@@ -544,7 +607,7 @@ mod tests {
             context.state.view = View::Patches;
             context.state.selected_patch = 1;
 
-            reduce(&mut context.graph, &mut context.state, action);
+            context.reduce(action);
             assert_eq!(context.state.selected_patch, 0);
         }
     }
@@ -556,7 +619,7 @@ mod tests {
             context.state.view = View::Patches;
             let original_selected_patch = context.state.selected_patch;
 
-            reduce(&mut context.graph, &mut context.state, action);
+            context.reduce(action);
             assert!(context.state.selected_patch == original_selected_patch);
         }
     }
@@ -568,7 +631,7 @@ mod tests {
             context.state.view = View::Patches;
 
             assert_eq!(context.state.selected_patch, 0);
-            reduce(&mut context.graph, &mut context.state, action);
+            context.reduce(action);
             assert_eq!(context.state.selected_patch, 1);
         }
     }
@@ -580,7 +643,7 @@ mod tests {
             context.state.view = View::Patches;
             context.state.selected_patch = 1;
 
-            reduce(&mut context.graph, &mut context.state, action);
+            context.reduce(action);
             assert_eq!(context.state.selected_patch, 0);
         }
     }
@@ -591,12 +654,12 @@ mod tests {
 
         context.state.view = View::Modules;
         let original_selected_patch = context.state.selected_patch;
-        reduce(&mut context.graph, &mut context.state, Action::AlphaUp);
+        context.reduce(Action::AlphaUp);
         assert_eq!(context.state.selected_patch, original_selected_patch);
 
         context.state.view = View::Patches;
         let original_selected_module = context.state.selected_module;
-        reduce(&mut context.graph, &mut context.state, Action::AlphaUp);
+        context.reduce(Action::AlphaUp);
         assert_eq!(context.state.selected_module, original_selected_module);
     }
 
@@ -606,12 +669,12 @@ mod tests {
 
         context.state.view = View::Modules;
         let original_selected_patch = context.state.selected_patch;
-        reduce(&mut context.graph, &mut context.state, Action::AlphaDown);
+        context.reduce(Action::AlphaDown);
         assert_eq!(context.state.selected_patch, original_selected_patch);
 
         context.state.view = View::Patches;
         let original_selected_module = context.state.selected_module;
-        reduce(&mut context.graph, &mut context.state, Action::AlphaDown);
+        context.reduce(Action::AlphaDown);
         assert_eq!(context.state.selected_module, original_selected_module);
     }
 
@@ -622,7 +685,7 @@ mod tests {
         context.state.selected_patch = 0;
 
         assert!(context.state.patches[0].source.is_some());
-        reduce(&mut context.graph, &mut context.state, Action::BetaHold);
+        context.reduce(Action::BetaHold);
         assert!(context.state.patches[0].source.is_none());
     }
 
@@ -635,7 +698,7 @@ mod tests {
         let producer = context.state.patches[0].source.as_ref().unwrap().producer;
         let consumer = context.state.patches[0].destination.consumer;
 
-        reduce(&mut context.graph, &mut context.state, Action::BetaHold);
+        context.reduce(Action::BetaHold);
         assert!(!context.graph.has_edge(producer, consumer));
     }
 
@@ -646,7 +709,7 @@ mod tests {
         context.state.selected_patch = 0;
 
         assert!(context.state.modules[1].attributes[0].connected);
-        reduce(&mut context.graph, &mut context.state, Action::BetaHold);
+        context.reduce(Action::BetaHold);
         assert!(!context.state.modules[1].attributes[0].connected);
     }
 
@@ -657,7 +720,7 @@ mod tests {
         context.state.selected_patch = 0;
 
         let original_state = context.state.clone();
-        reduce(&mut context.graph, &mut context.state, Action::AlphaDown);
+        context.reduce(Action::AlphaDown);
         assert!(context.state == original_state);
     }
 
@@ -669,11 +732,11 @@ mod tests {
         assert!(context.state.modules[0].attributes[0].connected);
 
         context.state.selected_patch = 0;
-        reduce(&mut context.graph, &mut context.state, Action::BetaHold);
+        context.reduce(Action::BetaHold);
         assert!(context.state.modules[0].attributes[0].connected);
 
         context.state.selected_patch = 1;
-        reduce(&mut context.graph, &mut context.state, Action::BetaHold);
+        context.reduce(Action::BetaHold);
         assert!(!context.state.modules[0].attributes[0].connected);
     }
 
@@ -685,7 +748,7 @@ mod tests {
         context.state.selected_patch = 0;
 
         assert!(context.state.modules[0].attributes[0].connected);
-        reduce(&mut context.graph, &mut context.state, Action::BetaHold);
+        context.reduce(Action::BetaHold);
         assert!(!context.state.modules[0].attributes[0].connected);
     }
 
@@ -695,7 +758,7 @@ mod tests {
         context.state.view = View::Patches;
         context.state.selected_patch = 0;
 
-        reduce(&mut context.graph, &mut context.state, Action::BetaClick);
+        context.reduce(Action::BetaClick);
         assert!(context.state.view == View::PatchEdit);
     }
 
@@ -713,7 +776,7 @@ mod tests {
                 context.state.patch_edit_origin = Some(*origin);
                 context.state.selected_patch = 0;
 
-                reduce(&mut context.graph, &mut context.state, *action);
+                context.reduce(*action);
                 assert!(context.state.view == *origin);
                 assert!(context.state.patch_edit_origin.is_none());
             }
@@ -729,10 +792,10 @@ mod tests {
         context.state.view = View::Patches;
         context.state.selected_patch = 0;
 
-        reduce(&mut context.graph, &mut context.state, Action::BetaClick);
+        context.reduce(Action::BetaClick);
         assert!(!context.state.patch_edit_sources.is_empty());
 
-        reduce(&mut context.graph, &mut context.state, Action::BetaClick);
+        context.reduce(Action::BetaClick);
         assert!(context.state.patch_edit_sources.is_empty());
     }
 
@@ -743,10 +806,10 @@ mod tests {
         context.add_source_module();
         context.add_destination_module();
         context.state.view = View::Patches;
-        reduce(&mut context.graph, &mut context.state, Action::BetaClick);
+        context.reduce(Action::BetaClick);
 
         assert_eq!(context.state.patch_edit_selected_source, 0);
-        reduce(&mut context.graph, &mut context.state, Action::BetaUp);
+        context.reduce(Action::BetaUp);
         assert_eq!(context.state.patch_edit_selected_source, 1);
     }
 
@@ -757,10 +820,10 @@ mod tests {
         context.add_source_module();
         context.add_destination_module();
         context.state.view = View::Patches;
-        reduce(&mut context.graph, &mut context.state, Action::BetaClick);
+        context.reduce(Action::BetaClick);
         context.state.patch_edit_selected_source = 1;
 
-        reduce(&mut context.graph, &mut context.state, Action::BetaDown);
+        context.reduce(Action::BetaDown);
         assert_eq!(context.state.patch_edit_selected_source, 0);
     }
 
@@ -771,10 +834,10 @@ mod tests {
         context.add_source_module();
         context.add_destination_module();
         context.state.view = View::Patches;
-        reduce(&mut context.graph, &mut context.state, Action::BetaClick);
+        context.reduce(Action::BetaClick);
 
         assert_eq!(context.state.patch_edit_selected_source, 0);
-        reduce(&mut context.graph, &mut context.state, Action::BetaDown);
+        context.reduce(Action::BetaDown);
         assert_eq!(context.state.patch_edit_selected_source, 1);
     }
 
@@ -782,10 +845,10 @@ mod tests {
     fn given_selected_a_source_in_patch_edit_when_beta_up_it_moves_to_previous() {
         let mut context = TestContext::new().with_two_patches();
         context.state.view = View::Patches;
-        reduce(&mut context.graph, &mut context.state, Action::BetaClick);
+        context.reduce(Action::BetaClick);
         context.state.patch_edit_selected_source = 1;
 
-        reduce(&mut context.graph, &mut context.state, Action::BetaUp);
+        context.reduce(Action::BetaUp);
         assert_eq!(context.state.patch_edit_selected_source, 0);
     }
 
@@ -797,9 +860,9 @@ mod tests {
             context.state.view = View::Patches;
             context.state.selected_patch = 0;
 
-            reduce(&mut context.graph, &mut context.state, Action::BetaClick);
+            context.reduce(Action::BetaClick);
             assert!(context.state.patches[0].source.is_none());
-            reduce(&mut context.graph, &mut context.state, action);
+            context.reduce(action);
             assert!(context.state.patches[0].source.is_some());
 
             let producer = context.state.patches[0].source.as_ref().unwrap().producer;
@@ -821,7 +884,7 @@ mod tests {
         context.state.view = View::Patches;
         context.state.selected_patch = 0;
 
-        reduce(&mut context.graph, &mut context.state, Action::BetaClick);
+        context.reduce(Action::BetaClick);
         assert_eq!(context.state.patch_edit_selected_source, 1);
     }
 
@@ -835,7 +898,7 @@ mod tests {
         context.state.view = View::Patches;
         context.state.selected_patch = 0;
 
-        reduce(&mut context.graph, &mut context.state, Action::BetaClick);
+        context.reduce(Action::BetaClick);
         assert_eq!(context.state.patch_edit_selected_source, 0);
     }
 
@@ -845,7 +908,7 @@ mod tests {
         context.state.view = View::Patches;
         context.state.selected_patch = 0;
 
-        reduce(&mut context.graph, &mut context.state, Action::BetaClick);
+        context.reduce(Action::BetaClick);
         assert!(context.state.view == View::PatchEdit);
 
         assert_correct_patch_edit_sources(&context.state);
@@ -857,11 +920,11 @@ mod tests {
         context.state.view = View::Patches;
         context.state.selected_patch = 0;
 
-        reduce(&mut context.graph, &mut context.state, Action::BetaClick);
-        reduce(&mut context.graph, &mut context.state, Action::AlphaClick);
+        context.reduce(Action::BetaClick);
+        context.reduce(Action::AlphaClick);
 
         context.add_source_module();
-        reduce(&mut context.graph, &mut context.state, Action::BetaClick);
+        context.reduce(Action::BetaClick);
 
         assert_correct_patch_edit_sources(&context.state);
     }
@@ -899,7 +962,7 @@ mod tests {
         let mut context = TestContext::new().with_two_patches();
         context.state.view = View::Modules;
 
-        reduce(&mut context.graph, &mut context.state, Action::AlphaHold);
+        context.reduce(Action::AlphaHold);
         assert!(context.state.view == View::ModuleAdd);
     }
 
@@ -909,7 +972,7 @@ mod tests {
             let mut context = TestContext::new();
             context.state.view = View::ModuleAdd;
 
-            reduce(&mut context.graph, &mut context.state, action);
+            context.reduce(action);
             assert!(context.state.view == View::Modules);
         }
     }
@@ -921,7 +984,7 @@ mod tests {
             context.state.view = View::ModuleAdd;
 
             context.state.selected_class = 1;
-            reduce(&mut context.graph, &mut context.state, action);
+            context.reduce(action);
             assert_eq!(context.state.selected_class, 0);
         }
     }
@@ -933,7 +996,7 @@ mod tests {
             context.state.view = View::ModuleAdd;
 
             assert_eq!(context.state.selected_class, 0);
-            reduce(&mut context.graph, &mut context.state, action);
+            context.reduce(action);
             assert_eq!(context.state.selected_class, 1);
         }
     }
@@ -945,7 +1008,7 @@ mod tests {
             context.state.view = View::ModuleAdd;
 
             assert_eq!(context.state.selected_class, 0);
-            reduce(&mut context.graph, &mut context.state, action);
+            context.reduce(action);
             assert_eq!(context.state.selected_class, 1);
         }
     }
@@ -957,25 +1020,28 @@ mod tests {
             context.state.view = View::ModuleAdd;
 
             context.state.selected_class = 1;
-            reduce(&mut context.graph, &mut context.state, action);
+            context.reduce(action);
             assert_eq!(context.state.selected_class, 0);
         }
     }
 
-    // #[test]
-    // fn given_module_add_view_when_alpha_or_beta_click_it_instantiates_class_and_selects_it() {
-    //     for action in [Action::AlphaClick, Action::BetaClick] {
-    //         let mut context = TestContext::new().with_two_classes();
-    //         context.state.view = View::ModuleAdd;
-    //         context.state.selected_class = 0;
+    #[test]
+    fn given_module_add_view_when_alpha_or_beta_click_it_instantiates_class_and_selects_it() {
+        for action in [Action::AlphaClick, Action::BetaClick] {
+            let mut context = TestContext::new().with_two_modules().with_two_classes();
+            context.state.view = View::ModuleAdd;
+            context.state.selected_class = 0;
 
-    //         let original_modules_len = context.state.modules.len();
-    //         let original_patches_len = context.state.patches.len();
-    //         reduce(&mut context.state, action);
-    //         assert_eq!(context.state.modules.len(), original_modules_len + 1);
-    //         assert_eq!(context.state.patches.len(), original_patches_len + 1);
-    //         assert!(context.state.view == View::Modules);
-    //         assert_eq!(context.state.selected_module, context.state.modules.len() - 1);
-    //     }
-    // }
+            let original_modules_len = context.state.modules.len();
+            let original_patches_len = context.state.patches.len();
+            context.reduce(action);
+            assert_eq!(context.state.modules.len(), original_modules_len + 1);
+            assert_eq!(context.state.patches.len(), original_patches_len + 1);
+            assert!(context.state.view == View::Modules);
+            assert_eq!(
+                context.state.selected_module,
+                context.state.modules.len() - 1
+            );
+        }
+    }
 }

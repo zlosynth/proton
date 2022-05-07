@@ -7,7 +7,8 @@ backwards compatibility.
 ## Unreleased
 
 * Implement menu for dynamic connecting of patches.
-* Implement disconnecting of patch source.
+* Allow disconnecting of patch source.
+* Introduce support for module instantiation.
 
 ## 0.2.0
 

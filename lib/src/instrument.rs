@@ -1,10 +1,10 @@
 use alloc::vec;
+use alloc::vec::Vec;
 
 use embedded_graphics_core::draw_target::DrawTarget;
 use embedded_graphics_core::pixelcolor::BinaryColor;
 use graphity::NodeIndex;
 
-use crate::core::module::Module as _;
 use crate::core::signal::Signal;
 use crate::display::Display;
 use crate::model::action::Action;
@@ -12,21 +12,45 @@ use crate::model::reduce::reduce;
 use crate::model::state::{Attribute, Class, Destination, Module, Patch, Socket, State};
 use crate::modules::audio_output::*;
 use crate::modules::control_input::*;
-use crate::modules::oscillator::*;
+use crate::modules::mixer::{self, MixerConsumer, MixerNode, MixerProducer};
+use crate::modules::oscillator::{self, OscillatorConsumer, OscillatorNode, OscillatorProducer};
 
 graphity!(
     Graph<Signal>;
     ControlInput = {ControlInput, ControlInputConsumer, ControlInputProducer},
     AudioOutput = {AudioOutput, AudioOutputConsumer, AudioOutputProducer},
     OscillatorNode = {OscillatorNode, OscillatorConsumer, OscillatorProducer},
+    MixerNode = {MixerNode, MixerConsumer, MixerProducer},
 );
+
+// TODO: Generate this with a macro
+pub fn register<N, NI, CI, PI>(
+    name: &'static str,
+    graph: &mut graphity::signal::SignalGraph<N, NI, CI, PI>,
+    modules: &mut Vec<Module<NI, CI, PI>>,
+) where
+    N: graphity::NodeWrapper<Class = NI::Class, Consumer = NI::Consumer, Producer = NI::Producer>,
+    NI: graphity::NodeIndex<ConsumerIndex = CI, ProducerIndex = PI>,
+    CI: graphity::node::ConsumerIndex<NodeIndex = NI, Consumer = NI::Consumer>,
+    PI: graphity::node::ProducerIndex<NodeIndex = NI, Producer = NI::Producer>,
+    N: From<__Node>,
+    <NI as graphity::NodeIndex>::Consumer: From<__Consumer>,
+    <NI as graphity::NodeIndex>::Producer: From<__Producer>,
+{
+    if name == "OSC" {
+        oscillator::register(graph, modules);
+    } else if name == "MIX" {
+        mixer::register(graph, modules);
+    }
+}
 
 pub struct Instrument<D> {
     display: Option<Display<D>>,
     state: State<__NodeIndex, __ConsumerIndex, __ProducerIndex>,
 
     graph: Graph,
-    control_input_cell: ControlInputCell,
+    control1_input_cell: ControlInputCell,
+    control2_input_cell: ControlInputCell,
     audio_output_cell: AudioOutputCell,
 }
 
@@ -36,15 +60,28 @@ impl<D> Instrument<D> {
         let mut state = State::default();
         let mut graph = Graph::new();
 
-        let (control_input, control_input_cell) = ControlInput::new();
+        let (control1_input, control1_input_cell) = ControlInput::new();
+        let (control2_input, control2_input_cell) = ControlInput::new();
         let (audio_output, audio_output_cell) = AudioOutput::new();
 
         // Pretend initialization
-        let control_input = graph.add_node(control_input);
+        let control_input = graph.add_node(control1_input);
         state.modules.push(Module {
             handle: control_input,
             name: ">CV",
             index: 1,
+            attributes: vec![Attribute {
+                socket: Socket::Producer(control_input.producer(ControlInputProducer)),
+                name: "OUT",
+                connected: true,
+            }],
+            selected_attribute: 0,
+        });
+        let control_input = graph.add_node(control2_input);
+        state.modules.push(Module {
+            handle: control_input,
+            name: ">CV",
+            index: 2,
             attributes: vec![Attribute {
                 socket: Socket::Producer(control_input.producer(ControlInputProducer)),
                 name: "OUT",
@@ -67,19 +104,6 @@ impl<D> Instrument<D> {
         state.patches.push(Patch {
             source: None,
             destination: Destination {
-                consumer: state.modules[1].attributes[0].socket.consumer(),
-                module_name: state.modules[1].name,
-                module_index: state.modules[1].index,
-                attribute_name: state.modules[1].attributes[0].name,
-            },
-        });
-
-        // Pretend store load / user interaction
-        let oscillator = Oscillator;
-        oscillator.register(&mut graph, &mut state);
-        state.patches.push(Patch {
-            source: None,
-            destination: Destination {
                 consumer: state.modules[2].attributes[0].socket.consumer(),
                 module_name: state.modules[2].name,
                 module_index: state.modules[2].index,
@@ -92,12 +116,8 @@ impl<D> Instrument<D> {
             description: "Basic saw osc-\nillator with \nfrequency con-\ntrol",
         });
         state.classes.push(Class {
-            name: "ENV",
+            name: "MIX",
             description: "Description",
-        });
-        state.classes.push(Class {
-            name: "ATT",
-            description: "Explanation",
         });
 
         Self {
@@ -105,12 +125,17 @@ impl<D> Instrument<D> {
             graph,
             state,
             audio_output_cell,
-            control_input_cell,
+            control1_input_cell,
+            control2_input_cell,
         }
     }
 
-    pub fn set_control(&mut self, value: f32) {
-        self.control_input_cell.set(value);
+    pub fn set_control1(&mut self, value: f32) {
+        self.control1_input_cell.set(value);
+    }
+
+    pub fn set_control2(&mut self, value: f32) {
+        self.control2_input_cell.set(value);
     }
 
     pub fn tick(&mut self) {
@@ -122,35 +147,44 @@ impl<D> Instrument<D> {
     }
 
     pub fn alpha_up(&mut self) {
-        reduce(&mut self.graph, &mut self.state, Action::AlphaUp);
+        self.reduce(Action::AlphaUp);
     }
 
     pub fn alpha_down(&mut self) {
-        reduce(&mut self.graph, &mut self.state, Action::AlphaDown);
+        self.reduce(Action::AlphaDown);
     }
 
     pub fn alpha_click(&mut self) {
-        reduce(&mut self.graph, &mut self.state, Action::AlphaClick);
+        self.reduce(Action::AlphaClick);
     }
 
     pub fn alpha_hold(&mut self) {
-        reduce(&mut self.graph, &mut self.state, Action::AlphaHold);
+        self.reduce(Action::AlphaHold);
     }
 
     pub fn beta_up(&mut self) {
-        reduce(&mut self.graph, &mut self.state, Action::BetaUp);
+        self.reduce(Action::BetaUp);
     }
 
     pub fn beta_down(&mut self) {
-        reduce(&mut self.graph, &mut self.state, Action::BetaDown);
+        self.reduce(Action::BetaDown);
     }
 
     pub fn beta_click(&mut self) {
-        reduce(&mut self.graph, &mut self.state, Action::BetaClick);
+        self.reduce(Action::BetaClick);
     }
 
     pub fn beta_hold(&mut self) {
-        reduce(&mut self.graph, &mut self.state, Action::BetaHold);
+        self.reduce(Action::BetaHold);
+    }
+
+    fn reduce(&mut self, action: Action) {
+        reduce::<__Node, __NodeIndex, __Consumer, __ConsumerIndex, __Producer, __ProducerIndex>(
+            register,
+            &mut self.graph,
+            &mut self.state,
+            action,
+        );
     }
 }
 
@@ -169,35 +203,5 @@ where
 
     pub fn mut_display(&mut self) -> &mut D {
         &mut self.display.as_mut().unwrap().display
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn can_be_initialized() {
-        let _instrument: Instrument<()> = Instrument::new();
-    }
-
-    #[test]
-    fn set_arbitrary_control_tick_and_get() {
-        let mut instrument: Instrument<()> = Instrument::new();
-
-        // TODO: connect modules
-
-        instrument.set_control(0.0); // Frequency
-        instrument.tick();
-        let out = instrument.get_audio();
-        for x in out {
-            assert_relative_eq!(x, 0.0);
-        }
-
-        instrument.set_control(1.0); // Frequency
-        instrument.tick();
-        let out = instrument.get_audio();
-        let average = out.iter().fold(0.0, |a, b| a + b.abs()) / out.len() as f32;
-        assert!(average > 0.0);
     }
 }
