@@ -4,9 +4,9 @@ use alloc::vec::Vec;
 use graphity::signal::SignalGraph;
 use graphity::Node;
 
-use crate::core::signal::Signal;
 use crate::model::state::*;
 use crate::primitives;
+use crate::signal::Signal;
 
 pub struct OscillatorNode {
     oscillator: primitives::oscillator::Oscillator,

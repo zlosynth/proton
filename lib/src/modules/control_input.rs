@@ -3,7 +3,7 @@ use core::cell::RefCell;
 
 use graphity::Node;
 
-use crate::core::signal::Signal;
+use crate::signal::Signal;
 
 type Buffer = f32;
 

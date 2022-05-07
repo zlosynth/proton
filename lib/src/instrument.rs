@@ -5,7 +5,6 @@ use embedded_graphics_core::draw_target::DrawTarget;
 use embedded_graphics_core::pixelcolor::BinaryColor;
 use graphity::NodeIndex;
 
-use crate::core::signal::Signal;
 use crate::display::Display;
 use crate::model::action::Action;
 use crate::model::reduce::reduce;
@@ -14,6 +13,7 @@ use crate::modules::audio_output::*;
 use crate::modules::control_input::*;
 use crate::modules::mixer::{self, MixerConsumer, MixerNode, MixerProducer};
 use crate::modules::oscillator::{self, OscillatorConsumer, OscillatorNode, OscillatorProducer};
+use crate::signal::Signal;
 
 graphity!(
     Graph<Signal>;
