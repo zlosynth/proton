@@ -10,7 +10,7 @@ use crate::display::Display;
 use crate::model::action::Action;
 use crate::model::reaction::Reaction;
 use crate::model::reduce::reduce;
-use crate::model::state::{Attribute, Destination, Module, Patch, Socket, Source, State};
+use crate::model::state::{Attribute, Class, Destination, Module, Patch, Socket, State, View};
 use crate::modules::audio_output::*;
 use crate::modules::control_input::*;
 use crate::modules::oscillator::*;
@@ -65,42 +65,8 @@ impl<D> Instrument<D> {
             }],
             selected_attribute: 0,
         });
-
-        // Pretend store load / user interaction
-        let oscillator = Oscillator;
-        oscillator.register(&mut graph, &mut state);
-
-        // Pretend store load / user interaction
-        graph.must_add_edge(
-            state.modules[0].attributes[0].socket.producer(),
-            state.modules[2].attributes[0].socket.consumer(),
-        );
         state.patches.push(Patch {
-            source: Some(Source {
-                producer: state.modules[0].attributes[0].socket.producer(),
-                module_name: state.modules[0].name,
-                module_index: state.modules[0].index,
-                attribute_name: state.modules[0].attributes[0].name,
-            }),
-            destination: Destination {
-                consumer: state.modules[2].attributes[0].socket.consumer(),
-                module_name: state.modules[2].name,
-                module_index: state.modules[2].index,
-                attribute_name: state.modules[2].attributes[0].name,
-            },
-        });
-
-        graph.must_add_edge(
-            state.modules[2].attributes[1].socket.producer(),
-            state.modules[1].attributes[0].socket.consumer(),
-        );
-        state.patches.push(Patch {
-            source: Some(Source {
-                producer: state.modules[2].attributes[1].socket.producer(),
-                module_name: state.modules[2].name,
-                module_index: state.modules[2].index,
-                attribute_name: state.modules[2].attributes[1].name,
-            }),
+            source: None,
             destination: Destination {
                 consumer: state.modules[1].attributes[0].socket.consumer(),
                 module_name: state.modules[1].name,
@@ -109,46 +75,32 @@ impl<D> Instrument<D> {
             },
         });
 
-        for i in 3..8 {
-            let (audio_output, _audio_output_cell) = AudioOutput::new();
-            let audio_output = graph.add_node(audio_output);
-            state.modules.push(Module {
-                handle: audio_output,
-                name: "<AU",
-                index: i,
-                attributes: vec![Attribute {
-                    socket: Socket::Consumer(audio_output.consumer(AudioOutputConsumer)),
-                    name: "IN",
-                    connected: true,
-                }],
-                selected_attribute: 0,
-            });
-            state.patches.push(Patch {
-                source: None,
-                destination: Destination {
-                    consumer: state.modules[i].attributes[0].socket.consumer(),
-                    module_name: state.modules[i].name,
-                    module_index: state.modules[i].index,
-                    attribute_name: state.modules[i].attributes[0].name,
-                },
-            });
-        }
+        // Pretend store load / user interaction
+        let oscillator = Oscillator;
+        oscillator.register(&mut graph, &mut state);
+        state.patches.push(Patch {
+            source: None,
+            destination: Destination {
+                consumer: state.modules[2].attributes[0].socket.consumer(),
+                module_name: state.modules[2].name,
+                module_index: state.modules[2].index,
+                attribute_name: state.modules[2].attributes[0].name,
+            },
+        });
 
-        for i in 8..12 {
-            let (control_input, _control_input_cell) = ControlInput::new();
-            let control_input = graph.add_node(control_input);
-            state.modules.push(Module {
-                handle: control_input,
-                name: ">CV",
-                index: i,
-                attributes: vec![Attribute {
-                    socket: Socket::Producer(control_input.producer(ControlInputProducer)),
-                    name: "OUT",
-                    connected: true,
-                }],
-                selected_attribute: 0,
-            });
-        }
+        state.classes.push(Class {
+            name: "OSC",
+            description: "Basic saw osc-\nillator with \nfrequency con-\ntrol",
+        });
+        state.classes.push(Class {
+            name: "ENV",
+            description: "Description",
+        });
+        state.classes.push(Class {
+            name: "ATT",
+            description: "Explanation",
+        });
+        state.view = View::ModuleAdd;
 
         Self {
             display: None,
@@ -240,6 +192,8 @@ mod tests {
     #[test]
     fn set_arbitrary_control_tick_and_get() {
         let mut instrument: Instrument<()> = Instrument::new();
+
+        // TODO: connect modules
 
         instrument.set_control(0.0); // Frequency
         instrument.tick();

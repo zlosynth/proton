@@ -10,7 +10,9 @@ use embedded_graphics::{
 };
 use embedded_graphics_core::draw_target::DrawTarget;
 
-use crate::model::state::{Attribute, Destination, Module, Patch, Socket, Source, State, View};
+use crate::model::state::{
+    Attribute, Class, Destination, Module, Patch, Socket, Source, State, View,
+};
 
 const PADDING: i32 = 5;
 const FONT_HEIGHT: i32 = 12;
@@ -46,6 +48,7 @@ where
 
         match state.view {
             View::Modules => self.update_modules(state),
+            View::ModuleAdd => self.update_module_add(state),
             View::Patches => self.update_patches(state),
             View::PatchEdit => self.update_patch_edit(state),
         }
@@ -77,6 +80,17 @@ where
         }
 
         draw_scroll_bar(Left, state.modules.len(), modules_page, &mut self.display);
+    }
+
+    fn update_module_add<NI, CI, PI>(&mut self, state: &State<NI, CI, PI>) {
+        for (i, class) in state.classes.iter().enumerate() {
+            let selected = i == state.selected_class;
+            draw_class_name(class, i, selected, &mut self.display);
+
+            if selected {
+                draw_class_description(class, &mut self.display);
+            }
+        }
     }
 
     fn update_patches<NI, CI, PI>(&mut self, state: &State<NI, CI, PI>) {
@@ -135,6 +149,29 @@ fn draw_module<NI, CI, PI, D: DrawTarget<Color = BinaryColor>>(
     let mut cursor = Cursor::new(x, y, display).with_highlight(selected);
     cursor.write(module.name);
     cursor.write(I32_TO_STR[module.index]);
+}
+
+fn draw_class_name<D: DrawTarget<Color = BinaryColor>>(
+    class: &Class,
+    index: usize,
+    selected: bool,
+    display: &mut D,
+) {
+    let x = PADDING;
+    let y = FONT_HEIGHT * (index + 1) as i32 - 1;
+
+    let mut cursor = Cursor::new(x, y, display).with_highlight(selected);
+    cursor.space(FONT_WIDTH);
+    cursor.write(class.name);
+    cursor.space(FONT_WIDTH);
+}
+
+fn draw_class_description<D: DrawTarget<Color = BinaryColor>>(class: &Class, display: &mut D) {
+    let x = PADDING + 34;
+    let y = FONT_HEIGHT as i32 - 1;
+
+    let mut cursor = Cursor::new(x, y, display);
+    cursor.write(class.description);
 }
 
 enum Side {

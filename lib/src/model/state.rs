@@ -14,11 +14,15 @@ pub struct State<NI, CI, PI> {
     pub patch_edit_sources: Vec<Source<PI>>,
     pub patch_edit_selected_source: usize,
     pub patch_edit_origin: Option<View>,
+
+    pub classes: Vec<Class>,
+    pub selected_class: usize,
 }
 
 #[derive(Clone, Copy, PartialEq)]
 pub enum View {
     Modules,
+    ModuleAdd,
     Patches,
     PatchEdit,
 }
@@ -31,10 +35,11 @@ impl<NI, CI, PI> Default for State<NI, CI, PI> {
             selected_module: 0,
             patches: vec![],
             selected_patch: 0,
-            // TODO
             patch_edit_sources: vec![],
             patch_edit_selected_source: 0,
             patch_edit_origin: None,
+            classes: vec![],
+            selected_class: 0,
         }
     }
 }
@@ -158,4 +163,10 @@ impl<CI> Destination<CI> {
             attribute_name: "",
         }
     }
+}
+
+#[derive(Clone, PartialEq)]
+pub struct Class {
+    pub name: &'static str,
+    pub description: &'static str,
 }

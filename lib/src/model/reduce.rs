@@ -21,6 +21,7 @@ where
             Action::BetaClick => todo!(),
             Action::BetaHold => todo!(),
         },
+        View::ModuleAdd => None,
         View::Patches => match action {
             Action::AlphaUp => select_previous_patch(state),
             Action::AlphaDown => select_next_patch(state),
