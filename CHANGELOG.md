@@ -6,6 +6,8 @@ backwards compatibility.
 
 ## Unreleased
 
+## 0.3.0
+
 * Introduce support for module instantiation and removal.
 * Implement menu for dynamic connecting and disconnecting of patches.
 
