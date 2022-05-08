@@ -13,6 +13,7 @@ micromath = "2"
 graphity = "2.0"
 embedded-graphics = "0.7"
 embedded-graphics-core = "0.3"
+hashbrown = "0.12"
 
 [dev-dependencies]
 approx = "0.4"

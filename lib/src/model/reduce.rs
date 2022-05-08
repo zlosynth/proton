@@ -2,6 +2,8 @@ use alloc::vec;
 use alloc::vec::Vec;
 use core::cmp::PartialEq;
 
+use hashbrown::HashSet;
+
 use super::action::Action;
 use super::state::*;
 
@@ -165,7 +167,8 @@ fn instantiate_selected_class<N, NI, C, CI, P, PI>(
         "Registrator must add a single module"
     );
 
-    let module = &state.modules[state.modules.len() - 1];
+    let module = &state.modules.last().unwrap();
+
     for attribute in module.attributes.iter() {
         if let Socket::Consumer(consumer) = attribute.socket {
             state.patches.push(Patch {
@@ -179,6 +182,35 @@ fn instantiate_selected_class<N, NI, C, CI, P, PI>(
             });
         }
     }
+
+    let index = {
+        let used_indices: HashSet<usize> = state.modules[..state.modules.len() - 1]
+            .iter()
+            .filter_map(|m| {
+                if m.name == module.name {
+                    Some(m.index)
+                } else {
+                    None
+                }
+            })
+            .collect();
+
+        if used_indices.is_empty() {
+            1
+        } else {
+            let max_used_index = used_indices.iter().fold(0, |a, b| usize::max(a, *b));
+            if max_used_index == 99 {
+                let possible_indices: HashSet<usize> = (1..=99).collect();
+                let available_indices = possible_indices.difference(&used_indices);
+                *available_indices.min().unwrap()
+            } else {
+                max_used_index + 1
+            }
+        }
+    };
+
+    let module = &mut state.modules.last_mut().unwrap();
+    module.index = index;
 
     state.view = View::Modules;
     state.selected_module = state.modules.len() - 1;
@@ -394,7 +426,7 @@ mod tests {
     );
 
     pub fn register<N, NI, CI, PI>(
-        _name: &'static str,
+        name: &'static str,
         graph: &mut graphity::signal::SignalGraph<N, NI, CI, PI>,
         modules: &mut Vec<Module<NI, CI, PI>>,
     ) where
@@ -411,11 +443,9 @@ mod tests {
         <NI as graphity::NodeIndex>::Producer: From<__Producer>,
     {
         let node = graph.add_node::<__Node>(TestNode.into());
-        modules.push(
-            Module::new_for_node(node).with_attribute(Attribute::new_for_consumer(
-                node.consumer::<__Consumer>(TestConsumer.into()),
-            )),
-        );
+        modules.push(Module::new_for_node(node).with_name(name).with_attribute(
+            Attribute::new_for_consumer(node.consumer::<__Consumer>(TestConsumer.into())),
+        ));
     }
 
     struct TestContext {
@@ -453,35 +483,39 @@ mod tests {
         }
 
         fn with_two_classes(mut self) -> Self {
-            self.add_class();
-            self.add_class();
+            self.add_class("CL1");
+            self.add_class("CL2");
             self
         }
 
-        fn add_class(&mut self) {
+        fn add_class(&mut self, name: &'static str) {
             self.state.classes.push(Class {
-                name: "",
+                name: name,
                 description: "",
             });
         }
 
         fn add_source_module(&mut self) -> __NodeIndex {
             let node_handle = self.graph.add_node(TestNode);
-            self.state
-                .modules
-                .push(Module::new_for_node(node_handle).with_attribute(
-                    Attribute::new_for_producer(node_handle.producer(TestProducer)),
-                ));
+            self.state.modules.push(
+                Module::new_for_node(node_handle)
+                    .with_name("SRC")
+                    .with_attribute(Attribute::new_for_producer(
+                        node_handle.producer(TestProducer),
+                    )),
+            );
             node_handle
         }
 
         fn add_destination_module(&mut self) -> __NodeIndex {
             let node_handle = self.graph.add_node(TestNode);
-            self.state
-                .modules
-                .push(Module::new_for_node(node_handle).with_attribute(
-                    Attribute::new_for_consumer(node_handle.consumer(TestConsumer)),
-                ));
+            self.state.modules.push(
+                Module::new_for_node(node_handle)
+                    .with_name("DST")
+                    .with_attribute(Attribute::new_for_consumer(
+                        node_handle.consumer(TestConsumer),
+                    )),
+            );
             self.state
                 .patches
                 .push(Patch::new_for_consumer(node_handle.consumer(TestConsumer)));
@@ -1098,5 +1132,58 @@ mod tests {
         let original_modules_len = context.state.modules.len();
         context.reduce(Action::AlphaHold);
         assert_eq!(context.state.modules.len(), original_modules_len);
+    }
+
+    #[test]
+    fn given_new_module_added_when_its_first_99_it_gets_increasing_index() {
+        let mut context = TestContext::new().with_two_classes();
+
+        for i in 0..98 {
+            context.reduce(Action::BothClick);
+            context.reduce(Action::AlphaClick);
+            let new_module = &context.state.modules[context.state.modules.len() - 1];
+            assert_eq!(new_module.index, i + 1);
+        }
+    }
+
+    #[test]
+    fn given_new_modules_from_two_different_classes_are_added_they_dont_share_pool_of_indices() {
+        let mut context = TestContext::new().with_two_classes();
+
+        for i in 0..10 {
+            context.reduce(Action::BothClick);
+            context.state.selected_class = 0;
+            context.reduce(Action::AlphaClick);
+            let new_module = &context.state.modules[context.state.modules.len() - 1];
+            assert_eq!(new_module.index, i + 1);
+
+            context.reduce(Action::BothClick);
+            context.state.selected_class = 1;
+            context.reduce(Action::AlphaClick);
+            let new_module = &context.state.modules[context.state.modules.len() - 1];
+            assert_eq!(new_module.index, i + 1);
+        }
+    }
+
+    #[test]
+    fn given_new_module_added_when_its_after_first_99_it_gets_index_of_freed_up_sub_99() {
+        let mut context = TestContext::new().with_two_classes();
+
+        for _ in 0..99 {
+            context.reduce(Action::BothClick);
+            context.reduce(Action::AlphaClick);
+        }
+
+        let old_module_12 = &context.state.modules[11];
+        assert_eq!(old_module_12.index, 12);
+
+        context.state.selected_module = 11;
+        context.reduce(Action::AlphaHold);
+
+        context.reduce(Action::BothClick);
+        context.reduce(Action::AlphaClick);
+
+        let new_module_12 = &context.state.modules[context.state.modules.len() - 1];
+        assert_eq!(new_module_12.index, 12);
     }
 }
