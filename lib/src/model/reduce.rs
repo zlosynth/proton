@@ -295,6 +295,12 @@ fn connect_selected_source<N, NI, CI, PI>(
         return;
     }
 
+    let patch = &state.patches[state.selected_patch];
+    let patch_consumer = patch.destination.consumer;
+    if let Some(source) = patch.source.as_ref() {
+        graph.remove_edge(source.producer, patch_consumer);
+    }
+
     let new_patch_source = state.patch_edit_sources[state.patch_edit_selected_source].clone();
     let patch = &mut state.patches[state.selected_patch];
     patch.source = Some(new_patch_source);
@@ -981,6 +987,27 @@ mod tests {
         context.reduce(Action::BetaClick);
 
         assert_correct_patch_edit_sources(&context.state);
+    }
+
+    #[test]
+    fn given_patch_connected_to_a_source_when_connecting_to_another_source_it_switches() {
+        let mut context = TestContext::new();
+        let _source1 = context.add_source_module();
+        let _source2 = context.add_source_module();
+        let _destination = context.add_destination_module();
+
+        context.state.view = View::Patches;
+        context.state.selected_patch = 0;
+
+        context.reduce(Action::BetaClick);
+        context.reduce(Action::BetaClick);
+        let original_source = context.state.patches[0].source.clone();
+
+        context.reduce(Action::BetaClick);
+        context.reduce(Action::BetaDown);
+        context.reduce(Action::BetaClick);
+        let new_source = context.state.patches[0].source.clone();
+        assert!(new_source != original_source);
     }
 
     fn assert_correct_patch_edit_sources(
