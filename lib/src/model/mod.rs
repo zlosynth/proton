@@ -1,3 +1,3 @@
 pub mod action;
-pub mod reduce;
+pub mod reducer;
 pub mod state;

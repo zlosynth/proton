@@ -71,6 +71,11 @@ impl<NI, CI, PI> Module<NI, CI, PI> {
         self
     }
 
+    pub fn persistent(mut self) -> Self {
+        self.persistent = true;
+        self
+    }
+
     pub fn with_attribute(mut self, attribute: Attribute<CI, PI>) -> Self {
         self.attributes.push(attribute);
         self

@@ -167,6 +167,18 @@ fn instantiate_selected_class<N, NI, C, CI, P, PI>(
         "Registrator must add a single module"
     );
 
+    sync_last_module(state);
+
+    state.view = View::Modules;
+    state.selected_module = state.modules.len() - 1;
+}
+
+pub fn sync_last_module<NI, CI, PI>(state: &mut State<NI, CI, PI>)
+where
+    NI: graphity::NodeIndex<ConsumerIndex = CI, ProducerIndex = PI>,
+    CI: graphity::node::ConsumerIndex<NodeIndex = NI, Consumer = NI::Consumer>,
+    PI: graphity::node::ProducerIndex<NodeIndex = NI, Producer = NI::Producer>,
+{
     let module = &state.modules.last().unwrap();
 
     for attribute in module.attributes.iter() {
@@ -211,9 +223,6 @@ fn instantiate_selected_class<N, NI, C, CI, P, PI>(
 
     let module = &mut state.modules.last_mut().unwrap();
     module.index = index;
-
-    state.view = View::Modules;
-    state.selected_module = state.modules.len() - 1;
 }
 
 fn remove_module<N, NI, CI, PI>(

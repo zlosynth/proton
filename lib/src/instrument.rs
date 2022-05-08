@@ -1,4 +1,3 @@
-use alloc::vec;
 use alloc::vec::Vec;
 
 use embedded_graphics_core::draw_target::DrawTarget;
@@ -7,8 +6,8 @@ use graphity::NodeIndex;
 
 use crate::display::Display;
 use crate::model::action::Action;
-use crate::model::reduce::reduce;
-use crate::model::state::{Attribute, Class, Destination, Module, Patch, Socket, State};
+use crate::model::reducer;
+use crate::model::state::{Attribute, Class, Module, State};
 use crate::modules::audio_output::*;
 use crate::modules::control_input::*;
 use crate::modules::mixer::{self, MixerConsumer, MixerNode, MixerProducer};
@@ -23,7 +22,6 @@ graphity!(
     MixerNode = {MixerNode, MixerConsumer, MixerProducer},
 );
 
-// TODO: Generate this with a macro
 pub fn register<N, NI, CI, PI>(
     name: &'static str,
     graph: &mut graphity::signal::SignalGraph<N, NI, CI, PI>,
@@ -66,53 +64,37 @@ impl<D> Instrument<D> {
 
         // Pretend initialization
         let control_input = graph.add_node(control1_input);
-        state.modules.push(Module {
-            handle: control_input,
-            name: ">CV",
-            index: 1,
-            attributes: vec![Attribute {
-                socket: Socket::Producer(control_input.producer(ControlInputProducer)),
-                name: "OUT",
-                connected: true,
-            }],
-            selected_attribute: 0,
-            persistent: true,
-        });
+        state.modules.push(
+            Module::new_for_node(control_input)
+                .with_name(">CV")
+                .persistent()
+                .with_attribute(Attribute::new_for_producer(
+                    control_input.producer(ControlInputProducer),
+                )),
+        );
+        reducer::sync_last_module(&mut state);
+
         let control_input = graph.add_node(control2_input);
-        state.modules.push(Module {
-            handle: control_input,
-            name: ">CV",
-            index: 2,
-            attributes: vec![Attribute {
-                socket: Socket::Producer(control_input.producer(ControlInputProducer)),
-                name: "OUT",
-                connected: true,
-            }],
-            selected_attribute: 0,
-            persistent: true,
-        });
+        state.modules.push(
+            Module::new_for_node(control_input)
+                .with_name(">CV")
+                .persistent()
+                .with_attribute(Attribute::new_for_producer(
+                    control_input.producer(ControlInputProducer),
+                )),
+        );
+        reducer::sync_last_module(&mut state);
+
         let audio_output = graph.add_node(audio_output);
-        state.modules.push(Module {
-            handle: audio_output,
-            name: "<AU",
-            index: 0,
-            attributes: vec![Attribute {
-                socket: Socket::Consumer(audio_output.consumer(AudioOutputConsumer)),
-                name: "IN",
-                connected: true,
-            }],
-            selected_attribute: 0,
-            persistent: true,
-        });
-        state.patches.push(Patch {
-            source: None,
-            destination: Destination {
-                consumer: state.modules[2].attributes[0].socket.consumer(),
-                module_name: state.modules[2].name,
-                module_index: state.modules[2].index,
-                attribute_name: state.modules[2].attributes[0].name,
-            },
-        });
+        state.modules.push(
+            Module::new_for_node(audio_output)
+                .with_name("<AU")
+                .persistent()
+                .with_attribute(Attribute::new_for_consumer(
+                    audio_output.consumer(AudioOutputConsumer),
+                )),
+        );
+        reducer::sync_last_module(&mut state);
 
         state.classes.push(Class {
             name: "OSC",
@@ -186,12 +168,14 @@ impl<D> Instrument<D> {
     }
 
     fn reduce(&mut self, action: Action) {
-        reduce::<__Node, __NodeIndex, __Consumer, __ConsumerIndex, __Producer, __ProducerIndex>(
-            register,
-            &mut self.graph,
-            &mut self.state,
-            action,
-        );
+        reducer::reduce::<
+            __Node,
+            __NodeIndex,
+            __Consumer,
+            __ConsumerIndex,
+            __Producer,
+            __ProducerIndex,
+        >(register, &mut self.graph, &mut self.state, action);
     }
 }
 
