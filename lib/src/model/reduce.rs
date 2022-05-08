@@ -32,7 +32,7 @@ pub fn reduce<N, NI, C, CI, P, PI>(
             Action::AlphaUp => select_previous_module(state),
             Action::AlphaDown => select_next_module(state),
             Action::AlphaClick => switch_to_patches(state),
-            Action::AlphaHold => remove_module(state),
+            Action::AlphaHold => remove_module(graph, state),
             Action::BetaUp => todo!(),
             Action::BetaDown => todo!(),
             Action::BetaClick => todo!(),
@@ -216,11 +216,36 @@ fn instantiate_selected_class<N, NI, C, CI, P, PI>(
     state.selected_module = state.modules.len() - 1;
 }
 
-fn remove_module<NI, CI, PI>(state: &mut State<NI, CI, PI>) {
+fn remove_module<N, NI, CI, PI>(
+    graph: &mut graphity::signal::SignalGraph<N, NI, CI, PI>,
+    state: &mut State<NI, CI, PI>,
+) where
+    N: graphity::NodeWrapper<Class = NI::Class, Consumer = NI::Consumer, Producer = NI::Producer>,
+    NI: graphity::NodeIndex<ProducerIndex = PI, ConsumerIndex = CI>,
+    CI: graphity::node::ConsumerIndex<NodeIndex = NI, Consumer = NI::Consumer>,
+    PI: graphity::node::ProducerIndex<NodeIndex = NI, Producer = NI::Producer>,
+{
     if state.modules[state.selected_module].persistent {
         return;
     }
 
+    let module = &state.modules[state.selected_module];
+    let removed_consumers: HashSet<_> = module
+        .attributes
+        .iter()
+        .filter_map(|a| {
+            if let Socket::Consumer(consumer) = &a.socket {
+                Some(*consumer)
+            } else {
+                None
+            }
+        })
+        .collect();
+    state
+        .patches
+        .retain(|p| !removed_consumers.contains(&p.destination.consumer));
+
+    graph.remove_node(module.handle);
     state.modules.remove(state.selected_module);
     state.selected_module = usize::min(state.selected_module, state.modules.len() - 1);
 }
@@ -1128,12 +1153,24 @@ mod tests {
 
     #[test]
     fn given_modules_view_selected_regular_module_when_holds_alpha_it_removes_the_module() {
-        let mut context = TestContext::new().with_two_modules();
+        let mut context = TestContext::new().with_one_patch();
         context.state.view = View::Modules;
+        context.state.selected_module = 1;
+
+        let destination_node = context.state.modules[1].handle;
+        let consumer = context.state.modules[1].attributes[0].socket.consumer();
+        let producer = context.state.modules[0].attributes[0].socket.producer();
+        assert!(context.graph.node(&destination_node).is_some());
+        assert!(context.graph.has_edge(producer, consumer));
 
         let original_modules_len = context.state.modules.len();
+        let original_patches_len = context.state.patches.len();
         context.reduce(Action::AlphaHold);
         assert_eq!(context.state.modules.len(), original_modules_len - 1);
+        assert_eq!(context.state.patches.len(), original_patches_len - 1);
+
+        assert!(context.graph.node(&destination_node).is_none());
+        assert!(!context.graph.has_edge(producer, consumer));
     }
 
     #[test]
