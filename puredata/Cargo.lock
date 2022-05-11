@@ -464,7 +464,7 @@ dependencies = [
 
 [[package]]
 name = "proton-lib"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "embedded-graphics",
  "embedded-graphics-core",
@@ -475,7 +475,7 @@ dependencies = [
 
 [[package]]
 name = "proton-puredata"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "embedded-graphics-core",
  "embedded-graphics-simulator",
