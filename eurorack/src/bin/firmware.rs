@@ -5,9 +5,6 @@ use proton_eurorack as _; // global logger + panicking-behavior
 
 #[rtic::app(device = stm32h7xx_hal::pac, peripherals = true, dispatchers = [EXTI0])]
 mod app {
-    use daisy::hal::prelude::_stm32h7xx_hal_spi_SpiExt;
-    use daisy::hal::prelude::_stm32h7xx_hal_timer_TimerExt;
-    use daisy::hal::{delay::DelayFromCountDownTimer, spi};
     use daisy::led::{Led, LedUser};
     use embedded_graphics::{
         pixelcolor::BinaryColor,
@@ -15,8 +12,7 @@ mod app {
         primitives::{Circle, PrimitiveStyleBuilder, Rectangle, Triangle},
     };
     use fugit::ExtU64;
-    use fugit::RateExtU32;
-    use ssd1306::{prelude::*, Ssd1306};
+    use proton_eurorack::system::System;
     use systick_monotonic::Systick;
 
     #[monotonic(binds = SysTick, default = true)]
@@ -34,41 +30,11 @@ mod app {
     fn init(cx: init::Context) -> (Shared, Local, init::Monotonics) {
         defmt::info!("INIT");
 
-        let mono = Systick::new(cx.core.SYST, 480_000_000);
+        let system = System::init(cx.core, cx.device);
 
-        let dp = cx.device;
-        let board = daisy::Board::take().unwrap();
-        let ccdr = daisy::board_freeze_clocks!(board, dp);
-        let pins = daisy::board_split_gpios!(board, ccdr, dp);
-        let led = daisy::board_split_leds!(pins).USER;
-
-        let mut delay = DelayFromCountDownTimer::new(dp.TIM2.timer(
-            100.Hz(),
-            ccdr.peripheral.TIM2,
-            &ccdr.clocks,
-        ));
-
-        let sck = pins.GPIO.PIN_8.into_alternate();
-        let cs = pins.GPIO.PIN_7.into_push_pull_output();
-        let miso = spi::NoMiso;
-        let mosi = pins.GPIO.PIN_10.into_alternate();
-        let mut rst = pins.GPIO.PIN_30.into_push_pull_output();
-        let dc = pins.GPIO.PIN_9.into_push_pull_output();
-
-        let spi = dp.SPI1.spi(
-            (sck, miso, mosi),
-            spi::MODE_0,
-            3.MHz(),
-            ccdr.peripheral.SPI1,
-            &ccdr.clocks,
-        );
-
-        let interface = display_interface_spi::SPIInterface::new(spi, dc, cs);
-        let mut display = Ssd1306::new(interface, DisplaySize128x64, DisplayRotation::Rotate0)
-            .into_buffered_graphics_mode();
-
-        display.reset(&mut rst, &mut delay).unwrap();
-        display.init().unwrap();
+        let mut display = system.display;
+        let led = system.led;
+        let mono = system.mono;
 
         let yoffset = 20;
 
