@@ -138,6 +138,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "cortex-m-semihosting"
+version = "0.3.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6bffa6c1454368a6aa4811ae60964c38e6996d397ff8095a8b9211b1c1f749bc"
+dependencies = [
+ "cortex-m",
+]
+
+[[package]]
 name = "critical-section"
 version = "0.2.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -147,6 +156,18 @@ dependencies = [
  "cfg-if",
  "cortex-m",
  "riscv",
+]
+
+[[package]]
+name = "daisy"
+version = "0.4.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ec406f22479011fb4173e7f2f1033df148b22b8c9a3023f96d6501a7266658cf"
+dependencies = [
+ "cortex-m",
+ "cortex-m-rt",
+ "cortex-m-semihosting",
+ "stm32h7xx-hal",
 ]
 
 [[package]]
@@ -377,13 +398,14 @@ name = "proton-eurorack"
 version = "0.3.0"
 dependencies = [
  "cortex-m",
- "cortex-m-rt",
  "cortex-m-rtic",
+ "daisy",
  "defmt",
  "defmt-rtt",
  "defmt-test",
  "panic-probe",
  "stm32h7xx-hal",
+ "systick-monotonic",
 ]
 
 [[package]]
@@ -544,6 +566,7 @@ dependencies = [
  "nb 1.0.0",
  "paste",
  "stm32h7",
+ "synopsys-usb-otg",
  "void",
 ]
 
@@ -559,10 +582,39 @@ dependencies = [
 ]
 
 [[package]]
+name = "synopsys-usb-otg"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5999b93d4d7e294fc26de39181dbe1428d61dd3b4046642ee0b3927ea2037c9b"
+dependencies = [
+ "cortex-m",
+ "embedded-hal",
+ "usb-device",
+ "vcell",
+]
+
+[[package]]
+name = "systick-monotonic"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "57e71d8e4587d8f434b88b9aef901987f46164df813a3a1d6bdf3a58debf67f0"
+dependencies = [
+ "cortex-m",
+ "fugit",
+ "rtic-monotonic",
+]
+
+[[package]]
 name = "unicode-xid"
 version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "957e51f3646910546462e67d5f7599b9e4fb8acdd304b087a6494730f9eebf04"
+
+[[package]]
+name = "usb-device"
+version = "0.2.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6be90410d4772074ea49525e2e753b65920b94b57eee21a6ef7b6a6fe6296245"
 
 [[package]]
 name = "vcell"
