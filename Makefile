@@ -38,7 +38,7 @@ puredata:
 
 .PHONY: test-embedded
 test-embedded:
-	cd eurorack && DEFMT_LOG=info cargo test --test integration
+	cd eurorack && DEFMT_LOG=info cargo test --test display
 
 .PHONY: flash
 flash:
