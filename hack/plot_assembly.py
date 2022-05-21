@@ -100,7 +100,7 @@ def plot_assembly(board):
                 "chromium-browser",
                 "--headless",
                 "--print-to-pdf-no-header",
-                "--print-to-pdf=hardware/plot/Achordion-Assembly.pdf",
+                "--print-to-pdf=hardware/plot/Module-Assembly.pdf",
                 html_path,
             ],
             stderr=subprocess.DEVNULL,
