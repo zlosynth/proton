@@ -204,7 +204,7 @@
       (effects (font (size 1 1) (thickness 0.15)))
       (tstamp ec7073f7-f754-4ee6-a977-3d11d16480f8)
     )
-    (fp_text value "1k" (at -0.36 -1.53 180) (layer "F.Fab") hide
+    (fp_text value "1k" (at -0.36 -1.53 180) (layer "F.Fab")
       (effects (font (size 1 1) (thickness 0.15)))
       (tstamp a8470270-920a-4fed-9691-22526135f92c)
     )
@@ -250,7 +250,7 @@
       (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 8ecc0874-e7f5-4102-a6b7-0222cf1fccc2)
     )
-    (fp_text value "1k" (at 2.71 0.12 90) (layer "F.Fab") hide
+    (fp_text value "1k" (at 2.71 0.12 90) (layer "F.Fab")
       (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 82782dc2-cb84-4d0c-b85e-b3903aca1e13)
     )
@@ -1716,7 +1716,7 @@
       (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 3b19a97f-624a-48d9-8072-15bdeede0fff)
     )
-    (fp_text value "100k" (at 0.1 1.53 90) (layer "F.Fab") hide
+    (fp_text value "100k" (at 0.1 1.53 90) (layer "F.Fab")
       (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 87f44303-a6e8-48e5-bb6d-f89abb09a999)
     )
@@ -4273,7 +4273,7 @@
       (effects (font (size 1 1) (thickness 0.15)))
       (tstamp d33c6077-a8ec-48ca-b0e0-97f3539ef54c)
     )
-    (fp_text value "10k" (at -0.0675 -4.51 90) (layer "F.Fab") hide
+    (fp_text value "10k" (at -0.0675 -4.51 90) (layer "F.Fab")
       (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 60960af7-b938-44a8-82b5-e9c36f2e6817)
     )
