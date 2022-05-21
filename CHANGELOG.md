@@ -6,6 +6,8 @@ backwards compatibility.
 
 ## Unreleased
 
+* Integrate display in the firmware.
+
 ## 0.3.0
 
 * Introduce support for module instantiation and removal.

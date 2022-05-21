@@ -6,14 +6,17 @@ use proton_eurorack as _; // global logger + panicking-behavior
 #[rtic::app(device = stm32h7xx_hal::pac, peripherals = true, dispatchers = [EXTI0])]
 mod app {
     use daisy::led::{Led, LedUser};
-    use embedded_graphics::{
-        pixelcolor::BinaryColor,
-        prelude::*,
-        primitives::{Circle, PrimitiveStyleBuilder, Rectangle, Triangle},
-    };
+
     use fugit::ExtU64;
     use proton_eurorack::system::System;
     use systick_monotonic::Systick;
+
+    use alloc_cortex_m::CortexMHeap;
+
+    #[global_allocator]
+    static ALLOCATOR: CortexMHeap = CortexMHeap::empty();
+
+    use proton_lib::instrument::Instrument;
 
     #[monotonic(binds = SysTick, default = true)]
     type Mono = Systick<1000>; // 1 kHz / 1 ms granularity
@@ -30,50 +33,18 @@ mod app {
     fn init(cx: init::Context) -> (Shared, Local, init::Monotonics) {
         defmt::info!("INIT");
 
+        init_allocator();
+
         let system = System::init(cx.core, cx.device);
 
-        let mut display = system.display;
+        let display = system.display;
         let led = system.led;
         let mono = system.mono;
 
-        let yoffset = 20;
-
-        let style = PrimitiveStyleBuilder::new()
-            .stroke_width(1)
-            .stroke_color(BinaryColor::On)
-            .build();
-
-        // screen outline
-        // default display size is 128x64 if you don't pass a _DisplaySize_
-        // enum to the _Builder_ struct
-        Rectangle::new(Point::new(0, 0), Size::new(127, 63))
-            .into_styled(style)
-            .draw(&mut display)
-            .unwrap();
-
-        // triangle
-        Triangle::new(
-            Point::new(16, 16 + yoffset),
-            Point::new(16 + 16, 16 + yoffset),
-            Point::new(16 + 8, yoffset),
-        )
-        .into_styled(style)
-        .draw(&mut display)
-        .unwrap();
-
-        // square
-        Rectangle::new(Point::new(52, yoffset), Size::new_equal(16))
-            .into_styled(style)
-            .draw(&mut display)
-            .unwrap();
-
-        // circle
-        Circle::new(Point::new(88, yoffset), 16)
-            .into_styled(style)
-            .draw(&mut display)
-            .unwrap();
-
-        display.flush().unwrap();
+        let mut instrument = Instrument::new();
+        instrument.register_display(display);
+        instrument.update_display();
+        instrument.mut_display().flush().unwrap();
 
         foo::spawn(true).unwrap();
 
@@ -91,5 +62,12 @@ mod app {
             cx.local.led.off();
             foo::spawn_after(1.secs(), true).unwrap();
         }
+    }
+
+    fn init_allocator() {
+        use core::mem::MaybeUninit;
+        const HEAP_SIZE: usize = 10 * 1024;
+        static mut HEAP: [MaybeUninit<u8>; HEAP_SIZE] = [MaybeUninit::uninit(); HEAP_SIZE];
+        unsafe { ALLOCATOR.init(HEAP.as_ptr() as usize, HEAP_SIZE) }
     }
 }
