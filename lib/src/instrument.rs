@@ -68,9 +68,10 @@ impl<D> Instrument<D> {
             Module::new_for_node(control_input)
                 .with_name(">CV")
                 .persistent()
-                .with_attribute(Attribute::new_for_producer(
-                    control_input.producer(ControlInputProducer),
-                )),
+                .with_attribute(
+                    Attribute::new_for_producer(control_input.producer(ControlInputProducer))
+                        .with_name("OUT"),
+                ),
         );
         reducer::sync_last_module(&mut state);
 
@@ -79,9 +80,10 @@ impl<D> Instrument<D> {
             Module::new_for_node(control_input)
                 .with_name(">CV")
                 .persistent()
-                .with_attribute(Attribute::new_for_producer(
-                    control_input.producer(ControlInputProducer),
-                )),
+                .with_attribute(
+                    Attribute::new_for_producer(control_input.producer(ControlInputProducer))
+                        .with_name("OUT"),
+                ),
         );
         reducer::sync_last_module(&mut state);
 
@@ -90,9 +92,10 @@ impl<D> Instrument<D> {
             Module::new_for_node(audio_output)
                 .with_name("<AU")
                 .persistent()
-                .with_attribute(Attribute::new_for_consumer(
-                    audio_output.consumer(AudioOutputConsumer),
-                )),
+                .with_attribute(
+                    Attribute::new_for_consumer(audio_output.consumer(AudioOutputConsumer))
+                        .with_name("IN"),
+                ),
         );
         reducer::sync_last_module(&mut state);
 
