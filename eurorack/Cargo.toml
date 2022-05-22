@@ -12,6 +12,10 @@ publish = false
 name = "display"
 harness = false # defined through defmt_test
 
+[[test]]
+name = "encoders"
+harness = false # defined through defmt_test
+
 [dependencies]
 proton-lib = { path = "../lib" }
 proton-peripherals = { path = "../peripherals" }
