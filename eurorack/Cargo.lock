@@ -586,6 +586,7 @@ dependencies = [
  "defmt-rtt",
  "defmt-test",
  "display-interface-spi",
+ "embedded-graphics",
  "fugit",
  "panic-probe",
  "proton-lib",

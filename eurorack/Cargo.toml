@@ -31,6 +31,7 @@ fugit = "0.3"
 
 [dev-dependencies]
 defmt-test = "0.3"
+embedded-graphics = "0.7"
 
 [profile.dev]
 codegen-units = 1 # better optimizations

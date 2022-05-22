@@ -11,11 +11,6 @@ mod app {
     use proton_eurorack::system::System;
     use systick_monotonic::Systick;
 
-    use alloc_cortex_m::CortexMHeap;
-
-    #[global_allocator]
-    static ALLOCATOR: CortexMHeap = CortexMHeap::empty();
-
     type Instrument = proton_lib::instrument::Instrument<proton_eurorack::system::display::Display>;
     type Input = proton_ui::input::Input<
         proton_eurorack::system::encoder::AlphaRotaryPinA,
@@ -44,7 +39,7 @@ mod app {
     fn init(cx: init::Context) -> (Shared, Local, init::Monotonics) {
         defmt::info!("INIT");
 
-        init_allocator();
+        proton_eurorack::init_allocator();
 
         let system = System::init(cx.core, cx.device);
 
@@ -119,12 +114,5 @@ mod app {
         instrument.mut_display().flush().unwrap();
 
         control::spawn_after(1.millis()).unwrap();
-    }
-
-    fn init_allocator() {
-        use core::mem::MaybeUninit;
-        const HEAP_SIZE: usize = 10 * 1024;
-        static mut HEAP: [MaybeUninit<u8>; HEAP_SIZE] = [MaybeUninit::uninit(); HEAP_SIZE];
-        unsafe { ALLOCATOR.init(HEAP.as_ptr() as usize, HEAP_SIZE) }
     }
 }

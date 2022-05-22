@@ -18,7 +18,7 @@ mod tests {
         let cp = cortex_m::Peripherals::take().unwrap();
         let dp = daisy::pac::Peripherals::take().unwrap();
 
-        let system = System::init(cp, dp);
+        let mut system = System::init(cp, dp);
         let mut display = system.display;
 
         let style = MonoTextStyleBuilder::new()
@@ -27,23 +27,15 @@ mod tests {
             .background_color(BinaryColor::On)
             .build();
         let position = Point::new(15, 45);
-
-        Text::new("Test 3", position, style)
+        Text::new("TEST", position, style)
             .draw(&mut display)
             .unwrap();
         display.flush().unwrap();
-        cortex_m::asm::delay(480_000_000);
 
-        Text::new("Test 2", position, style)
-            .draw(&mut display)
-            .unwrap();
-        display.flush().unwrap();
-        cortex_m::asm::delay(480_000_000);
-
-        Text::new("Test 1", position, style)
-            .draw(&mut display)
-            .unwrap();
-        display.flush().unwrap();
-        cortex_m::asm::delay(480_000_000);
+        defmt::info!("ACTION REQUIRED: Click Alpha if display displays");
+        while !system.alpha_button.clicked() {
+            system.alpha_button.sample();
+            cortex_m::asm::nop();
+        }
     }
 }
