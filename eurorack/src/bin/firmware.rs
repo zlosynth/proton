@@ -17,7 +17,7 @@ mod app {
     static ALLOCATOR: CortexMHeap = CortexMHeap::empty();
 
     use proton_eurorack::system::display::Display;
-    use proton_eurorack::system::{AlphaButton, AlphaRotary, BetaButton, BetaRotary};
+    use proton_eurorack::system::encoder::{AlphaButton, AlphaRotary, BetaButton, BetaRotary};
     use proton_lib::instrument::Instrument;
     use proton_peripherals::detent_rotary::Direction;
 
