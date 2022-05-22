@@ -5,20 +5,27 @@ use daisy::hal;
 use hal::pac::CorePeripherals;
 use hal::pac::Peripherals as DevicePeripherals;
 use proton_peripherals::button::Button;
+use proton_peripherals::detent_rotary::DetentRotary;
 use systick_monotonic::Systick;
 
 use display::{Display, DisplayPins};
 use led::Led;
 
 pub type AlphaButton = Button<10, hal::gpio::gpioc::PC1<hal::gpio::Input>>;
+pub type AlphaRotary =
+    DetentRotary<hal::gpio::gpioc::PC4<hal::gpio::Input>, hal::gpio::gpioa::PA1<hal::gpio::Input>>;
 pub type BetaButton = Button<10, hal::gpio::gpiob::PB9<hal::gpio::Input>>;
+pub type BetaRotary =
+    DetentRotary<hal::gpio::gpiob::PB7<hal::gpio::Input>, hal::gpio::gpiob::PB6<hal::gpio::Input>>;
 
 pub struct System {
     pub display: Display,
     pub led: Led,
     pub mono: Systick<1000>,
     pub alpha_button: AlphaButton,
+    pub alpha_rotary: AlphaRotary,
     pub beta_button: BetaButton,
+    pub beta_rotary: BetaRotary,
 }
 
 impl System {
@@ -48,14 +55,26 @@ impl System {
         let mono = Systick::new(cp.SYST, 480_000_000);
 
         let alpha_button = Button::new(pins.GPIO.PIN_20.into_pull_up_input());
+        let alpha_rotary = DetentRotary::new(
+            pins.GPIO.PIN_21.into_pull_up_input(),
+            pins.GPIO.PIN_24.into_pull_up_input(),
+            4,
+        );
         let beta_button = Button::new(pins.GPIO.PIN_12.into_pull_up_input());
+        let beta_rotary = DetentRotary::new(
+            pins.GPIO.PIN_14.into_pull_up_input(),
+            pins.GPIO.PIN_13.into_pull_up_input(),
+            4,
+        );
 
         Self {
             display,
             led,
             mono,
             alpha_button,
+            alpha_rotary,
             beta_button,
+            beta_rotary,
         }
     }
 }

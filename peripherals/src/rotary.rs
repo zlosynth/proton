@@ -8,6 +8,7 @@ use embedded_hal::digital::v2::InputPin;
 pub struct Rotary<A, B> {
     pin_a: A,
     pin_b: B,
+    position: u8,
     transition: u8,
 }
 
@@ -38,6 +39,7 @@ where
         Self {
             pin_a,
             pin_b,
+            position: 0u8,
             transition: 0u8,
         }
     }
@@ -67,6 +69,12 @@ where
         }
 
         self.transition = transition;
+
+        self.position = match self.transition.into() {
+            Direction::Clockwise => self.position.wrapping_add(1),
+            Direction::CounterClockwise => self.position.wrapping_sub(1),
+            _ => self.position,
+        };
 
         Ok(())
     }
@@ -103,7 +111,7 @@ mod tests {
     }
 
     #[test]
-    fn it_should_work() {
+    fn when_measuring_each_step_it_should_work() {
         use Direction::*;
 
         let states = [

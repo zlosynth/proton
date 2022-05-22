@@ -16,8 +16,9 @@ mod app {
     #[global_allocator]
     static ALLOCATOR: CortexMHeap = CortexMHeap::empty();
 
-    use proton_eurorack::system::{AlphaButton, BetaButton};
+    use proton_eurorack::system::{AlphaButton, AlphaRotary, BetaButton, BetaRotary};
     use proton_lib::instrument::Instrument;
+    use proton_peripherals::detent_rotary::Direction;
 
     #[monotonic(binds = SysTick, default = true)]
     type Mono = Systick<1000>; // 1 kHz / 1 ms granularity
@@ -29,7 +30,9 @@ mod app {
     struct Local {
         led: LedUser,
         alpha_button: AlphaButton,
+        alpha_rotary: AlphaRotary,
         beta_button: BetaButton,
+        beta_rotary: BetaRotary,
     }
 
     #[init]
@@ -44,7 +47,9 @@ mod app {
         let led = system.led;
         let mono = system.mono;
         let alpha_button = system.alpha_button;
+        let alpha_rotary = system.alpha_rotary;
         let beta_button = system.beta_button;
+        let beta_rotary = system.beta_rotary;
 
         let mut instrument = Instrument::new();
         instrument.register_display(display);
@@ -59,7 +64,9 @@ mod app {
             Local {
                 led,
                 alpha_button,
+                alpha_rotary,
                 beta_button,
+                beta_rotary,
             },
             init::Monotonics(mono),
         )
@@ -76,16 +83,28 @@ mod app {
         }
     }
 
-    #[task(local = [alpha_button, beta_button])]
+    #[task(local = [alpha_button, alpha_rotary, beta_button, beta_rotary])]
     fn control(cx: control::Context) {
         cx.local.alpha_button.sample();
+        cx.local.alpha_rotary.sample().unwrap();
         cx.local.beta_button.sample();
+        cx.local.beta_rotary.sample().unwrap();
 
         if cx.local.alpha_button.clicked() {
             defmt::info!("ALPHA ON");
         }
+        match cx.local.alpha_rotary.direction() {
+            Direction::Clockwise => defmt::info!("ALPHA CW"),
+            Direction::CounterClockwise => defmt::info!("ALPHA CCW"),
+            _ => (),
+        }
         if cx.local.beta_button.clicked() {
             defmt::info!("BETA ON");
+        }
+        match cx.local.beta_rotary.direction() {
+            Direction::Clockwise => defmt::info!("BETA CW"),
+            Direction::CounterClockwise => defmt::info!("BETA CCW"),
+            _ => (),
         }
 
         control::spawn_after(1.millis()).unwrap();
