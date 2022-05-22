@@ -16,12 +16,15 @@ mod app {
     #[global_allocator]
     static ALLOCATOR: CortexMHeap = CortexMHeap::empty();
 
-    use proton_eurorack::system::display::Display;
-    use proton_eurorack::system::encoder::{AlphaButton, AlphaRotary, BetaButton, BetaRotary};
-    use proton_lib::instrument::Instrument;
-    use proton_peripherals::detent_rotary::Direction;
-
-    type InstrumentT = Instrument<Display>;
+    type Instrument = proton_lib::instrument::Instrument<proton_eurorack::system::display::Display>;
+    type Input = proton_ui::input::Input<
+        proton_eurorack::system::encoder::AlphaRotaryPinA,
+        proton_eurorack::system::encoder::AlphaRotaryPinB,
+        proton_eurorack::system::encoder::AlphaButtonPin,
+        proton_eurorack::system::encoder::BetaRotaryPinA,
+        proton_eurorack::system::encoder::BetaRotaryPinB,
+        proton_eurorack::system::encoder::BetaButtonPin,
+    >;
 
     #[monotonic(binds = SysTick, default = true)]
     type Mono = Systick<1000>; // 1 kHz / 1 ms granularity
@@ -32,13 +35,10 @@ mod app {
     #[local]
     struct Local {
         led: LedUser,
-        alpha_button: AlphaButton,
-        alpha_rotary: AlphaRotary,
-        beta_button: BetaButton,
-        beta_rotary: BetaRotary,
+        user_input: Input,
     }
 
-    static mut INSTRUMENT: Option<InstrumentT> = None;
+    static mut INSTRUMENT: Option<Instrument> = None;
 
     #[init]
     fn init(cx: init::Context) -> (Shared, Local, init::Monotonics) {
@@ -56,6 +56,8 @@ mod app {
         let beta_button = system.beta_button;
         let beta_rotary = system.beta_rotary;
 
+        let user_input = Input::new(alpha_button, alpha_rotary, beta_button, beta_rotary);
+
         let mut instrument = Instrument::new();
         instrument.register_display(display);
 
@@ -64,17 +66,7 @@ mod app {
         foo::spawn(true).unwrap();
         control::spawn().unwrap();
 
-        (
-            Shared {},
-            Local {
-                led,
-                alpha_button,
-                alpha_rotary,
-                beta_button,
-                beta_rotary,
-            },
-            init::Monotonics(mono),
-        )
+        (Shared {}, Local { led, user_input }, init::Monotonics(mono))
     }
 
     #[task(local = [led])]
@@ -88,44 +80,39 @@ mod app {
         }
     }
 
-    #[task(local = [alpha_button, alpha_rotary, beta_button, beta_rotary])]
+    #[task(local = [user_input])]
     fn control(cx: control::Context) {
-        cx.local.alpha_button.sample();
-        cx.local.alpha_rotary.sample().unwrap();
-        cx.local.beta_button.sample();
-        cx.local.beta_rotary.sample().unwrap();
+        use proton_ui::action::Action;
 
         let instrument = unsafe { INSTRUMENT.as_mut().unwrap() };
 
-        if cx.local.alpha_button.clicked() {
-            defmt::info!("ALPHA ON");
-            instrument.alpha_click();
-        }
-        match cx.local.alpha_rotary.direction() {
-            Direction::Clockwise => {
-                defmt::info!("ALPHA CW");
-                instrument.alpha_down();
+        for action in cx.local.user_input.process() {
+            match action {
+                Action::AlphaClick => {
+                    defmt::info!("ALPHA ON");
+                    instrument.alpha_click();
+                }
+                Action::AlphaUp => {
+                    defmt::info!("ALPHA CCW");
+                    instrument.alpha_up();
+                }
+                Action::AlphaDown => {
+                    defmt::info!("ALPHA CW");
+                    instrument.alpha_down();
+                }
+                Action::BetaClick => {
+                    defmt::info!("BETA ON");
+                    instrument.beta_click();
+                }
+                Action::BetaUp => {
+                    defmt::info!("BETA CCW");
+                    instrument.beta_up();
+                }
+                Action::BetaDown => {
+                    defmt::info!("BETA CW");
+                    instrument.beta_down();
+                }
             }
-            Direction::CounterClockwise => {
-                defmt::info!("ALPHA CCW");
-                instrument.alpha_up();
-            }
-            _ => (),
-        }
-        if cx.local.beta_button.clicked() {
-            defmt::info!("BETA ON");
-            instrument.beta_click();
-        }
-        match cx.local.beta_rotary.direction() {
-            Direction::Clockwise => {
-                defmt::info!("BETA CW");
-                instrument.beta_down();
-            }
-            Direction::CounterClockwise => {
-                defmt::info!("BETA CCW");
-                instrument.beta_up();
-            }
-            _ => (),
         }
 
         instrument.update_display();

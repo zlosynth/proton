@@ -1,0 +1,21 @@
+[package]
+authors = ["Petr Horáček <hrck@protonmail.com>"]
+name = "proton-ui"
+version = "0.3.0" # hack/release.sh
+edition = "2021"
+license = "GPL-3.0-or-later"
+repository = "https://github.com/zlosynth/proton"
+readme = "../README.md"
+publish = false
+
+[dependencies]
+proton-peripherals = { path = "../peripherals" }
+embedded-hal = { version = "0.2", features = ["unproven"] }
+heapless = "0.7"
+
+[dependencies.defmt]
+version  = "0.3"
+optional = true
+
+[features]
+defmt = ["dep:defmt", "proton-peripherals/defmt"]

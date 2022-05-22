@@ -15,6 +15,7 @@ harness = false # defined through defmt_test
 [dependencies]
 proton-lib = { path = "../lib" }
 proton-peripherals = { path = "../peripherals" }
+proton-ui = { path = "../ui" }
 alloc-cortex-m = "0.4"
 cortex-m = "0.7"
 cortex-m-rtic = "1"

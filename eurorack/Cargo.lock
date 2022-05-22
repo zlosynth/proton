@@ -590,6 +590,7 @@ dependencies = [
  "panic-probe",
  "proton-lib",
  "proton-peripherals",
+ "proton-ui",
  "ssd1306",
  "stm32h7xx-hal",
  "systick-monotonic",
@@ -612,6 +613,15 @@ version = "0.3.0"
 dependencies = [
  "either",
  "embedded-hal",
+]
+
+[[package]]
+name = "proton-ui"
+version = "0.3.0"
+dependencies = [
+ "embedded-hal",
+ "heapless",
+ "proton-peripherals",
 ]
 
 [[package]]
