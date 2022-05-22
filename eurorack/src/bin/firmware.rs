@@ -5,7 +5,6 @@ use proton_eurorack as _; // global logger + panicking-behavior
 
 #[rtic::app(device = stm32h7xx_hal::pac, peripherals = true, dispatchers = [EXTI0])]
 mod app {
-    use daisy::hal;
     use daisy::led::{Led, LedUser};
 
     use fugit::ExtU64;
@@ -17,21 +16,12 @@ mod app {
     #[global_allocator]
     static ALLOCATOR: CortexMHeap = CortexMHeap::empty();
 
+    use proton_eurorack::system::display::Display;
     use proton_eurorack::system::{AlphaButton, AlphaRotary, BetaButton, BetaRotary};
     use proton_lib::instrument::Instrument;
     use proton_peripherals::detent_rotary::Direction;
 
-    type InstrumentT = Instrument<
-        ssd1306::Ssd1306<
-            ssd1306::prelude::SPIInterface<
-                hal::spi::Spi<hal::pac::SPI1, hal::spi::Enabled>,
-                hal::gpio::gpiob::PB4<hal::gpio::Output>,
-                hal::gpio::gpiog::PG10<hal::gpio::Output>,
-            >,
-            ssd1306::prelude::DisplaySize128x64,
-            ssd1306::mode::BufferedGraphicsMode<ssd1306::prelude::DisplaySize128x64>,
-        >,
-    >;
+    type InstrumentT = Instrument<Display>;
 
     #[monotonic(binds = SysTick, default = true)]
     type Mono = Systick<1000>; // 1 kHz / 1 ms granularity
