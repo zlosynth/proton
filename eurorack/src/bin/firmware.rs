@@ -16,6 +16,7 @@ mod app {
     #[global_allocator]
     static ALLOCATOR: CortexMHeap = CortexMHeap::empty();
 
+    use proton_eurorack::system::{AlphaButton, BetaButton};
     use proton_lib::instrument::Instrument;
 
     #[monotonic(binds = SysTick, default = true)]
@@ -27,7 +28,8 @@ mod app {
     #[local]
     struct Local {
         led: LedUser,
-        alpha_click: daisy::hal::gpio::gpioc::PC1<daisy::hal::gpio::Input>,
+        alpha_button: AlphaButton,
+        beta_button: BetaButton,
     }
 
     #[init]
@@ -41,7 +43,8 @@ mod app {
         let display = system.display;
         let led = system.led;
         let mono = system.mono;
-        let alpha_click = system.alpha_click;
+        let alpha_button = system.alpha_button;
+        let beta_button = system.beta_button;
 
         let mut instrument = Instrument::new();
         instrument.register_display(display);
@@ -53,15 +56,17 @@ mod app {
 
         (
             Shared {},
-            Local { led, alpha_click },
+            Local {
+                led,
+                alpha_button,
+                beta_button,
+            },
             init::Monotonics(mono),
         )
     }
 
     #[task(local = [led])]
     fn foo(cx: foo::Context, on: bool) {
-        defmt::info!("FOO: {:?}", on);
-
         if on {
             cx.local.led.on();
             foo::spawn_after(1.secs(), false).unwrap();
@@ -71,11 +76,18 @@ mod app {
         }
     }
 
-    #[task(local = [alpha_click])]
+    #[task(local = [alpha_button, beta_button])]
     fn control(cx: control::Context) {
-        if cx.local.alpha_click.is_low() {
+        cx.local.alpha_button.sample();
+        cx.local.beta_button.sample();
+
+        if cx.local.alpha_button.clicked() {
             defmt::info!("ALPHA ON");
         }
+        if cx.local.beta_button.clicked() {
+            defmt::info!("BETA ON");
+        }
+
         control::spawn_after(1.millis()).unwrap();
     }
 

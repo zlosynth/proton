@@ -4,16 +4,21 @@ pub mod led;
 use daisy::hal;
 use hal::pac::CorePeripherals;
 use hal::pac::Peripherals as DevicePeripherals;
+use proton_peripherals::button::Button;
 use systick_monotonic::Systick;
 
 use display::{Display, DisplayPins};
 use led::Led;
 
+pub type AlphaButton = Button<10, hal::gpio::gpioc::PC1<hal::gpio::Input>>;
+pub type BetaButton = Button<10, hal::gpio::gpiob::PB9<hal::gpio::Input>>;
+
 pub struct System {
     pub display: Display,
     pub led: Led,
     pub mono: Systick<1000>,
-    pub alpha_click: hal::gpio::gpioc::PC1<hal::gpio::Input>,
+    pub alpha_button: AlphaButton,
+    pub beta_button: BetaButton,
 }
 
 impl System {
@@ -42,13 +47,15 @@ impl System {
 
         let mono = Systick::new(cp.SYST, 480_000_000);
 
-        let alpha_click = pins.GPIO.PIN_20.into_pull_up_input();
+        let alpha_button = Button::new(pins.GPIO.PIN_20.into_pull_up_input());
+        let beta_button = Button::new(pins.GPIO.PIN_12.into_pull_up_input());
 
         Self {
             display,
             led,
             mono,
-            alpha_click,
+            alpha_button,
+            beta_button,
         }
     }
 }
