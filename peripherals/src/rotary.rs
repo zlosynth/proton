@@ -8,7 +8,7 @@ use embedded_hal::digital::v2::InputPin;
 pub struct Rotary<A, B> {
     pin_a: A,
     pin_b: B,
-    state: u8,
+    transition: u8,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -38,7 +38,7 @@ where
         Self {
             pin_a,
             pin_b,
-            state: 0u8,
+            transition: 0u8,
         }
     }
 
@@ -50,13 +50,15 @@ where
         &mut self.pin_b
     }
 
-    pub fn update(&mut self) -> Result<Direction, Either<A::Error, B::Error>> {
-        // use mask to get previous state value
-        let mut transition = self.state & 0b11;
+    pub fn update(&mut self) -> Result<(), Either<A::Error, B::Error>> {
+        let mut transition = self.transition;
+
+        // discard the pre-previous state
+        transition >>= 2;
 
         let (a_is_high, b_is_high) = (self.pin_a.is_high(), self.pin_b.is_high());
 
-        // move in the new state
+        // record the new state
         if a_is_high.map_err(Either::Left)? {
             transition |= 0b1000;
         }
@@ -64,10 +66,13 @@ where
             transition |= 0b100;
         }
 
-        // move new state in
-        self.state = transition >> 2;
+        self.transition = transition;
 
-        Ok(transition.into())
+        Ok(())
+    }
+
+    pub fn direction(&self) -> Direction {
+        self.transition.into()
     }
 }
 
@@ -122,7 +127,8 @@ mod tests {
         for (b_high, a_high, direction) in states {
             rotary.pin_a().high = a_high;
             rotary.pin_b().high = b_high;
-            assert_eq!(rotary.update().unwrap(), direction);
+            rotary.update().unwrap();
+            assert_eq!(rotary.direction(), direction);
         }
     }
 }
