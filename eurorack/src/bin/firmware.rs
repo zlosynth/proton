@@ -5,6 +5,7 @@ use proton_eurorack as _; // global logger + panicking-behavior
 
 #[rtic::app(device = stm32h7xx_hal::pac, peripherals = true, dispatchers = [EXTI0])]
 mod app {
+    use daisy::hal;
     use daisy::led::{Led, LedUser};
 
     use fugit::ExtU64;
@@ -20,6 +21,18 @@ mod app {
     use proton_lib::instrument::Instrument;
     use proton_peripherals::detent_rotary::Direction;
 
+    type InstrumentT = Instrument<
+        ssd1306::Ssd1306<
+            ssd1306::prelude::SPIInterface<
+                hal::spi::Spi<hal::pac::SPI1, hal::spi::Enabled>,
+                hal::gpio::gpiob::PB4<hal::gpio::Output>,
+                hal::gpio::gpiog::PG10<hal::gpio::Output>,
+            >,
+            ssd1306::prelude::DisplaySize128x64,
+            ssd1306::mode::BufferedGraphicsMode<ssd1306::prelude::DisplaySize128x64>,
+        >,
+    >;
+
     #[monotonic(binds = SysTick, default = true)]
     type Mono = Systick<1000>; // 1 kHz / 1 ms granularity
 
@@ -34,6 +47,8 @@ mod app {
         beta_button: BetaButton,
         beta_rotary: BetaRotary,
     }
+
+    static mut INSTRUMENT: Option<InstrumentT> = None;
 
     #[init]
     fn init(cx: init::Context) -> (Shared, Local, init::Monotonics) {
@@ -53,8 +68,8 @@ mod app {
 
         let mut instrument = Instrument::new();
         instrument.register_display(display);
-        instrument.update_display();
-        instrument.mut_display().flush().unwrap();
+
+        unsafe { INSTRUMENT = Some(instrument) };
 
         foo::spawn(true).unwrap();
         control::spawn().unwrap();
@@ -90,22 +105,41 @@ mod app {
         cx.local.beta_button.sample();
         cx.local.beta_rotary.sample().unwrap();
 
+        let instrument = unsafe { INSTRUMENT.as_mut().unwrap() };
+
         if cx.local.alpha_button.clicked() {
             defmt::info!("ALPHA ON");
+            instrument.alpha_click();
         }
         match cx.local.alpha_rotary.direction() {
-            Direction::Clockwise => defmt::info!("ALPHA CW"),
-            Direction::CounterClockwise => defmt::info!("ALPHA CCW"),
+            Direction::Clockwise => {
+                defmt::info!("ALPHA CW");
+                instrument.alpha_down();
+            }
+            Direction::CounterClockwise => {
+                defmt::info!("ALPHA CCW");
+                instrument.alpha_up();
+            }
             _ => (),
         }
         if cx.local.beta_button.clicked() {
             defmt::info!("BETA ON");
+            instrument.beta_click();
         }
         match cx.local.beta_rotary.direction() {
-            Direction::Clockwise => defmt::info!("BETA CW"),
-            Direction::CounterClockwise => defmt::info!("BETA CCW"),
+            Direction::Clockwise => {
+                defmt::info!("BETA CW");
+                instrument.beta_down();
+            }
+            Direction::CounterClockwise => {
+                defmt::info!("BETA CCW");
+                instrument.beta_up();
+            }
             _ => (),
         }
+
+        instrument.update_display();
+        instrument.mut_display().flush().unwrap();
 
         control::spawn_after(1.millis()).unwrap();
     }
