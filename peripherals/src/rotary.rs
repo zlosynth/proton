@@ -50,19 +50,19 @@ where
         &mut self.pin_b
     }
 
-    pub fn update(&mut self) -> Result<(), Either<A::Error, B::Error>> {
+    pub fn sample(&mut self) -> Result<(), Either<A::Error, B::Error>> {
         let mut transition = self.transition;
 
         // discard the pre-previous state
         transition >>= 2;
 
-        let (a_is_high, b_is_high) = (self.pin_a.is_high(), self.pin_b.is_high());
+        let (a_is_low, b_is_low) = (self.pin_a.is_low(), self.pin_b.is_low());
 
         // record the new state
-        if a_is_high.map_err(Either::Left)? {
+        if a_is_low.map_err(Either::Left)? {
             transition |= 0b1000;
         }
-        if b_is_high.map_err(Either::Right)? {
+        if b_is_low.map_err(Either::Right)? {
             transition |= 0b100;
         }
 
@@ -127,7 +127,7 @@ mod tests {
         for (b_high, a_high, direction) in states {
             rotary.pin_a().high = a_high;
             rotary.pin_b().high = b_high;
-            rotary.update().unwrap();
+            rotary.sample().unwrap();
             assert_eq!(rotary.direction(), direction);
         }
     }
