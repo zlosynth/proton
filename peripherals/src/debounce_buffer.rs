@@ -38,10 +38,7 @@ mod tests {
         }
         let original = buffer.read();
 
-        buffer.write(true);
-        buffer.write(true);
         buffer.write(false);
-        buffer.write(true);
 
         assert_eq!(buffer.read(), original);
     }
