@@ -13,6 +13,7 @@ pub struct System {
     pub display: Display,
     pub led: Led,
     pub mono: Systick<1000>,
+    pub alpha_click: hal::gpio::gpioc::PC1<hal::gpio::Input>,
 }
 
 impl System {
@@ -41,7 +42,14 @@ impl System {
 
         let mono = Systick::new(cp.SYST, 480_000_000);
 
-        Self { display, led, mono }
+        let alpha_click = pins.GPIO.PIN_20.into_pull_up_input();
+
+        Self {
+            display,
+            led,
+            mono,
+            alpha_click,
+        }
     }
 }
 

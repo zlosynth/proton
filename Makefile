@@ -6,28 +6,33 @@ check-format:
 	cd lib && cargo +nightly fmt --all -- --check
 	cd puredata && cargo +nightly fmt --all -- --check
 	cd eurorack && cargo +nightly fmt --all -- --check
+	cd peripherals && cargo +nightly fmt --all -- --check
 
 .PHONY: format
 format:
 	cd lib && cargo +nightly fmt --all
 	cd puredata && cargo +nightly fmt --all
 	cd eurorack && cargo +nightly fmt --all
+	cd peripherals && cargo +nightly fmt --all
 
 .PHONY: clippy
 clippy:
 	cd lib && cargo +nightly clippy --all -- -D warnings
 	cd puredata && cargo +nightly clippy --all -- -D warnings
 	cd eurorack && cargo +nightly clippy --all -- -D warnings
+	cd peripherals && cargo +nightly clippy --all --features defmt -- -D warnings
 
 .PHONY: test
 test:
 	cd lib && cargo +nightly test --all
+	cd peripherals && cargo +nightly test --features defmt --all
 
 .PHONY: update
 update:
 	cd lib && cargo +nightly update
 	cd puredata && cargo +nightly update
 	cd eurorack && cargo +nightly update
+	cd peripherals && cargo +nightly update
 
 .PHONY: puredata
 puredata:
@@ -51,4 +56,4 @@ flash-dfu:
 
 .PHONY: debug-test
 debug-test:
-	./hack/debug_test.sh
+	WHAT=$(WHAT) ./hack/debug_test.sh

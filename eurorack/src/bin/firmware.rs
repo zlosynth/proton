@@ -27,6 +27,7 @@ mod app {
     #[local]
     struct Local {
         led: LedUser,
+        alpha_click: daisy::hal::gpio::gpioc::PC1<daisy::hal::gpio::Input>,
     }
 
     #[init]
@@ -40,6 +41,7 @@ mod app {
         let display = system.display;
         let led = system.led;
         let mono = system.mono;
+        let alpha_click = system.alpha_click;
 
         let mut instrument = Instrument::new();
         instrument.register_display(display);
@@ -47,8 +49,13 @@ mod app {
         instrument.mut_display().flush().unwrap();
 
         foo::spawn(true).unwrap();
+        control::spawn().unwrap();
 
-        (Shared {}, Local { led }, init::Monotonics(mono))
+        (
+            Shared {},
+            Local { led, alpha_click },
+            init::Monotonics(mono),
+        )
     }
 
     #[task(local = [led])]
@@ -62,6 +69,14 @@ mod app {
             cx.local.led.off();
             foo::spawn_after(1.secs(), true).unwrap();
         }
+    }
+
+    #[task(local = [alpha_click])]
+    fn control(cx: control::Context) {
+        if cx.local.alpha_click.is_low() {
+            defmt::info!("ALPHA ON");
+        }
+        control::spawn_after(1.millis()).unwrap();
     }
 
     fn init_allocator() {
