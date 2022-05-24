@@ -3,6 +3,7 @@
 pub mod action;
 pub mod display;
 pub mod input;
+pub mod state;
 pub mod view;
 
 // TODO NOTE
@@ -12,3 +13,5 @@ pub mod view;
 // state reducer passes actions via queue to lib front, that handles interporation
 // CV input passes actions via queue to lib front
 // audio loop is owned by the lib itself
+//
+// TODO introduce Config that would be passed by plugins and used to create State

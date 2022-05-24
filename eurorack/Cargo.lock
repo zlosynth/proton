@@ -623,6 +623,7 @@ dependencies = [
  "embedded-graphics",
  "embedded-hal",
  "heapless",
+ "micromath 2.0.0",
  "proton-peripherals",
 ]
 
