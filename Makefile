@@ -51,6 +51,10 @@ test-embedded:
 	cd eurorack && DEFMT_LOG=info cargo +nightly test --test display
 	cd eurorack && DEFMT_LOG=info cargo +nightly test --test encoders
 
+.PHONY: test-ui
+test-ui:
+	cd ui && cargo +nightly run --example display
+
 .PHONY: flash
 flash:
 	cd eurorack && cargo +nightly run --bin firmware $(FLAGS)
