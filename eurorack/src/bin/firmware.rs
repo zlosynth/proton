@@ -125,11 +125,11 @@ mod app {
     #[task(local = [input_actions_consumer, state])]
     fn state(cx: state::Context) {
         let input_actions_consumer = cx.local.input_actions_consumer;
-        let state = cx.local.state;
-        let view = (&*state).into();
-        display::spawn(view).unwrap();
+
+        let mut state = cx.local.state;
 
         while let Some(action) = input_actions_consumer.dequeue() {
+            proton_ui::reducer::reduce(action, state);
             match action {
                 InputAction::AlphaClick => {
                     defmt::info!("ALPHA ON");
@@ -151,6 +151,9 @@ mod app {
                 }
             }
         }
+
+        let view = (&*state).into();
+        display::spawn(view).unwrap();
 
         state::spawn_after(1.millis()).unwrap();
     }
