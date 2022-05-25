@@ -8,10 +8,15 @@ mod app {
     use daisy::led::{Led, LedUser};
 
     use fugit::ExtU64;
-    use proton_eurorack::system::System;
+    use heapless::spsc::{Consumer, Producer, Queue};
     use systick_monotonic::Systick;
 
-    type Instrument = proton_lib::instrument::Instrument<proton_eurorack::system::display::Display>;
+    use proton_eurorack::system::display::Display;
+    use proton_eurorack::system::System;
+    use proton_ui::action::Action as InputAction;
+    use proton_ui::state::State;
+    use proton_ui::view::View;
+
     type Input = proton_ui::input::Input<
         proton_eurorack::system::encoder::AlphaRotaryPinA,
         proton_eurorack::system::encoder::AlphaRotaryPinB,
@@ -31,19 +36,21 @@ mod app {
     struct Local {
         led: LedUser,
         user_input: Input,
+        display: Display,
+        state: State,
+        input_actions_producer: Producer<'static, InputAction, 6>,
+        input_actions_consumer: Consumer<'static, InputAction, 6>,
     }
 
-    static mut INSTRUMENT: Option<Instrument> = None;
-
-    #[init]
+    #[init(local = [input_actions_queue: Queue<InputAction, 6> = Queue::new()])]
     fn init(cx: init::Context) -> (Shared, Local, init::Monotonics) {
         defmt::info!("INIT");
 
-        proton_eurorack::init_allocator();
+        let (input_actions_producer, input_actions_consumer) = cx.local.input_actions_queue.split();
 
         let system = System::init(cx.core, cx.device);
 
-        let display = system.display;
+        let mut display = system.display;
         let led = system.led;
         let mono = system.mono;
         let alpha_button = system.alpha_button;
@@ -53,66 +60,116 @@ mod app {
 
         let user_input = Input::new(alpha_button, alpha_rotary, beta_button, beta_rotary);
 
-        let mut instrument = Instrument::new();
-        instrument.register_display(display);
+        let state = {
+            use heapless::Vec;
+            use proton_ui::state::*;
+            State {
+                title: "Proton",
+                attributes: Vec::from_slice(&[
+                    Attribute {
+                        name: "scale",
+                        value: Value::Select(ValueSelect {
+                            available: Vec::from_slice(&["major", "minor"]).unwrap(),
+                            selected: 0,
+                        }),
+                    },
+                    Attribute {
+                        name: "root",
+                        value: Value::Select(ValueSelect {
+                            available: Vec::from_slice(&["c", "c#"]).unwrap(),
+                            selected: 1,
+                        }),
+                    },
+                    Attribute {
+                        name: "speed",
+                        value: Value::F32(1.0),
+                    },
+                ])
+                .unwrap(),
+                selected_attribute: 1,
+            }
+        };
+        let view = (&state).into();
+        proton_ui::display::draw(&mut display, &view).unwrap();
+        display.flush().unwrap();
 
-        unsafe { INSTRUMENT = Some(instrument) };
-
-        foo::spawn(true).unwrap();
+        indicator::spawn(true).unwrap();
         control::spawn().unwrap();
+        state::spawn().unwrap();
 
-        (Shared {}, Local { led, user_input }, init::Monotonics(mono))
+        (
+            Shared {},
+            Local {
+                led,
+                user_input,
+                display,
+                state,
+                input_actions_producer,
+                input_actions_consumer,
+            },
+            init::Monotonics(mono),
+        )
     }
 
-    #[task(local = [led])]
-    fn foo(cx: foo::Context, on: bool) {
-        if on {
-            cx.local.led.on();
-            foo::spawn_after(1.secs(), false).unwrap();
-        } else {
-            cx.local.led.off();
-            foo::spawn_after(1.secs(), true).unwrap();
-        }
-    }
-
-    #[task(local = [user_input])]
+    #[task(local = [user_input, input_actions_producer])]
     fn control(cx: control::Context) {
-        use proton_ui::action::Action;
-
-        let instrument = unsafe { INSTRUMENT.as_mut().unwrap() };
+        let input_actions_producer = cx.local.input_actions_producer;
 
         for action in cx.local.user_input.process() {
+            input_actions_producer.enqueue(action).unwrap();
+        }
+
+        control::spawn_after(1.millis()).unwrap();
+    }
+
+    #[task(local = [input_actions_consumer, state])]
+    fn state(cx: state::Context) {
+        let input_actions_consumer = cx.local.input_actions_consumer;
+        let state = cx.local.state;
+        let view = (&*state).into();
+        display::spawn(view).unwrap();
+
+        while let Some(action) = input_actions_consumer.dequeue() {
             match action {
-                Action::AlphaClick => {
+                InputAction::AlphaClick => {
                     defmt::info!("ALPHA ON");
-                    instrument.alpha_click();
                 }
-                Action::AlphaUp => {
+                InputAction::AlphaUp => {
                     defmt::info!("ALPHA CCW");
-                    instrument.alpha_up();
                 }
-                Action::AlphaDown => {
+                InputAction::AlphaDown => {
                     defmt::info!("ALPHA CW");
-                    instrument.alpha_down();
                 }
-                Action::BetaClick => {
+                InputAction::BetaClick => {
                     defmt::info!("BETA ON");
-                    instrument.beta_click();
                 }
-                Action::BetaUp => {
+                InputAction::BetaUp => {
                     defmt::info!("BETA CCW");
-                    instrument.beta_up();
                 }
-                Action::BetaDown => {
+                InputAction::BetaDown => {
                     defmt::info!("BETA CW");
-                    instrument.beta_down();
                 }
             }
         }
 
-        instrument.update_display();
-        instrument.mut_display().flush().unwrap();
+        state::spawn_after(1.millis()).unwrap();
+    }
 
-        control::spawn_after(1.millis()).unwrap();
+    #[task(local = [display])]
+    fn display(cx: display::Context, view: View) {
+        let display = cx.local.display;
+        proton_ui::display::draw(display, &view).unwrap();
+        display.flush().unwrap();
+    }
+
+    #[task(local = [led])]
+    fn indicator(cx: indicator::Context, on: bool) {
+        if on {
+            cx.local.led.on();
+            indicator::spawn_after(1.secs(), false).unwrap();
+        } else {
+            cx.local.led.off();
+            indicator::spawn_after(1.secs(), true).unwrap();
+        }
     }
 }

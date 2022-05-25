@@ -6,9 +6,10 @@ use embedded_graphics_simulator::{
 };
 use heapless::Vec;
 
-use proton_ui::display::*;
-use proton_ui::state::*;
 use proton_ui::action::Action;
+use proton_ui::display::*;
+use proton_ui::reducer;
+use proton_ui::state::*;
 
 fn main() -> Result<(), core::convert::Infallible> {
     let mut display: SimulatorDisplay<BinaryColor> =
@@ -16,7 +17,7 @@ fn main() -> Result<(), core::convert::Infallible> {
     let output_settings = OutputSettingsBuilder::new().scale(2).build();
     let mut window = Window::new("Fonts", &output_settings);
 
-    let state = State {
+    let mut state = State {
         title: "Proton",
         attributes: Vec::from_slice(&[
             Attribute {
@@ -51,16 +52,18 @@ fn main() -> Result<(), core::convert::Infallible> {
             match event {
                 SimulatorEvent::Quit => break 'running Ok(()),
                 SimulatorEvent::KeyDown { keycode, .. } => {
-                    let _action = match keycode {
+                    let action = match keycode {
                         Keycode::Left => Some(Action::BetaDown),
                         Keycode::Right => Some(Action::BetaUp),
                         Keycode::Up => Some(Action::AlphaUp),
                         Keycode::Down => Some(Action::AlphaDown),
                         _ => None,
                     };
-                    // reduce(action, &mut state);
-                    let view = (&state).into();
-                    draw(&mut display, &view)?;
+                    if let Some(action) = action {
+                        reducer::reduce(action, &mut state);
+                        let view = (&state).into();
+                        draw(&mut display, &view)?;
+                    }
                 }
                 _ => {}
             }

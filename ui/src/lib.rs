@@ -3,6 +3,7 @@
 pub mod action;
 pub mod display;
 pub mod input;
+pub mod reducer;
 pub mod state;
 pub mod view;
 

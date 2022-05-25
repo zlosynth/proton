@@ -29,16 +29,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "alloc-cortex-m"
-version = "0.4.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5069e21ec61f3b243a4a4c56d920d3206e6ee86022a67c23e9fe36eb60fc1efd"
-dependencies = [
- "cortex-m",
- "linked_list_allocator",
-]
-
-[[package]]
 name = "atomic-polyfill"
 version = "0.1.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -462,12 +452,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "349d5a591cd28b49e1d1037471617a32ddcda5731b99419008085f72d5a53836"
 
 [[package]]
-name = "linked_list_allocator"
-version = "0.8.11"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "822add9edb1860698b79522510da17bef885171f75aa395cff099d770c609c24"
-
-[[package]]
 name = "lock_api"
 version = "0.4.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -578,7 +562,6 @@ dependencies = [
 name = "proton-eurorack"
 version = "0.3.0"
 dependencies = [
- "alloc-cortex-m",
  "cortex-m",
  "cortex-m-rtic",
  "daisy",
@@ -588,6 +571,7 @@ dependencies = [
  "display-interface-spi",
  "embedded-graphics",
  "fugit",
+ "heapless",
  "panic-probe",
  "proton-lib",
  "proton-peripherals",
