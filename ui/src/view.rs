@@ -63,7 +63,7 @@ impl From<&state::Value> for Value {
             state::Value::Select(value_select) => {
                 Value::Str(value_select.available[value_select.selected])
             }
-            state::Value::F32(value) => Value::F32(*value),
+            state::Value::F32(value_f32) => Value::F32(value_f32.value),
         }
     }
 }
@@ -82,19 +82,31 @@ mod tests {
             attributes: Vec::from_slice(&[
                 state::Attribute {
                     name: "a1",
-                    value: state::Value::F32(1.0),
+                    value: state::Value::F32(state::ValueF32 {
+                        value: 1.0,
+                        step: 0.01,
+                    }),
                 },
                 state::Attribute {
                     name: "a2",
-                    value: state::Value::F32(1.0),
+                    value: state::Value::F32(state::ValueF32 {
+                        value: 1.0,
+                        step: 0.01,
+                    }),
                 },
                 state::Attribute {
                     name: "a3",
-                    value: state::Value::F32(1.0),
+                    value: state::Value::F32(state::ValueF32 {
+                        value: 1.0,
+                        step: 0.01,
+                    }),
                 },
                 state::Attribute {
                     name: "a4",
-                    value: state::Value::F32(1.0),
+                    value: state::Value::F32(state::ValueF32 {
+                        value: 1.0,
+                        step: 0.01,
+                    }),
                 },
                 state::Attribute {
                     name: "a5",
@@ -105,7 +117,10 @@ mod tests {
                 },
                 state::Attribute {
                     name: "a6",
-                    value: state::Value::F32(1.0),
+                    value: state::Value::F32(state::ValueF32 {
+                        value: 1.0,
+                        step: 0.01,
+                    }),
                 },
             ])
             .unwrap(),

@@ -42,15 +42,24 @@ mod tests {
             attributes: Vec::from_slice(&[
                 Attribute {
                     name: "a1",
-                    value: Value::F32(1.0),
+                    value: Value::F32(ValueF32 {
+                        value: 1.0,
+                        step: 0.01,
+                    }),
                 },
                 Attribute {
                     name: "a2",
-                    value: Value::F32(1.0),
+                    value: Value::F32(ValueF32 {
+                        value: 1.0,
+                        step: 0.01,
+                    }),
                 },
                 Attribute {
                     name: "a3",
-                    value: Value::F32(1.0),
+                    value: Value::F32(ValueF32 {
+                        value: 1.0,
+                        step: 0.01,
+                    }),
                 },
             ])
             .unwrap(),
@@ -71,15 +80,24 @@ mod tests {
             attributes: Vec::from_slice(&[
                 Attribute {
                     name: "a1",
-                    value: Value::F32(1.0),
+                    value: Value::F32(ValueF32 {
+                        value: 1.0,
+                        step: 0.01,
+                    }),
                 },
                 Attribute {
                     name: "a2",
-                    value: Value::F32(1.0),
+                    value: Value::F32(ValueF32 {
+                        value: 1.0,
+                        step: 0.01,
+                    }),
                 },
                 Attribute {
                     name: "a3",
-                    value: Value::F32(1.0),
+                    value: Value::F32(ValueF32 {
+                        value: 1.0,
+                        step: 0.01,
+                    }),
                 },
             ])
             .unwrap(),
@@ -100,15 +118,24 @@ mod tests {
             attributes: Vec::from_slice(&[
                 Attribute {
                     name: "a1",
-                    value: Value::F32(1.0),
+                    value: Value::F32(ValueF32 {
+                        value: 1.0,
+                        step: 0.01,
+                    }),
                 },
                 Attribute {
                     name: "a2",
-                    value: Value::F32(1.0),
+                    value: Value::F32(ValueF32 {
+                        value: 1.0,
+                        step: 0.01,
+                    }),
                 },
                 Attribute {
                     name: "a3",
-                    value: Value::F32(1.0),
+                    value: Value::F32(ValueF32 {
+                        value: 1.0,
+                        step: 0.01,
+                    }),
                 },
             ])
             .unwrap(),
@@ -129,15 +156,24 @@ mod tests {
             attributes: Vec::from_slice(&[
                 Attribute {
                     name: "a1",
-                    value: Value::F32(1.0),
+                    value: Value::F32(ValueF32 {
+                        value: 1.0,
+                        step: 0.01,
+                    }),
                 },
                 Attribute {
                     name: "a2",
-                    value: Value::F32(1.0),
+                    value: Value::F32(ValueF32 {
+                        value: 1.0,
+                        step: 0.01,
+                    }),
                 },
                 Attribute {
                     name: "a3",
-                    value: Value::F32(1.0),
+                    value: Value::F32(ValueF32 {
+                        value: 1.0,
+                        step: 0.01,
+                    }),
                 },
             ])
             .unwrap(),

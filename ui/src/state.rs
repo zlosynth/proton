@@ -30,7 +30,7 @@ pub struct Attribute {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Value {
     Select(ValueSelect),
-    F32(f32),
+    F32(ValueF32),
 }
 
 #[derive(Clone, Debug)]
@@ -44,4 +44,11 @@ impl defmt::Format for ValueSelect {
     fn format(&self, fmt: defmt::Formatter) {
         defmt::write!(fmt, "ValueSelect({:?})", self.available[self.selected]);
     }
+}
+
+#[derive(Copy, Clone, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+pub struct ValueF32 {
+    pub value: f32,
+    pub step: f32,
 }

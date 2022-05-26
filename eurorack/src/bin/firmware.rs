@@ -82,7 +82,10 @@ mod app {
                     },
                     Attribute {
                         name: "speed",
-                        value: Value::F32(1.0),
+                        value: Value::F32(ValueF32 {
+                            value: 0.3,
+                            step: 0.01,
+                        }),
                     },
                 ])
                 .unwrap(),

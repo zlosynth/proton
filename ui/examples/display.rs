@@ -36,7 +36,10 @@ fn main() -> Result<(), core::convert::Infallible> {
             },
             Attribute {
                 name: "speed",
-                value: Value::F32(1.0),
+                value: Value::F32(ValueF32 {
+                    value: 0.1,
+                    step: 0.01,
+                }),
             },
         ])
         .unwrap(),
