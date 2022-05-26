@@ -596,6 +596,7 @@ dependencies = [
 name = "proton-peripherals"
 version = "0.3.0"
 dependencies = [
+ "defmt",
  "either",
  "embedded-hal",
 ]
@@ -604,6 +605,7 @@ dependencies = [
 name = "proton-ui"
 version = "0.3.0"
 dependencies = [
+ "defmt",
  "embedded-graphics",
  "embedded-hal",
  "heapless",

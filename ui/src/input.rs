@@ -1,15 +1,15 @@
 use embedded_hal::digital::v2::InputPin;
 use heapless::Vec;
 use proton_peripherals::button::Button;
-use proton_peripherals::detent_rotary::{DetentRotary, Direction};
+use proton_peripherals::rotary::{Direction, Rotary};
 
 use crate::action::Action;
 
 pub struct Input<A1, B1, C1, A2, B2, C2> {
     alpha_button: Button<10, C1>,
-    alpha_rotary: DetentRotary<A1, B1>,
+    alpha_rotary: Rotary<A1, B1>,
     beta_button: Button<10, C2>,
-    beta_rotary: DetentRotary<A2, B2>,
+    beta_rotary: Rotary<A2, B2>,
 }
 
 impl<A1, B1, C1, A2, B2, C2> Input<A1, B1, C1, A2, B2, C2>
@@ -23,9 +23,9 @@ where
 {
     pub fn new(
         alpha_button: Button<10, C1>,
-        alpha_rotary: DetentRotary<A1, B1>,
+        alpha_rotary: Rotary<A1, B1>,
         beta_button: Button<10, C2>,
-        beta_rotary: DetentRotary<A2, B2>,
+        beta_rotary: Rotary<A2, B2>,
     ) -> Self {
         Self {
             alpha_button,

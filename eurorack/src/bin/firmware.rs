@@ -3,7 +3,7 @@
 
 use proton_eurorack as _; // global logger + panicking-behavior
 
-#[rtic::app(device = stm32h7xx_hal::pac, peripherals = true, dispatchers = [EXTI0])]
+#[rtic::app(device = stm32h7xx_hal::pac, peripherals = true, dispatchers = [EXTI0, EXTI1])]
 mod app {
     use daisy::led::{Led, LedUser};
 
@@ -111,7 +111,7 @@ mod app {
         )
     }
 
-    #[task(local = [user_input, input_actions_producer])]
+    #[task(local = [user_input, input_actions_producer], priority = 2)]
     fn control(cx: control::Context) {
         let input_actions_producer = cx.local.input_actions_producer;
 
@@ -126,7 +126,7 @@ mod app {
     fn state(cx: state::Context) {
         let input_actions_consumer = cx.local.input_actions_consumer;
 
-        let mut state = cx.local.state;
+        let state = cx.local.state;
 
         while let Some(action) = input_actions_consumer.dequeue() {
             proton_ui::reducer::reduce(action, state);

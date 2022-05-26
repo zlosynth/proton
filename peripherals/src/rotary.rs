@@ -8,8 +8,9 @@ use embedded_hal::digital::v2::InputPin;
 pub struct Rotary<A, B> {
     pin_a: A,
     pin_b: B,
-    position: u8,
+    traveled: i8,
     transition: u8,
+    direction: Direction,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -39,8 +40,9 @@ where
         Self {
             pin_a,
             pin_b,
-            position: 0u8,
+            traveled: 0i8,
             transition: 0u8,
+            direction: Direction::None,
         }
     }
 
@@ -70,17 +72,28 @@ where
 
         self.transition = transition;
 
-        self.position = match self.transition.into() {
-            Direction::Clockwise => self.position.wrapping_add(1),
-            Direction::CounterClockwise => self.position.wrapping_sub(1),
-            _ => self.position,
+        self.traveled = match self.transition.into() {
+            Direction::Clockwise => self.traveled + 1,
+            Direction::CounterClockwise => self.traveled - 1,
+            _ => self.traveled,
         };
+
+        // if traveled over a detent, record movement
+        if self.traveled == 3 {
+            self.direction = self.transition.into();
+            self.traveled = -1;
+        } else if self.traveled == -3 {
+            self.direction = self.transition.into();
+            self.traveled = 1;
+        } else {
+            self.direction = Direction::None;
+        }
 
         Ok(())
     }
 
     pub fn direction(&self) -> Direction {
-        self.transition.into()
+        self.direction
     }
 }
 
@@ -116,16 +129,16 @@ mod tests {
 
         let states = [
             // B A Direction
-            (false, false, None),
-            (false, true, Clockwise),
-            (true, true, Clockwise),
-            (true, false, Clockwise),
-            (false, false, Clockwise),
-            (true, false, CounterClockwise),
-            (true, true, CounterClockwise),
-            (true, true, None),
-            (false, true, CounterClockwise),
-            (false, false, CounterClockwise),
+            (false, false, None),            // 0
+            (false, true, None),             // >
+            (true, true, None),              // >
+            (true, false, Clockwise),        // >
+            (false, false, None),            // >, 0
+            (true, false, None),             // <
+            (true, true, None),              // <
+            (true, true, None),              // _
+            (false, true, CounterClockwise), // <
+            (false, false, None),            // <, 0
         ];
 
         let a = TestPin::new();

@@ -15,8 +15,3 @@ pub fn reduce(action: Action, state: &mut State) {
         Action::BetaClick => (),
     }
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-}

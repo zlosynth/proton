@@ -51,13 +51,11 @@ impl System {
         let alpha_rotary = AlphaRotary::new(
             pins.GPIO.PIN_21.into_pull_up_input(),
             pins.GPIO.PIN_24.into_pull_up_input(),
-            4,
         );
         let beta_button = BetaButton::new(pins.GPIO.PIN_12.into_pull_up_input());
         let beta_rotary = BetaRotary::new(
             pins.GPIO.PIN_14.into_pull_up_input(),
             pins.GPIO.PIN_13.into_pull_up_input(),
-            4,
         );
 
         Self {

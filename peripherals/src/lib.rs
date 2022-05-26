@@ -1,7 +1,6 @@
 #![no_std]
 
 pub mod button;
-pub mod detent_rotary;
+pub mod rotary;
 
 mod debounce_buffer;
-mod rotary;
