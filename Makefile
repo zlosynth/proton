@@ -21,6 +21,7 @@ format:
 clippy:
 	cd puredata && cargo +nightly clippy --all -- -D warnings
 	cd eurorack && cargo +nightly clippy --all -- -D warnings
+	cd eurorack && cargo +nightly check --test display --test encoders
 	cd peripherals && cargo +nightly clippy --all --features defmt -- -D warnings
 	cd ui && cargo +nightly clippy --all --features defmt -- -D warnings
 	cd primitives && cargo +nightly clippy --all -- -D warnings

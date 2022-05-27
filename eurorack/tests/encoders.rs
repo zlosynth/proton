@@ -26,7 +26,7 @@ mod tests {
 
     #[test]
     fn encoder_alpha_can_be_turned_clockwise(system: &mut System) {
-        use proton_peripherals::detent_rotary::Direction;
+        use proton_peripherals::rotary::Direction;
         defmt::info!("ACTION REQUIRED: Turn Alpha clockwise");
         loop {
             system.alpha_rotary.sample().unwrap();
@@ -42,7 +42,7 @@ mod tests {
 
     #[test]
     fn encoder_alpha_can_be_turned_counter_clockwise(system: &mut System) {
-        use proton_peripherals::detent_rotary::Direction;
+        use proton_peripherals::rotary::Direction;
         defmt::info!("ACTION REQUIRED: Turn Alpha counter clockwise");
         loop {
             system.alpha_rotary.sample().unwrap();
@@ -67,7 +67,7 @@ mod tests {
 
     #[test]
     fn encoder_beta_can_be_turned_clockwise(system: &mut System) {
-        use proton_peripherals::detent_rotary::Direction;
+        use proton_peripherals::rotary::Direction;
         defmt::info!("ACTION REQUIRED: Turn Beta clockwise");
         loop {
             system.beta_rotary.sample().unwrap();
@@ -83,7 +83,7 @@ mod tests {
 
     #[test]
     fn encoder_beta_can_be_turned_counter_clockwise(system: &mut System) {
-        use proton_peripherals::detent_rotary::Direction;
+        use proton_peripherals::rotary::Direction;
         defmt::info!("ACTION REQUIRED: Turn Beta counter clockwise");
         loop {
             system.beta_rotary.sample().unwrap();
