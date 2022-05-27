@@ -151,9 +151,9 @@ mod tests {
         let b = TestPin::new();
         let mut rotary = Rotary::new(a, b);
 
-        for (b_high, a_high, direction) in states {
-            rotary.pin_a().high = a_high;
-            rotary.pin_b().high = b_high;
+        for (b_low, a_low, direction) in states {
+            rotary.pin_a().high = !a_low;
+            rotary.pin_b().high = !b_low;
             rotary.sample().unwrap();
             assert_eq!(rotary.direction(), direction);
         }

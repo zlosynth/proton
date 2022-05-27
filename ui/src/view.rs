@@ -75,57 +75,22 @@ mod tests {
     #[test]
     fn given_state_when_converted_into_view_it_should_provide_expected_result() {
         use crate::state;
-        use heapless::Vec;
 
-        let source_state = state::State {
-            title: "Title",
-            attributes: Vec::from_slice(&[
-                state::Attribute {
-                    name: "a1",
-                    value: state::Value::F32(state::ValueF32 {
-                        value: 1.0,
-                        step: 0.01,
-                    }),
-                },
-                state::Attribute {
-                    name: "a2",
-                    value: state::Value::F32(state::ValueF32 {
-                        value: 1.0,
-                        step: 0.01,
-                    }),
-                },
-                state::Attribute {
-                    name: "a3",
-                    value: state::Value::F32(state::ValueF32 {
-                        value: 1.0,
-                        step: 0.01,
-                    }),
-                },
-                state::Attribute {
-                    name: "a4",
-                    value: state::Value::F32(state::ValueF32 {
-                        value: 1.0,
-                        step: 0.01,
-                    }),
-                },
-                state::Attribute {
-                    name: "a5",
-                    value: state::Value::Select(state::ValueSelect {
-                        available: Vec::from_slice(&["v1", "v2"]).unwrap(),
-                        selected: 1,
-                    }),
-                },
-                state::Attribute {
-                    name: "a6",
-                    value: state::Value::F32(state::ValueF32 {
-                        value: 1.0,
-                        step: 0.01,
-                    }),
-                },
+        let source_state = state::State::new("Title")
+            .with_attributes(&[
+                state::Attribute::new("a1").with_value_f32(state::ValueF32::new(1.0)),
+                state::Attribute::new("a2").with_value_f32(state::ValueF32::new(1.0)),
+                state::Attribute::new("a3").with_value_f32(state::ValueF32::new(1.0)),
+                state::Attribute::new("a4").with_value_f32(state::ValueF32::new(1.0)),
+                state::Attribute::new("a5").with_value_select(
+                    state::ValueSelect::new(&["v1", "v2"])
+                        .unwrap()
+                        .with_selected(1),
+                ),
+                state::Attribute::new("a6").with_value_f32(state::ValueF32::new(1.0)),
             ])
-            .unwrap(),
-            selected_attribute: 5,
-        };
+            .unwrap()
+            .with_selected_attribute(5);
 
         let expected_view = View {
             title: "Title",

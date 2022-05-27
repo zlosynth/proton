@@ -35,36 +35,15 @@ mod tests {
     #[test]
     fn when_alpha_turns_up_on_middle_attribute_it_scrolls_to_previous_attribute() {
         use crate::state::*;
-        use heapless::Vec;
 
-        let mut state = State {
-            title: "Proton",
-            attributes: Vec::from_slice(&[
-                Attribute {
-                    name: "a1",
-                    value: Value::F32(ValueF32 {
-                        value: 1.0,
-                        step: 0.01,
-                    }),
-                },
-                Attribute {
-                    name: "a2",
-                    value: Value::F32(ValueF32 {
-                        value: 1.0,
-                        step: 0.01,
-                    }),
-                },
-                Attribute {
-                    name: "a3",
-                    value: Value::F32(ValueF32 {
-                        value: 1.0,
-                        step: 0.01,
-                    }),
-                },
+        let mut state = State::new("Proton")
+            .with_attributes(&[
+                Attribute::new("a1"),
+                Attribute::new("a2"),
+                Attribute::new("a3"),
             ])
-            .unwrap(),
-            selected_attribute: 1,
-        };
+            .unwrap()
+            .with_selected_attribute(1);
         reduce(Action::AlphaUp, &mut state);
 
         assert_eq!(state.selected_attribute, 0);
@@ -73,36 +52,15 @@ mod tests {
     #[test]
     fn when_alpha_turns_up_on_first_attribute_it_scrolls_to_last_attribute() {
         use crate::state::*;
-        use heapless::Vec;
 
-        let mut state = State {
-            title: "Proton",
-            attributes: Vec::from_slice(&[
-                Attribute {
-                    name: "a1",
-                    value: Value::F32(ValueF32 {
-                        value: 1.0,
-                        step: 0.01,
-                    }),
-                },
-                Attribute {
-                    name: "a2",
-                    value: Value::F32(ValueF32 {
-                        value: 1.0,
-                        step: 0.01,
-                    }),
-                },
-                Attribute {
-                    name: "a3",
-                    value: Value::F32(ValueF32 {
-                        value: 1.0,
-                        step: 0.01,
-                    }),
-                },
+        let mut state = State::new("Proton")
+            .with_attributes(&[
+                Attribute::new("a1"),
+                Attribute::new("a2"),
+                Attribute::new("a3"),
             ])
-            .unwrap(),
-            selected_attribute: 0,
-        };
+            .unwrap()
+            .with_selected_attribute(0);
         reduce(Action::AlphaUp, &mut state);
 
         assert_eq!(state.selected_attribute, 2);
@@ -111,36 +69,15 @@ mod tests {
     #[test]
     fn when_alpha_turns_down_on_middle_attribute_it_scrolls_to_next_attribute() {
         use crate::state::*;
-        use heapless::Vec;
 
-        let mut state = State {
-            title: "Proton",
-            attributes: Vec::from_slice(&[
-                Attribute {
-                    name: "a1",
-                    value: Value::F32(ValueF32 {
-                        value: 1.0,
-                        step: 0.01,
-                    }),
-                },
-                Attribute {
-                    name: "a2",
-                    value: Value::F32(ValueF32 {
-                        value: 1.0,
-                        step: 0.01,
-                    }),
-                },
-                Attribute {
-                    name: "a3",
-                    value: Value::F32(ValueF32 {
-                        value: 1.0,
-                        step: 0.01,
-                    }),
-                },
+        let mut state = State::new("Proton")
+            .with_attributes(&[
+                Attribute::new("a1"),
+                Attribute::new("a2"),
+                Attribute::new("a3"),
             ])
-            .unwrap(),
-            selected_attribute: 1,
-        };
+            .unwrap()
+            .with_selected_attribute(1);
         reduce(Action::AlphaDown, &mut state);
 
         assert_eq!(state.selected_attribute, 2);
@@ -149,38 +86,39 @@ mod tests {
     #[test]
     fn when_alpha_turns_down_on_last_attribute_it_scrolls_to_first_attribute() {
         use crate::state::*;
-        use heapless::Vec;
 
-        let mut state = State {
-            title: "Proton",
-            attributes: Vec::from_slice(&[
-                Attribute {
-                    name: "a1",
-                    value: Value::F32(ValueF32 {
-                        value: 1.0,
-                        step: 0.01,
-                    }),
-                },
-                Attribute {
-                    name: "a2",
-                    value: Value::F32(ValueF32 {
-                        value: 1.0,
-                        step: 0.01,
-                    }),
-                },
-                Attribute {
-                    name: "a3",
-                    value: Value::F32(ValueF32 {
-                        value: 1.0,
-                        step: 0.01,
-                    }),
-                },
+        let mut state = State::new("Proton")
+            .with_attributes(&[
+                Attribute::new("a1"),
+                Attribute::new("a2"),
+                Attribute::new("a3"),
             ])
-            .unwrap(),
-            selected_attribute: 2,
-        };
+            .unwrap()
+            .with_selected_attribute(2);
         reduce(Action::AlphaDown, &mut state);
 
         assert_eq!(state.selected_attribute, 0);
     }
+
+    // #[test]
+    // fn given_selected_f32_attribute_in_middle_when_beta_turns_down_it_decreases_the_value_by_set_step(
+    // ) {
+    //     todo!();
+    // }
+
+    // #[test]
+    // fn given_selected_f32_attribute_on_bottom_when_beta_turns_down_it_does_not_go_below_zero() {
+    //     todo!();
+    // }
+
+    // #[test]
+    // fn given_selected_f32_attribute_in_middle_when_beta_turns_up_it_increases_the_value_by_set_step(
+    // ) {
+    //     todo!();
+    // }
+
+    // #[test]
+    // fn given_selected_f32_attribute_on_top_when_beta_turns_up_it_does_not_go_above_one() {
+    //     todo!();
+    // }
 }

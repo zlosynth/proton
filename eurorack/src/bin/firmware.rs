@@ -61,36 +61,16 @@ mod app {
         let user_input = Input::new(alpha_button, alpha_rotary, beta_button, beta_rotary);
 
         let state = {
-            use heapless::Vec;
             use proton_ui::state::*;
-            State {
-                title: "Proton",
-                attributes: Vec::from_slice(&[
-                    Attribute {
-                        name: "scale",
-                        value: Value::Select(ValueSelect {
-                            available: Vec::from_slice(&["major", "minor"]).unwrap(),
-                            selected: 0,
-                        }),
-                    },
-                    Attribute {
-                        name: "root",
-                        value: Value::Select(ValueSelect {
-                            available: Vec::from_slice(&["c", "c#"]).unwrap(),
-                            selected: 1,
-                        }),
-                    },
-                    Attribute {
-                        name: "speed",
-                        value: Value::F32(ValueF32 {
-                            value: 0.3,
-                            step: 0.01,
-                        }),
-                    },
+            State::new("Proton")
+                .with_attributes(&[
+                    Attribute::new("scale")
+                        .with_value_select(ValueSelect::new(&["major", "minor"]).unwrap()),
+                    Attribute::new("root")
+                        .with_value_select(ValueSelect::new(&["c", "c#"]).unwrap()),
+                    Attribute::new("speed").with_value_f32(ValueF32::new(0.3)),
                 ])
-                .unwrap(),
-                selected_attribute: 1,
-            }
+                .unwrap()
         };
         let view = (&state).into();
         proton_ui::display::draw(&mut display, &view).unwrap();
