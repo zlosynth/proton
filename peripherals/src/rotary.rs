@@ -78,6 +78,12 @@ where
             _ => self.traveled,
         };
 
+        // in case some samples were missed and corrupted the traveled tracker,
+        // reset to resting point
+        if self.transition & 0b1100 == 0b0000 {
+            self.traveled = 0;
+        }
+
         // if traveled over a detent, record movement
         if self.traveled == 3 {
             self.direction = self.transition.into();
