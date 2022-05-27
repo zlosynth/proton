@@ -106,7 +106,7 @@ to be installed in the system.
 To attach the debugger to a unit test run:
 
 ```sh
-make debug-test
+make debug-test WHAT=ui
 ```
 
 After the debugger is open, set breakpoints, type `r` into the GDB console and

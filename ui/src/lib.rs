@@ -1,5 +1,9 @@
 #![no_std]
 
+#[cfg(test)]
+#[macro_use]
+extern crate approx;
+
 pub mod action;
 pub mod display;
 pub mod input;

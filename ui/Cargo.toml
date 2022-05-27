@@ -21,6 +21,7 @@ optional = true
 
 [dev-dependencies]
 embedded-graphics-simulator = "0.3"
+approx = "0.4"
 
 [features]
 defmt = ["dep:defmt", "proton-peripherals/defmt"]

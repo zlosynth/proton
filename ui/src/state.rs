@@ -136,4 +136,9 @@ impl ValueF32 {
         self.value = value;
         self
     }
+
+    pub fn with_step(mut self, step: f32) -> Self {
+        self.step = step;
+        self
+    }
 }
