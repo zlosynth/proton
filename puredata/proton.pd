@@ -1,4 +1,4 @@
-#N canvas 1282 74 636 1004 12;
+#N canvas 2 74 1916 1004 12;
 #X obj 60 165 dac~;
 #X obj 60 140 *~ 0.6;
 #X obj 63 67 hsl 256 15 20 21000 1 0 mode_\$1 empty empty -2 -8 0 10
@@ -142,24 +142,21 @@
 #X obj 210 134 tabwrite~ scope;
 #X obj 210 109 metro 500;
 #X obj 60 114 proton~;
-#X msg 164 239 ad;
-#X msg 164 215 ac;
-#X msg 164 191 au;
-#X msg 199 216 ah;
+#X msg 251 242 ad;
+#X msg 251 218 ac;
+#X msg 251 194 au;
 #X msg 304 194 bu;
 #X msg 305 218 bc;
 #X msg 305 242 bd;
-#X msg 340 218 bh;
 #X text 326 65 control1;
 #X msg 60 87 control1 \$1;
 #X obj 63 22 hsl 256 15 20 21000 1 0 mode_\$1 empty empty -2 -8 0 10
 -262144 -1 -1 0 1;
 #X text 326 22 control2;
 #X msg 60 42 control2 \$1;
-#X msg 249 216 abc;
 #X connect 1 0 0 0;
 #X connect 1 0 0 1;
-#X connect 2 0 17 0;
+#X connect 2 0 15 0;
 #X connect 3 0 6 0;
 #X connect 6 0 5 0;
 #X connect 7 0 1 0;
@@ -170,9 +167,6 @@
 #X connect 11 0 7 0;
 #X connect 12 0 7 0;
 #X connect 13 0 7 0;
-#X connect 14 0 7 0;
 #X connect 15 0 7 0;
-#X connect 17 0 7 0;
-#X connect 18 0 20 0;
-#X connect 20 0 7 0;
-#X connect 21 0 7 0;
+#X connect 16 0 18 0;
+#X connect 18 0 7 0;

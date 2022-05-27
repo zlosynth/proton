@@ -16,11 +16,17 @@ use embedded_graphics_core::geometry::Size;
 use embedded_graphics_core::pixelcolor::BinaryColor;
 use embedded_graphics_simulator::{OutputSettingsBuilder, SimulatorDisplay, Window};
 
-use proton_lib::instrument::Instrument;
+use proton_ui::action::Action;
+use proton_ui::display::draw as draw_display;
+use proton_ui::reducer;
+use proton_ui::state::*;
+
+pub type Display = SimulatorDisplay<BinaryColor>;
 
 static mut CLASS: Option<*mut pd_sys::_class> = None;
-static mut INSTRUMENT: Option<Instrument<SimulatorDisplay<BinaryColor>>> = None;
+static mut STATE: Option<State> = None;
 static mut WINDOW: Option<Window> = None;
+static mut DISPLAY: Option<Display> = None;
 
 #[repr(C)]
 struct Class {
@@ -42,29 +48,33 @@ pub unsafe extern "C" fn proton_tilde_setup() {
     );
 
     let mut window = Window::new("", &OutputSettingsBuilder::new().scale(2).build());
-    let mut instrument = Instrument::new();
+    let mut display = SimulatorDisplay::new(Size::new(128, 64));
 
-    let display = SimulatorDisplay::new(Size::new(128, 64));
-    instrument.register_display(display);
-
-    instrument.update_display();
-    window.update(instrument.mut_display());
+    let state = State::new("Proton")
+        .with_attributes(&[
+            Attribute::new("scale")
+                .with_value_select(ValueSelect::new(&["major", "minor"]).unwrap()),
+            Attribute::new("root").with_value_select(ValueSelect::new(&["c", "c#"]).unwrap()),
+            Attribute::new("speed").with_value_f32(ValueF32::new(0.0)),
+        ])
+        .unwrap();
+    let view = (&state).into();
+    draw_display(&mut display, &view).unwrap();
+    window.update(&display);
 
     register_float_method(class, "control1", set_control1);
     register_float_method(class, "control2", set_control2);
     register_symbol_method(class, "au", alpha_up);
     register_symbol_method(class, "ad", alpha_down);
     register_symbol_method(class, "ac", alpha_click);
-    register_symbol_method(class, "ah", alpha_hold);
     register_symbol_method(class, "bu", beta_up);
     register_symbol_method(class, "bd", beta_down);
     register_symbol_method(class, "bc", beta_click);
-    register_symbol_method(class, "bh", beta_hold);
-    register_symbol_method(class, "abc", both_click);
 
     CLASS = Some(class);
-    INSTRUMENT = Some(instrument);
+    STATE = Some(state);
     WINDOW = Some(window);
+    DISPLAY = Some(display);
 }
 
 unsafe fn create_class() -> *mut pd_sys::_class {
@@ -123,71 +133,47 @@ unsafe fn register_symbol_method(
     );
 }
 
-unsafe extern "C" fn set_control1(_class: *mut Class, value: pd_sys::t_float) {
-    INSTRUMENT
-        .as_mut()
-        .unwrap()
-        .set_control1(value.clamp(0.0, 21000.0));
+unsafe extern "C" fn set_control1(_class: *mut Class, _value: pd_sys::t_float) {
+    // TODO
 }
 
-unsafe extern "C" fn set_control2(_class: *mut Class, value: pd_sys::t_float) {
-    INSTRUMENT
-        .as_mut()
-        .unwrap()
-        .set_control2(value.clamp(0.0, 21000.0));
+unsafe extern "C" fn set_control2(_class: *mut Class, _value: pd_sys::t_float) {
+    // TODO
 }
 
 unsafe extern "C" fn alpha_up(_class: *mut Class) {
-    INSTRUMENT.as_mut().unwrap().alpha_up();
+    reducer::reduce(Action::AlphaUp, STATE.as_mut().unwrap());
     update_display();
 }
 
 unsafe extern "C" fn alpha_down(_class: *mut Class) {
-    INSTRUMENT.as_mut().unwrap().alpha_down();
+    reducer::reduce(Action::AlphaDown, STATE.as_mut().unwrap());
     update_display();
 }
 
 unsafe extern "C" fn alpha_click(_class: *mut Class) {
-    INSTRUMENT.as_mut().unwrap().alpha_click();
-    update_display();
-}
-
-unsafe extern "C" fn alpha_hold(_class: *mut Class) {
-    INSTRUMENT.as_mut().unwrap().alpha_hold();
+    reducer::reduce(Action::AlphaClick, STATE.as_mut().unwrap());
     update_display();
 }
 
 unsafe extern "C" fn beta_up(_class: *mut Class) {
-    INSTRUMENT.as_mut().unwrap().beta_up();
+    reducer::reduce(Action::BetaUp, STATE.as_mut().unwrap());
     update_display();
 }
 
 unsafe extern "C" fn beta_down(_class: *mut Class) {
-    INSTRUMENT.as_mut().unwrap().beta_down();
+    reducer::reduce(Action::BetaDown, STATE.as_mut().unwrap());
     update_display();
 }
 
 unsafe extern "C" fn beta_click(_class: *mut Class) {
-    INSTRUMENT.as_mut().unwrap().beta_click();
-    update_display();
-}
-
-unsafe extern "C" fn beta_hold(_class: *mut Class) {
-    INSTRUMENT.as_mut().unwrap().beta_hold();
-    update_display();
-}
-
-unsafe extern "C" fn both_click(_class: *mut Class) {
-    INSTRUMENT.as_mut().unwrap().both_click();
+    reducer::reduce(Action::BetaClick, STATE.as_mut().unwrap());
     update_display();
 }
 
 unsafe extern "C" fn update_display() {
-    INSTRUMENT.as_mut().unwrap().update_display();
-    WINDOW
-        .as_mut()
-        .unwrap()
-        .update(INSTRUMENT.as_mut().unwrap().mut_display());
+    draw_display(DISPLAY.as_mut().unwrap(), &STATE.as_ref().unwrap().into()).unwrap();
+    WINDOW.as_mut().unwrap().update(DISPLAY.as_mut().unwrap());
 }
 
 unsafe fn perform(
@@ -199,10 +185,7 @@ unsafe fn perform(
     const BUFFER_LEN: usize = 32;
     assert!(outlets[0].len() % BUFFER_LEN == 0);
 
-    for chunk_index in 0..outlets[0].len() / BUFFER_LEN {
-        INSTRUMENT.as_mut().unwrap().tick();
-        let buffer = INSTRUMENT.as_mut().unwrap().get_audio();
-        let start = chunk_index * BUFFER_LEN;
-        outlets[0][start..(BUFFER_LEN + start)].clone_from_slice(&buffer[..BUFFER_LEN]);
+    for _chunk_index in 0..outlets[0].len() / BUFFER_LEN {
+        // TODO
     }
 }

@@ -13,7 +13,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 pd-sys = "0.1.0"
-proton-lib = { path = "../lib" }
+proton-ui = { path = "../ui" }
 field-offset = "0.3"
 embedded-graphics-simulator = "0.3"
 embedded-graphics-core = "0.3"
