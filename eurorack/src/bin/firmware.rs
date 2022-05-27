@@ -14,6 +14,8 @@ mod app {
     use proton_eurorack::system::display::Display;
     use proton_eurorack::system::System;
     use proton_ui::action::Action as InputAction;
+    use proton_ui::display::draw as draw_view_on_display;
+    use proton_ui::reducer;
     use proton_ui::state::State;
     use proton_ui::view::View;
 
@@ -50,7 +52,7 @@ mod app {
 
         let system = System::init(cx.core, cx.device);
 
-        let mut display = system.display;
+        let display = system.display;
         let led = system.led;
         let mono = system.mono;
 
@@ -79,12 +81,11 @@ mod app {
                 .unwrap()
         };
         let view = (&state).into();
-        proton_ui::display::draw(&mut display, &view).unwrap();
-        display.flush().unwrap();
 
-        indicator::spawn(true).unwrap();
-        control::spawn().unwrap();
-        state::spawn().unwrap();
+        update_display::spawn(view).unwrap();
+        set_indicator::spawn(true).unwrap();
+        read_controls::spawn().unwrap();
+        update_state::spawn().unwrap();
 
         (
             Shared {},
@@ -101,24 +102,24 @@ mod app {
     }
 
     #[task(local = [user_input, input_actions_producer], priority = 2)]
-    fn control(cx: control::Context) {
+    fn read_controls(cx: read_controls::Context) {
         let input_actions_producer = cx.local.input_actions_producer;
 
         for action in cx.local.user_input.process() {
             input_actions_producer.enqueue(action).unwrap();
         }
 
-        control::spawn_after(1.millis()).unwrap();
+        read_controls::spawn_after(1.millis()).unwrap();
     }
 
     #[task(local = [input_actions_consumer, state])]
-    fn state(cx: state::Context) {
+    fn update_state(cx: update_state::Context) {
         let input_actions_consumer = cx.local.input_actions_consumer;
 
         let state = cx.local.state;
 
         while let Some(action) = input_actions_consumer.dequeue() {
-            proton_ui::reducer::reduce(action, state);
+            reducer::reduce(action, state);
             match action {
                 InputAction::AlphaClick => {
                     defmt::info!("ALPHA ON");
@@ -142,26 +143,26 @@ mod app {
         }
 
         let view = (&*state).into();
-        display::spawn(view).unwrap();
+        update_display::spawn(view).unwrap();
 
-        state::spawn_after(1.millis()).unwrap();
+        update_state::spawn_after(1.millis()).unwrap();
     }
 
     #[task(local = [display])]
-    fn display(cx: display::Context, view: View) {
+    fn update_display(cx: update_display::Context, view: View) {
         let display = cx.local.display;
-        proton_ui::display::draw(display, &view).unwrap();
+        draw_view_on_display(display, &view).unwrap();
         display.flush().unwrap();
     }
 
     #[task(local = [led])]
-    fn indicator(cx: indicator::Context, on: bool) {
+    fn set_indicator(cx: set_indicator::Context, on: bool) {
         if on {
             cx.local.led.on();
-            indicator::spawn_after(1.secs(), false).unwrap();
+            set_indicator::spawn_after(1.secs(), false).unwrap();
         } else {
             cx.local.led.off();
-            indicator::spawn_after(1.secs(), true).unwrap();
+            set_indicator::spawn_after(1.secs(), true).unwrap();
         }
     }
 }
