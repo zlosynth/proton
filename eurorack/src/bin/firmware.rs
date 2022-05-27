@@ -120,26 +120,6 @@ mod app {
 
         while let Some(action) = input_actions_consumer.dequeue() {
             reducer::reduce(action, state);
-            match action {
-                InputAction::AlphaClick => {
-                    defmt::info!("ALPHA ON");
-                }
-                InputAction::AlphaUp => {
-                    defmt::info!("ALPHA CCW");
-                }
-                InputAction::AlphaDown => {
-                    defmt::info!("ALPHA CW");
-                }
-                InputAction::BetaClick => {
-                    defmt::info!("BETA ON");
-                }
-                InputAction::BetaUp => {
-                    defmt::info!("BETA CCW");
-                }
-                InputAction::BetaDown => {
-                    defmt::info!("BETA CW");
-                }
-            }
         }
 
         let view = (&*state).into();
