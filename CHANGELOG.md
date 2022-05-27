@@ -8,6 +8,7 @@ backwards compatibility.
 
 * Integrate display in the firmware.
 * Use left encoder to move through attributes.
+* Use right encoder to adjust attributes.
 
 ## 0.3.0
 

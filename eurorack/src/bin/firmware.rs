@@ -64,10 +64,15 @@ mod app {
             use proton_ui::state::*;
             State::new("Proton")
                 .with_attributes(&[
-                    Attribute::new("scale")
-                        .with_value_select(ValueSelect::new(&["major", "minor"]).unwrap()),
-                    Attribute::new("root")
-                        .with_value_select(ValueSelect::new(&["c", "c#"]).unwrap()),
+                    Attribute::new("scale").with_value_select(
+                        ValueSelect::new(&["major", "minor", "phrygian"]).unwrap(),
+                    ),
+                    Attribute::new("root").with_value_select(
+                        ValueSelect::new(&[
+                            "c ", "c#", "d ", "d#", "e ", "f ", "f#", "g ", "g#", "a ", "a#", "b ",
+                        ])
+                        .unwrap(),
+                    ),
                     Attribute::new("speed").with_value_f32(ValueF32::new(0.3)),
                 ])
                 .unwrap()
