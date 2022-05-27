@@ -31,6 +31,8 @@ pub fn draw<D>(target: &mut D, view: &View) -> Result<(), D::Error>
 where
     D: DrawTarget<Color = BinaryColor>,
 {
+    reset_screen(target)?;
+
     draw_status_bar(target, view.title)?;
 
     for (i, attribute) in view
@@ -44,6 +46,18 @@ where
     }
 
     Ok(())
+}
+
+fn reset_screen<D>(target: &mut D) -> Result<(), D::Error>
+where
+    D: DrawTarget<Color = BinaryColor>,
+{
+    draw_rectangle(
+        target,
+        Point::new(0, 0),
+        Size::new(DISPLAY_WIDTH, DISPLAY_HEIGHT),
+        BinaryColor::Off,
+    )
 }
 
 fn draw_status_bar<D>(target: &mut D, text: &'static str) -> Result<(), D::Error>
