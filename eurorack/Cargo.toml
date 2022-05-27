@@ -17,7 +17,6 @@ name = "encoders"
 harness = false # defined through defmt_test
 
 [dependencies]
-proton-lib = { path = "../lib" }
 proton-peripherals = { path = "../peripherals" }
 proton-ui = { path = "../ui", features = ["defmt"] }
 cortex-m = "0.7"
