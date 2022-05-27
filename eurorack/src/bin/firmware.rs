@@ -53,12 +53,13 @@ mod app {
         let mut display = system.display;
         let led = system.led;
         let mono = system.mono;
-        let alpha_button = system.alpha_button;
-        let alpha_rotary = system.alpha_rotary;
-        let beta_button = system.beta_button;
-        let beta_rotary = system.beta_rotary;
 
-        let user_input = Input::new(alpha_button, alpha_rotary, beta_button, beta_rotary);
+        let user_input = Input::new(
+            system.alpha_button,
+            system.alpha_rotary,
+            system.beta_button,
+            system.beta_rotary,
+        );
 
         let state = {
             use proton_ui::state::*;
