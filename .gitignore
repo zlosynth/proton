@@ -1,5 +1,6 @@
 .gdb_history
 /template
+instruments/karplus_strong_music_box/Cargo.lock
 peripherals/Cargo.lock
 ui/Cargo.lock
 primitives/Cargo.lock
