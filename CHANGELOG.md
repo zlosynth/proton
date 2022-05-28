@@ -7,6 +7,7 @@ backwards compatibility.
 ## Unreleased
 
 * Implement sound output in the firmware.
+* Introduce a basic instrument based around Karplus Strong algorithm.
 
 ## 0.4.0
 
