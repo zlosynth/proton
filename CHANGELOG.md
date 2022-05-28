@@ -6,6 +6,8 @@ backwards compatibility.
 
 ## Unreleased
 
+## 0.4.0
+
 * Integrate display in the firmware.
 * Use left encoder to move through attributes.
 * Use right encoder to adjust attributes.
