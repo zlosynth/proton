@@ -11,6 +11,7 @@ mod app {
     use heapless::spsc::{Consumer, Producer, Queue};
     use systick_monotonic::Systick;
 
+    use proton_eurorack::system::audio::{Audio, BLOCK_LENGTH, SAMPLE_RATE};
     use proton_eurorack::system::display::Display;
     use proton_eurorack::system::System;
     use proton_instruments_karplus_strong_music_box::Instrument;
@@ -38,6 +39,7 @@ mod app {
 
     #[local]
     struct Local {
+        audio: Audio,
         instrument: Instrument,
         led: LedUser,
         user_input: Input,
@@ -69,6 +71,8 @@ mod app {
         let display = system.display;
         let led = system.led;
         let mono = system.mono;
+        let mut audio = system.audio;
+        audio.spawn();
 
         let user_input = Input::new(
             system.alpha_button,
@@ -85,11 +89,12 @@ mod app {
         read_controls::spawn().unwrap();
         update_state::spawn().unwrap();
 
-        let instrument = Instrument::new(48_000);
+        let instrument = Instrument::new(SAMPLE_RATE);
 
         (
             Shared {},
             Local {
+                audio,
                 instrument,
                 led,
                 user_input,
@@ -104,19 +109,27 @@ mod app {
         )
     }
 
-    // #[task(binds = DMA1_STR1, priority = 3, resources = [audio, instrument])]
-    #[task(binds = DMA1_STR1, local = [input_reactions_consumer, instrument], priority = 3)]
+    #[task(binds = DMA1_STR1, local = [input_reactions_consumer, instrument, audio], priority = 3)]
     fn handle_dsp(cx: handle_dsp::Context) {
         use core::convert::TryInto;
 
         let input_reactions_consumer = cx.local.input_reactions_consumer;
         let instrument = cx.local.instrument;
+        let audio = cx.local.audio;
 
         while let Some(action) = input_reactions_consumer.dequeue() {
             let reaction = action.try_into();
-            defmt::info!("{:?}", reaction);
             instrument.execute(reaction.unwrap());
         }
+
+        let mut buffer = [0.0; BLOCK_LENGTH];
+        instrument.populate(&mut buffer);
+
+        audio.update_buffer(|audio_buffer| {
+            audio_buffer.iter_mut().enumerate().for_each(|(i, x)| {
+                *x = (buffer[i], buffer[i]);
+            })
+        });
     }
 
     #[task(local = [user_input, input_actions_producer], priority = 2)]

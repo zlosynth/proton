@@ -1,3 +1,4 @@
+pub mod audio;
 pub mod display;
 pub mod encoder;
 pub mod led;
@@ -7,11 +8,13 @@ use hal::pac::CorePeripherals;
 use hal::pac::Peripherals as DevicePeripherals;
 use systick_monotonic::Systick;
 
+use audio::Audio;
 use display::{Display, DisplayPins};
 use encoder::{AlphaButton, AlphaRotary, BetaButton, BetaRotary};
 use led::Led;
 
 pub struct System {
+    pub audio: Audio,
     pub display: Display,
     pub led: Led,
     pub mono: Systick<1000>,
@@ -29,6 +32,7 @@ impl System {
         let ccdr = daisy::board_freeze_clocks!(board, dp);
         let pins = daisy::board_split_gpios!(board, ccdr, dp);
         let led = daisy::board_split_leds!(pins).USER;
+        let audio = Audio::init(daisy::board_split_audio!(ccdr, pins));
 
         let display = display::init(
             DisplayPins {
@@ -59,6 +63,7 @@ impl System {
         );
 
         Self {
+            audio,
             display,
             led,
             mono,
