@@ -6,6 +6,8 @@ backwards compatibility.
 
 ## Unreleased
 
+* Implement sound output in the firmware.
+
 ## 0.4.0
 
 * Integrate display in the firmware.
