@@ -16,7 +16,7 @@ use embedded_graphics_core::geometry::Size;
 use embedded_graphics_core::pixelcolor::BinaryColor;
 use embedded_graphics_simulator::{OutputSettingsBuilder, SimulatorDisplay, Window};
 
-use proton_instruments_karplus_strong_music_box::Instrument;
+use proton_instruments_karplus_strong::Instrument;
 use proton_ui::action::Action;
 use proton_ui::display::draw as draw_display;
 use proton_ui::reaction::Reaction;

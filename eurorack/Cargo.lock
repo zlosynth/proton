@@ -599,7 +599,7 @@ dependencies = [
  "fugit",
  "heapless",
  "panic-probe",
- "proton-instruments-karplus-strong-music-box",
+ "proton-instruments-karplus-strong",
  "proton-peripherals",
  "proton-ui",
  "ssd1306",
@@ -608,7 +608,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "proton-instruments-karplus-strong-music-box"
+name = "proton-instruments-karplus-strong"
 version = "0.4.0"
 dependencies = [
  "proton-primitives",

@@ -609,7 +609,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "proton-instruments-karplus-strong-music-box"
+name = "proton-instruments-karplus-strong"
 version = "0.4.0"
 dependencies = [
  "proton-primitives",
@@ -640,7 +640,7 @@ dependencies = [
  "embedded-graphics-simulator",
  "field-offset",
  "pd-sys",
- "proton-instruments-karplus-strong-music-box",
+ "proton-instruments-karplus-strong",
  "proton-ui",
 ]
 

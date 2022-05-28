@@ -8,7 +8,7 @@ check-format:
 	cd peripherals && cargo +nightly fmt --all -- --check
 	cd ui && cargo +nightly fmt --all -- --check
 	cd primitives && cargo +nightly fmt --all -- --check
-	cd instruments/karplus_strong_music_box && cargo +nightly fmt --all -- --check
+	cd instruments/karplus_strong && cargo +nightly fmt --all -- --check
 
 .PHONY: format
 format:
@@ -17,7 +17,7 @@ format:
 	cd peripherals && cargo +nightly fmt --all
 	cd ui && cargo +nightly fmt --all
 	cd primitives && cargo +nightly fmt --all
-	cd instruments/karplus_strong_music_box && cargo +nightly fmt --all
+	cd instruments/karplus_strong && cargo +nightly fmt --all
 
 .PHONY: clippy
 clippy:
@@ -27,14 +27,14 @@ clippy:
 	cd peripherals && cargo +nightly clippy --all --features defmt -- -D warnings
 	cd ui && cargo +nightly clippy --all --features defmt -- -D warnings
 	cd primitives && cargo +nightly clippy --all --features defmt -- -D warnings
-	cd instruments/karplus_strong_music_box && cargo +nightly clippy --all --features defmt -- -D warnings
+	cd instruments/karplus_strong && cargo +nightly clippy --all --features defmt -- -D warnings
 
 .PHONY: test
 test:
 	cd peripherals && cargo +nightly test --features defmt --all
 	cd ui && cargo +nightly test --features defmt --all
 	cd primitives && cargo +nightly test --all --features defmt
-	cd instruments/karplus_strong_music_box && cargo +nightly test --all --features defmt
+	cd instruments/karplus_strong && cargo +nightly test --all --features defmt
 
 .PHONY: update
 update:
@@ -43,7 +43,7 @@ update:
 	cd peripherals && cargo +nightly update
 	cd ui && cargo +nightly update
 	cd primitives && cargo +nightly update
-	cd instruments/karplus_strong_music_box && cargo +nightly update
+	cd instruments/karplus_strong && cargo +nightly update
 
 .PHONY: puredata
 puredata:

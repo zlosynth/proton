@@ -1,6 +1,6 @@
 [package]
 authors = ["Petr Horáček <hrck@protonmail.com>"]
-name = "proton-instruments-karplus-strong-music-box"
+name = "proton-instruments-karplus-strong"
 version = "0.4.0" # hack/release.sh
 edition = "2021"
 license = "GPL-3.0-or-later"
