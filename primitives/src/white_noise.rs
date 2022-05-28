@@ -1,8 +1,8 @@
-use rand::{thread_rng, Rng};
+use dasp::signal;
 
 pub fn pop() -> f32 {
-    let mut rng = thread_rng();
-    rng.gen_range(-1.0..1.0)
+    let mut noise = signal::noise(0);
+    noise.next_sample() as f32
 }
 
 pub fn populate(buffer: &mut [f32]) {

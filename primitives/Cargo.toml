@@ -10,7 +10,11 @@ publish = false
 
 [dependencies]
 micromath = "2"
-rand = "0.8"
+
+[dependencies.dasp]
+version = "0.11"
+default-features = false
+features = ["signal", "window"]
 
 [dev-dependencies]
 approx = "0.4"
