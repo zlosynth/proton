@@ -16,6 +16,10 @@ version = "0.11"
 default-features = false
 features = ["signal", "window"]
 
+[dependencies.defmt]
+version  = "0.3"
+optional = true
+
 [dev-dependencies]
 approx = "0.4"
 heapless = "0.7"
@@ -24,3 +28,6 @@ heapless = "0.7"
 version = "0.4"
 default-features = false
 features = ["maxn-1024"]
+
+[features]
+defmt = ["dep:defmt"]

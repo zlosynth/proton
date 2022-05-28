@@ -3,6 +3,8 @@ use micromath::F32Ext;
 
 use core::f32::consts::PI;
 
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[derive(Debug)]
 pub struct StateVariableFilter {
     sample_rate: u32,
     bandform: Bandform,
@@ -92,6 +94,8 @@ impl StateVariableFilter {
     }
 }
 
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[derive(Debug)]
 pub enum Bandform {
     LowPass,
     HighPass,
@@ -105,7 +109,7 @@ pub use Bandform::*;
 mod tests {
     use super::*;
     use crate::spectral_analysis::SpectralAnalysis;
-    use crate::white_noise;
+    use crate::white_noise::WhiteNoise;
 
     #[test]
     fn initialize_filter() {
@@ -118,7 +122,7 @@ mod tests {
         const SAMPLE_RATE: u32 = 1024;
 
         let mut signal = [0.0; 1024];
-        white_noise::populate(&mut signal);
+        WhiteNoise::new().populate(&mut signal);
 
         let mut filter = StateVariableFilter::new(SAMPLE_RATE);
         filter.set_bandform(LowPass).set_frequency(100.0);
@@ -136,7 +140,7 @@ mod tests {
         const SAMPLE_RATE: u32 = 1024;
 
         let mut signal = [0.0; 1024];
-        white_noise::populate(&mut signal);
+        WhiteNoise::new().populate(&mut signal);
 
         let mut filter = StateVariableFilter::new(SAMPLE_RATE);
         filter.set_bandform(HighPass).set_frequency(100.0);
@@ -154,7 +158,7 @@ mod tests {
         const SAMPLE_RATE: u32 = 1024;
 
         let mut signal = [0.0; 1024];
-        white_noise::populate(&mut signal);
+        WhiteNoise::new().populate(&mut signal);
 
         let mut filter = StateVariableFilter::new(SAMPLE_RATE);
         filter
@@ -177,7 +181,7 @@ mod tests {
         const SAMPLE_RATE: u32 = 1024;
 
         let mut signal = [0.0; 1024];
-        white_noise::populate(&mut signal);
+        WhiteNoise::new().populate(&mut signal);
 
         let mut filter = StateVariableFilter::new(SAMPLE_RATE);
         filter
@@ -200,7 +204,7 @@ mod tests {
         const SAMPLE_RATE: u32 = 1024;
 
         let mut signal = [0.0; 1024];
-        white_noise::populate(&mut signal);
+        WhiteNoise::new().populate(&mut signal);
 
         let analysis = SpectralAnalysis::analyze(&signal, SAMPLE_RATE);
         let original_mean_magnitude = analysis.mean_magnitude(0.0, 200.0);

@@ -12,5 +12,12 @@ publish = false
 proton-ui = { path = "../../ui" }
 proton-primitives = { path = "../../primitives" }
 
+[dependencies.defmt]
+version  = "0.3"
+optional = true
+
 [dev-dependencies]
 test-case = "1.2"
+
+[features]
+defmt = ["dep:defmt", "proton-primitives/defmt"]

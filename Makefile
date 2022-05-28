@@ -26,15 +26,15 @@ clippy:
 	cd eurorack && cargo +nightly check --test display --test encoders
 	cd peripherals && cargo +nightly clippy --all --features defmt -- -D warnings
 	cd ui && cargo +nightly clippy --all --features defmt -- -D warnings
-	cd primitives && cargo +nightly clippy --all -- -D warnings
-	cd instruments/karplus_strong_music_box && cargo +nightly clippy --all -- -D warnings
+	cd primitives && cargo +nightly clippy --all --features defmt -- -D warnings
+	cd instruments/karplus_strong_music_box && cargo +nightly clippy --all --features defmt -- -D warnings
 
 .PHONY: test
 test:
 	cd peripherals && cargo +nightly test --features defmt --all
 	cd ui && cargo +nightly test --features defmt --all
-	cd primitives && cargo +nightly test --all
-	cd instruments/karplus_strong_music_box && cargo +nightly test --all
+	cd primitives && cargo +nightly test --all --features defmt
+	cd instruments/karplus_strong_music_box && cargo +nightly test --all --features defmt
 
 .PHONY: update
 update:

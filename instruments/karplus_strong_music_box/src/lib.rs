@@ -3,7 +3,7 @@
 use core::convert::TryFrom;
 
 use proton_primitives::state_variable_filter::{Bandform, StateVariableFilter};
-use proton_primitives::white_noise;
+use proton_primitives::white_noise::WhiteNoise;
 use proton_ui::reaction::Reaction;
 use proton_ui::state::*;
 
@@ -12,6 +12,7 @@ const CUTOFF_FREQUENCY_ATTRIBUTE: &str = "cutoff";
 
 pub struct Instrument {
     svf: StateVariableFilter,
+    white_noise: WhiteNoise,
 }
 
 impl Instrument {
@@ -26,12 +27,15 @@ impl Instrument {
     pub fn new(sample_rate: u32) -> Self {
         let mut svf = StateVariableFilter::new(sample_rate);
         svf.set_bandform(Bandform::LowPass).set_frequency(200.0);
-        Self { svf }
+
+        let white_noise = WhiteNoise::new();
+
+        Self { svf, white_noise }
     }
 
     pub fn populate(&mut self, buffer: &mut [f32]) {
         for x in buffer.iter_mut() {
-            *x = self.svf.tick(white_noise::pop());
+            *x = self.svf.tick(self.white_noise.pop());
         }
     }
 

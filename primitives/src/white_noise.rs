@@ -1,13 +1,30 @@
-use dasp::signal;
+use dasp::signal::{self, Noise};
 
-pub fn pop() -> f32 {
-    let mut noise = signal::noise(0);
-    noise.next_sample() as f32
+pub struct WhiteNoise {
+    noise: Noise,
 }
 
-pub fn populate(buffer: &mut [f32]) {
-    for i in buffer.iter_mut() {
-        *i = pop();
+impl Default for WhiteNoise {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+impl WhiteNoise {
+    pub fn new() -> Self {
+        Self {
+            noise: signal::noise(0),
+        }
+    }
+
+    pub fn pop(&mut self) -> f32 {
+        self.noise.next_sample() as f32
+    }
+
+    pub fn populate(&mut self, buffer: &mut [f32]) {
+        for i in buffer.iter_mut() {
+            *i = self.pop();
+        }
     }
 }
 
@@ -16,10 +33,9 @@ mod tests {
     use super::*;
 
     fn new_white_noise_array() -> [f32; 0xfff] {
+        let mut white_noise = WhiteNoise::new();
         let mut buffer = [0.0; 0xfff];
-        for x in buffer.iter_mut() {
-            *x = pop();
-        }
+        white_noise.populate(&mut buffer);
         buffer
     }
 
