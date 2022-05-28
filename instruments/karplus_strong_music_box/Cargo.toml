@@ -11,3 +11,6 @@ publish = false
 [dependencies]
 proton-ui = { path = "../../ui" }
 proton-primitives = { path = "../../primitives" }
+
+[dev-dependencies]
+test-case = "1.2"

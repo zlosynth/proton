@@ -69,7 +69,7 @@ impl StateVariableFilter {
     //      |                                                                      |
     //      +----------------------------------------------------------------------+
     //
-    fn tick(&mut self, value: f32) -> f32 {
+    pub fn tick(&mut self, value: f32) -> f32 {
         let sum_3 = self.delay_1 * self.f + self.delay_2;
         let sum_1 = value - sum_3 - self.delay_1 * self.q;
         let sum_2 = sum_1 * self.f + self.delay_1;

@@ -19,6 +19,7 @@ use embedded_graphics_simulator::{OutputSettingsBuilder, SimulatorDisplay, Windo
 use proton_instruments_karplus_strong_music_box::Instrument;
 use proton_ui::action::Action;
 use proton_ui::display::draw as draw_display;
+use proton_ui::reaction::Reaction;
 use proton_ui::reducer;
 use proton_ui::state::*;
 
@@ -70,7 +71,7 @@ pub unsafe extern "C" fn proton_tilde_setup() {
     STATE = Some(state);
     WINDOW = Some(window);
     DISPLAY = Some(display);
-    INSTRUMENT = Some(Instrument);
+    INSTRUMENT = Some(Instrument::new(48_000));
 }
 
 unsafe fn create_class() -> *mut pd_sys::_class {
@@ -138,38 +139,53 @@ unsafe extern "C" fn set_control2(_class: *mut Class, _value: pd_sys::t_float) {
 }
 
 unsafe extern "C" fn alpha_up(_class: *mut Class) {
-    reducer::reduce(Action::AlphaUp, STATE.as_mut().unwrap());
+    let reaction = reducer::reduce(Action::AlphaUp, STATE.as_mut().unwrap());
+    execute_reaction(reaction);
     update_display();
 }
 
 unsafe extern "C" fn alpha_down(_class: *mut Class) {
-    reducer::reduce(Action::AlphaDown, STATE.as_mut().unwrap());
+    let reaction = reducer::reduce(Action::AlphaDown, STATE.as_mut().unwrap());
+    execute_reaction(reaction);
     update_display();
 }
 
 unsafe extern "C" fn alpha_click(_class: *mut Class) {
-    reducer::reduce(Action::AlphaClick, STATE.as_mut().unwrap());
+    let reaction = reducer::reduce(Action::AlphaClick, STATE.as_mut().unwrap());
+    execute_reaction(reaction);
     update_display();
 }
 
 unsafe extern "C" fn beta_up(_class: *mut Class) {
-    reducer::reduce(Action::BetaUp, STATE.as_mut().unwrap());
+    let reaction = reducer::reduce(Action::BetaUp, STATE.as_mut().unwrap());
+    execute_reaction(reaction);
     update_display();
 }
 
 unsafe extern "C" fn beta_down(_class: *mut Class) {
-    reducer::reduce(Action::BetaDown, STATE.as_mut().unwrap());
+    let reaction = reducer::reduce(Action::BetaDown, STATE.as_mut().unwrap());
+    execute_reaction(reaction);
     update_display();
 }
 
 unsafe extern "C" fn beta_click(_class: *mut Class) {
-    reducer::reduce(Action::BetaClick, STATE.as_mut().unwrap());
+    let reaction = reducer::reduce(Action::BetaClick, STATE.as_mut().unwrap());
+    execute_reaction(reaction);
     update_display();
 }
 
-unsafe extern "C" fn update_display() {
+unsafe fn update_display() {
     draw_display(DISPLAY.as_mut().unwrap(), &STATE.as_ref().unwrap().into()).unwrap();
     WINDOW.as_mut().unwrap().update(DISPLAY.as_mut().unwrap());
+}
+
+unsafe fn execute_reaction(reaction: Option<Reaction>) {
+    if let Some(reaction) = reaction {
+        INSTRUMENT
+            .as_mut()
+            .unwrap()
+            .execute(reaction.try_into().unwrap());
+    }
 }
 
 unsafe fn perform(
