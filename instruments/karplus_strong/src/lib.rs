@@ -34,7 +34,8 @@ impl Instrument {
         State::new(NAME)
             .with_attributes(&[
                 Attribute::new(FREQUENCY_ATTRIBUTE).with_value_f32(ValueF32::new(0.5)), // TODO: use default value
-                Attribute::new(CUTOFF_ATTRIBUTE).with_value_f32(ValueF32::new(0.3)),
+                Attribute::new(CUTOFF_ATTRIBUTE)
+                    .with_value_f32(ValueF32::new(0.3).with_step(0.005)),
                 Attribute::new(FEEDBACK_ATTRIBUTE).with_value_f32(ValueF32::new(0.9)),
             ])
             .unwrap()
