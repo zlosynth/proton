@@ -119,7 +119,10 @@ mod app {
         let state = cx.local.state;
 
         while let Some(action) = input_actions_consumer.dequeue() {
-            reducer::reduce(action, state);
+            let reaction = reducer::reduce(action, state);
+            if let Some(reaction) = reaction {
+                defmt::info!("{:?}", reaction);
+            }
         }
 
         let view = (&*state).into();

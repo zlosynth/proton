@@ -7,6 +7,7 @@ extern crate approx;
 pub mod action;
 pub mod display;
 pub mod input;
+pub mod reaction;
 pub mod reducer;
 pub mod state;
 pub mod view;

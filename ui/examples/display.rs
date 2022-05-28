@@ -35,14 +35,15 @@ fn main() -> Result<(), core::convert::Infallible> {
                 SimulatorEvent::Quit => break 'running Ok(()),
                 SimulatorEvent::KeyDown { keycode, .. } => {
                     let action = match keycode {
-                        Keycode::Left => Some(Action::BetaDown),
-                        Keycode::Right => Some(Action::BetaUp),
+                        Keycode::Left => Some(Action::BetaUp),
+                        Keycode::Right => Some(Action::BetaDown),
                         Keycode::Up => Some(Action::AlphaUp),
                         Keycode::Down => Some(Action::AlphaDown),
                         _ => None,
                     };
                     if let Some(action) = action {
-                        reducer::reduce(action, &mut state);
+                        let reaction = reducer::reduce(action, &mut state);
+                        println!("Reaction: {:?}", reaction);
                         let view = (&state).into();
                         draw(&mut display, &view)?;
                     }
