@@ -16,6 +16,7 @@ use embedded_graphics_core::geometry::Size;
 use embedded_graphics_core::pixelcolor::BinaryColor;
 use embedded_graphics_simulator::{OutputSettingsBuilder, SimulatorDisplay, Window};
 
+use proton_instruments_karplus_strong_music_box::Instrument;
 use proton_ui::action::Action;
 use proton_ui::display::draw as draw_display;
 use proton_ui::reducer;
@@ -27,6 +28,7 @@ static mut CLASS: Option<*mut pd_sys::_class> = None;
 static mut STATE: Option<State> = None;
 static mut WINDOW: Option<Window> = None;
 static mut DISPLAY: Option<Display> = None;
+static mut INSTRUMENT: Option<Instrument> = None;
 
 #[repr(C)]
 struct Class {
@@ -50,14 +52,7 @@ pub unsafe extern "C" fn proton_tilde_setup() {
     let mut window = Window::new("", &OutputSettingsBuilder::new().scale(2).build());
     let mut display = SimulatorDisplay::new(Size::new(128, 64));
 
-    let state = State::new("Proton")
-        .with_attributes(&[
-            Attribute::new("scale")
-                .with_value_select(ValueSelect::new(&["major", "minor"]).unwrap()),
-            Attribute::new("root").with_value_select(ValueSelect::new(&["c", "c#"]).unwrap()),
-            Attribute::new("speed").with_value_f32(ValueF32::new(0.0)),
-        ])
-        .unwrap();
+    let state = Instrument::initial_state();
     let view = (&state).into();
     draw_display(&mut display, &view).unwrap();
     window.update(&display);
@@ -75,6 +70,7 @@ pub unsafe extern "C" fn proton_tilde_setup() {
     STATE = Some(state);
     WINDOW = Some(window);
     DISPLAY = Some(display);
+    INSTRUMENT = Some(Instrument);
 }
 
 unsafe fn create_class() -> *mut pd_sys::_class {
@@ -185,7 +181,11 @@ unsafe fn perform(
     const BUFFER_LEN: usize = 32;
     assert!(outlets[0].len() % BUFFER_LEN == 0);
 
-    for _chunk_index in 0..outlets[0].len() / BUFFER_LEN {
-        // TODO
+    let mut buffer = [0.0; BUFFER_LEN];
+
+    for chunk_index in 0..outlets[0].len() / BUFFER_LEN {
+        INSTRUMENT.as_mut().unwrap().populate(&mut buffer);
+        let start = chunk_index * BUFFER_LEN;
+        outlets[0][start..(BUFFER_LEN + start)].copy_from_slice(&buffer[..BUFFER_LEN]);
     }
 }
