@@ -1,3 +1,6 @@
+#[allow(unused_imports)]
+use micromath::F32Ext;
+
 pub struct RingBuffer<const N: usize> {
     buffer: [f32; N],
     write_index: usize,
@@ -33,6 +36,19 @@ impl<const N: usize> RingBuffer<N> {
             (self.write_index as i32 + relative_index - 1).wrapping_rem_euclid(N as i32) as usize;
         self.buffer[index]
     }
+
+    pub fn peek_interpolated(&self, relative_index: f32) -> f32 {
+        let index_a = relative_index.floor() as i32;
+        let a = self.peek(index_a);
+
+        let index_b = relative_index.ceil() as i32;
+        let b = self.peek(index_b);
+
+        let diff = b - a;
+        let root = if relative_index < 0.0 { b } else { a };
+
+        root + diff * relative_index.fract()
+    }
 }
 
 impl<const N: usize> Default for RingBuffer<N> {
@@ -67,6 +83,26 @@ mod tests {
         assert_eq!(buffer.peek(0), 3.0);
         assert_eq!(buffer.peek(-1), 2.0);
         assert_eq!(buffer.peek(-2), 1.0);
+    }
+
+    #[test]
+    fn read_interpolated_from_buffer_with_positive_index() {
+        let mut buffer = RingBuffer::<3>::new();
+        buffer.write(1.0);
+        buffer.write(10.0);
+        buffer.write(0.0);
+
+        assert_relative_eq!(buffer.peek_interpolated(0.6), 0.6);
+    }
+
+    #[test]
+    fn read_interpolated_from_buffer_with_negative_index() {
+        let mut buffer = RingBuffer::<3>::new();
+        buffer.write(10.0);
+        buffer.write(1.0);
+        buffer.write(0.0);
+
+        assert_relative_eq!(buffer.peek_interpolated(-0.6), 0.6);
     }
 
     #[test]

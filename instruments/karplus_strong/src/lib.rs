@@ -92,7 +92,7 @@ impl Instrument {
             let new_sample = self.noise.pop() * self.envelope.pop();
             let delayed_sample = self
                 .ring_buffer
-                .peek(-(self.sample_rate as i32) / self.frequency as i32);
+                .peek_interpolated(-(self.sample_rate as f32) / self.frequency);
             let mixed_sample = self.svf.tick(new_sample + delayed_sample * self.feedback);
             self.ring_buffer.write(mixed_sample);
 
