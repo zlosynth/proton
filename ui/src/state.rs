@@ -122,18 +122,35 @@ impl ValueSelect {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct ValueF32 {
     pub value: f32,
+    pub min: f32,
+    pub max: f32,
     pub step: f32,
 }
 
 impl ValueF32 {
     pub fn new(value: f32) -> Self {
-        Self { value, step: 0.01 }
+        Self {
+            value,
+            min: 0.0,
+            max: 1.0,
+            step: 0.01,
+        }
     }
 }
 
 impl ValueF32 {
     pub fn with_value(mut self, value: f32) -> Self {
         self.value = value;
+        self
+    }
+
+    pub fn with_min(mut self, min: f32) -> Self {
+        self.min = min;
+        self
+    }
+
+    pub fn with_max(mut self, max: f32) -> Self {
+        self.max = max;
         self
     }
 

@@ -60,10 +60,11 @@ fn increase_attribute_value(state: &mut State) -> Option<Reaction> {
 fn decrease_f32_attribute_value(value_f32: &mut ValueF32) -> Option<f32> {
     let old_value = value_f32.value;
 
-    value_f32.value = (value_f32.value - value_f32.step).max(0.0);
+    value_f32.value = (value_f32.value - value_f32.step).max(value_f32.min);
 
+    let epsilon = (value_f32.max - value_f32.min) * 0.0001;
     let new_value = value_f32.value;
-    if old_value - new_value > 0.001 {
+    if old_value - new_value > epsilon {
         Some(new_value)
     } else {
         None
@@ -73,10 +74,11 @@ fn decrease_f32_attribute_value(value_f32: &mut ValueF32) -> Option<f32> {
 fn increase_f32_attribute_value(value_f32: &mut ValueF32) -> Option<f32> {
     let old_value = value_f32.value;
 
-    value_f32.value = (value_f32.value + value_f32.step).min(1.0);
+    value_f32.value = (value_f32.value + value_f32.step).min(value_f32.max);
 
+    let epsilon = (value_f32.max - value_f32.min) * 0.0001;
     let new_value = value_f32.value;
-    if new_value - old_value > 0.001 {
+    if new_value - old_value > epsilon {
         Some(new_value)
     } else {
         None
@@ -156,37 +158,84 @@ mod tests {
 
     #[test]
     fn given_f32_attribute_in_middle_when_beta_turns_up_it_decreases_the_value_by_set_step() {
-        assert_value_f32_transition_with_reaction(0.5, 0.1, Action::BetaUp, 0.4, true);
+        assert_value_f32_transition_with_reaction(
+            ValueF32::new(2.0)
+                .with_min(0.0)
+                .with_max(10.0)
+                .with_step(1.0),
+            Action::BetaUp,
+            1.0,
+            true,
+        );
     }
 
     #[test]
-    fn given_f32_attribute_almost_on_bottom_when_beta_turns_up_it_does_not_go_below_zero() {
-        assert_value_f32_transition_with_reaction(0.05, 0.1, Action::BetaUp, 0.0, true);
+    fn given_f32_attribute_almost_on_bottom_when_beta_turns_up_it_does_not_go_below_min() {
+        assert_value_f32_transition_with_reaction(
+            ValueF32::new(-9.5)
+                .with_min(-10.0)
+                .with_max(0.0)
+                .with_step(1.0),
+            Action::BetaUp,
+            -10.0,
+            true,
+        );
     }
 
     #[test]
-    fn given_f32_attribute_on_bottom_when_beta_turns_up_it_does_not_go_below_zero() {
-        assert_value_f32_transition_with_reaction(0.0, 0.1, Action::BetaUp, 0.0, false);
+    fn given_f32_attribute_on_bottom_when_beta_turns_up_it_does_not_go_below_min() {
+        assert_value_f32_transition_with_reaction(
+            ValueF32::new(-10.0)
+                .with_min(-10.0)
+                .with_max(0.0)
+                .with_step(1.0),
+            Action::BetaUp,
+            -10.0,
+            false,
+        );
     }
 
     #[test]
     fn given_f32_attribute_in_middle_when_beta_turns_down_it_increases_the_value_by_set_step() {
-        assert_value_f32_transition_with_reaction(0.5, 0.1, Action::BetaDown, 0.6, true);
+        assert_value_f32_transition_with_reaction(
+            ValueF32::new(1.0)
+                .with_min(0.0)
+                .with_max(10.0)
+                .with_step(1.0),
+            Action::BetaDown,
+            2.0,
+            true,
+        );
     }
 
     #[test]
-    fn given_f32_attribute_almost_on_top_when_beta_turns_down_it_does_not_go_above_one() {
-        assert_value_f32_transition_with_reaction(0.95, 0.1, Action::BetaDown, 1.0, true);
+    fn given_f32_attribute_almost_on_top_when_beta_turns_down_it_does_not_go_above_max() {
+        assert_value_f32_transition_with_reaction(
+            ValueF32::new(9.5)
+                .with_min(0.0)
+                .with_max(10.0)
+                .with_step(1.0),
+            Action::BetaDown,
+            10.0,
+            true,
+        );
     }
 
     #[test]
-    fn given_f32_attribute_on_top_when_beta_turns_down_it_does_not_go_above_one() {
-        assert_value_f32_transition_with_reaction(1.0, 0.1, Action::BetaDown, 1.0, false);
+    fn given_f32_attribute_on_top_when_beta_turns_down_it_does_not_go_above_max() {
+        assert_value_f32_transition_with_reaction(
+            ValueF32::new(10.0)
+                .with_min(0.0)
+                .with_max(10.0)
+                .with_step(1.0),
+            Action::BetaDown,
+            10.0,
+            false,
+        );
     }
 
     fn assert_value_f32_transition_with_reaction(
-        old: f32,
-        step: f32,
+        value_f32: ValueF32,
         action: Action,
         new: f32,
         expect_reaction: bool,
@@ -194,9 +243,7 @@ mod tests {
         use crate::state::*;
 
         let mut state = State::new("Proton")
-            .with_attributes(&[
-                Attribute::new("a1").with_value_f32(ValueF32::new(old).with_step(step))
-            ])
+            .with_attributes(&[Attribute::new("a1").with_value_f32(value_f32)])
             .unwrap();
         let reaction = reduce(action, &mut state);
 

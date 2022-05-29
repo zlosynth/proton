@@ -36,7 +36,12 @@ impl Instrument {
                 Attribute::new(FREQUENCY_ATTRIBUTE).with_value_f32(ValueF32::new(0.5)), // TODO: use default value
                 Attribute::new(CUTOFF_ATTRIBUTE)
                     .with_value_f32(ValueF32::new(0.3).with_step(0.005)),
-                Attribute::new(FEEDBACK_ATTRIBUTE).with_value_f32(ValueF32::new(0.9)),
+                Attribute::new(FEEDBACK_ATTRIBUTE).with_value_f32(
+                    ValueF32::new(0.9)
+                        .with_min(0.6)
+                        .with_max(1.0)
+                        .with_step(0.005),
+                ),
             ])
             .unwrap()
     }
@@ -122,7 +127,7 @@ impl TryFrom<Reaction> for Command {
                 } else if attribute == FREQUENCY_ATTRIBUTE {
                     Ok(Command::SetFrequency(value * 1000.0))
                 } else if attribute == FEEDBACK_ATTRIBUTE {
-                    Ok(Command::SetFeedback(0.9 + value / 10.0))
+                    Ok(Command::SetFeedback(value))
                 } else {
                     Err("cannot convert this reaction to a command")
                 }
@@ -154,8 +159,8 @@ mod tests {
         Ok(Command::SetFrequency(100.0))
     )]
     #[test_case(
-        Reaction::SetValue(FEEDBACK_ATTRIBUTE, 0.1) =>
-        Ok(Command::SetFeedback(0.90999997))
+        Reaction::SetValue(FEEDBACK_ATTRIBUTE, 0.95) =>
+        Ok(Command::SetFeedback(0.95))
     )]
     fn it_converts_reaction_to_command(reaction: Reaction) -> Result<Command, &'static str> {
         reaction.try_into()
