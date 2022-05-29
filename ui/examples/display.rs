@@ -1,3 +1,4 @@
+use core::fmt;
 use std::{thread, time::Duration};
 
 use embedded_graphics::{pixelcolor::BinaryColor, prelude::*};
@@ -10,6 +11,10 @@ use proton_ui::display::*;
 use proton_ui::reducer;
 use proton_ui::state::*;
 
+fn speed_writter(destination: &mut dyn fmt::Write, value: f32) {
+    write!(destination, "{:.2}%", value).unwrap();
+}
+
 fn main() -> Result<(), core::convert::Infallible> {
     let mut display: SimulatorDisplay<BinaryColor> =
         SimulatorDisplay::new(Size::new(DISPLAY_WIDTH, DISPLAY_HEIGHT));
@@ -21,7 +26,13 @@ fn main() -> Result<(), core::convert::Infallible> {
             Attribute::new("scale")
                 .with_value_select(ValueSelect::new(&["major", "minor"]).unwrap()),
             Attribute::new("root").with_value_select(ValueSelect::new(&["c", "c#"]).unwrap()),
-            Attribute::new("speed").with_value_f32(ValueF32::new(0.0)),
+            Attribute::new("speed").with_value_f32(
+                ValueF32::new(0.0)
+                    .with_min(0.0)
+                    .with_max(100.0)
+                    .with_step(1.0)
+                    .with_writter(speed_writter),
+            ),
         ])
         .unwrap();
 

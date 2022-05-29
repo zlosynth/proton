@@ -1,3 +1,5 @@
+use core::fmt;
+
 use heapless::Vec;
 
 #[derive(Clone, Debug)]
@@ -118,13 +120,41 @@ impl ValueSelect {
     }
 }
 
-#[derive(Copy, Clone, Debug)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[derive(Copy, Clone)]
 pub struct ValueF32 {
     pub value: f32,
     pub min: f32,
     pub max: f32,
     pub step: f32,
+    pub writter: fn(&mut dyn fmt::Write, f32),
+}
+
+impl fmt::Debug for ValueF32 {
+    fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            fmt,
+            "ValueF32(value: {}, min: {}, max: {}, step: {})",
+            self.value, self.min, self.max, self.step
+        )
+    }
+}
+
+#[cfg(feature = "defmt")]
+impl defmt::Format for ValueF32 {
+    fn format(&self, fmt: defmt::Formatter) {
+        defmt::write!(
+            fmt,
+            "ValueF32(value: {}, min: {}, max: {}, step: {})",
+            self.value,
+            self.min,
+            self.max,
+            self.step
+        );
+    }
+}
+
+fn default_writter(destination: &mut dyn fmt::Write, value: f32) {
+    write!(destination, "{:.1}%", value).unwrap();
 }
 
 impl ValueF32 {
@@ -134,6 +164,7 @@ impl ValueF32 {
             min: 0.0,
             max: 1.0,
             step: 0.01,
+            writter: default_writter,
         }
     }
 }
@@ -156,6 +187,11 @@ impl ValueF32 {
 
     pub fn with_step(mut self, step: f32) -> Self {
         self.step = step;
+        self
+    }
+
+    pub fn with_writter(mut self, writter: fn(&mut dyn fmt::Write, f32)) -> Self {
+        self.writter = writter;
         self
     }
 }

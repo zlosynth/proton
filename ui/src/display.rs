@@ -1,5 +1,3 @@
-use core::fmt::Write;
-
 use embedded_graphics::{
     mono_font::{ascii::FONT_6X12, MonoTextStyle},
     pixelcolor::BinaryColor,
@@ -110,9 +108,9 @@ where
                 text,
             )?;
         }
-        Value::F32(value) => {
+        Value::F32(writter, value) => {
             let mut string = heapless::String::<6>::new();
-            write!(string, "{:.1}%", value * 100.0).unwrap();
+            writter(&mut string, *value);
             let number = &string;
 
             let y = y + FONT_HEIGHT_ABOVE_LINE as i32;

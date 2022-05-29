@@ -1,6 +1,7 @@
 #![no_std]
 
 use core::convert::TryFrom;
+use core::fmt;
 
 use proton_primitives::ad_envelope::{Ad, Config as AdConfig};
 use proton_primitives::ring_buffer::RingBuffer;
@@ -29,6 +30,10 @@ pub struct Instrument {
     countdown: u32,
 }
 
+fn feedback_writter(destination: &mut dyn fmt::Write, value: f32) {
+    write!(destination, "{:.3}", value).unwrap();
+}
+
 impl Instrument {
     pub fn initial_state() -> State {
         State::new(NAME)
@@ -40,7 +45,8 @@ impl Instrument {
                     ValueF32::new(0.9)
                         .with_min(0.6)
                         .with_max(1.0)
-                        .with_step(0.005),
+                        .with_step(0.005)
+                        .with_writter(feedback_writter),
                 ),
             ])
             .unwrap()

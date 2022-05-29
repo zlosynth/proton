@@ -1,6 +1,8 @@
 #[allow(unused_imports)]
 use micromath::F32Ext;
 
+use core::fmt;
+
 use super::state;
 
 const ATTRIBUTES_CAPACITY: usize = 4;
@@ -50,11 +52,10 @@ impl From<&state::Attribute> for Attribute {
     }
 }
 
-#[derive(Copy, Clone, Debug, PartialEq)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[derive(Copy, Clone)]
 pub enum Value {
     Str(&'static str),
-    F32(f32),
+    F32(fn(&mut dyn fmt::Write, f32), f32),
 }
 
 impl From<&state::Value> for Value {
@@ -63,7 +64,36 @@ impl From<&state::Value> for Value {
             state::Value::Select(value_select) => {
                 Value::Str(value_select.available[value_select.selected])
             }
-            state::Value::F32(value_f32) => Value::F32(value_f32.value),
+            state::Value::F32(value_f32) => Value::F32(value_f32.writter, value_f32.value),
+        }
+    }
+}
+
+impl fmt::Debug for Value {
+    fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            Self::Str(value) => write!(fmt, "Value::Str({})", value),
+            Self::F32(_, value) => write!(fmt, "Value::F32({})", value),
+        }
+    }
+}
+
+#[cfg(feature = "defmt")]
+impl defmt::Format for Value {
+    fn format(&self, fmt: defmt::Formatter) {
+        match self {
+            Self::Str(value) => defmt::write!(fmt, "Value::Str({})", value),
+            Self::F32(_, value) => defmt::write!(fmt, "Value::F32({})", value),
+        }
+    }
+}
+
+impl PartialEq for Value {
+    fn eq(&self, other: &Self) -> bool {
+        match (self, other) {
+            (Self::Str(a), Self::Str(b)) => a == b,
+            (Self::F32(_, a), Self::F32(_, b)) => a == b,
+            _ => false,
         }
     }
 }
@@ -76,6 +106,10 @@ mod tests {
     fn given_state_when_converted_into_view_it_should_provide_expected_result() {
         use crate::state;
 
+        fn test_writter(destination: &mut dyn fmt::Write, value: f32) {
+            write!(destination, "x{:.2}", value).unwrap();
+        }
+
         let source_state = state::State::new("Title")
             .with_attributes(&[
                 state::Attribute::new("a1").with_value_f32(state::ValueF32::new(1.0)),
@@ -87,7 +121,8 @@ mod tests {
                         .unwrap()
                         .with_selected(1),
                 ),
-                state::Attribute::new("a6").with_value_f32(state::ValueF32::new(1.0)),
+                state::Attribute::new("a6")
+                    .with_value_f32(state::ValueF32::new(1.0).with_writter(test_writter)),
             ])
             .unwrap()
             .with_selected_attribute(5);
@@ -101,7 +136,7 @@ mod tests {
                 }),
                 Some(Attribute {
                     name: "a6",
-                    value: Value::F32(1.0),
+                    value: Value::F32(test_writter, 1.0),
                 }),
                 None,
                 None,
