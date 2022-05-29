@@ -94,6 +94,14 @@ To flash a release build, extend the command with a flag:
 make flash-dfu FLAGS="--release"
 ```
 
+## Firmware size
+
+Check firmware size:
+
+```sh
+cd eurorack && cargo +nightly size --bin firmware --release -- -m # or -A
+```
+
 ## Run a debugger
 
 I prefer to use [gdbgui](https://www.gdbgui.com/) when I need to attach a
