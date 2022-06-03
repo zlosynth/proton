@@ -24,10 +24,10 @@ pub struct Instrument {
     noise: WhiteNoise,
     envelope: Ad,
     ring_buffer: RingBuffer<SAMPLES>,
+    turing: Turing,
     frequency: f32,
     feedback: f32,
     sample_rate: u32,
-    countdown: u32,
 }
 
 fn feedback_writter(destination: &mut dyn fmt::Write, value: f32) {
@@ -72,22 +72,22 @@ impl Instrument {
             noise,
             envelope,
             ring_buffer,
+            turing: Turing::new(sample_rate),
             frequency: 100.0,
             feedback: 0.9,
             sample_rate,
-            countdown: u32::MAX,
         }
     }
 
     pub fn populate(&mut self, buffer: &mut [f32]) {
+        let config = self.turing.tick(buffer.len() as u32);
+
         for x in buffer.iter_mut() {
-            if self.countdown > self.sample_rate / 2 {
+            if config.triggered {
                 self.envelope.trigger(
                     AdConfig::new().with_decay_time(self.frequency / self.sample_rate as f32),
                 );
-                self.countdown = 0;
             }
-            self.countdown += 1;
 
             let new_sample = self.noise.pop() * self.envelope.pop();
             let delayed_sample = self
@@ -143,6 +143,75 @@ impl TryFrom<Reaction> for Command {
     }
 }
 
+struct Turing {
+    sample_rate: u32,
+    bpm: f32,
+    triggers: [u32; 6],
+    phase: u32,
+}
+
+impl Turing {
+    const CELLS_IN_BEAT: u32 = 3 * 4;
+    const CELLS: u32 = Self::CELLS_IN_BEAT * 16;
+
+    pub fn new(sample_rate: u32) -> Self {
+        Self {
+            sample_rate,
+            bpm: 120.0,
+            triggers: [
+                0b1000_1000_0000_1000_1000_1000_1000_1000,
+                0b1000_0000_0000_1000_1000_1000_1000_1000,
+                0b1000_1000_0000_1000_1000_1000_1000_1000,
+                0b1000_0000_0000_1000_1000_1000_1000_1000,
+                0b1000_1000_0000_1000_1000_1000_1000_1000,
+                0b1000_0000_0000_1000_1000_1000_1000_1000,
+            ],
+            phase: 0,
+        }
+    }
+
+    // NOTE: In theory this tick may miss some triggers when bpm is too high.
+    // However, in reality this can be safely ignored:
+    //
+    // With sample rate of 48 kHz, buffer length of 32 samples, tick would be
+    // triggered every 1/1500 of a second.
+    //
+    // With BPM of 600 and beat resolution of 12 cells, each cell would last
+    // 1/120 of a second.
+    pub fn tick(&mut self, samples: u32) -> Config {
+        let seconds_per_beat = 60.0 / self.bpm;
+        let seconds_per_cell = seconds_per_beat / Self::CELLS_IN_BEAT as f32;
+        let cell_in_samples = seconds_per_cell * self.sample_rate as f32;
+
+        let old_tick = self.phase / cell_in_samples as u32;
+
+        self.phase += samples;
+        self.phase %= cell_in_samples as u32 * Self::CELLS;
+
+        let new_tick = self.phase / cell_in_samples as u32;
+
+        let triggered = if new_tick != old_tick {
+            is_nth_tick_on(&self.triggers, new_tick as usize)
+        } else {
+            false
+        };
+
+        Config { triggered }
+    }
+}
+
+fn is_nth_tick_on(triggers: &[u32; 6], tick_index: usize) -> bool {
+    let (field_index, tick_index) = {
+        let quotient = tick_index / 32;
+        (quotient, tick_index - 32 * quotient)
+    };
+    triggers[field_index] << tick_index & (1 << 31) != 0
+}
+
+struct Config {
+    triggered: bool,
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -170,5 +239,40 @@ mod tests {
     )]
     fn it_converts_reaction_to_command(reaction: Reaction) -> Result<Command, &'static str> {
         reaction.try_into()
+    }
+
+    #[test]
+    fn is_nth_tick_on_returns_true_on_enabled_tick() {
+        let triggers = [
+            0b1000_0000_0000_0000_0000_0000_0000_0000,
+            //^ 0
+            0b0000_0000_0000_0000_0000_0000_0000_0000,
+            0b0000_0000_0000_0000_0000_0000_1000_0001,
+            //                              ^ 88    ^ 95
+            0b0000_0000_0000_0000_0000_0000_0000_0000,
+            0b0000_0000_0000_0000_0000_0000_0000_0000,
+            0b0000_0000_0000_0000_0000_0000_0000_0000,
+        ];
+
+        assert!(is_nth_tick_on(&triggers, 0));
+        assert!(is_nth_tick_on(&triggers, 88));
+        assert!(is_nth_tick_on(&triggers, 95));
+    }
+
+    #[test]
+    fn is_nth_tick_on_returns_false_on_disabled_tick() {
+        let triggers = [
+            0b1000_1000_1000_1000_1000_1000_1000_1000,
+            // ^ 1
+            0b1000_1000_1000_1000_1000_1000_1000_1000,
+            0b1000_1000_1000_1000_1000_1000_1000_1000,
+            //                               ^ 89
+            0b1000_1000_1000_1000_1000_1000_1000_1000,
+            0b1000_1000_1000_1000_1000_1000_1000_1000,
+            0b1000_1000_1000_1000_1000_1000_1000_1000,
+        ];
+
+        assert!(!is_nth_tick_on(&triggers, 1));
+        assert!(!is_nth_tick_on(&triggers, 89));
     }
 }
