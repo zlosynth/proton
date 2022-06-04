@@ -16,7 +16,7 @@ use embedded_graphics_core::geometry::Size;
 use embedded_graphics_core::pixelcolor::BinaryColor;
 use embedded_graphics_simulator::{OutputSettingsBuilder, SimulatorDisplay, Window};
 
-use proton_instruments_karplus_strong::Instrument;
+use proton_instruments_karplus_strong::{Instrument, Rand};
 use proton_ui::action::Action;
 use proton_ui::display::draw as draw_display;
 use proton_ui::reaction::Reaction;
@@ -30,6 +30,15 @@ static mut STATE: Option<State> = None;
 static mut WINDOW: Option<Window> = None;
 static mut DISPLAY: Option<Display> = None;
 static mut INSTRUMENT: Option<Instrument> = None;
+
+struct ThreadRand;
+
+impl Rand for ThreadRand {
+    fn generate(&mut self) -> u16 {
+        use rand::Rng;
+        rand::thread_rng().gen()
+    }
+}
 
 #[repr(C)]
 struct Class {
@@ -200,7 +209,10 @@ unsafe fn perform(
     let mut buffer = [0.0; BUFFER_LEN];
 
     for chunk_index in 0..outlets[0].len() / BUFFER_LEN {
-        INSTRUMENT.as_mut().unwrap().populate(&mut buffer);
+        INSTRUMENT
+            .as_mut()
+            .unwrap()
+            .populate(&mut buffer, &mut ThreadRand);
         let start = chunk_index * BUFFER_LEN;
         outlets[0][start..(BUFFER_LEN + start)].copy_from_slice(&buffer[..BUFFER_LEN]);
     }

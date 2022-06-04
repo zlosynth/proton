@@ -13,6 +13,7 @@ mod app {
 
     use proton_eurorack::system::audio::{Audio, BLOCK_LENGTH, SAMPLE_RATE};
     use proton_eurorack::system::display::Display;
+    use proton_eurorack::system::randomizer::Randomizer;
     use proton_eurorack::system::System;
     use proton_instruments_karplus_strong::Instrument;
     use proton_ui::action::Action as InputAction;
@@ -40,6 +41,7 @@ mod app {
     #[local]
     struct Local {
         audio: Audio,
+        randomizer: Randomizer,
         instrument: Instrument,
         led: LedUser,
         user_input: Input,
@@ -71,6 +73,7 @@ mod app {
         let display = system.display;
         let led = system.led;
         let mono = system.mono;
+        let randomizer = system.randomizer;
         let mut audio = system.audio;
         audio.spawn();
 
@@ -95,6 +98,7 @@ mod app {
             Shared {},
             Local {
                 audio,
+                randomizer,
                 instrument,
                 led,
                 user_input,
@@ -109,12 +113,13 @@ mod app {
         )
     }
 
-    #[task(binds = DMA1_STR1, local = [input_reactions_consumer, instrument, audio], priority = 3)]
+    #[task(binds = DMA1_STR1, local = [input_reactions_consumer, randomizer, instrument, audio], priority = 3)]
     fn handle_dsp(cx: handle_dsp::Context) {
         use core::convert::TryInto;
 
         let input_reactions_consumer = cx.local.input_reactions_consumer;
         let instrument = cx.local.instrument;
+        let randomizer = cx.local.randomizer;
         let audio = cx.local.audio;
 
         while let Some(action) = input_reactions_consumer.dequeue() {
@@ -123,7 +128,7 @@ mod app {
         }
 
         let mut buffer = [0.0; BLOCK_LENGTH];
-        instrument.populate(&mut buffer);
+        instrument.populate(&mut buffer, randomizer);
 
         audio.update_buffer(|audio_buffer| {
             audio_buffer.iter_mut().enumerate().for_each(|(i, x)| {

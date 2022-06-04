@@ -2,6 +2,7 @@ pub mod audio;
 pub mod display;
 pub mod encoder;
 pub mod led;
+pub mod randomizer;
 
 use daisy::hal;
 use hal::pac::CorePeripherals;
@@ -12,6 +13,7 @@ use audio::Audio;
 use display::{Display, DisplayPins};
 use encoder::{AlphaButton, AlphaRotary, BetaButton, BetaRotary};
 use led::Led;
+use randomizer::Randomizer;
 
 pub struct System {
     pub audio: Audio,
@@ -22,6 +24,7 @@ pub struct System {
     pub alpha_rotary: AlphaRotary,
     pub beta_button: BetaButton,
     pub beta_rotary: BetaRotary,
+    pub randomizer: Randomizer,
 }
 
 impl System {
@@ -62,6 +65,11 @@ impl System {
             pins.GPIO.PIN_13.into_pull_up_input(),
         );
 
+        let randomizer = {
+            use stm32h7xx_hal::prelude::_stm32h7xx_hal_rng_RngExt;
+            Randomizer::new(dp.RNG.constrain(ccdr.peripheral.RNG, &ccdr.clocks))
+        };
+
         Self {
             audio,
             display,
@@ -71,6 +79,7 @@ impl System {
             alpha_rotary,
             beta_button,
             beta_rotary,
+            randomizer,
         }
     }
 }
