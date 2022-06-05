@@ -1,8 +1,12 @@
 #![no_std]
 
+#[allow(unused_imports)]
+use micromath::F32Ext;
+
 use core::convert::TryFrom;
 use core::fmt;
 
+use heapless::FnvIndexMap as IndexMap;
 use heapless::Vec;
 
 use proton_primitives::ad_envelope::{Ad, Config as AdConfig};
@@ -13,9 +17,6 @@ use proton_ui::reaction::Reaction;
 use proton_ui::state::*;
 
 const NAME: &str = "Karplus Strong";
-
-const FREQUENCY_ATTRIBUTE: &str = "frequency";
-const FREQUENCY_DEFAULT: f32 = 100.0;
 
 const CUTOFF_ATTRIBUTE: &str = "cutoff";
 const CUTOFF_DEFAULT: f32 = 1000.0;
@@ -52,6 +53,8 @@ const MAX_SAMPLE_RATE: u32 = 48_000;
 const MIN_FREQUENCY: f32 = 40.0;
 const SAMPLES: usize = (MAX_SAMPLE_RATE as f32 / MIN_FREQUENCY) as usize;
 
+const A: f32 = 12.978_271;
+
 pub trait Rand {
     fn generate(&mut self) -> u16;
 }
@@ -62,8 +65,8 @@ pub struct Instrument {
     envelope: Ad,
     ring_buffer: RingBuffer<SAMPLES>,
     turing: Turing,
-    frequency: f32,
     feedback: f32,
+    frequency: f32,
     sample_rate: u32,
 }
 
@@ -79,13 +82,6 @@ impl Instrument {
     pub fn initial_state() -> State {
         State::new(NAME)
             .with_attributes(&[
-                Attribute::new(FREQUENCY_ATTRIBUTE).with_value_f32(
-                    ValueF32::new(FREQUENCY_DEFAULT)
-                        .with_min(50.0)
-                        .with_max(10000.0)
-                        .with_step(10.0)
-                        .with_writter(int_writter),
-                ),
                 Attribute::new(CUTOFF_ATTRIBUTE).with_value_f32(
                     ValueF32::new(CUTOFF_DEFAULT)
                         .with_min(50.0)
@@ -190,14 +186,17 @@ impl Instrument {
             envelope,
             ring_buffer,
             turing,
-            frequency: FREQUENCY_DEFAULT,
             feedback: FEEDBACK_DEFAULT,
+            frequency: 0.0,
             sample_rate,
         }
     }
 
     pub fn populate(&mut self, buffer: &mut [f32], randomizer: &mut impl Rand) {
         let config = self.turing.tick(buffer.len() as u32, randomizer);
+        if config.frequency > 0.1 {
+            self.frequency = config.frequency;
+        }
 
         for x in buffer.iter_mut() {
             if config.triggered {
@@ -233,9 +232,6 @@ impl Instrument {
             Command::SetCutoff(value) => {
                 self.svf.set_frequency(value);
             }
-            Command::SetFrequency(value) => {
-                self.frequency = value;
-            }
             Command::SetFeedback(value) => {
                 self.feedback = value;
             }
@@ -256,7 +252,6 @@ impl Instrument {
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum Command {
-    SetFrequency(f32),
     SetCutoff(f32),
     SetFeedback(f32),
     SetDensity(f32),
@@ -274,8 +269,6 @@ impl TryFrom<Reaction> for Command {
             Reaction::SetValue(attribute, value) => {
                 if attribute == CUTOFF_ATTRIBUTE {
                     Ok(Command::SetCutoff(value))
-                } else if attribute == FREQUENCY_ATTRIBUTE {
-                    Ok(Command::SetFrequency(value))
                 } else if attribute == FEEDBACK_ATTRIBUTE {
                     Ok(Command::SetFeedback(value))
                 } else if attribute == DENSITY_ATTRIBUTE {
@@ -303,6 +296,7 @@ impl TryFrom<Reaction> for Command {
 struct Turing {
     sample_rate: u32,
     triggers: [u32; 3],
+    tones: IndexMap<usize, f32, 64>,
     phase: u32,
     pub lengths: Vec<NoteLength, { NoteLength::LEN }>,
     pub bpm: f32,
@@ -319,10 +313,11 @@ impl Turing {
             sample_rate,
             bpm: 360.0,
             triggers: [
-                0b1000_0010_0000_1000_0010_0000_1000_0010,
-                0b0000_1000_0010_0000_1000_0010_0000_1000,
-                0b0010_0000_1000_0010_0000_1000_0010_0000,
+                0b0000_0000_0000_0000_0000_0000_0000_0000,
+                0b0000_0000_0000_0000_0000_0000_0000_0000,
+                0b0000_0000_0000_0000_0000_0000_0000_0000,
             ],
+            tones: IndexMap::new(),
             phase: 0,
             density: 16,
             rate_of_change: 4.0,
@@ -361,7 +356,17 @@ impl Turing {
             false
         };
 
-        Config { triggered }
+        let frequency = if triggered {
+            let voct = *self.tones.get(&(new_tick as usize)).unwrap();
+            A * 2.0_f32.powf(voct)
+        } else {
+            0.0
+        };
+
+        Config {
+            triggered,
+            frequency,
+        }
     }
 
     fn randomize(&mut self, randomizer: &mut impl Rand) {
@@ -385,22 +390,28 @@ impl Turing {
                 ticks_on.swap_remove(rand % ticks_on.len())
             };
             set_nth_tick_off(&mut self.triggers, index);
+            self.tones.remove(&index);
         }
 
         if !self.lengths.is_empty() {
             for _ in 0..add {
-                let length_in_cells = {
-                    let rand = randomizer.generate() as usize;
-                    let length = self.lengths.get(rand % self.lengths.len()).unwrap();
-                    length.in_cells()
+                let (length, tone) = {
+                    let rand = randomizer.generate();
+                    let length = self
+                        .lengths
+                        .get(rand as usize % self.lengths.len())
+                        .unwrap();
+                    const TONE_MIN: f32 = 1.0;
+                    const TONE_MAX: f32 = 4.0;
+                    let tone = TONE_MIN + (TONE_MAX - TONE_MIN) * (rand as f32 / u16::MAX as f32);
+                    (length, tone)
                 };
+                let length_in_cells = length.in_cells();
                 let position =
                     (randomizer.generate() as u32 % self.enabled_cells()) / length_in_cells;
-                place_note(
-                    position as usize * length_in_cells as usize,
-                    length_in_cells,
-                    &mut self.triggers,
-                );
+                let index = position as usize * length_in_cells as usize;
+                place_note(index, length_in_cells, &mut self.triggers);
+                self.tones.insert(index, tone).unwrap();
             }
         }
     }
@@ -413,6 +424,7 @@ impl Turing {
 #[derive(Clone, Copy)]
 struct Config {
     triggered: bool,
+    frequency: f32,
 }
 
 #[derive(Clone, Copy, PartialEq, Debug)]
@@ -544,10 +556,6 @@ mod tests {
     #[test_case(
         Reaction::SetValue(CUTOFF_ATTRIBUTE, 5.0) =>
         Ok(Command::SetCutoff(5.0))
-    )]
-    #[test_case(
-        Reaction::SetValue(FREQUENCY_ATTRIBUTE, 300.0) =>
-        Ok(Command::SetFrequency(300.0))
     )]
     #[test_case(
         Reaction::SetValue(FEEDBACK_ATTRIBUTE, 0.95) =>

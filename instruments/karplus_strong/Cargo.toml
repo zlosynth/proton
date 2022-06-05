@@ -12,6 +12,7 @@ publish = false
 proton-ui = { path = "../../ui" }
 proton-primitives = { path = "../../primitives" }
 heapless = "0.7"
+micromath = "2"
 
 [dependencies.defmt]
 version  = "0.3"
