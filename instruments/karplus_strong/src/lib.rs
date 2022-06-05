@@ -29,6 +29,9 @@ const DENSITY_DEFAULT: f32 = 4.0;
 const CHANGE_ATTRIBUTE: &str = "change";
 const CHANGE_DEFAULT: f32 = 1.0;
 
+const BEATS_ATTRIBUTE: &str = "beats";
+const BEATS_DEFAULT: f32 = 4.0;
+
 const OFF_ON: [&str; 2] = ["off", "on"];
 const WHOLE_ATTRIBUTE: &str = "whole";
 const WHOLE_DEFAULT: usize = 0;
@@ -111,6 +114,13 @@ impl Instrument {
                         .with_step(1.0)
                         .with_writter(int_writter),
                 ),
+                Attribute::new(BEATS_ATTRIBUTE).with_value_f32(
+                    ValueF32::new(BEATS_DEFAULT)
+                        .with_min(1.0)
+                        .with_max(16.0)
+                        .with_step(1.0)
+                        .with_writter(int_writter),
+                ),
                 Attribute::new(WHOLE_ATTRIBUTE).with_value_select(
                     ValueSelect::new(&OFF_ON)
                         .unwrap()
@@ -169,6 +179,7 @@ impl Instrument {
             let mut turing = Turing::new(sample_rate);
             turing.density = DENSITY_DEFAULT as u32;
             turing.rate_of_change = CHANGE_DEFAULT;
+            turing.beats = BEATS_DEFAULT as u32;
             turing.lengths.push(NoteLength::Quarter).unwrap();
             turing
         };
@@ -208,7 +219,7 @@ impl Instrument {
 
     pub fn execute(&mut self, command: Command) {
         fn add_length(lengths: &mut Vec<NoteLength, { NoteLength::LEN }>, length: NoteLength) {
-            if lengths.iter().enumerate().any(|(_, l)| *l == length) {
+            if !lengths.iter().enumerate().any(|(_, l)| *l == length) {
                 lengths.push(length).unwrap();
             }
         }
@@ -234,6 +245,9 @@ impl Instrument {
             Command::SetChange(value) => {
                 self.turing.rate_of_change = value;
             }
+            Command::SetBeats(value) => {
+                self.turing.beats = value;
+            }
             Command::EnableLength(length) => add_length(&mut self.turing.lengths, length),
             Command::DisableLength(length) => remove_length(&mut self.turing.lengths, length),
         }
@@ -247,6 +261,7 @@ pub enum Command {
     SetFeedback(f32),
     SetDensity(f32),
     SetChange(f32),
+    SetBeats(u32),
     EnableLength(NoteLength),
     DisableLength(NoteLength),
 }
@@ -267,6 +282,8 @@ impl TryFrom<Reaction> for Command {
                     Ok(Command::SetDensity(value))
                 } else if attribute == CHANGE_ATTRIBUTE {
                     Ok(Command::SetChange(value))
+                } else if attribute == BEATS_ATTRIBUTE {
+                    Ok(Command::SetBeats(value as u32))
                 } else {
                     Err("cannot convert this reaction to a command")
                 }
@@ -291,25 +308,26 @@ struct Turing {
     pub bpm: f32,
     pub density: u32,
     pub rate_of_change: f32,
+    pub beats: u32,
 }
 
 impl Turing {
     const CELLS_IN_BEAT: u32 = 2 * 3;
-    const CELLS: u32 = Self::CELLS_IN_BEAT * 16;
 
     pub fn new(sample_rate: u32) -> Self {
         Self {
             sample_rate,
             bpm: 360.0,
             triggers: [
-                0b0000_0000_0000_0000_0000_0000_0000_0000,
-                0b0000_0000_0000_0000_0000_0000_0000_0000,
-                0b0000_0000_0000_0000_0000_0000_0000_0000,
+                0b1000_0010_0000_1000_0010_0000_1000_0010,
+                0b0000_1000_0010_0000_1000_0010_0000_1000,
+                0b0010_0000_1000_0010_0000_1000_0010_0000,
             ],
             phase: 0,
             density: 16,
             rate_of_change: 4.0,
             lengths: Vec::new(),
+            beats: 4,
         }
     }
 
@@ -330,9 +348,9 @@ impl Turing {
 
         self.phase += samples;
 
-        if self.phase >= cell_in_samples as u32 * Self::CELLS {
+        if self.phase >= cell_in_samples as u32 * self.enabled_cells() {
             self.randomize(randomizer);
-            self.phase %= cell_in_samples as u32 * Self::CELLS;
+            self.phase %= cell_in_samples as u32 * self.enabled_cells();
         }
 
         let new_tick = self.phase / cell_in_samples as u32;
@@ -376,7 +394,8 @@ impl Turing {
                     let length = self.lengths.get(rand % self.lengths.len()).unwrap();
                     length.in_cells()
                 };
-                let position = (randomizer.generate() as u32 % Self::CELLS) / length_in_cells;
+                let position =
+                    (randomizer.generate() as u32 % self.enabled_cells()) / length_in_cells;
                 place_note(
                     position as usize * length_in_cells as usize,
                     length_in_cells,
@@ -384,6 +403,10 @@ impl Turing {
                 );
             }
         }
+    }
+
+    fn enabled_cells(&self) -> u32 {
+        self.beats * Self::CELLS_IN_BEAT
     }
 }
 
@@ -537,6 +560,10 @@ mod tests {
     #[test_case(
         Reaction::SetValue(CHANGE_ATTRIBUTE, 5.0) =>
         Ok(Command::SetChange(5.0))
+    )]
+    #[test_case(
+        Reaction::SetValue(BEATS_ATTRIBUTE, 5.0) =>
+        Ok(Command::SetBeats(5))
     )]
     #[test_case(
         Reaction::SelectValue(WHOLE_ATTRIBUTE, OFF_ON[0]) =>
