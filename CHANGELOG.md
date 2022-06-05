@@ -6,6 +6,8 @@ backwards compatibility.
 
 ## Unreleased
 
+## 0.5.0
+
 * Implement sound output in the firmware.
 * Introduce a basic instrument based around Karplus Strong algorithm.
 * Allow custom settings for f32 attribute range.

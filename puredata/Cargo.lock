@@ -627,7 +627,7 @@ checksum = "eb9f9e6e233e5c4a35559a617bf40a4ec447db2e84c20b55a6f83167b7e57872"
 
 [[package]]
 name = "proton-instruments-karplus-strong"
-version = "0.4.0"
+version = "0.5.0"
 dependencies = [
  "heapless",
  "micromath 2.0.0",
@@ -637,7 +637,7 @@ dependencies = [
 
 [[package]]
 name = "proton-peripherals"
-version = "0.4.0"
+version = "0.5.0"
 dependencies = [
  "either",
  "embedded-hal",
@@ -645,7 +645,7 @@ dependencies = [
 
 [[package]]
 name = "proton-primitives"
-version = "0.4.0"
+version = "0.5.0"
 dependencies = [
  "dasp",
  "micromath 2.0.0",
@@ -653,7 +653,7 @@ dependencies = [
 
 [[package]]
 name = "proton-puredata"
-version = "0.4.0"
+version = "0.5.0"
 dependencies = [
  "embedded-graphics-core",
  "embedded-graphics-simulator",
@@ -666,7 +666,7 @@ dependencies = [
 
 [[package]]
 name = "proton-ui"
-version = "0.4.0"
+version = "0.5.0"
 dependencies = [
  "embedded-graphics",
  "embedded-hal",
