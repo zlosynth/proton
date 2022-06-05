@@ -358,7 +358,24 @@ impl Turing {
 
         let frequency = if triggered {
             let voct = *self.tones.get(&(new_tick as usize)).unwrap();
-            A * 2.0_f32.powf(voct)
+
+            let oct = voct.trunc();
+            let pentatonic = {
+                let fract = voct.fract();
+                if fract < 1.0 / 5.0 {
+                    0.0
+                } else if fract < 2.0 / 5.0 {
+                    2.0 / 12.0
+                } else if fract < 3.0 / 5.0 {
+                    4.0 / 12.0
+                } else if fract < 4.0 / 5.0 {
+                    7.0 / 12.0
+                } else {
+                    9.0 / 12.0
+                }
+            };
+            let quantized_voct = oct + pentatonic;
+            A * 2.0_f32.powf(quantized_voct)
         } else {
             0.0
         };
