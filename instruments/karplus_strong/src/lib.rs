@@ -14,8 +14,11 @@ use proton_ui::state::*;
 
 const NAME: &str = "Karplus Strong";
 const FREQUENCY_ATTRIBUTE: &str = "frequency";
+const FREQUENCY_DEFAULT: f32 = 100.0;
 const CUTOFF_ATTRIBUTE: &str = "cutoff";
+const CUTOFF_DEFAULT: f32 = 1000.0;
 const FEEDBACK_ATTRIBUTE: &str = "feedback";
+const FEEDBACK_DEFAULT: f32 = 0.95;
 
 const MAX_SAMPLE_RATE: u32 = 48_000;
 const MIN_FREQUENCY: f32 = 40.0;
@@ -36,6 +39,10 @@ pub struct Instrument {
     sample_rate: u32,
 }
 
+fn frequency_writter(destination: &mut dyn fmt::Write, value: f32) {
+    write!(destination, "{:.0}", value).unwrap();
+}
+
 fn feedback_writter(destination: &mut dyn fmt::Write, value: f32) {
     write!(destination, "{:.3}", value).unwrap();
 }
@@ -44,11 +51,22 @@ impl Instrument {
     pub fn initial_state() -> State {
         State::new(NAME)
             .with_attributes(&[
-                Attribute::new(FREQUENCY_ATTRIBUTE).with_value_f32(ValueF32::new(0.5)), // TODO: use default value
-                Attribute::new(CUTOFF_ATTRIBUTE)
-                    .with_value_f32(ValueF32::new(0.3).with_step(0.005)),
+                Attribute::new(FREQUENCY_ATTRIBUTE).with_value_f32(
+                    ValueF32::new(FREQUENCY_DEFAULT)
+                        .with_min(50.0)
+                        .with_max(10000.0)
+                        .with_step(10.0)
+                        .with_writter(frequency_writter),
+                ),
+                Attribute::new(CUTOFF_ATTRIBUTE).with_value_f32(
+                    ValueF32::new(CUTOFF_DEFAULT)
+                        .with_min(50.0)
+                        .with_max(10000.0)
+                        .with_step(10.0)
+                        .with_writter(frequency_writter),
+                ),
                 Attribute::new(FEEDBACK_ATTRIBUTE).with_value_f32(
-                    ValueF32::new(0.9)
+                    ValueF32::new(FEEDBACK_DEFAULT)
                         .with_min(0.6)
                         .with_max(1.0)
                         .with_step(0.005)
@@ -66,7 +84,8 @@ impl Instrument {
 
         let svf = {
             let mut svf = StateVariableFilter::new(sample_rate);
-            svf.set_bandform(Bandform::LowPass).set_frequency(1000.0);
+            svf.set_bandform(Bandform::LowPass)
+                .set_frequency(CUTOFF_DEFAULT);
             svf
         };
         let noise = WhiteNoise::new();
@@ -79,8 +98,8 @@ impl Instrument {
             envelope,
             ring_buffer,
             turing: Turing::new(sample_rate),
-            frequency: 100.0,
-            feedback: 0.9,
+            frequency: FREQUENCY_DEFAULT,
+            feedback: FEEDBACK_DEFAULT,
             sample_rate,
         }
     }
@@ -135,9 +154,9 @@ impl TryFrom<Reaction> for Command {
         match other {
             Reaction::SetValue(attribute, value) => {
                 if attribute == CUTOFF_ATTRIBUTE {
-                    Ok(Command::SetCutoff(value * 5000.0))
+                    Ok(Command::SetCutoff(value))
                 } else if attribute == FREQUENCY_ATTRIBUTE {
-                    Ok(Command::SetFrequency(value * 1000.0))
+                    Ok(Command::SetFrequency(value))
                 } else if attribute == FEEDBACK_ATTRIBUTE {
                     Ok(Command::SetFeedback(value))
                 } else {
@@ -378,12 +397,12 @@ mod tests {
         Ok(Command::SetCutoff(0.0))
     )]
     #[test_case(
-        Reaction::SetValue(CUTOFF_ATTRIBUTE, 0.1) =>
-        Ok(Command::SetCutoff(500.0))
+        Reaction::SetValue(CUTOFF_ATTRIBUTE, 5.0) =>
+        Ok(Command::SetCutoff(5.0))
     )]
     #[test_case(
-        Reaction::SetValue(FREQUENCY_ATTRIBUTE, 0.1) =>
-        Ok(Command::SetFrequency(100.0))
+        Reaction::SetValue(FREQUENCY_ATTRIBUTE, 300.0) =>
+        Ok(Command::SetFrequency(300.0))
     )]
     #[test_case(
         Reaction::SetValue(FEEDBACK_ATTRIBUTE, 0.95) =>
