@@ -50,7 +50,7 @@ const EIGHT_ATTRIBUTE: &str = "eight";
 const EIGHT_DEFAULT: usize = 0;
 
 const MAX_SAMPLE_RATE: u32 = 48_000;
-const MIN_FREQUENCY: f32 = 40.0;
+const MIN_FREQUENCY: f32 = 10.0;
 const SAMPLES: usize = (MAX_SAMPLE_RATE as f32 / MIN_FREQUENCY) as usize;
 
 const A: f32 = 12.978_271;
@@ -187,7 +187,7 @@ impl Instrument {
             ring_buffer,
             turing,
             feedback: FEEDBACK_DEFAULT,
-            frequency: 0.0,
+            frequency: 1000.0,
             sample_rate,
         }
     }
@@ -419,7 +419,7 @@ impl Turing {
                         .get(rand as usize % self.lengths.len())
                         .unwrap();
                     const TONE_MIN: f32 = 1.0;
-                    const TONE_MAX: f32 = 4.0;
+                    const TONE_MAX: f32 = 3.0;
                     let tone = TONE_MIN + (TONE_MAX - TONE_MIN) * (rand as f32 / u16::MAX as f32);
                     (length, tone)
                 };
