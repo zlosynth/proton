@@ -19,6 +19,10 @@ const CUTOFF_ATTRIBUTE: &str = "cutoff";
 const CUTOFF_DEFAULT: f32 = 1000.0;
 const FEEDBACK_ATTRIBUTE: &str = "feedback";
 const FEEDBACK_DEFAULT: f32 = 0.95;
+const DENSITY_ATTRIBUTE: &str = "density";
+const DENSITY_DEFAULT: f32 = 4.0;
+const CHANGE_ATTRIBUTE: &str = "change";
+const CHANGE_DEFAULT: f32 = 1.0;
 
 const MAX_SAMPLE_RATE: u32 = 48_000;
 const MIN_FREQUENCY: f32 = 40.0;
@@ -39,11 +43,11 @@ pub struct Instrument {
     sample_rate: u32,
 }
 
-fn frequency_writter(destination: &mut dyn fmt::Write, value: f32) {
+fn int_writter(destination: &mut dyn fmt::Write, value: f32) {
     write!(destination, "{:.0}", value).unwrap();
 }
 
-fn feedback_writter(destination: &mut dyn fmt::Write, value: f32) {
+fn f3_writter(destination: &mut dyn fmt::Write, value: f32) {
     write!(destination, "{:.3}", value).unwrap();
 }
 
@@ -56,21 +60,35 @@ impl Instrument {
                         .with_min(50.0)
                         .with_max(10000.0)
                         .with_step(10.0)
-                        .with_writter(frequency_writter),
+                        .with_writter(int_writter),
                 ),
                 Attribute::new(CUTOFF_ATTRIBUTE).with_value_f32(
                     ValueF32::new(CUTOFF_DEFAULT)
                         .with_min(50.0)
                         .with_max(10000.0)
                         .with_step(10.0)
-                        .with_writter(frequency_writter),
+                        .with_writter(int_writter),
                 ),
                 Attribute::new(FEEDBACK_ATTRIBUTE).with_value_f32(
                     ValueF32::new(FEEDBACK_DEFAULT)
                         .with_min(0.6)
                         .with_max(1.0)
                         .with_step(0.005)
-                        .with_writter(feedback_writter),
+                        .with_writter(f3_writter),
+                ),
+                Attribute::new(DENSITY_ATTRIBUTE).with_value_f32(
+                    ValueF32::new(DENSITY_DEFAULT)
+                        .with_min(0.0)
+                        .with_max(16.0)
+                        .with_step(1.0)
+                        .with_writter(int_writter),
+                ),
+                Attribute::new(CHANGE_ATTRIBUTE).with_value_f32(
+                    ValueF32::new(CHANGE_DEFAULT)
+                        .with_min(0.0)
+                        .with_max(4.0)
+                        .with_step(1.0)
+                        .with_writter(int_writter),
                 ),
             ])
             .unwrap()
@@ -91,13 +109,19 @@ impl Instrument {
         let noise = WhiteNoise::new();
         let envelope = Ad::new(sample_rate as f32);
         let ring_buffer = RingBuffer::new();
+        let turing = {
+            let mut turing = Turing::new(sample_rate);
+            turing.density = DENSITY_DEFAULT as u32;
+            turing.rate_of_change = CHANGE_DEFAULT;
+            turing
+        };
 
         Self {
             svf,
             noise,
             envelope,
             ring_buffer,
-            turing: Turing::new(sample_rate),
+            turing,
             frequency: FREQUENCY_DEFAULT,
             feedback: FEEDBACK_DEFAULT,
             sample_rate,
@@ -136,6 +160,12 @@ impl Instrument {
             Command::SetFeedback(value) => {
                 self.feedback = value;
             }
+            Command::SetDensity(value) => {
+                self.turing.density = value as u32;
+            }
+            Command::SetChange(value) => {
+                self.turing.rate_of_change = value;
+            }
         }
     }
 }
@@ -145,6 +175,8 @@ pub enum Command {
     SetFrequency(f32),
     SetCutoff(f32),
     SetFeedback(f32),
+    SetDensity(f32),
+    SetChange(f32),
 }
 
 impl TryFrom<Reaction> for Command {
@@ -159,6 +191,10 @@ impl TryFrom<Reaction> for Command {
                     Ok(Command::SetFrequency(value))
                 } else if attribute == FEEDBACK_ATTRIBUTE {
                     Ok(Command::SetFeedback(value))
+                } else if attribute == DENSITY_ATTRIBUTE {
+                    Ok(Command::SetDensity(value))
+                } else if attribute == CHANGE_ATTRIBUTE {
+                    Ok(Command::SetChange(value))
                 } else {
                     Err("cannot convert this reaction to a command")
                 }
@@ -170,11 +206,11 @@ impl TryFrom<Reaction> for Command {
 
 struct Turing {
     sample_rate: u32,
-    bpm: f32,
     triggers: [u32; 3],
     phase: u32,
-    density: u32,
-    rate_of_change: f32,
+    pub bpm: f32,
+    pub density: u32,
+    pub rate_of_change: f32,
 }
 
 impl Turing {
@@ -237,8 +273,11 @@ impl Turing {
 
         let (add, remove) = match delta.cmp(&0) {
             Ordering::Less => (delta.abs().min(self.rate_of_change as i32), 0),
-            Ordering::Equal => (self.rate_of_change as i32, self.rate_of_change as i32),
-            Ordering::Greater => (0, delta.abs().min(self.rate_of_change as i32)),
+            Ordering::Equal => {
+                let change = self.density.min(self.rate_of_change as u32) as i32;
+                (change, change)
+            }
+            Ordering::Greater => (0, delta.min(self.rate_of_change as i32)),
         };
 
         for _ in 0..remove {
@@ -407,6 +446,14 @@ mod tests {
     #[test_case(
         Reaction::SetValue(FEEDBACK_ATTRIBUTE, 0.95) =>
         Ok(Command::SetFeedback(0.95))
+    )]
+    #[test_case(
+        Reaction::SetValue(DENSITY_ATTRIBUTE, 5.0) =>
+        Ok(Command::SetDensity(5.0))
+    )]
+    #[test_case(
+        Reaction::SetValue(CHANGE_ATTRIBUTE, 5.0) =>
+        Ok(Command::SetChange(5.0))
     )]
     fn it_converts_reaction_to_command(reaction: Reaction) -> Result<Command, &'static str> {
         reaction.try_into()
