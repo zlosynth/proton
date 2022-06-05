@@ -13,16 +13,37 @@ use proton_ui::reaction::Reaction;
 use proton_ui::state::*;
 
 const NAME: &str = "Karplus Strong";
+
 const FREQUENCY_ATTRIBUTE: &str = "frequency";
 const FREQUENCY_DEFAULT: f32 = 100.0;
+
 const CUTOFF_ATTRIBUTE: &str = "cutoff";
 const CUTOFF_DEFAULT: f32 = 1000.0;
+
 const FEEDBACK_ATTRIBUTE: &str = "feedback";
 const FEEDBACK_DEFAULT: f32 = 0.95;
+
 const DENSITY_ATTRIBUTE: &str = "density";
 const DENSITY_DEFAULT: f32 = 4.0;
+
 const CHANGE_ATTRIBUTE: &str = "change";
 const CHANGE_DEFAULT: f32 = 1.0;
+
+const OFF_ON: [&str; 2] = ["off", "on"];
+const WHOLE_ATTRIBUTE: &str = "whole";
+const WHOLE_DEFAULT: usize = 0;
+const HALF_TRIPLET_ATTRIBUTE: &str = "half triplet";
+const HALF_TRIPLET_DEFAULT: usize = 0;
+const HALF_ATTRIBUTE: &str = "half";
+const HALF_DEFAULT: usize = 0;
+const QUARTER_TRIPLET_ATTRIBUTE: &str = "quarter triplet";
+const QUARTER_TRIPLET_DEFAULT: usize = 0;
+const QUARTER_ATTRIBUTE: &str = "quarter";
+const QUARTER_DEFAULT: usize = 1;
+const EIGHT_TRIPLET_ATTRIBUTE: &str = "eight triplet";
+const EIGHT_TRIPLET_DEFAULT: usize = 0;
+const EIGHT_ATTRIBUTE: &str = "eight";
+const EIGHT_DEFAULT: usize = 0;
 
 const MAX_SAMPLE_RATE: u32 = 48_000;
 const MIN_FREQUENCY: f32 = 40.0;
@@ -90,6 +111,41 @@ impl Instrument {
                         .with_step(1.0)
                         .with_writter(int_writter),
                 ),
+                Attribute::new(WHOLE_ATTRIBUTE).with_value_select(
+                    ValueSelect::new(&OFF_ON)
+                        .unwrap()
+                        .with_selected(WHOLE_DEFAULT),
+                ),
+                Attribute::new(HALF_TRIPLET_ATTRIBUTE).with_value_select(
+                    ValueSelect::new(&OFF_ON)
+                        .unwrap()
+                        .with_selected(HALF_TRIPLET_DEFAULT),
+                ),
+                Attribute::new(HALF_ATTRIBUTE).with_value_select(
+                    ValueSelect::new(&OFF_ON)
+                        .unwrap()
+                        .with_selected(HALF_DEFAULT),
+                ),
+                Attribute::new(QUARTER_TRIPLET_ATTRIBUTE).with_value_select(
+                    ValueSelect::new(&OFF_ON)
+                        .unwrap()
+                        .with_selected(QUARTER_TRIPLET_DEFAULT),
+                ),
+                Attribute::new(QUARTER_ATTRIBUTE).with_value_select(
+                    ValueSelect::new(&OFF_ON)
+                        .unwrap()
+                        .with_selected(QUARTER_DEFAULT),
+                ),
+                Attribute::new(EIGHT_TRIPLET_ATTRIBUTE).with_value_select(
+                    ValueSelect::new(&OFF_ON)
+                        .unwrap()
+                        .with_selected(EIGHT_TRIPLET_DEFAULT),
+                ),
+                Attribute::new(EIGHT_ATTRIBUTE).with_value_select(
+                    ValueSelect::new(&OFF_ON)
+                        .unwrap()
+                        .with_selected(EIGHT_DEFAULT),
+                ),
             ])
             .unwrap()
     }
@@ -113,6 +169,7 @@ impl Instrument {
             let mut turing = Turing::new(sample_rate);
             turing.density = DENSITY_DEFAULT as u32;
             turing.rate_of_change = CHANGE_DEFAULT;
+            turing.lengths.push(NoteLength::Quarter).unwrap();
             turing
         };
 
@@ -150,6 +207,17 @@ impl Instrument {
     }
 
     pub fn execute(&mut self, command: Command) {
+        fn add_length(lengths: &mut Vec<NoteLength, { NoteLength::LEN }>, length: NoteLength) {
+            if lengths.iter().enumerate().any(|(_, l)| *l == length) {
+                lengths.push(length).unwrap();
+            }
+        }
+        fn remove_length(lengths: &mut Vec<NoteLength, { NoteLength::LEN }>, length: NoteLength) {
+            if let Some((index, _)) = lengths.iter().enumerate().find(|(_, l)| **l == length) {
+                lengths.swap_remove(index);
+            }
+        }
+
         match command {
             Command::SetCutoff(value) => {
                 self.svf.set_frequency(value);
@@ -166,6 +234,8 @@ impl Instrument {
             Command::SetChange(value) => {
                 self.turing.rate_of_change = value;
             }
+            Command::EnableLength(length) => add_length(&mut self.turing.lengths, length),
+            Command::DisableLength(length) => remove_length(&mut self.turing.lengths, length),
         }
     }
 }
@@ -177,6 +247,8 @@ pub enum Command {
     SetFeedback(f32),
     SetDensity(f32),
     SetChange(f32),
+    EnableLength(NoteLength),
+    DisableLength(NoteLength),
 }
 
 impl TryFrom<Reaction> for Command {
@@ -199,7 +271,14 @@ impl TryFrom<Reaction> for Command {
                     Err("cannot convert this reaction to a command")
                 }
             }
-            _ => Err("cannot convert this reaction to a command"),
+            Reaction::SelectValue(attribute, value) => {
+                let length = NoteLength::from_attribute(attribute);
+                if value == OFF_ON[1] {
+                    Ok(Command::EnableLength(length))
+                } else {
+                    Ok(Command::DisableLength(length))
+                }
+            }
         }
     }
 }
@@ -208,6 +287,7 @@ struct Turing {
     sample_rate: u32,
     triggers: [u32; 3],
     phase: u32,
+    pub lengths: Vec<NoteLength, { NoteLength::LEN }>,
     pub bpm: f32,
     pub density: u32,
     pub rate_of_change: f32,
@@ -229,6 +309,7 @@ impl Turing {
             phase: 0,
             density: 16,
             rate_of_change: 4.0,
+            lengths: Vec::new(),
         }
     }
 
@@ -288,18 +369,20 @@ impl Turing {
             set_nth_tick_off(&mut self.triggers, index);
         }
 
-        for _ in 0..add {
-            let length_in_cells = {
-                let rand = randomizer.generate() as usize;
-                let length = NoteLength::from_index(rand % NoteLength::LEN);
-                length.in_cells()
-            };
-            let position = (randomizer.generate() as u32 % Self::CELLS) / length_in_cells;
-            place_note(
-                position as usize * length_in_cells as usize,
-                length_in_cells,
-                &mut self.triggers,
-            );
+        if !self.lengths.is_empty() {
+            for _ in 0..add {
+                let length_in_cells = {
+                    let rand = randomizer.generate() as usize;
+                    let length = self.lengths.get(rand % self.lengths.len()).unwrap();
+                    length.in_cells()
+                };
+                let position = (randomizer.generate() as u32 % Self::CELLS) / length_in_cells;
+                place_note(
+                    position as usize * length_in_cells as usize,
+                    length_in_cells,
+                    &mut self.triggers,
+                );
+            }
         }
     }
 }
@@ -309,8 +392,8 @@ struct Config {
     triggered: bool,
 }
 
-#[derive(Clone, Copy)]
-enum NoteLength {
+#[derive(Clone, Copy, PartialEq, Debug)]
+pub enum NoteLength {
     Whole,
     HalfTriplet,
     Half,
@@ -324,16 +407,16 @@ use NoteLength::*;
 impl NoteLength {
     const LEN: usize = 7;
 
-    fn from_index(index: usize) -> Self {
-        match index {
-            0 => Whole,
-            1 => HalfTriplet,
-            2 => Half,
-            3 => QuarterTriplet,
-            4 => Quarter,
-            5 => EightTriplet,
-            6 => Eight,
-            _ => panic!("no such length"),
+    fn from_attribute(name: &str) -> Self {
+        match name {
+            WHOLE_ATTRIBUTE => Whole,
+            HALF_TRIPLET_ATTRIBUTE => HalfTriplet,
+            HALF_ATTRIBUTE => Half,
+            QUARTER_TRIPLET_ATTRIBUTE => QuarterTriplet,
+            QUARTER_ATTRIBUTE => Quarter,
+            EIGHT_TRIPLET_ATTRIBUTE => EightTriplet,
+            EIGHT_ATTRIBUTE => Eight,
+            _ => unreachable!(),
         }
     }
 
@@ -454,6 +537,62 @@ mod tests {
     #[test_case(
         Reaction::SetValue(CHANGE_ATTRIBUTE, 5.0) =>
         Ok(Command::SetChange(5.0))
+    )]
+    #[test_case(
+        Reaction::SelectValue(WHOLE_ATTRIBUTE, OFF_ON[0]) =>
+        Ok(Command::DisableLength(NoteLength::Whole))
+    )]
+    #[test_case(
+        Reaction::SelectValue(WHOLE_ATTRIBUTE, OFF_ON[1]) =>
+        Ok(Command::EnableLength(NoteLength::Whole))
+    )]
+    #[test_case(
+        Reaction::SelectValue(HALF_ATTRIBUTE, OFF_ON[0]) =>
+        Ok(Command::DisableLength(NoteLength::Half))
+    )]
+    #[test_case(
+        Reaction::SelectValue(HALF_ATTRIBUTE, OFF_ON[1]) =>
+        Ok(Command::EnableLength(NoteLength::Half))
+    )]
+    #[test_case(
+        Reaction::SelectValue(QUARTER_ATTRIBUTE, OFF_ON[0]) =>
+        Ok(Command::DisableLength(NoteLength::Quarter))
+    )]
+    #[test_case(
+        Reaction::SelectValue(QUARTER_ATTRIBUTE, OFF_ON[1]) =>
+        Ok(Command::EnableLength(NoteLength::Quarter))
+    )]
+    #[test_case(
+        Reaction::SelectValue(EIGHT_ATTRIBUTE, OFF_ON[0]) =>
+        Ok(Command::DisableLength(NoteLength::Eight))
+    )]
+    #[test_case(
+        Reaction::SelectValue(EIGHT_ATTRIBUTE, OFF_ON[1]) =>
+        Ok(Command::EnableLength(NoteLength::Eight))
+    )]
+    #[test_case(
+        Reaction::SelectValue(HALF_TRIPLET_ATTRIBUTE, OFF_ON[0]) =>
+        Ok(Command::DisableLength(NoteLength::HalfTriplet))
+    )]
+    #[test_case(
+        Reaction::SelectValue(HALF_TRIPLET_ATTRIBUTE, OFF_ON[1]) =>
+        Ok(Command::EnableLength(NoteLength::HalfTriplet))
+    )]
+    #[test_case(
+        Reaction::SelectValue(QUARTER_TRIPLET_ATTRIBUTE, OFF_ON[0]) =>
+        Ok(Command::DisableLength(NoteLength::QuarterTriplet))
+    )]
+    #[test_case(
+        Reaction::SelectValue(QUARTER_TRIPLET_ATTRIBUTE, OFF_ON[1]) =>
+        Ok(Command::EnableLength(NoteLength::QuarterTriplet))
+    )]
+    #[test_case(
+        Reaction::SelectValue(EIGHT_TRIPLET_ATTRIBUTE, OFF_ON[0]) =>
+        Ok(Command::DisableLength(NoteLength::EightTriplet))
+    )]
+    #[test_case(
+        Reaction::SelectValue(EIGHT_TRIPLET_ATTRIBUTE, OFF_ON[1]) =>
+        Ok(Command::EnableLength(NoteLength::EightTriplet))
     )]
     fn it_converts_reaction_to_command(reaction: Reaction) -> Result<Command, &'static str> {
         reaction.try_into()
@@ -620,18 +759,5 @@ mod tests {
             NoteLength::Eight.in_cells() * 8,
             NoteLength::Whole.in_cells()
         );
-    }
-
-    #[test]
-    fn confirm_that_note_length_len_is_correct_with_valid_indices() {
-        for i in 0..NoteLength::LEN {
-            let _ = NoteLength::from_index(i);
-        }
-    }
-
-    #[test]
-    #[should_panic]
-    fn confirm_that_note_length_len_is_correct_with_invalid_index() {
-        let _ = NoteLength::from_index(NoteLength::LEN);
     }
 }
