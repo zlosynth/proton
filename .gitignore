@@ -1,6 +1,7 @@
 .gdb_history
 /template
 instruments/karplus_strong/Cargo.lock
+instruments/tape/Cargo.lock
 peripherals/Cargo.lock
 ui/Cargo.lock
 primitives/Cargo.lock

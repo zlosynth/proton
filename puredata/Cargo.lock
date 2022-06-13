@@ -636,6 +636,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "proton-instruments-tape"
+version = "0.5.0"
+dependencies = [
+ "heapless",
+ "micromath 2.0.0",
+ "proton-primitives",
+ "proton-ui",
+]
+
+[[package]]
 name = "proton-peripherals"
 version = "0.5.0"
 dependencies = [
@@ -660,6 +670,7 @@ dependencies = [
  "field-offset",
  "pd-sys",
  "proton-instruments-karplus-strong",
+ "proton-instruments-tape",
  "proton-ui",
  "rand 0.8.5",
 ]

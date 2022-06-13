@@ -14,6 +14,7 @@ crate-type = ["cdylib"]
 [dependencies]
 proton-ui = { path = "../ui" }
 proton-instruments-karplus-strong = { path = "../instruments/karplus_strong" }
+proton-instruments-tape = { path = "../instruments/tape" }
 pd-sys = "0.1.0"
 field-offset = "0.3"
 embedded-graphics-simulator = "0.3"
