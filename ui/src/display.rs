@@ -109,7 +109,7 @@ where
             )?;
         }
         Value::F32(writter, value) => {
-            let mut string = heapless::String::<6>::new();
+            let mut string = heapless::String::<8>::new();
             writter(&mut string, *value);
             let number = &string;
 
