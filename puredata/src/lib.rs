@@ -64,7 +64,8 @@ pub unsafe extern "C" fn proton_tilde_setup() {
     let mut window = Window::new("", &OutputSettingsBuilder::new().scale(2).build());
     let mut display = SimulatorDisplay::new(Size::new(128, 64));
 
-    let state = Instrument::initial_state();
+    let instrument = Instrument::new(48_000);
+    let state = instrument.state();
     let view = (&state).into();
     draw_display(&mut display, &view).unwrap();
     window.update(&display);
@@ -82,7 +83,7 @@ pub unsafe extern "C" fn proton_tilde_setup() {
     STATE = Some(state);
     WINDOW = Some(window);
     DISPLAY = Some(display);
-    INSTRUMENT = Some(Instrument::new(48_000));
+    INSTRUMENT = Some(instrument);
 }
 
 unsafe fn create_class() -> *mut pd_sys::_class {
