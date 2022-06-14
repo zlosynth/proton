@@ -444,7 +444,7 @@ struct Config {
     frequency: f32,
 }
 
-#[derive(Clone, Copy, PartialEq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum NoteLength {
     Whole,
     HalfTriplet,

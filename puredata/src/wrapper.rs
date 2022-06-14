@@ -47,7 +47,7 @@ macro_rules! register_dsp_method {
             let vector: &mut [*mut pd_sys::t_int] =
                 std::slice::from_raw_parts_mut(vector, vector_length);
 
-            vector[1] = std::mem::transmute(number_of_frames);
+            vector[1] = number_of_frames as *mut pd_sys::t_int;
             for i in 0..iolets {
                 vector[2 + i] = (*signal[i]).s_vec as *mut pd_sys::t_int;
             }
@@ -103,6 +103,6 @@ pub unsafe fn read_signal<'a>(
     pointer: pd_sys::t_int,
     number_of_frames: usize,
 ) -> &'a mut [pd_sys::t_float] {
-    let samples = std::mem::transmute::<_, *mut pd_sys::t_sample>(pointer);
+    let samples = pointer as *mut pd_sys::t_sample;
     std::slice::from_raw_parts_mut(samples, number_of_frames)
 }

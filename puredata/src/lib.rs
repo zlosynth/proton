@@ -91,10 +91,7 @@ unsafe fn create_class() -> *mut pd_sys::_class {
 
     pd_sys::class_new(
         pd_sys::gensym(cstr::cstr("proton~").as_ptr()),
-        Some(std::mem::transmute::<
-            unsafe extern "C" fn() -> *mut c_void,
-            _,
-        >(new)),
+        Some(new),
         None,
         std::mem::size_of::<Class>(),
         pd_sys::CLASS_DEFAULT as i32,
