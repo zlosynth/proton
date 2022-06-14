@@ -68,7 +68,7 @@ macro_rules! register_dsp_method {
                 let reserved = 1;
                 let receiver = 1;
                 let number_of_frames = 1;
-                let inlets = $inlets.min(1);
+                let inlets = $inlets.max(1);
                 let outlets = $outlets;
                 reserved + receiver + number_of_frames + inlets + outlets
             };
