@@ -3,13 +3,14 @@ use core::fmt;
 use proton_ui::state::*;
 
 use crate::instrument::Instrument;
+use crate::instrument_attributes as attributes;
 
 const NAME: &str = "Tape";
 
 impl Instrument {
     pub fn state(&self) -> State {
         State::new(NAME)
-            .with_attributes(&[Attribute::new("post gain").with_value_f32(
+            .with_attributes(&[Attribute::new(attributes::POST_GAIN).with_value_f32(
                 ValueF32::new(self.post_gain)
                     .with_min(0.0)
                     .with_max(1.0)
