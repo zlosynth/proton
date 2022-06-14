@@ -2,8 +2,8 @@ use core::fmt;
 
 use proton_ui::state::*;
 
-use crate::instrument::Instrument;
-use crate::instrument_attributes as attributes;
+use super::attributes;
+use super::Instrument;
 
 const NAME: &str = "Tape";
 

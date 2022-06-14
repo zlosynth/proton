@@ -1,3 +1,9 @@
+mod attributes;
+mod command;
+mod execute;
+mod populate;
+mod state;
+
 pub struct Instrument {
     pub(crate) post_gain: f32,
 }

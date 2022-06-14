@@ -2,7 +2,7 @@ use core::convert::TryFrom;
 
 use proton_ui::reaction::Reaction;
 
-use crate::instrument_attributes as attributes;
+use super::attributes;
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum Command {
