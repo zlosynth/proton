@@ -1,12 +1,9 @@
-use dasp::{signal, Frame, Signal};
+use dasp::{signal, Signal};
 
 use super::Instrument;
 
 impl Instrument {
-    pub fn process<F>(&mut self, block: &mut [F; 32])
-    where
-        F: Frame,
-    {
+    pub fn process(&mut self, block: &mut [f32; 32]) {
         let block_copy = *block;
 
         let mut input_signal = signal::from_iter(block_copy.iter().cloned());

@@ -215,19 +215,19 @@ unsafe fn perform(
 ) {
     const BUFFER_LEN: usize = 32;
     assert!(number_of_frames % BUFFER_LEN == 0);
-    let mut buffer = [[0.0; 2]; BUFFER_LEN];
+    let mut buffer = [0.0; BUFFER_LEN];
 
     for chunk_index in 0..number_of_frames / BUFFER_LEN {
         for (i, frame) in buffer.iter_mut().enumerate() {
             let index = chunk_index * BUFFER_LEN + i;
-            *frame = [inlets[0][index], inlets[1][index]];
+            *frame = inlets[0][index];
         }
 
         INSTRUMENT.as_mut().unwrap().process(&mut buffer);
 
         for (i, frame) in buffer.iter().enumerate() {
             let index = chunk_index * BUFFER_LEN + i;
-            [outlets[0][index], outlets[1][index]] = *frame;
+            outlets[0][index] = *frame;
         }
     }
 }
