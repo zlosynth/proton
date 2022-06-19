@@ -5,7 +5,7 @@ use super::Instrument;
 impl Instrument {
     pub fn process<F>(&mut self, block: &mut [F; 32])
     where
-        F: Frame + Default,
+        F: Frame,
     {
         let block_copy = *block;
 
