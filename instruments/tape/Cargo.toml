@@ -14,6 +14,11 @@ proton-primitives = { path = "../../primitives" }
 heapless = "0.7"
 micromath = "2"
 
+[dependencies.dasp]
+version = "0.11"
+default-features = false
+features = ["signal", "slice", "ring_buffer"]
+
 [dependencies.defmt]
 version  = "0.3"
 optional = true

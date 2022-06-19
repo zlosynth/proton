@@ -45,6 +45,8 @@ static mut INSTRUMENT: Option<Instrument> = None;
 #[repr(C)]
 struct Class {
     pd_obj: pd_sys::t_object,
+    right_outlet: *mut pd_sys::_outlet,
+    right_inlet: *mut pd_sys::_inlet,
     signal_dummy: f32,
 }
 
@@ -56,8 +58,8 @@ pub unsafe extern "C" fn proton_tilde_setup() {
         class,
         receiver = Class,
         dummy_offset = offset_of!(Class => signal_dummy),
-        number_of_inlets = 1,
-        number_of_outlets = 1,
+        number_of_inlets = 2,
+        number_of_outlets = 2,
         callback = perform
     );
 
@@ -103,6 +105,14 @@ unsafe extern "C" fn new() -> *mut c_void {
     let class = pd_sys::pd_new(CLASS.unwrap()) as *mut Class;
 
     pd_sys::outlet_new(&mut (*class).pd_obj, &mut pd_sys::s_signal);
+    (*class).right_outlet = pd_sys::outlet_new(&mut (*class).pd_obj, &mut pd_sys::s_signal);
+
+    (*class).right_inlet = pd_sys::inlet_new(
+        &mut (*class).pd_obj,
+        &mut (*class).pd_obj.te_g.g_pd,
+        &mut pd_sys::s_signal,
+        &mut pd_sys::s_signal,
+    );
 
     class as *mut c_void
 }
@@ -199,19 +209,25 @@ unsafe fn execute_reaction(reaction: Option<Reaction>) {
 
 unsafe fn perform(
     _class: &mut Class,
-    _number_of_frames: usize,
-    _inlets: &[&mut [pd_sys::t_float]],
+    number_of_frames: usize,
+    inlets: &[&mut [pd_sys::t_float]],
     outlets: &mut [&mut [pd_sys::t_float]],
 ) {
     const BUFFER_LEN: usize = 32;
-    assert!(outlets[0].len() % BUFFER_LEN == 0);
+    assert!(number_of_frames % BUFFER_LEN == 0);
+    let mut buffer = [[0.0; 2]; BUFFER_LEN];
 
-    let mut buffer = [0.0; BUFFER_LEN];
+    for chunk_index in 0..number_of_frames / BUFFER_LEN {
+        for (i, frame) in buffer.iter_mut().enumerate() {
+            let index = chunk_index * BUFFER_LEN + i;
+            *frame = [inlets[0][index], inlets[1][index]];
+        }
 
-    for chunk_index in 0..outlets[0].len() / BUFFER_LEN {
-        INSTRUMENT.as_mut().unwrap().populate(&mut buffer);
-        // .populate(&mut buffer, &mut ThreadRand);
-        let start = chunk_index * BUFFER_LEN;
-        outlets[0][start..(BUFFER_LEN + start)].copy_from_slice(&buffer[..BUFFER_LEN]);
+        INSTRUMENT.as_mut().unwrap().process(&mut buffer);
+
+        for (i, frame) in buffer.iter().enumerate() {
+            let index = chunk_index * BUFFER_LEN + i;
+            [outlets[0][index], outlets[1][index]] = *frame;
+        }
     }
 }
