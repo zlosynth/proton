@@ -10,8 +10,8 @@ const NAME: &str = "Tape";
 impl Instrument {
     pub fn state(&self) -> State {
         State::new(NAME)
-            .with_attributes(&[Attribute::new(attributes::POST_GAIN).with_value_f32(
-                ValueF32::new(self.post_gain)
+            .with_attributes(&[Attribute::new(attributes::PRE_GAIN).with_value_f32(
+                ValueF32::new(self.pre_gain.value())
                     .with_min(0.0)
                     .with_max(1.0)
                     .with_step(0.05)

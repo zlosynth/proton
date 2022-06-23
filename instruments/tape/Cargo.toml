@@ -25,6 +25,7 @@ optional = true
 
 [dev-dependencies]
 test-case = "1.2"
+approx = "0.4"
 
 [features]
 defmt = ["dep:defmt", "proton-primitives/defmt"]

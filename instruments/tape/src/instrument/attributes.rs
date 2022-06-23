@@ -1,1 +1,1 @@
-pub const POST_GAIN: &str = "post gain";
+pub const PRE_GAIN: &str = "pre gain";
