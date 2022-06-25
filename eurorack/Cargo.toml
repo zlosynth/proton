@@ -19,7 +19,7 @@ harness = false # defined through defmt_test
 [dependencies]
 proton-peripherals = { path = "../peripherals" }
 proton-ui = { path = "../ui", features = ["defmt"] }
-proton-instruments-karplus-strong = { path = "../instruments/karplus_strong", features = ["defmt"] }
+proton-instruments-tape = { path = "../instruments/tape" }
 cortex-m = "0.7"
 cortex-m-rtic = "1"
 alloc-cortex-m = "0.4"

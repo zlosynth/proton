@@ -199,8 +199,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7381b67da416b639690ac77c73b86a7b5e64a29e31d1f75fb3b1102301ef355a"
 dependencies = [
  "dasp_frame",
+ "dasp_ring_buffer",
  "dasp_sample",
  "dasp_signal",
+ "dasp_slice",
  "dasp_window",
 ]
 
@@ -256,6 +258,16 @@ dependencies = [
  "dasp_interpolate",
  "dasp_peak",
  "dasp_ring_buffer",
+ "dasp_sample",
+]
+
+[[package]]
+name = "dasp_slice"
+version = "0.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4e1c7335d58e7baedafa516cb361360ff38d6f4d3f9d9d5ee2a2fc8e27178fa1"
+dependencies = [
+ "dasp_frame",
  "dasp_sample",
 ]
 
@@ -599,7 +611,7 @@ dependencies = [
  "fugit",
  "heapless",
  "panic-probe",
- "proton-instruments-karplus-strong",
+ "proton-instruments-tape",
  "proton-peripherals",
  "proton-ui",
  "ssd1306",
@@ -608,10 +620,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "proton-instruments-karplus-strong"
+name = "proton-instruments-tape"
 version = "0.5.0"
 dependencies = [
- "defmt",
+ "dasp",
  "heapless",
  "micromath 2.0.0",
  "proton-primitives",
@@ -632,7 +644,6 @@ name = "proton-primitives"
 version = "0.5.0"
 dependencies = [
  "dasp",
- "defmt",
  "micromath 2.0.0",
 ]
 

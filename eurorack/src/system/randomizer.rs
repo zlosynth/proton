@@ -1,7 +1,7 @@
 use daisy::hal::prelude::_stm32h7xx_hal_rng_RngCore;
 use daisy::hal::rng::Rng;
 
-use proton_instruments_karplus_strong::Rand;
+use proton_instruments_tape::Rand;
 
 pub struct Randomizer {
     pub rng: Rng,

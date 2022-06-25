@@ -16,7 +16,7 @@ use embedded_graphics_core::geometry::Size;
 use embedded_graphics_core::pixelcolor::BinaryColor;
 use embedded_graphics_simulator::{OutputSettingsBuilder, SimulatorDisplay, Window};
 
-use proton_instruments_tape::Instrument;
+use proton_instruments_tape::{Instrument, Rand};
 use proton_ui::action::Action;
 use proton_ui::display::draw as draw_display;
 use proton_ui::reaction::Reaction;
@@ -31,16 +31,14 @@ static mut WINDOW: Option<Window> = None;
 static mut DISPLAY: Option<Display> = None;
 static mut INSTRUMENT: Option<Instrument> = None;
 
-// NOTE: Rand implementation for karplus strong
-//
-// struct ThreadRand;
-//
-// impl Rand for ThreadRand {
-//     fn generate(&mut self) -> u16 {
-//         use rand::Rng;
-//         rand::thread_rng().gen()
-//     }
-// }
+struct ThreadRand;
+
+impl Rand for ThreadRand {
+    fn generate(&mut self) -> u16 {
+        use rand::Rng;
+        rand::thread_rng().gen()
+    }
+}
 
 #[repr(C)]
 struct Class {
@@ -223,7 +221,10 @@ unsafe fn perform(
             *frame = inlets[0][index];
         }
 
-        INSTRUMENT.as_mut().unwrap().process(&mut buffer);
+        INSTRUMENT
+            .as_mut()
+            .unwrap()
+            .process(&mut buffer, &mut ThreadRand);
 
         for (i, frame) in buffer.iter().enumerate() {
             let index = chunk_index * BUFFER_LEN + i;

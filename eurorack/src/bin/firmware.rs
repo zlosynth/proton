@@ -15,7 +15,7 @@ mod app {
     use proton_eurorack::system::display::Display;
     use proton_eurorack::system::randomizer::Randomizer;
     use proton_eurorack::system::System;
-    use proton_instruments_karplus_strong::Instrument;
+    use proton_instruments_tape::Instrument;
     use proton_ui::action::Action as InputAction;
     use proton_ui::display::draw as draw_view_on_display;
     use proton_ui::reaction::Reaction as InputReaction;
@@ -84,15 +84,14 @@ mod app {
             system.beta_rotary,
         );
 
-        let state = Instrument::initial_state();
+        let instrument = Instrument::new(SAMPLE_RATE);
+        let state = instrument.state();
         let view = (&state).into();
 
         update_display::spawn(view).unwrap();
         set_indicator::spawn(true).unwrap();
         read_controls::spawn().unwrap();
         update_state::spawn().unwrap();
-
-        let instrument = Instrument::new(SAMPLE_RATE);
 
         (
             Shared {},
@@ -128,7 +127,7 @@ mod app {
         }
 
         let mut buffer = [0.0; BLOCK_LENGTH];
-        instrument.populate(&mut buffer, randomizer);
+        instrument.process(&mut buffer, randomizer);
 
         audio.update_buffer(|audio_buffer| {
             audio_buffer.iter_mut().enumerate().for_each(|(i, x)| {
