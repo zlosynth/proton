@@ -10,7 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import numpy as np
 
-SR = 48000
+SR = 48000 * 8
 
 
 def process(block, n):
@@ -43,7 +43,7 @@ def plot_harmonic_response(ax, signal):
     f = np.linspace(0, SR / 2, int(N / 2 + 1))
 
     ax.semilogx(f, 20 * np.log10(np.abs(Y)))
-    ax.set_xlim([20, 20000])
+    ax.set_xlim([20, 120000])
     ax.set_ylim([-90, 5])
 
 
