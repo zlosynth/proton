@@ -6,14 +6,18 @@ mod state;
 
 use dasp::Signal;
 
+use crate::hysteresis::Hysteresis;
+
 pub struct Instrument {
     pub(crate) pre_gain: SmoothedValue,
+    pub(crate) hysteresis: Hysteresis,
 }
 
 impl Instrument {
-    pub fn new(_sample_rate: u32) -> Self {
+    pub fn new(sample_rate: u32) -> Self {
         Self {
             pre_gain: SmoothedValue::new(1.0),
+            hysteresis: Hysteresis::new(sample_rate as f32, 1.0, 0.9, 1.0),
         }
     }
 }

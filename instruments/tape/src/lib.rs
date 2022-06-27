@@ -6,6 +6,8 @@ extern crate approx;
 
 pub mod instrument;
 
+mod hysteresis;
+
 pub use instrument::Instrument;
 
 pub trait Rand {
