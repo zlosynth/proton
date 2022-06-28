@@ -6,6 +6,8 @@ backwards compatibility.
 
 ## Unreleased
 
+* Implement a basic tape simulation instrument.
+
 ## 0.5.0
 
 * Implement sound output in the firmware.

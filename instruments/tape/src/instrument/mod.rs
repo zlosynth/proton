@@ -17,7 +17,7 @@ impl Instrument {
     pub fn new(sample_rate: u32) -> Self {
         Self {
             pre_gain: SmoothedValue::new(1.0),
-            hysteresis: Hysteresis::new(sample_rate as f32, 1.0, 0.9, 1.0),
+            hysteresis: Hysteresis::new(sample_rate as f32),
         }
     }
 }

@@ -60,6 +60,13 @@ fn langevin_deriv(x: f32) -> f32 {
 
 /// Class to implement hysteresis processing
 pub struct Hysteresis {
+    /// Drive level
+    drive: f32,
+    /// Saturation level
+    saturation: f32,
+    /// Width level
+    width: f32,
+
     differentiator: Differentiator,
     /// Period between samples
     t: f32,
@@ -85,19 +92,54 @@ impl Hysteresis {
     /// Mean field parameter
     const ALPHA: f32 = 1.6e-3;
 
-    pub fn new(fs: f32, drive: f32, saturation: f32, width: f32) -> Self {
-        let m_s = 0.5 + 1.5 * (1.0 - saturation);
-        Self {
+    pub fn new(fs: f32) -> Self {
+        let mut hysteresis = Self {
+            drive: 0.0,
+            saturation: 0.0,
+            width: 0.0,
+
             differentiator: Differentiator::new(fs),
             t: 1.0 / fs,
-            m_s,
-            a: m_s / (0.01 + 6.0 * drive),
-            c: f32::powf(1.0 - width, 0.5) - 0.01,
+            m_s: 0.0,
+            a: 0.0,
+            c: 0.0,
 
             m_n1: 0.0,
             h_n1: 0.0,
             h_d_n1: 0.0,
-        }
+        };
+        hysteresis.set_drive(1.0);
+        hysteresis.set_saturation(0.9);
+        hysteresis.set_width(0.5);
+        hysteresis
+    }
+
+    pub fn set_drive(&mut self, drive: f32) {
+        self.drive = drive;
+        self.a = self.m_s / (0.01 + 6.0 * drive);
+    }
+
+    pub fn drive(&self) -> f32 {
+        self.drive
+    }
+
+    pub fn set_saturation(&mut self, saturation: f32) {
+        self.saturation = saturation;
+        self.m_s = 0.5 + 1.5 * (1.0 - saturation);
+        self.set_drive(self.drive);
+    }
+
+    pub fn saturation(&self) -> f32 {
+        self.saturation
+    }
+
+    pub fn set_width(&mut self, width: f32) {
+        self.width = width;
+        self.c = f32::powf(1.0 - width, 0.5) - 0.01;
+    }
+
+    pub fn width(&self) -> f32 {
+        self.width
     }
 
     /// Jiles-Atherton differential equation
