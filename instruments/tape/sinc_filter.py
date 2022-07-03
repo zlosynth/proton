@@ -76,6 +76,7 @@ def oversample(signal):
 
 
 def oversample_filter(signal):
+    ops = 0
     filtered = np.zeros(len(signal))
 
     for i in range(len(filtered)):
@@ -84,11 +85,14 @@ def oversample_filter(signal):
         while coef_index < len(COEFFICIENTS) and i - coef_index >= 0:
             filtered[i] += signal[i - coef_index] * COEFFICIENTS[coef_index]
             coef_index += 1
+            ops += 1
 
+    print(f'Oversample filter: {ops}')
     return filtered
 
 
 def oversample_filter_optimized(signal):
+    ops = 0
     filtered = np.zeros(len(signal))
 
     for i in range(0, int(len(signal) / OVERSAMPLING)):
@@ -99,7 +103,9 @@ def oversample_filter_optimized(signal):
             while coef_index < len(COEFFICIENTS) and j - coef_index >= 0:
                 filtered[j] += signal[j - coef_index] * COEFFICIENTS[coef_index]
                 coef_index += OVERSAMPLING
+                ops += 1
 
+    print(f'Optimized oversample filter: {ops}')
     return filtered
 
 
@@ -119,6 +125,7 @@ def distort(signal):
 
 
 def decimate_filter(signal):
+    ops = 0
     filtered = np.zeros(len(signal))
 
     for i in range(len(filtered)):
@@ -127,15 +134,33 @@ def decimate_filter(signal):
         while coef_index < len(COEFFICIENTS) and i - coef_index >= 0:
             filtered[i] += signal[i - coef_index] * COEFFICIENTS[coef_index]
             coef_index += 1
+            ops += 1
 
+    print(f'Decimate filter: {ops}')
+    return filtered
+
+
+def decimate_filter_optimized(signal):
+    ops = 0
+    filtered = np.zeros(len(signal))
+
+    for i in range(0, len(signal), OVERSAMPLING):
+        coef_index = 0
+
+        while coef_index < len(COEFFICIENTS) and i - coef_index >= 0:
+            filtered[i] += signal[i - coef_index] * COEFFICIENTS[coef_index]
+            coef_index += 1
+            ops += 1
+
+    print(f'Optimized decimate filter: {ops}')
     return filtered
 
 
 def decimate(signal):
     decimated = np.zeros(int(len(signal) / OVERSAMPLING))
 
-    for i in range(len(signal)):
-        decimated[int(i / OVERSAMPLING)] = signal[i]
+    for i in range(len(decimated)):
+        decimated[i] = signal[i * OVERSAMPLING]
 
     return decimated
 
@@ -194,19 +219,26 @@ if __name__ == '__main__':
     axs[0, 2].set_title('4. Distorted wave')
     axs[0, 3].set_title('4. Distorted response')
     signal = distort(signal)
+    distorted_signal = signal
     axs[0, 2].plot(os_time[:os_end], signal[:os_end])
     plot_harmonic_response(axs[0, 3], signal, FS * OVERSAMPLING)
 
-    axs[1, 2].set_title('5. Filtered wave')
-    axs[1, 3].set_title('5. Filtered response')
+    axs[1, 2].set_title('5a. Filtered wave')
+    axs[1, 3].set_title('5a. Filtered response')
     signal = decimate_filter(signal)
     axs[1, 2].plot(os_time[:os_end], signal[:os_end])
     plot_harmonic_response(axs[1, 3], signal, FS * OVERSAMPLING)
 
-    axs[2, 2].set_title('6. Decimated wave')
-    axs[2, 3].set_title('6. Decimated response')
+    axs[2, 2].set_title('5b. Filtered wave (optimized)')
+    axs[2, 3].set_title('5b. Filtered response (optimized)')
+    signal = decimate_filter_optimized(distorted_signal)
+    axs[2, 2].plot(os_time[:os_end], signal[:os_end])
+    plot_harmonic_response(axs[2, 3], signal, FS * OVERSAMPLING)
+
+    axs[3, 2].set_title('6. Decimated wave')
+    axs[3, 3].set_title('6. Decimated response')
     signal = decimate(signal)
-    axs[2, 2].plot(time[:end], signal[:end])
-    plot_harmonic_response(axs[2, 3], signal, FS)
+    axs[3, 2].plot(time[:end], signal[:end])
+    plot_harmonic_response(axs[3, 3], signal, FS)
 
     plt.show()
