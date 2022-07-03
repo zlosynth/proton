@@ -5,6 +5,7 @@
 extern crate approx;
 
 pub mod ad_envelope;
+pub mod oversampling;
 pub mod ring_buffer;
 pub mod state_variable_filter;
 pub mod white_noise;

@@ -7,6 +7,7 @@ backwards compatibility.
 ## Unreleased
 
 * Implement a basic tape simulation instrument.
+* Introduce oversampling converters over the Signal trait.
 
 ## 0.5.0
 
