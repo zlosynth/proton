@@ -4,6 +4,7 @@
 // * https://www.earlevel.com/main/2010/12/05/sample-rate-conversion-up/
 // * https://www.earlevel.com/main/2010/12/20/sample-rate-conversion-down/
 
+pub mod downsampling;
 pub mod upsampling;
 
 mod coefficients;
