@@ -6,7 +6,6 @@
 # * https://www.earlevel.com/main/2010/12/05/sample-rate-conversion-up/
 # * https://www.earlevel.com/main/2010/12/20/sample-rate-conversion-down/
 
-from scipy import signal
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -60,9 +59,6 @@ COEFFICIENTS = [
 ]
 
 
-# TODO: Optimize filters to only handle needed
-
-
 def create_saw(freq, harmonics, time):
     signal = np.zeros(len(time))
     for i in range(1, harmonics + 1):
@@ -88,6 +84,21 @@ def oversample_filter(signal):
         while coef_index < len(COEFFICIENTS) and i - coef_index >= 0:
             filtered[i] += signal[i - coef_index] * COEFFICIENTS[coef_index]
             coef_index += 1
+
+    return filtered
+
+
+def oversample_filter_optimized(signal):
+    filtered = np.zeros(len(signal))
+
+    for i in range(0, int(len(signal) / OVERSAMPLING)):
+        for m in range(0, OVERSAMPLING):
+            coef_index = m
+            j = i * OVERSAMPLING + m
+
+            while coef_index < len(COEFFICIENTS) and j - coef_index >= 0:
+                filtered[j] += signal[j - coef_index] * COEFFICIENTS[coef_index]
+                coef_index += OVERSAMPLING
 
     return filtered
 
@@ -146,7 +157,7 @@ if __name__ == '__main__':
     frequency = 40.0
     harmonics = 500
 
-    fig, axs = plt.subplots(3, 4)
+    fig, axs = plt.subplots(4, 4)
     fig.tight_layout()
 
     time = np.linspace(0, length, int(length * FS))
@@ -164,14 +175,21 @@ if __name__ == '__main__':
     axs[1, 0].set_title('2. Oversampled wave')
     axs[1, 1].set_title('2. Oversampled response')
     signal = oversample(signal)
+    oversampled_signal = signal
     axs[1, 0].plot(os_time[:os_end], signal[:os_end])
     plot_harmonic_response(axs[1, 1], signal, FS * OVERSAMPLING)
 
-    axs[2, 0].set_title('3. Filtered wave')
-    axs[2, 1].set_title('3. Filtered response')
+    axs[2, 0].set_title('3a. Filtered wave')
+    axs[2, 1].set_title('3a. Filtered response')
     signal = oversample_filter(signal)
     axs[2, 0].plot(os_time[:os_end], signal[:os_end])
     plot_harmonic_response(axs[2, 1], signal, FS * OVERSAMPLING)
+
+    axs[3, 0].set_title('3b. Filtered wave (optimized)')
+    axs[3, 1].set_title('3b. Filtered response (optimized)')
+    signal = oversample_filter_optimized(oversampled_signal)
+    axs[3, 0].plot(os_time[:os_end], signal[:os_end])
+    plot_harmonic_response(axs[3, 1], signal, FS * OVERSAMPLING)
 
     axs[0, 2].set_title('4. Distorted wave')
     axs[0, 3].set_title('4. Distorted response')
