@@ -64,7 +64,8 @@ pub unsafe extern "C" fn proton_tilde_setup() {
     let mut window = Window::new("", &OutputSettingsBuilder::new().scale(2).build());
     let mut display = SimulatorDisplay::new(Size::new(128, 64));
 
-    let instrument = Instrument::new(48_000);
+    let sample_rate = pd_sys::sys_getsr() as u32;
+    let instrument = Instrument::new(sample_rate);
     let state = instrument.state();
     let view = (&state).into();
     draw_display(&mut display, &view).unwrap();
