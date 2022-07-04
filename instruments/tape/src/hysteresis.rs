@@ -42,7 +42,7 @@ fn tanh(x: f32) -> f32 {
 
 /// Langevin function: coth(x) - (1/x)
 fn langevin(x: f32) -> f32 {
-    if x.abs() > f32::powi(10.0, -4) {
+    if x.abs() > f32::powi(10.0, -3) {
         1.0 / tanh(x) - 1.0 / x
     } else {
         x / 3.0
@@ -51,7 +51,7 @@ fn langevin(x: f32) -> f32 {
 
 /// Derivative of the Langevin function: (1/x^2) - coth(x)^2 + 1
 fn langevin_deriv(x: f32) -> f32 {
-    if x.abs() > f32::powi(10.0, -4) {
+    if x.abs() > f32::powi(10.0, -3) {
         1.0 / f32::powi(x, 2) - f32::powi(1.0 / tanh(x), 2) + 1.0
     } else {
         1.0 / 3.0
