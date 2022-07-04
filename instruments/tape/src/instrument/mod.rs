@@ -8,9 +8,14 @@ use dasp::Signal;
 
 use crate::hysteresis::Hysteresis;
 
+use proton_primitives::oversampling::downsampling::Downsampler2;
+use proton_primitives::oversampling::upsampling::Upsampler2;
+
 pub struct Instrument {
     pub(crate) pre_gain: SmoothedValue,
     pub(crate) hysteresis: Hysteresis,
+    pub(crate) upsampler: Upsampler2,
+    pub(crate) downsampler: Downsampler2,
 }
 
 impl Instrument {
@@ -18,6 +23,8 @@ impl Instrument {
         Self {
             pre_gain: SmoothedValue::new(1.0),
             hysteresis: Hysteresis::new(sample_rate as f32),
+            upsampler: Upsampler2::new(),
+            downsampler: Downsampler2::new(),
         }
     }
 }
