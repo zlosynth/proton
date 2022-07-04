@@ -9,7 +9,7 @@ pub struct SpectralAnalysis {
 
 impl SpectralAnalysis {
     pub fn analyze(signal: &[f32; N], sample_rate: u32) -> Self {
-        let magnitude = fft_magnitude(&signal);
+        let magnitude = fft_magnitude(signal);
         let bins_length = f32::ceil(signal.len() as f32 / 2.0) as usize;
         let bins: Vec<f32, N> = magnitude.iter().take(bins_length).copied().collect();
         let bin_width = sample_rate as f32 / signal.len() as f32;
@@ -78,7 +78,8 @@ fn lowest_peak_index(data: &[f32], relative_treshold: f32) -> usize {
 
     let treshold_finder = data.iter().enumerate();
     let peak_finder = treshold_finder.skip_while(|(_, x)| **x < treshold);
-    let peak_index = {
+
+    {
         let mut index = 0;
         let mut current_peak = 0.0;
         for (i, x) in peak_finder {
@@ -90,9 +91,7 @@ fn lowest_peak_index(data: &[f32], relative_treshold: f32) -> usize {
             }
         }
         index
-    };
-
-    peak_index
+    }
 }
 
 fn fft_magnitude(signal: &[f32; N]) -> Vec<f32, N> {
