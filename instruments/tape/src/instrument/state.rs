@@ -36,7 +36,7 @@ impl Instrument {
                     ValueF32::new(self.hysteresis.width())
                         .with_min(0.0)
                         .with_max(1.0)
-                        .with_step(0.05)
+                        .with_step(0.02)
                         .with_writter(percentage_writter),
                 ),
             ])
