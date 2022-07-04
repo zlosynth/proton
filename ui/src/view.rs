@@ -45,6 +45,7 @@ pub struct Attribute {
 
 impl From<&state::Attribute> for Attribute {
     fn from(other: &state::Attribute) -> Self {
+        #[allow(clippy::needless_borrow)] // It's not needless, it fails without it
         Self {
             name: other.name,
             value: (&other.value).into(),

@@ -86,6 +86,7 @@ mod app {
 
         let instrument = Instrument::new(SAMPLE_RATE);
         let state = instrument.state();
+        #[allow(clippy::needless_borrow)] // It's not needless, it fails without it
         let view = (&state).into();
 
         update_display::spawn(view).unwrap();
@@ -163,6 +164,7 @@ mod app {
             }
         }
 
+        #[allow(clippy::needless_borrow)] // It's not needless, it fails without it
         let view = (&*state).into();
         update_display::spawn(view).unwrap();
 

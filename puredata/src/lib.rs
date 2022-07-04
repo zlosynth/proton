@@ -67,6 +67,7 @@ pub unsafe extern "C" fn proton_tilde_setup() {
     let sample_rate = pd_sys::sys_getsr() as u32;
     let instrument = Instrument::new(sample_rate);
     let state = instrument.state();
+    #[allow(clippy::needless_borrow)] // It's not needless, it fails without it
     let view = (&state).into();
     draw_display(&mut display, &view).unwrap();
     window.update(&display);
