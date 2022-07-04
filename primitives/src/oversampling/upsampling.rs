@@ -1,6 +1,6 @@
 use dasp::{Frame, Signal};
 
-use super::coefficients::COEFFICIENTS_2;
+use super::coefficients::*;
 use crate::ring_buffer::RingBuffer;
 
 pub struct Upsampler<const N: usize, const M: usize> {
@@ -13,7 +13,7 @@ pub struct Upsampler<const N: usize, const M: usize> {
 pub type Upsampler2 = Upsampler<{ COEFFICIENTS_2.len() }, { COEFFICIENTS_2.len() / 2 + 1 }>;
 
 impl Upsampler2 {
-    pub fn new() -> Self {
+    pub fn new_2() -> Self {
         Self {
             factor: 2,
             coefficients: &COEFFICIENTS_2,
@@ -23,9 +23,16 @@ impl Upsampler2 {
     }
 }
 
-impl Default for Upsampler2 {
-    fn default() -> Self {
-        Self::new()
+pub type Upsampler16 = Upsampler<{ COEFFICIENTS_16.len() }, { COEFFICIENTS_16.len() / 2 + 1 }>;
+
+impl Upsampler16 {
+    pub fn new_16() -> Self {
+        Self {
+            factor: 16,
+            coefficients: &COEFFICIENTS_16,
+            buffer: RingBuffer::new(),
+            coefficients_offset: 0,
+        }
     }
 }
 
