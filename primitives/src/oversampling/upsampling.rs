@@ -4,7 +4,7 @@ use super::coefficients::COEFFICIENTS_2;
 use crate::ring_buffer::RingBuffer;
 
 pub trait SignalUpsampler: Signal {
-    fn upsampled_2(
+    fn upsample_2(
         self,
     ) -> Upsampler<Self, { COEFFICIENTS_2.len() }, { COEFFICIENTS_2.len() / 2 + 1 }>
     where
