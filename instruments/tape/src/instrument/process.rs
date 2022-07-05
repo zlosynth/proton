@@ -12,6 +12,7 @@ impl Instrument {
 
         let mut instrument = signal::from_iter(block_copy.into_iter())
             .mul_amp(self.pre_gain.by_ref())
+            .clip_amp(10.0)
             .upsample(&mut self.upsampler)
             .map(|x| self.hysteresis.process(x))
             .downsample(&mut self.downsampler);
