@@ -202,8 +202,19 @@ impl Hysteresis {
     }
 
     pub fn process(&mut self, h: f32) -> f32 {
-        let h_d = self.differentiator.differentiate(h);
-        let m = self.rk4(self.m_n1, h, self.h_n1, h_d, self.h_d_n1);
+        let h = h as f64;
+        let (h_d, m) = {
+            let h_d = self.differentiator.differentiate(h);
+            let m = self.rk4(self.m_n1, h, self.h_n1, h_d, self.h_d_n1);
+
+            const UPPER_LIMIT: f64 = 20.0;
+            if m > UPPER_LIMIT {
+                (0.0, 0.0)
+            } else {
+                (h_d, m)
+            }
+        };
+
         self.m_n1 = m;
         self.h_n1 = h;
         self.h_d_n1 = h_d;
