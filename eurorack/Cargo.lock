@@ -617,12 +617,23 @@ dependencies = [
  "fugit",
  "heapless",
  "panic-probe",
+ "proton-instruments-karplus-strong",
  "proton-instruments-tape",
  "proton-peripherals",
  "proton-ui",
  "ssd1306",
  "stm32h7xx-hal",
  "systick-monotonic",
+]
+
+[[package]]
+name = "proton-instruments-karplus-strong"
+version = "0.5.0"
+dependencies = [
+ "heapless",
+ "micromath 2.0.0",
+ "proton-primitives",
+ "proton-ui",
 ]
 
 [[package]]

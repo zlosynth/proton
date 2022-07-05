@@ -1,6 +1,10 @@
 use daisy::hal::prelude::_stm32h7xx_hal_rng_RngCore;
 use daisy::hal::rng::Rng;
 
+#[cfg(feature = "karplus_strong")]
+use proton_instruments_karplus_strong::Rand;
+
+#[cfg(feature = "tape")]
 use proton_instruments_tape::Rand;
 
 pub struct Randomizer {

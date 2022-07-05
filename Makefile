@@ -1,3 +1,5 @@
+INSTRUMENT ?= tape
+
 .PHONY: all
 all: format clippy test
 
@@ -23,9 +25,11 @@ format:
 
 .PHONY: clippy
 clippy:
-	cd puredata && cargo +nightly clippy --all -- -D warnings
-	cd eurorack && cargo +nightly clippy --all -- -D warnings
-	cd eurorack && cargo +nightly check --test display --test encoders
+	cd puredata && cargo +nightly clippy --all --features tape -- -D warnings
+	cd puredata && cargo +nightly clippy --all --features karplus_strong -- -D warnings
+	cd eurorack && cargo +nightly clippy --all --features tape -- -D warnings
+	cd eurorack && cargo +nightly clippy --all --features karplus_strong -- -D warnings
+	cd eurorack && cargo +nightly check --test display --test encoders --features karplus_strong
 	cd peripherals && cargo +nightly clippy --all --features defmt -- -D warnings
 	cd ui && cargo +nightly clippy --all --features defmt -- -D warnings
 	cd primitives && cargo +nightly clippy --all --features defmt -- -D warnings
@@ -53,7 +57,7 @@ update:
 .PHONY: puredata
 puredata:
 	mkdir -p ~/.local/lib/pd/extra
-	cd puredata && cargo +nightly build --release
+	cd puredata && cargo +nightly build --release --features $(INSTRUMENT)
 	cp puredata/target/release/libproton_puredata.so ~/.local/lib/pd/extra/proton~.pd_linux
 	pd puredata/proton.pd
 
@@ -68,11 +72,11 @@ test-ui:
 
 .PHONY: flash
 flash:
-	cd eurorack && cargo +nightly run --bin firmware $(FLAGS)
+	cd eurorack && cargo +nightly run --bin firmware $(FLAGS) --features $(INSTRUMENT)
 
 .PHONY: flash-dfu
 flash-dfu:
-	cd eurorack && cargo +nightly objcopy $(FLAGS) -- -O binary target/proton.bin
+	cd eurorack && cargo +nightly objcopy $(FLAGS) --features $(INSTRUMENT) -- -O binary target/proton.bin
 	dfu-util -a 0 -s 0x08000000:leave -D eurorack/target/proton.bin -d ,0483:df11
 
 .PHONY: debug-test

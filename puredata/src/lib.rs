@@ -16,7 +16,12 @@ use embedded_graphics_core::geometry::Size;
 use embedded_graphics_core::pixelcolor::BinaryColor;
 use embedded_graphics_simulator::{OutputSettingsBuilder, SimulatorDisplay, Window};
 
+#[cfg(feature = "tape")]
 use proton_instruments_tape::{Instrument, Rand};
+
+#[cfg(feature = "karplus_strong")]
+use proton_instruments_karplus_strong::{Instrument, Rand};
+
 use proton_ui::action::Action;
 use proton_ui::display::draw as draw_display;
 use proton_ui::reaction::Reaction;

@@ -11,11 +11,16 @@ mod app {
     use heapless::spsc::{Consumer, Producer, Queue};
     use systick_monotonic::Systick;
 
+    #[cfg(feature = "tape")]
+    use proton_instruments_tape::Instrument;
+
+    #[cfg(feature = "karplus_strong")]
+    use proton_instruments_karplus_strong::Instrument;
+
     use proton_eurorack::system::audio::{Audio, BLOCK_LENGTH, SAMPLE_RATE};
     use proton_eurorack::system::display::Display;
     use proton_eurorack::system::randomizer::Randomizer;
     use proton_eurorack::system::System;
-    use proton_instruments_tape::Instrument;
     use proton_ui::action::Action as InputAction;
     use proton_ui::display::draw as draw_view_on_display;
     use proton_ui::reaction::Reaction as InputReaction;

@@ -79,7 +79,7 @@ fn f3_writter(destination: &mut dyn fmt::Write, value: f32) {
 }
 
 impl Instrument {
-    pub fn initial_state() -> State {
+    pub fn state(&self) -> State {
         State::new(NAME)
             .with_attributes(&[
                 Attribute::new(CUTOFF_ATTRIBUTE).with_value_f32(
@@ -192,7 +192,7 @@ impl Instrument {
         }
     }
 
-    pub fn populate(&mut self, buffer: &mut [f32], randomizer: &mut impl Rand) {
+    pub fn process(&mut self, buffer: &mut [f32], randomizer: &mut impl Rand) {
         let config = self.turing.tick(buffer.len() as u32, randomizer);
         if config.frequency > 0.1 {
             self.frequency = config.frequency;
