@@ -3,22 +3,20 @@
 /// * https://dafx2019.bcu.ac.uk/papers/DAFx2019_paper_3.pdf
 /// * https://ccrma.stanford.edu/~jatin/papers/Complex_NLs.pdf
 /// * https://github.com/jatinchowdhury18/audio_dspy
-
-#[allow(unused_imports)]
-use micromath::F32Ext;
+use libm::{fabs, sqrt, tanh};
 
 /// Time domain differentiation using the trapezoidal rule
 struct Differentiator {
     /// Period between samples
-    t: f32,
+    t: f64,
     /// Previous sample
-    x_n1: f32,
+    x_n1: f64,
     /// Time derivative of previous sample
-    x_d_n1: f32,
+    x_d_n1: f64,
 }
 
 impl Differentiator {
-    pub fn new(fs: f32) -> Self {
+    pub fn new(fs: f64) -> Self {
         Self {
             t: 1.0 / fs,
             x_n1: 0.0,
@@ -26,7 +24,7 @@ impl Differentiator {
         }
     }
 
-    pub fn differentiate(&mut self, x: f32) -> f32 {
+    pub fn differentiate(&mut self, x: f64) -> f64 {
         let x_d = ((2.0 / self.t) * (x - self.x_n1)) - 1.0 * self.x_d_n1;
         self.x_n1 = x;
         self.x_d_n1 = x_d;
@@ -34,15 +32,9 @@ impl Differentiator {
     }
 }
 
-/// Hyperbolic tangens approximation
-fn tanh(x: f32) -> f32 {
-    let x2 = f32::powi(x, 2);
-    x / (1.0 + (x2 / (3.0 + (x2 / (5.0 + (x2 / 7.0))))))
-}
-
 /// Langevin function: coth(x) - (1/x)
-fn langevin(x: f32) -> f32 {
-    if x.abs() > f32::powi(10.0, -3) {
+fn langevin(x: f64) -> f64 {
+    if fabs(x) > 0.001 {
         1.0 / tanh(x) - 1.0 / x
     } else {
         x / 3.0
@@ -50,9 +42,9 @@ fn langevin(x: f32) -> f32 {
 }
 
 /// Derivative of the Langevin function: (1/x^2) - coth(x)^2 + 1
-fn langevin_deriv(x: f32) -> f32 {
-    if x.abs() > f32::powi(10.0, -3) {
-        1.0 / f32::powi(x, 2) - f32::powi(1.0 / tanh(x), 2) + 1.0
+fn langevin_deriv(x: f64) -> f64 {
+    if fabs(x) > 0.001 {
+        1.0 / (x * x) - (1.0 / (tanh(x) * tanh(x))) + 1.0
     } else {
         1.0 / 3.0
     }
@@ -69,30 +61,31 @@ pub struct Hysteresis {
 
     differentiator: Differentiator,
     /// Period between samples
-    t: f32,
+    t: f64,
     /// Magnetisation saturation
-    m_s: f32,
+    m_s: f64,
     /// Anhysteric magnetisation shape
-    a: f32,
+    a: f64,
     /// Initial susceptibilities
-    c: f32,
+    c: f64,
 
     /// Previous magnetisation
-    m_n1: f32,
+    m_n1: f64,
     /// Previous magnetic field
-    h_n1: f32,
+    h_n1: f64,
     /// Time derivative of the previous magnetic field
-    h_d_n1: f32,
+    h_d_n1: f64,
 }
 
 impl Hysteresis {
     /// Hysteresis loop width / coercivity
-    const K: f32 = 0.47875;
+    const K: f64 = 0.47875;
 
     /// Mean field parameter
-    const ALPHA: f32 = 1.6e-3;
+    const ALPHA: f64 = 1.6e-3;
 
     pub fn new(fs: f32) -> Self {
+        let fs = fs as f64;
         let mut hysteresis = Self {
             drive: 0.0,
             saturation: 0.0,
@@ -110,13 +103,13 @@ impl Hysteresis {
         };
         hysteresis.set_drive(1.0);
         hysteresis.set_saturation(0.9);
-        hysteresis.set_width(0.5);
+        hysteresis.set_width(1.0);
         hysteresis
     }
 
     pub fn set_drive(&mut self, drive: f32) {
         self.drive = drive;
-        self.a = self.m_s / (0.01 + 6.0 * drive);
+        self.a = self.m_s / (0.01 + 6.0 * drive as f64);
     }
 
     pub fn drive(&self) -> f32 {
@@ -125,7 +118,7 @@ impl Hysteresis {
 
     pub fn set_saturation(&mut self, saturation: f32) {
         self.saturation = saturation;
-        self.m_s = 0.5 + 1.5 * (1.0 - saturation);
+        self.m_s = 0.5 + 1.5 * (1.0 - saturation as f64);
         self.set_drive(self.drive);
     }
 
@@ -135,7 +128,7 @@ impl Hysteresis {
 
     pub fn set_width(&mut self, width: f32) {
         self.width = width;
-        self.c = f32::powf(1.0 - width, 0.5) - 0.01;
+        self.c = sqrt(1.0 - width as f64) - 0.01;
     }
 
     pub fn width(&self) -> f32 {
@@ -153,13 +146,13 @@ impl Hysteresis {
     /// # Returns
     ///
     /// Derivative of magnetisation w.r.t time
-    fn dmdt(&self, m: f32, h: f32, h_d: f32) -> f32 {
+    fn dmdt(&self, m: f64, h: f64, h_d: f64) -> f64 {
         let q = (h + Self::ALPHA * m) / self.a;
         let m_diff = self.m_s * langevin(q) - m;
 
         let delta_s = if h_d > 0.0 { 1.0 } else { -1.0 };
 
-        let delta_m = if f32::is_sign_positive(delta_s) == f32::is_sign_positive(m_diff) {
+        let delta_m = if f64::is_sign_positive(delta_s) == f64::is_sign_positive(m_diff) {
             1.0
         } else {
             0.0
@@ -193,7 +186,7 @@ impl Hysteresis {
     /// # Returns
     ///
     /// Current magnetisation
-    fn rk4(&self, m_n1: f32, h: f32, h_n1: f32, h_d: f32, h_d_n1: f32) -> f32 {
+    fn rk4(&self, m_n1: f64, h: f64, h_n1: f64, h_d: f64, h_d_n1: f64) -> f64 {
         let k1 = self.t * self.dmdt(m_n1, h_n1, h_d_n1);
         let k2 = self.t * self.dmdt(m_n1 + k1 / 2.0, (h + h_n1) / 2.0, (h_d + h_d_n1) / 2.0);
         let k3 = self.t * self.dmdt(m_n1 + k2 / 2.0, (h + h_n1) / 2.0, (h_d + h_d_n1) / 2.0);
@@ -218,6 +211,6 @@ impl Hysteresis {
         self.m_n1 = m;
         self.h_n1 = h;
         self.h_d_n1 = h_d;
-        m
+        m as f32
     }
 }
