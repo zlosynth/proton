@@ -20,6 +20,32 @@ make
 
 Read the Makefile to learn more.
 
+## Benchmark
+
+If a package has a benchmark defined, `cd` into its directory and run it via:
+
+``` sh
+cargo +nightly bench --bench bench
+```
+
+Use the benchmark for profiling:
+
+``` sh
+rm -f target/release/deps/bench-*
+rm -f callgrind.out.*
+RUSTFLAGS="-g" cargo +nightly bench --bench bench --no-run
+BENCH=$(find target/release/deps -type f -executable -name 'bench-*')
+TEST=instrument
+valgrind \
+    --tool=callgrind \
+    --dump-instr=yes \
+    --collect-jumps=yes \
+    --simulate-cache=yes \
+    ${BENCH} --bench --profile-time 10 ${TEST}
+kcachegrind callgrind.out.*
+```
+
+
 ## Flash via ST-Link
 
 This requires external probe, such as the ST LINK-V3 MINI. The benefit of this

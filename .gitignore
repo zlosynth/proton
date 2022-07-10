@@ -1,4 +1,5 @@
 .gdb_history
+callgrind.*
 /template
 instruments/karplus_strong/Cargo.lock
 instruments/tape/Cargo.lock

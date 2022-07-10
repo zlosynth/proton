@@ -27,6 +27,12 @@ optional = true
 [dev-dependencies]
 test-case = "1.2"
 approx = "0.4"
+criterion = "0.3"
+rand = "0.8"
 
 [features]
 defmt = ["dep:defmt", "proton-primitives/defmt"]
+
+[[bench]]
+name = "bench"
+harness = false

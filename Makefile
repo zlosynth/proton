@@ -38,6 +38,7 @@ clippy:
 	cd primitives && cargo +nightly clippy --all --features defmt -- -D warnings
 	cd instruments/karplus_strong && cargo +nightly clippy --all --features defmt -- -D warnings
 	cd instruments/tape && cargo +nightly clippy --all --features defmt -- -D warnings
+	cd instruments/tape && cargo +nightly check --benches --all
 
 .PHONY: test
 test:
