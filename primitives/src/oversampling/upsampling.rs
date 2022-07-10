@@ -23,6 +23,19 @@ impl Upsampler2 {
     }
 }
 
+pub type Upsampler8 = Upsampler<{ COEFFICIENTS_8.len() }, { COEFFICIENTS_8.len() / 2 + 1 }>;
+
+impl Upsampler8 {
+    pub fn new_8() -> Self {
+        Self {
+            factor: 8,
+            coefficients: &COEFFICIENTS_8,
+            buffer: RingBuffer::new(),
+            coefficients_offset: 0,
+        }
+    }
+}
+
 pub type Upsampler16 = Upsampler<{ COEFFICIENTS_16.len() }, { COEFFICIENTS_16.len() / 2 + 1 }>;
 
 impl Upsampler16 {

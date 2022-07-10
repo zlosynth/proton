@@ -21,6 +21,18 @@ impl Downsampler2 {
     }
 }
 
+pub type Downsampler8 = Downsampler<{ COEFFICIENTS_8.len() }>;
+
+impl Downsampler8 {
+    pub fn new_8() -> Self {
+        Self {
+            factor: 8,
+            coefficients: &COEFFICIENTS_8,
+            buffer: RingBuffer::new(),
+        }
+    }
+}
+
 pub type Downsampler16 = Downsampler<{ COEFFICIENTS_16.len() }>;
 
 impl Downsampler16 {

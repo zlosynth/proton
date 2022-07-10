@@ -233,7 +233,7 @@ if __name__ == '__main__':
     analyze_processor(
         axs, 1,
         lambda block, saturation: processor(block, saturation=saturation),
-        [0.0, 0.5, 1.0],
+        [0.0, 0.5, 1.0, 1.327],
     )
 
     axs[0, 2].set_title('Width')
