@@ -8,6 +8,7 @@ backwards compatibility.
 
 * Implement a basic tape simulation instrument.
 * Introduce oversampling converters over the Signal trait.
+* Process all CV inputs.
 
 ## 0.5.0
 

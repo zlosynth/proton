@@ -670,6 +670,7 @@ version = "0.5.0"
 dependencies = [
  "either",
  "embedded-hal",
+ "nb 1.0.0",
 ]
 
 [[package]]

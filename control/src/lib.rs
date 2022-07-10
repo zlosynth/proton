@@ -1,5 +1,4 @@
 #![no_std]
 
-#[cfg(test)]
-#[macro_use]
-extern crate approx;
+pub mod input_processor;
+pub mod input_snapshot;

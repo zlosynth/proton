@@ -19,6 +19,7 @@ harness = false # defined through defmt_test
 [dependencies]
 proton-peripherals = { path = "../peripherals" }
 proton-ui = { path = "../ui", features = ["defmt"] }
+proton-control = { path = "../control", features = ["defmt"] }
 proton-instruments-karplus-strong = { path = "../instruments/karplus_strong", optional = true }
 proton-instruments-tape = { path = "../instruments/tape", optional = true }
 cortex-m = "0.7"
@@ -34,6 +35,7 @@ display-interface-spi = "0.4"
 ssd1306 = "0.7.0"
 fugit = "0.3"
 heapless = "0.7"
+nb = "1"
 
 [features]
 tape = ["proton-instruments-tape"]

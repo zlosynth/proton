@@ -11,6 +11,10 @@ mod app {
     use heapless::spsc::{Consumer, Producer, Queue};
     use systick_monotonic::Systick;
 
+    use daisy::hal;
+    use hal::adc::{Adc, Enabled};
+    use hal::pac::{ADC1, ADC2};
+
     #[cfg(feature = "tape")]
     use proton_instruments_tape::Instrument;
 
@@ -28,13 +32,23 @@ mod app {
     use proton_ui::state::State;
     use proton_ui::view::View;
 
-    type Input = proton_ui::input::Input<
+    type UserInput = proton_ui::input::Input<
         proton_eurorack::system::encoder::AlphaRotaryPinA,
         proton_eurorack::system::encoder::AlphaRotaryPinB,
         proton_eurorack::system::encoder::AlphaButtonPin,
         proton_eurorack::system::encoder::BetaRotaryPinA,
         proton_eurorack::system::encoder::BetaRotaryPinB,
         proton_eurorack::system::encoder::BetaButtonPin,
+    >;
+
+    type ControlInput = proton_control::input_processor::InputProcessor<
+        Adc<ADC1, Enabled>,
+        Adc<ADC2, Enabled>,
+        proton_eurorack::system::cv_input::CvInput1,
+        proton_eurorack::system::cv_input::CvInput2,
+        proton_eurorack::system::cv_input::CvInput3,
+        proton_eurorack::system::cv_input::CvInput4,
+        proton_eurorack::system::cv_input::CvInput5,
     >;
 
     #[monotonic(binds = SysTick, default = true)]
@@ -49,7 +63,8 @@ mod app {
         randomizer: Randomizer,
         instrument: Instrument,
         led: LedUser,
-        user_input: Input,
+        user_input: UserInput,
+        control_input: ControlInput,
         display: Display,
         state: State,
         input_actions_producer: Producer<'static, InputAction, 6>,
@@ -82,11 +97,21 @@ mod app {
         let mut audio = system.audio;
         audio.spawn();
 
-        let user_input = Input::new(
+        let user_input = UserInput::new(
             system.alpha_button,
             system.alpha_rotary,
             system.beta_button,
             system.beta_rotary,
+        );
+
+        let control_input = ControlInput::new(
+            system.adc_1,
+            system.adc_2,
+            system.cv_input_1,
+            system.cv_input_2,
+            system.cv_input_3,
+            system.cv_input_4,
+            system.cv_input_5,
         );
 
         let instrument = Instrument::new(SAMPLE_RATE);
@@ -107,6 +132,7 @@ mod app {
                 instrument,
                 led,
                 user_input,
+                control_input,
                 display,
                 state,
                 input_actions_producer,
@@ -118,7 +144,7 @@ mod app {
         )
     }
 
-    #[task(binds = DMA1_STR1, local = [input_reactions_consumer, randomizer, instrument, audio], priority = 3)]
+    #[task(binds = DMA1_STR1, local = [input_reactions_consumer, randomizer, instrument, audio, control_input], priority = 3)]
     fn handle_dsp(cx: handle_dsp::Context) {
         use core::convert::TryInto;
 
@@ -126,6 +152,9 @@ mod app {
         let instrument = cx.local.instrument;
         let randomizer = cx.local.randomizer;
         let audio = cx.local.audio;
+        let control_input = cx.local.control_input;
+
+        let _control_snapshot = control_input.update();
 
         while let Some(action) = input_reactions_consumer.dequeue() {
             let reaction = action.try_into();

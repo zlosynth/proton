@@ -1,15 +1,21 @@
 pub mod audio;
+pub mod cv_input;
 pub mod display;
 pub mod encoder;
 pub mod led;
 pub mod randomizer;
 
 use daisy::hal;
+use hal::adc::{Adc, AdcSampleTime, Enabled, Resolution};
+use hal::delay::DelayFromCountDownTimer;
 use hal::pac::CorePeripherals;
 use hal::pac::Peripherals as DevicePeripherals;
+use hal::pac::{ADC1, ADC2};
+use hal::prelude::*;
 use systick_monotonic::Systick;
 
 use audio::Audio;
+use cv_input::{CvInput1, CvInput2, CvInput3, CvInput4, CvInput5};
 use display::{Display, DisplayPins};
 use encoder::{AlphaButton, AlphaRotary, BetaButton, BetaRotary};
 use led::Led;
@@ -24,6 +30,13 @@ pub struct System {
     pub alpha_rotary: AlphaRotary,
     pub beta_button: BetaButton,
     pub beta_rotary: BetaRotary,
+    pub cv_input_1: CvInput1,
+    pub cv_input_2: CvInput2,
+    pub cv_input_3: CvInput3,
+    pub cv_input_4: CvInput4,
+    pub cv_input_5: CvInput5,
+    pub adc_1: Adc<ADC1, Enabled>,
+    pub adc_2: Adc<ADC2, Enabled>,
     pub randomizer: Randomizer,
 }
 
@@ -65,10 +78,33 @@ impl System {
             pins.GPIO.PIN_13.into_pull_up_input(),
         );
 
-        let randomizer = {
-            use stm32h7xx_hal::prelude::_stm32h7xx_hal_rng_RngExt;
-            Randomizer::new(dp.RNG.constrain(ccdr.peripheral.RNG, &ccdr.clocks))
+        let cv_input_1 = CvInput1::new(pins.GPIO.PIN_15);
+        let cv_input_2 = CvInput2::new(pins.GPIO.PIN_16);
+        let cv_input_3 = CvInput3::new(pins.GPIO.PIN_17);
+        let cv_input_4 = CvInput4::new(pins.GPIO.PIN_18);
+        let cv_input_5 = CvInput5::new(pins.GPIO.PIN_19);
+
+        let (adc_1, adc_2) = {
+            let mut delay = DelayFromCountDownTimer::new(dp.TIM3.timer(
+                100.Hz(),
+                ccdr.peripheral.TIM3,
+                &ccdr.clocks,
+            ));
+            let (mut adc_1, mut adc_2) = hal::adc::adc12(
+                dp.ADC1,
+                dp.ADC2,
+                &mut delay,
+                ccdr.peripheral.ADC12,
+                &ccdr.clocks,
+            );
+            adc_1.set_resolution(Resolution::SIXTEENBIT);
+            adc_1.set_sample_time(AdcSampleTime::T_16);
+            adc_2.set_resolution(Resolution::SIXTEENBIT);
+            adc_2.set_sample_time(AdcSampleTime::T_16);
+            (adc_1.enable(), adc_2.enable())
         };
+
+        let randomizer = Randomizer::new(dp.RNG.constrain(ccdr.peripheral.RNG, &ccdr.clocks));
 
         Self {
             audio,
@@ -79,6 +115,13 @@ impl System {
             alpha_rotary,
             beta_button,
             beta_rotary,
+            cv_input_1,
+            cv_input_2,
+            cv_input_3,
+            cv_input_4,
+            cv_input_5,
+            adc_1,
+            adc_2,
             randomizer,
         }
     }

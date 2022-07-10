@@ -602,6 +602,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "proton-control"
+version = "0.5.0"
+dependencies = [
+ "defmt",
+ "embedded-hal",
+ "heapless",
+ "micromath 2.0.0",
+ "nb 1.0.0",
+ "proton-peripherals",
+]
+
+[[package]]
 name = "proton-eurorack"
 version = "0.5.0"
 dependencies = [
@@ -616,7 +628,9 @@ dependencies = [
  "embedded-graphics",
  "fugit",
  "heapless",
+ "nb 1.0.0",
  "panic-probe",
+ "proton-control",
  "proton-instruments-karplus-strong",
  "proton-instruments-tape",
  "proton-peripherals",
@@ -654,6 +668,7 @@ dependencies = [
  "defmt",
  "either",
  "embedded-hal",
+ "nb 1.0.0",
 ]
 
 [[package]]
