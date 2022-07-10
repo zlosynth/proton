@@ -28,6 +28,8 @@ use proton_ui::reaction::Reaction;
 use proton_ui::reducer;
 use proton_ui::state::*;
 
+use proton_control::input_snapshot::{Cv as CvSnapshot, InputSnapshot};
+
 pub type Display = SimulatorDisplay<BinaryColor>;
 
 static mut CLASS: Option<*mut pd_sys::_class> = None;
@@ -51,6 +53,7 @@ struct Class {
     right_outlet: *mut pd_sys::_outlet,
     right_inlet: *mut pd_sys::_inlet,
     signal_dummy: f32,
+    input_snapshot: InputSnapshot,
 }
 
 #[no_mangle]
@@ -79,6 +82,9 @@ pub unsafe extern "C" fn proton_tilde_setup() {
 
     register_float_method(class, "control1", set_control1);
     register_float_method(class, "control2", set_control2);
+    register_float_method(class, "control3", set_control3);
+    register_float_method(class, "control4", set_control4);
+    register_float_method(class, "control5", set_control5);
     register_symbol_method(class, "au", alpha_up);
     register_symbol_method(class, "ad", alpha_down);
     register_symbol_method(class, "ac", alpha_click);
@@ -119,6 +125,16 @@ unsafe extern "C" fn new() -> *mut c_void {
         &mut pd_sys::s_signal,
     );
 
+    (*class).input_snapshot = InputSnapshot {
+        cv: [
+            CvSnapshot { value: 0.0 },
+            CvSnapshot { value: 0.0 },
+            CvSnapshot { value: 0.0 },
+            CvSnapshot { value: 0.0 },
+            CvSnapshot { value: 0.0 },
+        ],
+    };
+
     class as *mut c_void
 }
 
@@ -154,12 +170,44 @@ unsafe fn register_symbol_method(
     );
 }
 
-unsafe extern "C" fn set_control1(_class: *mut Class, _value: pd_sys::t_float) {
-    // TODO
+unsafe extern "C" fn set_control1(class: *mut Class, value: pd_sys::t_float) {
+    (*class).input_snapshot.cv[0].value = value;
+    INSTRUMENT
+        .as_mut()
+        .unwrap()
+        .update_control((*class).input_snapshot);
 }
 
-unsafe extern "C" fn set_control2(_class: *mut Class, _value: pd_sys::t_float) {
-    // TODO
+unsafe extern "C" fn set_control2(class: *mut Class, value: pd_sys::t_float) {
+    (*class).input_snapshot.cv[1].value = value;
+    INSTRUMENT
+        .as_mut()
+        .unwrap()
+        .update_control((*class).input_snapshot);
+}
+
+unsafe extern "C" fn set_control3(class: *mut Class, value: pd_sys::t_float) {
+    (*class).input_snapshot.cv[2].value = value;
+    INSTRUMENT
+        .as_mut()
+        .unwrap()
+        .update_control((*class).input_snapshot);
+}
+
+unsafe extern "C" fn set_control4(class: *mut Class, value: pd_sys::t_float) {
+    (*class).input_snapshot.cv[3].value = value;
+    INSTRUMENT
+        .as_mut()
+        .unwrap()
+        .update_control((*class).input_snapshot);
+}
+
+unsafe extern "C" fn set_control5(class: *mut Class, value: pd_sys::t_float) {
+    (*class).input_snapshot.cv[4].value = value;
+    INSTRUMENT
+        .as_mut()
+        .unwrap()
+        .update_control((*class).input_snapshot);
 }
 
 unsafe extern "C" fn alpha_up(_class: *mut Class) {

@@ -9,6 +9,7 @@ use core::fmt;
 use heapless::FnvIndexMap as IndexMap;
 use heapless::Vec;
 
+use proton_control::input_snapshot::InputSnapshot;
 use proton_primitives::ad_envelope::{Ad, Config as AdConfig};
 use proton_primitives::ring_buffer::RingBuffer;
 use proton_primitives::state_variable_filter::{Bandform, StateVariableFilter};
@@ -248,6 +249,8 @@ impl Instrument {
             Command::DisableLength(length) => remove_length(&mut self.turing.lengths, length),
         }
     }
+
+    pub fn update_control(&mut self, _snapshot: InputSnapshot) {}
 }
 
 #[derive(Clone, Copy, Debug, PartialEq)]

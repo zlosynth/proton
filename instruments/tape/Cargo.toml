@@ -10,6 +10,7 @@ publish = false
 
 [dependencies]
 proton-ui = { path = "../../ui" }
+proton-control = { path = "../../control" }
 proton-primitives = { path = "../../primitives" }
 heapless = "0.7"
 libm = "0.2.2"

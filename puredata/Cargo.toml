@@ -13,6 +13,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 proton-ui = { path = "../ui" }
+proton-control = { path = "../control" }
 proton-instruments-karplus-strong = { path = "../instruments/karplus_strong", optional = true }
 proton-instruments-tape = { path = "../instruments/tape", optional = true }
 pd-sys = "0.1.0"

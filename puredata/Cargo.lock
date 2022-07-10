@@ -644,11 +644,23 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "eb9f9e6e233e5c4a35559a617bf40a4ec447db2e84c20b55a6f83167b7e57872"
 
 [[package]]
+name = "proton-control"
+version = "0.5.0"
+dependencies = [
+ "embedded-hal",
+ "heapless",
+ "micromath 2.0.0",
+ "nb 1.0.0",
+ "proton-peripherals",
+]
+
+[[package]]
 name = "proton-instruments-karplus-strong"
 version = "0.5.0"
 dependencies = [
  "heapless",
  "micromath 2.0.0",
+ "proton-control",
  "proton-primitives",
  "proton-ui",
 ]
@@ -660,6 +672,7 @@ dependencies = [
  "dasp",
  "heapless",
  "libm",
+ "proton-control",
  "proton-primitives",
  "proton-ui",
 ]
@@ -689,6 +702,7 @@ dependencies = [
  "embedded-graphics-simulator",
  "field-offset",
  "pd-sys",
+ "proton-control",
  "proton-instruments-karplus-strong",
  "proton-instruments-tape",
  "proton-ui",

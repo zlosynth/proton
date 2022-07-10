@@ -1,7 +1,7 @@
-#N canvas 0 82 1916 1001 12;
-#X obj 128 63 hsl 256 15 20 21000 1 0 mode_\$1 empty empty -2 -8 0
-10 #fcfcfc #000000 #000000 0 1;
-#X obj 275 81 loadbang;
+#N canvas 0 45 1916 1001 12;
+#X obj 149 26 hsl 256 15 0.01 1 1 0 mode_\$1 empty empty -2 -8 0 10
+#fcfcfc #000000 #000000 0 1;
+#X obj 296 243 loadbang;
 #N canvas 0 50 450 250 (subpatch) 0;
 #X array scope 1000 float 1;
 #A 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
@@ -35,42 +35,54 @@
 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0;
 #X coords 0 1 999 -1 200 140 1 0 0;
-#X restore 495 31 graph;
-#X obj 275 130 tabwrite~ scope;
-#X obj 275 105 metro 500;
-#X obj 125 110 proton~;
-#X msg 316 238 ad;
-#X msg 316 214 ac;
-#X msg 316 190 au;
-#X msg 369 190 bu;
-#X msg 370 214 bc;
-#X msg 371 238 bd;
-#X text 391 61 control1;
-#X msg 125 83 control1 \$1;
-#X obj 128 18 hsl 256 15 20 21000 1 0 mode_\$1 empty empty -2 -8 0
-10 #fcfcfc #000000 #000000 0 1;
-#X text 391 18 control2;
-#X msg 125 38 control2 \$1;
+#X restore 523 40 graph;
+#X obj 296 292 tabwrite~ scope;
+#X obj 296 267 metro 500;
+#X obj 146 272 proton~;
+#X msg 337 400 ad;
+#X msg 337 376 ac;
+#X msg 337 352 au;
+#X msg 390 352 bu;
+#X msg 391 376 bc;
+#X msg 392 400 bd;
+#X text 412 24 control1;
+#X msg 146 46 control1 \$1;
 #N canvas 0 50 450 250 (subpatch) 0;
 #X array loop 1.25461e+06 float 2;
 #X coords 0 1 1.25461e+06 -1 200 140 1 0 0;
-#X restore 48 337 graph;
-#X obj 255 315 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#X restore 522 241 graph;
+#X obj 729 219 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
 #000000 #000000;
-#X obj 255 336 openpanel;
-#X obj 255 387 soundfiler;
-#X msg 255 361 read -resize \$1 loop;
-#X obj 23 70 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#X obj 729 240 openpanel;
+#X obj 729 291 soundfiler;
+#X msg 729 265 read -resize \$1 loop;
+#X obj 44 232 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000
 #000000;
-#X obj 23 90 tabplay~ loop;
-#X obj 106 197 output~;
-#X obj 80 48 adc~;
+#X obj 44 252 tabplay~ loop;
+#X obj 127 359 output~;
+#X obj 101 210 adc~;
+#X obj 149 72 hsl 256 15 0.01 1 1 0 mode_\$1 empty empty -2 -8 0 10
+#fcfcfc #000000 #000000 0 1;
+#X obj 149 118 hsl 256 15 0.01 1 1 0 mode_\$1 empty empty -2 -8 0 10
+#fcfcfc #000000 #000000 0 1;
+#X obj 149 164 hsl 256 15 0.01 1 1 0 mode_\$1 empty empty -2 -8 0 10
+#fcfcfc #000000 #000000 0 1;
+#X obj 149 210 hsl 256 15 0.01 1 1 0 mode_\$1 empty empty -2 -8 0 10
+#ffffff #000000 #9c00ff 0 1;
+#X msg 146 92 control2 \$1;
+#X text 413 70 control2;
+#X text 412 116 control3;
+#X text 412 162 control4;
+#X msg 146 184 control4 \$1;
+#X text 412 208 control5;
+#X msg 146 230 control5 \$1;
+#X msg 146 138 control3 \$1;
 #X connect 0 0 13 0;
 #X connect 1 0 4 0;
 #X connect 4 0 3 0;
 #X connect 5 0 3 0;
-#X connect 5 0 24 0;
-#X connect 5 0 24 1;
+#X connect 5 0 21 0;
+#X connect 5 0 21 1;
 #X connect 6 0 5 0;
 #X connect 7 0 5 0;
 #X connect 8 0 5 0;
@@ -78,12 +90,18 @@
 #X connect 10 0 5 0;
 #X connect 11 0 5 0;
 #X connect 13 0 5 0;
-#X connect 14 0 16 0;
-#X connect 16 0 5 0;
-#X connect 18 0 19 0;
-#X connect 19 0 21 0;
-#X connect 21 0 20 0;
-#X connect 22 0 23 0;
-#X connect 23 0 5 0;
-#X connect 23 1 22 0;
-#X connect 25 0 5 0;
+#X connect 15 0 16 0;
+#X connect 16 0 18 0;
+#X connect 18 0 17 0;
+#X connect 19 0 20 0;
+#X connect 20 0 5 0;
+#X connect 20 1 19 0;
+#X connect 22 0 5 0;
+#X connect 23 0 27 0;
+#X connect 24 0 34 0;
+#X connect 25 0 31 0;
+#X connect 26 0 33 0;
+#X connect 27 0 5 0;
+#X connect 31 0 5 0;
+#X connect 33 0 5 0;
+#X connect 34 0 5 0;

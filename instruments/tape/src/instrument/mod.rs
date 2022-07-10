@@ -1,5 +1,6 @@
 mod attributes;
 mod command;
+mod control;
 mod execute;
 mod process;
 mod state;
