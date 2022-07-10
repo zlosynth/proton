@@ -8,7 +8,8 @@ backwards compatibility.
 
 * Implement a basic tape simulation instrument.
 * Introduce oversampling converters over the Signal trait.
-* Process all CV inputs.
+* Reconcile CV inputs and pass them to instruments.
+* Allow control of cutoff and feedback of karplus strong via CV.
 
 ## 0.5.0
 

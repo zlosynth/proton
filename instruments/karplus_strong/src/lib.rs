@@ -66,7 +66,10 @@ pub struct Instrument {
     envelope: Ad,
     ring_buffer: RingBuffer<SAMPLES>,
     turing: Turing,
-    feedback: f32,
+    cutoff_ui: f32,
+    cutoff_cv: f32,
+    feedback_ui: f32,
+    feedback_cv: f32,
     frequency: f32,
     sample_rate: u32,
 }
@@ -187,7 +190,10 @@ impl Instrument {
             envelope,
             ring_buffer,
             turing,
-            feedback: FEEDBACK_DEFAULT,
+            feedback_ui: FEEDBACK_DEFAULT,
+            feedback_cv: 0.0,
+            cutoff_ui: CUTOFF_DEFAULT,
+            cutoff_cv: 0.0,
             frequency: 1000.0,
             sample_rate,
         }
@@ -210,7 +216,7 @@ impl Instrument {
             let delayed_sample = self
                 .ring_buffer
                 .peek_interpolated(-(self.sample_rate as f32) / self.frequency);
-            let mixed_sample = self.svf.tick(new_sample + delayed_sample * self.feedback);
+            let mixed_sample = self.svf.tick(new_sample + delayed_sample * self.feedback());
             self.ring_buffer.write(mixed_sample);
 
             *x = mixed_sample;
@@ -231,10 +237,11 @@ impl Instrument {
 
         match command {
             Command::SetCutoff(value) => {
-                self.svf.set_frequency(value);
+                self.cutoff_ui = value;
+                self.svf.set_frequency(self.cutoff());
             }
             Command::SetFeedback(value) => {
-                self.feedback = value;
+                self.feedback_ui = value;
             }
             Command::SetDensity(value) => {
                 self.turing.density = value as u32;
@@ -250,7 +257,20 @@ impl Instrument {
         }
     }
 
-    pub fn update_control(&mut self, _snapshot: InputSnapshot) {}
+    pub fn update_control(&mut self, snapshot: InputSnapshot) {
+        self.cutoff_cv = snapshot.cv[0].value * 5000.0;
+        self.svf.set_frequency(self.cutoff());
+
+        self.feedback_cv = snapshot.cv[1].value * 2.0 - 1.0;
+    }
+
+    fn cutoff(&self) -> f32 {
+        self.cutoff_ui + self.cutoff_cv
+    }
+
+    fn feedback(&self) -> f32 {
+        (self.feedback_ui + self.feedback_cv).clamp(0.0, 1.0)
+    }
 }
 
 #[derive(Clone, Copy, Debug, PartialEq)]
