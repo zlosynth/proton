@@ -6,6 +6,9 @@
 # * https://ccrma.stanford.edu/~jatin/papers/Complex_NLs.pdf
 # * https://github.com/jatinchowdhury18/audio_dspy
 
+import argparse
+import sys
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -207,7 +210,7 @@ def analyze_processor(axs, column, processor, attributes):
     plot_signal(ax_signal, half_time, half_signal)
 
 
-if __name__ == '__main__':
+def response():
     fig, axs = plt.subplots(3, 3)
 
     axs[0, 0].set_ylabel('Hysteresis loop')
@@ -244,3 +247,149 @@ if __name__ == '__main__':
     )
 
     plt.show()
+
+
+def amplitude():
+    FREQUENCY = 100.0
+    LENGTH = 0.02
+
+    fig, axs = plt.subplots(2, 3)
+
+    axs[0, 0].set_ylabel('Original')
+    axs[1, 0].set_ylabel('Normalized')
+
+    axs[0, 0].set_title('Drive')
+    axs[0, 1].set_title('Saturation')
+    axs[0, 2].set_title('Width')
+
+    def max_amplitude(
+        input_amplitude=1.0,
+        drive=1.0,
+        saturation=0.9,
+        width=1.0,
+    ):
+        signal = generate_sine(FREQUENCY, length=LENGTH)
+        return np.max(Hysteresis(drive, saturation, width, FS).process_block(signal))
+
+    legend = []
+
+    saturation = np.linspace(-3, 3, 5)
+    for s in saturation:
+        drive = np.linspace(-3, 3, 10)
+        amplitude_per_drive = np.zeros(len(drive))
+        i = 0
+        for d in drive:
+            amplitude_per_drive[i] = max_amplitude(drive=d, saturation=s)
+            i += 1
+        axs[0, 0].plot(drive, amplitude_per_drive)
+        m = np.min(amplitude_per_drive)
+        amplitude_per_drive = amplitude_per_drive - m
+        m = np.max(amplitude_per_drive)
+        amplitude_per_drive = amplitude_per_drive * (1 / m)
+        axs[1, 0].plot(drive, amplitude_per_drive)
+        legend.append(f'Saturation={s}')
+
+    width = np.linspace(-3, 1, 5)
+    for w in width:
+        drive = np.linspace(-3, 3, 10)
+        amplitude_per_drive = np.zeros(len(drive))
+        i = 0
+        for d in drive:
+            amplitude_per_drive[i] = max_amplitude(drive=d, width=w)
+            i += 1
+        axs[0, 0].plot(drive, amplitude_per_drive)
+        m = np.min(amplitude_per_drive)
+        amplitude_per_drive = amplitude_per_drive - m
+        m = np.max(amplitude_per_drive)
+        amplitude_per_drive = amplitude_per_drive * (1 / m)
+        axs[1, 0].plot(drive, amplitude_per_drive)
+        legend.append(f'Width={w}')
+
+    axs[0, 0].legend(legend)
+
+    legend = []
+
+    drive = np.linspace(-3, 3, 5)
+    for d in drive:
+        saturation = np.linspace(-3, 3, 10)
+        amplitude_per_saturation = np.zeros(len(saturation))
+        i = 0
+        for s in saturation:
+            amplitude_per_saturation[i] = max_amplitude(saturation=s, drive=d)
+            i += 1
+        axs[0, 1].plot(saturation, amplitude_per_saturation)
+        m = np.min(amplitude_per_saturation)
+        amplitude_per_saturation = amplitude_per_saturation - m
+        m = np.max(amplitude_per_saturation)
+        amplitude_per_saturation = amplitude_per_saturation * (1 / m)
+        axs[1, 1].plot(saturation, amplitude_per_saturation)
+        legend.append(f'Drive={d}')
+
+    width = np.linspace(-3, 1, 5)
+    for w in width:
+        saturation = np.linspace(-3, 3, 10)
+        amplitude_per_saturation = np.zeros(len(saturation))
+        i = 0
+        for s in saturation:
+            amplitude_per_saturation[i] = max_amplitude(saturation=s, width=w)
+            i += 1
+        axs[0, 1].plot(saturation, amplitude_per_saturation)
+        m = np.min(amplitude_per_saturation)
+        amplitude_per_saturation = amplitude_per_saturation - m
+        m = np.max(amplitude_per_saturation)
+        amplitude_per_saturation = amplitude_per_saturation * (1 / m)
+        axs[1, 1].plot(saturation, amplitude_per_saturation)
+        legend.append(f'Width={w}')
+
+    axs[0, 1].legend(legend)
+
+    legend = []
+
+    drive = np.linspace(-3, 3, 5)
+    for d in drive:
+        width = np.linspace(-3, 1, 10)
+        amplitude_per_width = np.zeros(len(width))
+        i = 0
+        for w in width:
+            amplitude_per_width[i] = max_amplitude(width=w, drive=d)
+            i += 1
+        axs[0, 2].plot(width, amplitude_per_width)
+        m = np.min(amplitude_per_width)
+        amplitude_per_width = amplitude_per_width - m
+        m = np.max(amplitude_per_width)
+        amplitude_per_width = amplitude_per_width * (1 / m)
+        axs[1, 2].plot(width, amplitude_per_width)
+        legend.append(f'Drive={d}')
+
+    saturation = np.linspace(-3, 1, 5)
+    for s in saturation:
+        width = np.linspace(-3, 1, 10)
+        amplitude_per_width = np.zeros(len(width))
+        i = 0
+        for w in width:
+            amplitude_per_width[i] = max_amplitude(width=w, saturation=s)
+            i += 1
+        axs[0, 2].plot(width, amplitude_per_width)
+        m = np.min(amplitude_per_width)
+        amplitude_per_width = amplitude_per_width - m
+        m = np.max(amplitude_per_width)
+        amplitude_per_width = amplitude_per_width * (1 / m)
+        axs[1, 2].plot(width, amplitude_per_width)
+        legend.append(f'Saturation={s}')
+
+    axs[0, 2].legend(legend)
+
+    plt.show()
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(prog=sys.argv[0])
+    subparsers = parser.add_subparsers(help='sub-command help', required=True, dest='subparser')
+    subparsers.add_parser('response', help='Plot processed signal, hysteresis loop, and harmonic response')
+    subparsers.add_parser('amplitude', help='Plot relation between individual arguments and amplitude')
+    args = parser.parse_args()
+
+    if args.subparser == 'response':
+        response()
+    elif args.subparser == 'amplitude':
+        amplitude()
