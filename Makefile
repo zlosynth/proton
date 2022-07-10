@@ -9,6 +9,7 @@ check-format:
 	cd eurorack && cargo +nightly fmt --all -- --check
 	cd peripherals && cargo +nightly fmt --all -- --check
 	cd ui && cargo +nightly fmt --all -- --check
+	cd control && cargo +nightly fmt --all -- --check
 	cd primitives && cargo +nightly fmt --all -- --check
 	cd instruments/karplus_strong && cargo +nightly fmt --all -- --check
 	cd instruments/tape && cargo +nightly fmt --all -- --check
@@ -19,6 +20,7 @@ format:
 	cd eurorack && cargo +nightly fmt --all
 	cd peripherals && cargo +nightly fmt --all
 	cd ui && cargo +nightly fmt --all
+	cd control && cargo +nightly fmt --all
 	cd primitives && cargo +nightly fmt --all
 	cd instruments/karplus_strong && cargo +nightly fmt --all
 	cd instruments/tape && cargo +nightly fmt --all
@@ -32,6 +34,7 @@ clippy:
 	cd eurorack && cargo +nightly check --test display --test encoders --features karplus_strong
 	cd peripherals && cargo +nightly clippy --all --features defmt -- -D warnings
 	cd ui && cargo +nightly clippy --all --features defmt -- -D warnings
+	cd control && cargo +nightly clippy --all --features defmt -- -D warnings
 	cd primitives && cargo +nightly clippy --all --features defmt -- -D warnings
 	cd instruments/karplus_strong && cargo +nightly clippy --all --features defmt -- -D warnings
 	cd instruments/tape && cargo +nightly clippy --all --features defmt -- -D warnings
@@ -40,6 +43,7 @@ clippy:
 test:
 	cd peripherals && cargo +nightly test --features defmt --all
 	cd ui && cargo +nightly test --features defmt --all
+	cd control && cargo +nightly test --features defmt --all
 	cd primitives && cargo +nightly test --all --features defmt
 	cd instruments/karplus_strong && cargo +nightly test --all --features defmt
 	cd instruments/tape && cargo +nightly test --all --features defmt
@@ -50,6 +54,7 @@ update:
 	cd eurorack && cargo +nightly update
 	cd peripherals && cargo +nightly update
 	cd ui && cargo +nightly update
+	cd control && cargo +nightly update
 	cd primitives && cargo +nightly update
 	cd instruments/karplus_strong && cargo +nightly update
 	cd instruments/tape && cargo +nightly update
