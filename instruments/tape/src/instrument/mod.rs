@@ -14,16 +14,34 @@ use proton_primitives::oversampling::upsampling::Upsampler16;
 
 pub struct Instrument {
     pub(crate) pre_gain: SmoothedValue,
+
     pub(crate) hysteresis: Hysteresis,
+    pub(crate) drive: SmoothedValue,
+    pub(crate) saturation: SmoothedValue,
+    pub(crate) width: SmoothedValue,
+
     pub(crate) upsampler: Upsampler16,
     pub(crate) downsampler: Downsampler16,
 }
 
 impl Instrument {
     pub fn new(sample_rate: u32) -> Self {
+        let drive = SmoothedValue::new(1.0);
+        let saturation = SmoothedValue::new(1.0);
+        let width = SmoothedValue::new(1.0);
+        let hysteresis = Hysteresis::new(
+            sample_rate as f32,
+            drive.value(),
+            saturation.value(),
+            width.value(),
+        );
+
         Self {
+            hysteresis,
+            drive,
+            saturation,
+            width,
             pre_gain: SmoothedValue::new(1.0),
-            hysteresis: Hysteresis::new(sample_rate as f32),
             upsampler: Upsampler16::new_16(),
             downsampler: Downsampler16::new_16(),
         }

@@ -1,8 +1,10 @@
-/// Kudos to Jatin Chowdhury
-/// * https://jatinchowdhury18.medium.com/complex-nonlinearities-episode-3-hysteresis-fdeb2cd3e3f6
-/// * https://dafx2019.bcu.ac.uk/papers/DAFx2019_paper_3.pdf
-/// * https://ccrma.stanford.edu/~jatin/papers/Complex_NLs.pdf
-/// * https://github.com/jatinchowdhury18/audio_dspy
+//! Kudos to Jatin Chowdhury
+//! * https://jatinchowdhury18.medium.com/complex-nonlinearities-episode-3-hysteresis-fdeb2cd3e3f6
+//! * https://dafx2019.bcu.ac.uk/papers/DAFx2019_paper_3.pdf
+//! * https://ccrma.stanford.edu/~jatin/papers/Complex_NLs.pdf
+//! * https://github.com/jatinchowdhury18/audio_dspy
+
+use dasp::Signal;
 use libm::{fabs, sqrt, tanh};
 
 /// Time domain differentiation using the trapezoidal rule
@@ -84,7 +86,7 @@ impl Hysteresis {
     /// Mean field parameter
     const ALPHA: f64 = 1.6e-3;
 
-    pub fn new(fs: f32) -> Self {
+    pub fn new(fs: f32, drive: f32, saturation: f32, width: f32) -> Self {
         let fs = fs as f64;
         let mut hysteresis = Self {
             drive: 0.0,
@@ -101,9 +103,9 @@ impl Hysteresis {
             h_n1: 0.0,
             h_d_n1: 0.0,
         };
-        hysteresis.set_drive(1.0);
-        hysteresis.set_saturation(0.9);
-        hysteresis.set_width(1.0);
+        hysteresis.set_drive(drive);
+        hysteresis.set_saturation(saturation);
+        hysteresis.set_width(width);
         hysteresis
     }
 
@@ -212,5 +214,51 @@ impl Hysteresis {
         self.h_n1 = h;
         self.h_d_n1 = h_d;
         m as f32
+    }
+}
+
+pub trait SignalApplyHysteresis: Signal {
+    fn apply_hysteresis<A>(
+        self,
+        hysteresis: &mut Hysteresis,
+        drive: A,
+        saturation: A,
+        width: A,
+    ) -> ApplyHysteresis<Self, A>
+    where
+        Self: Sized,
+    {
+        ApplyHysteresis {
+            source: self,
+            hysteresis,
+            drive,
+            saturation,
+            width,
+        }
+    }
+}
+
+impl<T> SignalApplyHysteresis for T where T: Signal {}
+
+pub struct ApplyHysteresis<'a, S, A> {
+    source: S,
+    hysteresis: &'a mut Hysteresis,
+    drive: A,
+    saturation: A,
+    width: A,
+}
+
+impl<'a, S, A> Signal for ApplyHysteresis<'a, S, A>
+where
+    S: Signal<Frame = f32>,
+    A: Signal<Frame = f32>,
+{
+    type Frame = S::Frame;
+
+    fn next(&mut self) -> Self::Frame {
+        self.hysteresis.set_drive(self.drive.next());
+        self.hysteresis.set_saturation(self.saturation.next());
+        self.hysteresis.set_width(self.width.next());
+        self.hysteresis.process(self.source.next())
     }
 }
