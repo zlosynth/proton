@@ -8,6 +8,7 @@ impl Instrument {
             Command::SetDrive(value) => self.drive.set(value),
             Command::SetSaturation(value) => self.saturation.set(value),
             Command::SetWidth(value) => self.width.set(value),
+            Command::Flush => panic!("Instrument: {:?}", self),
         }
     }
 }

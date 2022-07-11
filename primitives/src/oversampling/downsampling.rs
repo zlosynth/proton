@@ -1,3 +1,5 @@
+use core::fmt;
+
 use dasp::{Frame, Signal};
 
 use super::coefficients::*;
@@ -7,6 +9,14 @@ pub struct Downsampler<const N: usize> {
     factor: usize,
     coefficients: &'static [f32; N],
     buffer: RingBuffer<N>,
+}
+
+impl<const N: usize> fmt::Debug for Downsampler<N> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Downsampler")
+            .field("factor", &self.factor)
+            .finish()
+    }
 }
 
 pub type Downsampler2 = Downsampler<{ COEFFICIENTS_2.len() }>;

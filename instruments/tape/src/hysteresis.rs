@@ -8,6 +8,7 @@ use dasp::Signal;
 use libm::{fabs, sqrt, tanh};
 
 /// Time domain differentiation using the trapezoidal rule
+#[derive(Debug)]
 struct Differentiator {
     /// Period between samples
     t: f64,
@@ -53,6 +54,7 @@ fn langevin_deriv(x: f64) -> f64 {
 }
 
 /// Class to implement hysteresis processing
+#[derive(Debug)]
 pub struct Hysteresis {
     /// Drive level
     drive: f32,

@@ -11,6 +11,7 @@ pub enum Command {
     SetDrive(f32),
     SetSaturation(f32),
     SetWidth(f32),
+    Flush,
 }
 
 use Command::*;
@@ -27,7 +28,10 @@ impl TryFrom<Reaction> for Command {
                 attributes::WIDTH => Ok(SetWidth(value)),
                 _ => Err("invalid attribute name"),
             },
-            Reaction::SelectValue(_, _) => Err("invalid attribute type"),
+            Reaction::SelectValue(name, _) => match name {
+                attributes::FLUSH => Ok(Flush),
+                _ => Err("invalid attribute name"),
+            },
         }
     }
 }

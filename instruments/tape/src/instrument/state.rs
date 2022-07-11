@@ -39,6 +39,8 @@ impl Instrument {
                         .with_step(0.02)
                         .with_writter(percentage_writter),
                 ),
+                Attribute::new(attributes::FLUSH)
+                    .with_value_select(ValueSelect::new(&["Trigger", "Boom"]).unwrap()),
             ])
             .unwrap()
     }

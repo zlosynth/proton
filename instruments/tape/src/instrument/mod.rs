@@ -12,6 +12,7 @@ use crate::hysteresis::Hysteresis;
 use proton_primitives::oversampling::downsampling::Downsampler8;
 use proton_primitives::oversampling::upsampling::Upsampler8;
 
+#[derive(Debug)]
 pub struct Instrument {
     pub(crate) pre_gain: SmoothedValue,
 
@@ -48,7 +49,7 @@ impl Instrument {
     }
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub(crate) enum SmoothedValue {
     Stable(f32),
     Converging(f32, f32, f32),
