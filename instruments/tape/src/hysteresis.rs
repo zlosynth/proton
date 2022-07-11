@@ -28,7 +28,8 @@ impl Differentiator {
     }
 
     pub fn differentiate(&mut self, x: f64) -> f64 {
-        let x_d = ((2.0 / self.t) * (x - self.x_n1)) - 1.0 * self.x_d_n1;
+        const D_ALPHA: f64 = 0.75;
+        let x_d = (((1.0 + D_ALPHA) / self.t) * (x - self.x_n1)) - D_ALPHA * self.x_d_n1;
         self.x_n1 = x;
         self.x_d_n1 = x_d;
         x_d

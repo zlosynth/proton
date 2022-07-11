@@ -24,7 +24,8 @@ class Differentiator:
         self.x_d_n1 = 0.0
 
     def differentiate(self, x):
-        x_d = ((2 / self.T) * (x - self.x_1)) - 1 * self.x_d_n1
+        d_alpha = 0.75
+        x_d = (((1 + d_alpha) / self.T) * (x - self.x_1)) - d_alpha * self.x_d_n1
         self.x_1 = x
         self.x_d_n1 = x_d
         return x_d
