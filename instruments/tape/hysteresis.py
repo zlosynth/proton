@@ -11,6 +11,7 @@ import sys
 
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.widgets import Slider
 
 FS = 48000 * 8
 
@@ -34,7 +35,7 @@ class Differentiator:
 class Hysteresis:
     """Class to implement hysteresis processing"""
 
-    def __init__(self, drive, saturation, width, fs):
+    def __init__(self, drive, saturation, width, fs, makeup=True):
         """
         Parameters
         ----------
@@ -54,6 +55,10 @@ class Hysteresis:
         self.alpha = 1.6e-3
         self.k = 30 * (1 - 0.5) ** 6 + 0.01  # coercivity
         self.c = (1 - width) ** 0.5 - 0.01  # changes slope
+        if makeup:
+            self.makeup = (1.1566 + 0.2968 * width ** 1.37) / (1.5665 - saturation ** 1.43)
+        else:
+            self.makeup = 1.0
 
     @staticmethod
     def langevin(x):
@@ -149,7 +154,7 @@ class Hysteresis:
             H_n1 = H
             H_d_n1 = H_d
 
-            M_out[n] = M
+            M_out[n] = M * self.makeup
             n += 1
 
         return M_out
@@ -237,31 +242,68 @@ def response():
     analyze_processor(
         axs, 1,
         lambda block, saturation: processor(block, saturation=saturation),
-        [0.0, 0.5, 1.0, 1.327],
+        [0.0, 0.5, 1.0],
     )
 
     axs[0, 2].set_title('Width')
     analyze_processor(
         axs, 2,
         lambda block, width: processor(block, width=width),
-        [-10.0, -4.0, -2.0, -1.0, 0.0, 0.99],
+        [0.0, 0.5, 0.99],
     )
 
     plt.show()
 
 
 def amplitude():
+    fig, axs = plt.subplots()
+
+    plt.subplots_adjust(left=0.22)
+    plt.title('makeup = (aw + bw * width ** cw) / (as - saturation ** bs)')
+
+    aw_slider = Slider(
+        ax=plt.axes([0.03, 0.6, 0.0225, 0.3]),
+        label='aw',
+        valmin=0.9,
+        valmax=1.6,
+        valinit=1.156,
+        orientation='vertical'
+    )
+    bw_slider = Slider(
+        ax=plt.axes([0.06, 0.6, 0.0225, 0.3]),
+        label='bw',
+        valmin=0.1,
+        valmax=0.9,
+        valinit=0.2968,
+        orientation='vertical'
+    )
+    cw_slider = Slider(
+        ax=plt.axes([0.09, 0.6, 0.0225, 0.3]),
+        label='cw',
+        valmin=1.0,
+        valmax=2.0,
+        valinit=1.37,
+        orientation='vertical'
+    )
+    as_slider = Slider(
+        ax=plt.axes([0.12, 0.6, 0.0225, 0.3]),
+        label='as',
+        valmin=1.2,
+        valmax=2.0,
+        valinit=1.5665,
+        orientation='vertical'
+    )
+    bs_slider = Slider(
+        ax=plt.axes([0.15, 0.6, 0.0225, 0.3]),
+        label='bs',
+        valmin=1.0,
+        valmax=2.0,
+        valinit=1.43,
+        orientation='vertical'
+    )
+
     FREQUENCY = 100.0
     LENGTH = 0.02
-
-    fig, axs = plt.subplots(2, 3)
-
-    axs[0, 0].set_ylabel('Original')
-    axs[1, 0].set_ylabel('Normalized')
-
-    axs[0, 0].set_title('Drive')
-    axs[0, 1].set_title('Saturation')
-    axs[0, 2].set_title('Width')
 
     def max_amplitude(
         input_amplitude=1.0,
@@ -270,115 +312,46 @@ def amplitude():
         width=1.0,
     ):
         signal = generate_sine(FREQUENCY, length=LENGTH)
-        return np.max(Hysteresis(drive, saturation, width, FS).process_block(signal))
+        return np.max(Hysteresis(drive, saturation, width, FS, makeup=False).process_block(signal))
 
-    legend = []
+    configs = []
 
-    saturation = np.linspace(-3, 3, 5)
-    for s in saturation:
-        drive = np.linspace(-3, 3, 10)
-        amplitude_per_drive = np.zeros(len(drive))
-        i = 0
-        for d in drive:
-            amplitude_per_drive[i] = max_amplitude(drive=d, saturation=s)
-            i += 1
-        axs[0, 0].plot(drive, amplitude_per_drive)
-        m = np.min(amplitude_per_drive)
-        amplitude_per_drive = amplitude_per_drive - m
-        m = np.max(amplitude_per_drive)
-        amplitude_per_drive = amplitude_per_drive * (1 / m)
-        axs[1, 0].plot(drive, amplitude_per_drive)
-        legend.append(f'Saturation={s}')
+    for s in np.linspace(0, 1, 5):
+        widths = np.linspace(0, 1, 5)
+        config = {
+            'saturation': s,
+            'widths': [],
+            'amplitudes': [],
+        }
+        for w in widths:
+            config['widths'].append(w)
+            config['amplitudes'].append(max_amplitude(width=w, saturation=s))
+        configs.append(config)
 
-    width = np.linspace(-3, 1, 5)
-    for w in width:
-        drive = np.linspace(-3, 3, 10)
-        amplitude_per_drive = np.zeros(len(drive))
-        i = 0
-        for d in drive:
-            amplitude_per_drive[i] = max_amplitude(drive=d, width=w)
-            i += 1
-        axs[0, 0].plot(drive, amplitude_per_drive)
-        m = np.min(amplitude_per_drive)
-        amplitude_per_drive = amplitude_per_drive - m
-        m = np.max(amplitude_per_drive)
-        amplitude_per_drive = amplitude_per_drive * (1 / m)
-        axs[1, 0].plot(drive, amplitude_per_drive)
-        legend.append(f'Width={w}')
+    def plot(_):
+        axs.cla()
+        axs.set_xlim([0, 1])
+        axs.set_ylim([0, 2])
+        axs.grid()
+        for config in configs:
+            adjusted_amplitudes = []
+            for i, w in enumerate(config['widths']):
+                aw = aw_slider.val
+                bw = bw_slider.val
+                cw = cw_slider.val
+                as_ = as_slider.val
+                bs = bs_slider.val
+                makeup = (aw + bw * w ** cw) / (as_ - config['saturation'] ** bs)
+                adjusted_amplitudes.append(config['amplitudes'][i] * makeup)
+            axs.plot(config['widths'], adjusted_amplitudes)
 
-    axs[0, 0].legend(legend)
+    plot(())
 
-    legend = []
-
-    drive = np.linspace(-3, 3, 5)
-    for d in drive:
-        saturation = np.linspace(-3, 3, 10)
-        amplitude_per_saturation = np.zeros(len(saturation))
-        i = 0
-        for s in saturation:
-            amplitude_per_saturation[i] = max_amplitude(saturation=s, drive=d)
-            i += 1
-        axs[0, 1].plot(saturation, amplitude_per_saturation)
-        m = np.min(amplitude_per_saturation)
-        amplitude_per_saturation = amplitude_per_saturation - m
-        m = np.max(amplitude_per_saturation)
-        amplitude_per_saturation = amplitude_per_saturation * (1 / m)
-        axs[1, 1].plot(saturation, amplitude_per_saturation)
-        legend.append(f'Drive={d}')
-
-    width = np.linspace(-3, 1, 5)
-    for w in width:
-        saturation = np.linspace(-3, 3, 10)
-        amplitude_per_saturation = np.zeros(len(saturation))
-        i = 0
-        for s in saturation:
-            amplitude_per_saturation[i] = max_amplitude(saturation=s, width=w)
-            i += 1
-        axs[0, 1].plot(saturation, amplitude_per_saturation)
-        m = np.min(amplitude_per_saturation)
-        amplitude_per_saturation = amplitude_per_saturation - m
-        m = np.max(amplitude_per_saturation)
-        amplitude_per_saturation = amplitude_per_saturation * (1 / m)
-        axs[1, 1].plot(saturation, amplitude_per_saturation)
-        legend.append(f'Width={w}')
-
-    axs[0, 1].legend(legend)
-
-    legend = []
-
-    drive = np.linspace(-3, 3, 5)
-    for d in drive:
-        width = np.linspace(-3, 1, 10)
-        amplitude_per_width = np.zeros(len(width))
-        i = 0
-        for w in width:
-            amplitude_per_width[i] = max_amplitude(width=w, drive=d)
-            i += 1
-        axs[0, 2].plot(width, amplitude_per_width)
-        m = np.min(amplitude_per_width)
-        amplitude_per_width = amplitude_per_width - m
-        m = np.max(amplitude_per_width)
-        amplitude_per_width = amplitude_per_width * (1 / m)
-        axs[1, 2].plot(width, amplitude_per_width)
-        legend.append(f'Drive={d}')
-
-    saturation = np.linspace(-3, 1, 5)
-    for s in saturation:
-        width = np.linspace(-3, 1, 10)
-        amplitude_per_width = np.zeros(len(width))
-        i = 0
-        for w in width:
-            amplitude_per_width[i] = max_amplitude(width=w, saturation=s)
-            i += 1
-        axs[0, 2].plot(width, amplitude_per_width)
-        m = np.min(amplitude_per_width)
-        amplitude_per_width = amplitude_per_width - m
-        m = np.max(amplitude_per_width)
-        amplitude_per_width = amplitude_per_width * (1 / m)
-        axs[1, 2].plot(width, amplitude_per_width)
-        legend.append(f'Saturation={s}')
-
-    axs[0, 2].legend(legend)
+    aw_slider.on_changed(plot)
+    bw_slider.on_changed(plot)
+    cw_slider.on_changed(plot)
+    as_slider.on_changed(plot)
+    bs_slider.on_changed(plot)
 
     plt.show()
 
