@@ -9,7 +9,7 @@ with the project.
 
 # License
 
-Software of Achordion is distributed under the terms of the General Public
+Software of Proton is distributed under the terms of the General Public
 License version 3. See [LICENSE-SOFTWARE](LICENSE-SOFTWARE) for details.
 
 Schematics and PCB layout are distributed under the terms of Creative Commons
