@@ -6,12 +6,15 @@
 # * https://ccrma.stanford.edu/~jatin/papers/Complex_NLs.pdf
 # * https://github.com/jatinchowdhury18/audio_dspy
 
+from csv import DictWriter
 import argparse
 import sys
+import concurrent.futures
 
-import numpy as np
+from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
-from matplotlib.widgets import Slider
+import numpy as np
+import pandas as pd
 
 FS = 48000 * 8
 
@@ -56,7 +59,78 @@ class Hysteresis:
         self.k = 30 * (1 - 0.5) ** 6 + 0.01  # coercivity
         self.c = (1 - width) ** 0.5 - 0.01  # changes slope
         if makeup:
-            self.makeup = (1.1566 + 0.2968 * width ** 1.37) / (1.5665 - saturation ** 1.43)
+            # TODO: first 0.2 of is getting up to 1, then it gets undercompensated
+            # self.makeup = (1.1566 + 0.2968 * width ** 1.37) / (1.5665 - saturation ** 1.43)
+            x1 = drive
+            x2 = saturation
+            x3 = width
+            x4 = 1
+
+            a1 = 2.92183732e-01
+            a2 = 3.83587066e-01
+            a3 = -4.12807883e-01
+            a4 = 2.63565646e+00
+            a5 = -2.02954036e-02
+            a6 = -2.33793445e-01
+            a7 = 1.47444536e-01
+            a8 = -2.47464017e+00
+            a9 = 4.68106521e-04
+            a10 = -1.95089142e-02
+            a11 = -5.35647575e-01
+            a12 = 8.21883132e-01
+            a13 = -1.38625427e-01
+            a14 = -2.78652110e-02
+            a15 = -1.40898473e-02
+            a16 = 5.76600047e-02
+            a17 = -1.85152167e+00
+            a18 = 2.55584425e-01
+            a19 = 4.61574452e-03
+            a20 = 1.31761628e-03
+            a21 = -4.46917078e-04
+            a22 = 2.63399370e-02
+            a23 = 1.18055271e-01
+            a24 = 4.34739804e-01
+            a25 = 7.24152304e-03
+            a26 = -5.88168302e-03
+            a27 = 1.03339067e-02
+            a28 = 3.47648636e-01
+            a29 = 9.15414904e-01
+            a30 = -1.35347946e-01
+            b = -1.78693175e-01
+
+            self.makeup = (
+                a1 * x1 +
+                a2 * x2 +
+                a3 * x3 +
+                a4 * x4 +
+                a5 * x1 ** 2 +
+                a6 * x2 ** 2 +
+                a7 * x3 ** 2 +
+                a8 * x4 ** 2 +
+                a9 * x1 ** 3 +
+                a10 * x2 ** 3 +
+                a11 * x3 ** 3 +
+                a12 * x4 ** 3 +
+                a13 * x1 * x2 +
+                a14 * x1 * x3 +
+                a15 * x1 * x4 +
+                a16 * x2 * x3 +
+                a17 * x2 * x4 +
+                a18 * x3 * x4 +
+                a19 * x1 ** 2 * x2 +
+                a20 * x1 ** 2 * x3 +
+                a21 * x1 ** 2 * x4 +
+                a22 * x2 ** 2 * x3 +
+                a23 * x2 ** 2 * x4 +
+                a24 * x3 ** 2 * x4 +
+                a25 * x1 * x2 ** 2 +
+                a26 * x1 * x3 ** 2 +
+                a27 * x1 * x4 ** 2 +
+                a28 * x2 * x3 ** 2 +
+                a29 * x2 * x4 ** 2 +
+                a30 * x3 * x4 ** 2 +
+                b
+            )
         else:
             self.makeup = 1.0
 
@@ -188,7 +262,7 @@ def plot_signal(ax, time, signal):
 
 def analyze_processor(axs, column, processor, attributes):
     FREQUENCY = 100
-    LENGTH = 0.02
+    LENGTH = 0.08
 
     ax_loop = axs[0, column]
     ax_signal = axs[1, column]
@@ -197,7 +271,7 @@ def analyze_processor(axs, column, processor, attributes):
     legend = []
 
     # plot only the second half, after hysteresis stabilizes
-    signal = generate_sine(FREQUENCY, length=LENGTH)
+    signal = generate_sine(FREQUENCY, length=LENGTH) * 3
     half = int(len(signal) / 2)
     half_signal = signal[half:]
     time = np.linspace(0, LENGTH, int(FS * LENGTH))
@@ -235,7 +309,7 @@ def response():
     analyze_processor(
         axs, 0,
         lambda block, drive: processor(block, drive=drive),
-        [0.0, 0.1, 0.25, 0.5, 1.0, 5],
+        [0.0, 0.1, 0.25, 0.5, 1.0, 5.0, 10.0, 20.0],
     )
 
     axs[0, 1].set_title('Saturation')
@@ -255,115 +329,307 @@ def response():
     plt.show()
 
 
-def amplitude():
-    fig, axs = plt.subplots()
+def amplitude_generate():
+    I = 10
+    D = 20
+    S = 20
+    W = 20
 
-    plt.subplots_adjust(left=0.22)
-    plt.title('makeup = (aw + bw * width ** cw) / (as - saturation ** bs)')
+    input_configs = []
+    for i in np.linspace(0.1, 1.0, I):
+        for d in np.linspace(0.1, 20.0, D):
+            for s in np.linspace(0, 1, S):
+                for w in np.linspace(0, 0.999, W):
+                    input_configs.append({
+                        'i': i,
+                        'd': d,
+                        's': s,
+                        'w': w,
+                    })
 
-    aw_slider = Slider(
-        ax=plt.axes([0.03, 0.6, 0.0225, 0.3]),
-        label='aw',
-        valmin=0.9,
-        valmax=1.6,
-        valinit=1.156,
-        orientation='vertical'
-    )
-    bw_slider = Slider(
-        ax=plt.axes([0.06, 0.6, 0.0225, 0.3]),
-        label='bw',
-        valmin=0.1,
-        valmax=0.9,
-        valinit=0.2968,
-        orientation='vertical'
-    )
-    cw_slider = Slider(
-        ax=plt.axes([0.09, 0.6, 0.0225, 0.3]),
-        label='cw',
-        valmin=1.0,
-        valmax=2.0,
-        valinit=1.37,
-        orientation='vertical'
-    )
-    as_slider = Slider(
-        ax=plt.axes([0.12, 0.6, 0.0225, 0.3]),
-        label='as',
-        valmin=1.2,
-        valmax=2.0,
-        valinit=1.5665,
-        orientation='vertical'
-    )
-    bs_slider = Slider(
-        ax=plt.axes([0.15, 0.6, 0.0225, 0.3]),
-        label='bs',
-        valmin=1.0,
-        valmax=2.0,
-        valinit=1.43,
-        orientation='vertical'
-    )
+    i = 1
+    m = I * D * S * W
+    configs = []
+    with concurrent.futures.ProcessPoolExecutor() as executor:
+        for config in executor.map(set_max_amplitude, input_configs):
+            configs.append(config)
+            print(f'{i}/{m}')
+            i += 1
 
+    with open('amplitude_dataset.csv', 'w', newline='') as f:
+        writer = DictWriter(f, fieldnames=configs[0].keys())
+        writer.writeheader()
+        writer.writerows(configs)
+
+    print('Done')
+
+
+def set_max_amplitude(config):
     FREQUENCY = 100.0
     LENGTH = 0.02
+    signal = generate_sine(FREQUENCY, length=LENGTH) * config['i']
+    config['a'] = np.max(Hysteresis(config['d'], config['s'], config['w'], FS, makeup=False).process_block(signal))
+    return config
 
-    def max_amplitude(
-        input_amplitude=1.0,
-        drive=1.0,
-        saturation=0.9,
-        width=1.0,
-    ):
-        signal = generate_sine(FREQUENCY, length=LENGTH)
-        return np.max(Hysteresis(drive, saturation, width, FS, makeup=False).process_block(signal))
+
+def amplitude_fitting():
+    data_frame = pd.read_csv('amplitude_dataset.csv')
+    d_data = data_frame['d'].values
+    s_data = data_frame['s'].values
+    w_data = data_frame['w'].values
+    i_data = data_frame['i'].values
+    a_data = data_frame['a'].values
+
+    input_configs = [
+        # (func_a, d_data, s_data, w_data, i_data, a_data),
+        # (func_b, d_data, s_data, w_data, i_data, a_data),
+        # (func_c, d_data, s_data, w_data, i_data, a_data),
+        # (func_d, d_data, s_data, w_data, i_data, a_data),
+        (func_e, d_data, s_data, w_data, i_data, a_data),
+        # (func_f, d_data, s_data, w_data, i_data, a_data),
+        # (func_g, d_data, s_data, w_data, i_data, a_data),
+        # (func_h, d_data, s_data, w_data, i_data, a_data),
+        # (func_i, d_data, s_data, w_data, i_data, a_data),
+        # (func_i, d_data, s_data, w_data, i_data, a_data),
+        # (func_k, d_data, s_data, w_data, i_data, a_data),
+    ]
 
     configs = []
+    with concurrent.futures.ProcessPoolExecutor() as executor:
+        for i, config in enumerate(executor.map(measure_fitting_accuracy, input_configs)):
+            configs.append(config)
+            print('{}/{}'.format(i, len(input_configs)))
 
-    for s in np.linspace(0, 1, 5):
-        widths = np.linspace(0, 1, 5)
-        config = {
-            'saturation': s,
-            'widths': [],
-            'amplitudes': [],
-        }
-        for w in widths:
-            config['widths'].append(w)
-            config['amplitudes'].append(max_amplitude(width=w, saturation=s))
-        configs.append(config)
+    configs = sorted(configs, key=lambda x: x['rmse'])
 
-    def plot(_):
-        axs.cla()
-        axs.set_xlim([0, 1])
-        axs.set_ylim([0, 2])
-        axs.grid()
-        for config in configs:
-            adjusted_amplitudes = []
-            for i, w in enumerate(config['widths']):
-                aw = aw_slider.val
-                bw = bw_slider.val
-                cw = cw_slider.val
-                as_ = as_slider.val
-                bs = bs_slider.val
-                makeup = (aw + bw * w ** cw) / (as_ - config['saturation'] ** bs)
-                adjusted_amplitudes.append(config['amplitudes'][i] * makeup)
-            axs.plot(config['widths'], adjusted_amplitudes)
+    for config in configs:
+        print(config)
 
-    plot(())
 
-    aw_slider.on_changed(plot)
-    bw_slider.on_changed(plot)
-    cw_slider.on_changed(plot)
-    as_slider.on_changed(plot)
-    bs_slider.on_changed(plot)
+def measure_fitting_accuracy(config):
+    f = config[0]
+    d_data = config[1]
+    s_data = config[2]
+    w_data = config[3]
+    i_data = config[4]
+    a_data = config[5]
+    fitted_parameters, _ = curve_fit(f, [d_data, s_data, w_data, i_data], a_data, maxfev=15000)
+    model_predictions = f([d_data, s_data, w_data, i_data, a_data], *fitted_parameters)
+    abs_errors = model_predictions - a_data
+    squared_errors = np.square(abs_errors)
+    mean_squared_errors = np.mean(squared_errors)
+    root_mean_squared_errors = np.sqrt(mean_squared_errors)
+    r_squared = 1.0 - (np.var(abs_errors) / np.var(a_data))
+    print(fitted_parameters)
+    return {
+        'func': f.__name__,
+        'rmse': root_mean_squared_errors,
+        'rs': r_squared,
+    }
 
-    plt.show()
+
+def func_a(data, a1, a2, a3, a4, b):
+    x1 = data[0]
+    x2 = data[1]
+    x3 = data[2]
+    x4 = data[3]
+    return (
+        a1 * x1 +
+        a2 * x2 +
+        a3 * x3 +
+        a4 * x4 +
+        b
+    )
+
+def func_b(data, a1, a2, a3, a4, a5, a6, a7, a8, b):
+    x1 = data[0]
+    x2 = data[1]
+    x3 = data[2]
+    x4 = data[3]
+    return (
+        a1 * x1 +
+        a2 * x2 +
+        a3 * x3 +
+        a4 * x4 +
+        a5 * x1 ** 2 +
+        a6 * x2 ** 2 +
+        a7 * x3 ** 2 +
+        a8 * x4 ** 2 +
+        b
+    )
+
+def func_c(data, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, b):
+    x1 = data[0]
+    x2 = data[1]
+    x3 = data[2]
+    x4 = data[3]
+    return (
+        a1 * x1 +
+        a2 * x2 +
+        a3 * x3 +
+        a4 * x4 +
+        a5 * x1 ** 2 +
+        a6 * x2 ** 2 +
+        a7 * x3 ** 2 +
+        a8 * x4 ** 2 +
+        a9 * x1 * x2 +
+        a10 * x1 * x3 +
+        a11 * x1 * x4 +
+        a12 * x2 * x3 +
+        a13 * x2 * x4 +
+        a14 * x3 * x4 +
+        b
+    )
+
+def func_d(data, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, b):
+    x1 = data[0]
+    x2 = data[1]
+    x3 = data[2]
+    x4 = data[3]
+    return (
+        a1 * x1 +
+        a2 * x2 +
+        a3 * x3 +
+        a4 * x4 +
+        a5 * x1 ** 2 +
+        a6 * x2 ** 2 +
+        a7 * x3 ** 2 +
+        a8 * x4 ** 2 +
+        a9 * x1 ** 3 +
+        a10 * x2 ** 3 +
+        a11 * x3 ** 3 +
+        a12 * x4 ** 3 +
+        b
+    )
+
+def func_e(data, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27, a28, a29, a30, b):
+    x1 = data[0]
+    x2 = data[1]
+    x3 = data[2]
+    x4 = data[3]
+    return (
+        a1 * x1 +
+        a2 * x2 +
+        a3 * x3 +
+        a4 * x4 +
+        a5 * x1 ** 2 +
+        a6 * x2 ** 2 +
+        a7 * x3 ** 2 +
+        a8 * x4 ** 2 +
+        a9 * x1 ** 3 +
+        a10 * x2 ** 3 +
+        a11 * x3 ** 3 +
+        a12 * x4 ** 3 +
+        a13 * x1 * x2 +
+        a14 * x1 * x3 +
+        a15 * x1 * x4 +
+        a16 * x2 * x3 +
+        a17 * x2 * x4 +
+        a18 * x3 * x4 +
+        a19 * x1 ** 2 * x2 +
+        a20 * x1 ** 2 * x3 +
+        a21 * x1 ** 2 * x4 +
+        a22 * x2 ** 2 * x3 +
+        a23 * x2 ** 2 * x4 +
+        a24 * x3 ** 2 * x4 +
+        a25 * x1 * x2 ** 2 +
+        a26 * x1 * x3 ** 2 +
+        a27 * x1 * x4 ** 2 +
+        a28 * x2 * x3 ** 2 +
+        a29 * x2 * x4 ** 2 +
+        a30 * x3 * x4 ** 2 +
+        b
+    )
+
+def func_f(data, a1, a2, a3, a4, a5, a6, a7, a8, b):
+    x1 = data[0]
+    x2 = data[1]
+    x3 = data[2]
+    x4 = data[3]
+    return ((a1 + a2 * x1) * (a3 + a4 * x2)) / ((a5 + a6 * x3) * (a7 + a8 * x4)) + b
+
+def func_g(data, a1, a2, a3, a4, a5, a6, a7, a8, b):
+    x1 = data[0]
+    x2 = data[1]
+    x3 = data[2]
+    x4 = data[3]
+    return ((a1 + a2 * x1) * (a3 + a4 * x2)) * ((a5 + a6 * x3) * (a7 + a8 * x4)) + b
+
+def func_h(data, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, b):
+    x1 = data[0]
+    x2 = data[1]
+    x3 = data[2]
+    x4 = data[3]
+    return ((a1 + a2 * x1 ** a9) * (a3 + a4 * x2 ** a10)) / ((a5 + a6 * x3 ** a11) * (a7 + a8 * x4 ** a12)) + b
+
+def func_i(data, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, b):
+    x1 = data[0]
+    x2 = data[1]
+    x3 = data[2]
+    x4 = data[3]
+    return ((a1 + a2 * x1 ** a9) * (a3 + a4 * x4 ** a10)) / ((a5 + a6 * x3 ** a11) * (a7 + a8 * x2 ** a12)) + b
+
+def func_j(data, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, b):
+    x1 = data[0]
+    x2 = data[1]
+    x3 = data[2]
+    x4 = data[3]
+    return (a1 + a2 * x1 ** a9) * (a3 + a4 * x4 ** a10) * (a5 + a6 * x3 ** a11) * (a7 + a8 * x2 ** a12) + b
+
+def func_k(data, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27, a28, a29, a30, a31, a32, a33, a34, a35, a36, a37, a38, a39, a40, a41, a42, b):
+    x1 = data[0]
+    x2 = data[1]
+    x3 = data[2]
+    x4 = data[3]
+    return (
+        a1 * x1 +
+        a2 * x2 +
+        a3 * x3 +
+        a4 * x4 +
+        a5 * x1 ** 2 +
+        a6 * x2 ** 2 +
+        a7 * x3 ** 2 +
+        a8 * x4 ** 2 +
+        a9 * x1 ** 3 +
+        a10 * x2 ** 3 +
+        a11 * x3 ** 3 +
+        a12 * x4 ** 3 +
+        a13 * x1 * x2 +
+        a14 * x1 * x3 +
+        a15 * x1 * x4 +
+        a16 * x2 * x3 +
+        a17 * x2 * x4 +
+        a18 * x3 * x4 +
+        a19 * x1 ** 2 * x2 +
+        a20 * x1 ** 2 * x3 +
+        a21 * x1 ** 2 * x4 +
+        a22 * x2 ** 2 * x3 +
+        a23 * x2 ** 2 * x4 +
+        a24 * x3 ** 2 * x4 +
+        a25 * x1 * x2 ** 2 +
+        a26 * x1 * x3 ** 2 +
+        a27 * x1 * x4 ** 2 +
+        a28 * x2 * x3 ** 2 +
+        a29 * x2 * x4 ** 2 +
+        a30 * x3 * x4 ** 2 +
+        (a31 + a32 * x1 ** a33) * (a34 + a35 * x4 ** a36) * (a37 + a38 * x3 ** a39) * (a40 + a41 * x2 ** a42) +
+        b
+    )
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog=sys.argv[0])
     subparsers = parser.add_subparsers(help='sub-command help', required=True, dest='subparser')
     subparsers.add_parser('response', help='Plot processed signal, hysteresis loop, and harmonic response')
-    subparsers.add_parser('amplitude', help='Plot relation between individual arguments and amplitude')
+    subparsers.add_parser('amplitude_generate', help='Generate dataset mapping input arguments to amplitude')
+    subparsers.add_parser('amplitude_fitting', help='Find the best fitting approximation for amplitude')
     args = parser.parse_args()
 
     if args.subparser == 'response':
         response()
-    elif args.subparser == 'amplitude':
-        amplitude()
+    elif args.subparser == 'amplitude_generate':
+        amplitude_generate()
+    elif args.subparser == 'amplitude_plot':
+        amplitude_plot()
+    elif args.subparser == 'amplitude_fitting':
+        amplitude_fitting()
