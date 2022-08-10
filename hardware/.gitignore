@@ -22,3 +22,4 @@ Module-backups/
 
 # Avoid out-of-sync gerbers by not keeping them under the source tree
 plot/
+jlcpcb/
