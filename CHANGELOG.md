@@ -6,6 +6,8 @@ backwards compatibility.
 
 ## Unreleased
 
+## 0.6.0
+
 * Transform the module into two-board design.
 * Remove MIDI input and output.
 * Implement a basic tape simulation instrument.

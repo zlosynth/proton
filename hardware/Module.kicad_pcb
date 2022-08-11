@@ -8,7 +8,7 @@
   (title_block
     (title "Proton")
     (date "2022-03-06")
-    (rev "v0.5.0")
+    (rev "v0.6.0")
     (company "Petr Horáček")
     (comment 1 "petr@zlosynth.com")
     (comment 2 "https://github.com/zlosynth/proton")
@@ -7494,7 +7494,7 @@
   (gr_text "Petr Horáček <petr@zlosynth.com>, 2022, CC BY-SA" (at 131.838677 86.606953 90) (layer "F.SilkS") (tstamp 5adc6c78-7048-49f5-904d-c9793f065eea)
     (effects (font (size 1 1) (thickness 0.15)))
   )
-  (gr_text "board v0.5.0" (at 131.978677 50.246953 90) (layer "F.SilkS") (tstamp 652e784a-2ab5-4190-b0a1-7a906bf80d96)
+  (gr_text "board v0.6.0" (at 131.978677 50.246953 90) (layer "F.SilkS") (tstamp 652e784a-2ab5-4190-b0a1-7a906bf80d96)
     (effects (font (size 1 1) (thickness 0.15)) (justify left))
   )
   (gr_text "OLED" (at 111.728677 235.146953 180) (layer "F.Fab") (tstamp 233d14ec-e17f-4b70-ace9-a65479e58a33)

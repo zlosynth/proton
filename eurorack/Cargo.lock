@@ -603,7 +603,7 @@ dependencies = [
 
 [[package]]
 name = "proton-control"
-version = "0.5.0"
+version = "0.6.0"
 dependencies = [
  "defmt",
  "embedded-hal",
@@ -615,7 +615,7 @@ dependencies = [
 
 [[package]]
 name = "proton-eurorack"
-version = "0.5.0"
+version = "0.6.0"
 dependencies = [
  "alloc-cortex-m",
  "cortex-m",
@@ -642,7 +642,7 @@ dependencies = [
 
 [[package]]
 name = "proton-instruments-karplus-strong"
-version = "0.5.0"
+version = "0.6.0"
 dependencies = [
  "heapless",
  "micromath 2.0.0",
@@ -653,7 +653,7 @@ dependencies = [
 
 [[package]]
 name = "proton-instruments-tape"
-version = "0.5.0"
+version = "0.6.0"
 dependencies = [
  "dasp",
  "heapless",
@@ -665,7 +665,7 @@ dependencies = [
 
 [[package]]
 name = "proton-peripherals"
-version = "0.5.0"
+version = "0.6.0"
 dependencies = [
  "defmt",
  "either",
@@ -675,7 +675,7 @@ dependencies = [
 
 [[package]]
 name = "proton-primitives"
-version = "0.5.0"
+version = "0.6.0"
 dependencies = [
  "dasp",
  "micromath 2.0.0",
@@ -683,7 +683,7 @@ dependencies = [
 
 [[package]]
 name = "proton-ui"
-version = "0.5.0"
+version = "0.6.0"
 dependencies = [
  "defmt",
  "embedded-graphics",

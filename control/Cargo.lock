@@ -240,7 +240,7 @@ dependencies = [
 
 [[package]]
 name = "proton-control"
-version = "0.5.0"
+version = "0.6.0"
 dependencies = [
  "defmt",
  "embedded-hal",
@@ -252,7 +252,7 @@ dependencies = [
 
 [[package]]
 name = "proton-peripherals"
-version = "0.5.0"
+version = "0.6.0"
 dependencies = [
  "defmt",
  "either",
