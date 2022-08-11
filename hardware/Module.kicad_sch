@@ -10010,7 +10010,7 @@
   (symbol (lib_id "power:-10V") (at 34.417 143.383 90) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 5c7deceb-9d26-4828-af86-d24990d64d26)
-    (property "Reference" "#PWR?" (id 0) (at 31.877 143.383 0)
+    (property "Reference" "#PWR0108" (id 0) (at 31.877 143.383 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "-10V" (id 1) (at 29.083 143.383 90))
@@ -10305,7 +10305,7 @@
   (symbol (lib_id "power:-10V") (at 93.853 143.764 90) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid c2b75c3a-9fd7-433e-a701-09b5d18c991c)
-    (property "Reference" "#PWR?" (id 0) (at 91.313 143.764 0)
+    (property "Reference" "#PWR0107" (id 0) (at 91.313 143.764 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "-10V" (id 1) (at 88.519 143.764 90))
@@ -10628,11 +10628,11 @@
     (path "/36c52104-9383-4fec-93e5-771b8c41ab2c"
       (reference "#PWR0106") (unit 1) (value "GND") (footprint "")
     )
-    (path "/5c7deceb-9d26-4828-af86-d24990d64d26"
-      (reference "#PWR?") (unit 1) (value "-10V") (footprint "")
-    )
     (path "/c2b75c3a-9fd7-433e-a701-09b5d18c991c"
-      (reference "#PWR?") (unit 1) (value "-10V") (footprint "")
+      (reference "#PWR0107") (unit 1) (value "-10V") (footprint "")
+    )
+    (path "/5c7deceb-9d26-4828-af86-d24990d64d26"
+      (reference "#PWR0108") (unit 1) (value "-10V") (footprint "")
     )
     (path "/00000000-0000-0000-0000-000062372793"
       (reference "A1") (unit 1) (value "Daisy Seed v4") (footprint "Device_Audio_Electrosmith_Daisy_Seed:Device_Audio_Electrosmith_Daisy_Seed")

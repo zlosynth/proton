@@ -6,6 +6,8 @@ backwards compatibility.
 
 ## Unreleased
 
+* Transform the module into two-board design.
+* Remove MIDI input and output.
 * Implement a basic tape simulation instrument.
 * Introduce oversampling converters over the Signal trait.
 * Reconcile CV inputs and pass them to instruments.
