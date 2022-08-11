@@ -4286,10 +4286,6 @@
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 3f8c4ada-3193-43a5-9868-069b43dbca60)
   )
-  (text "TODO: Confirm that all globals are connected" (at 32.512 120.65 0)
-    (effects (font (size 2.0066 2.0066)) (justify left bottom))
-    (uuid 40024b16-d933-4e70-82b7-b2b2b0a8ad06)
-  )
   (text "RES" (at 63.373 259.715 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 45e009ac-89b1-46d2-bf14-48d9d69a4da5)
@@ -9858,7 +9854,7 @@
   (symbol (lib_id "power:GND") (at 30.607 216.281 0) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 36c52104-9383-4fec-93e5-771b8c41ab2c)
-    (property "Reference" "#PWR?" (id 0) (at 30.607 222.631 0)
+    (property "Reference" "#PWR0106" (id 0) (at 30.607 222.631 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (id 1) (at 30.607 220.726 0))
@@ -9956,7 +9952,7 @@
   (symbol (lib_id "power:GND") (at 88.773 216.535 0) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 56dbafc3-2b76-42f6-81d5-b8e8ad40462e)
-    (property "Reference" "#PWR?" (id 0) (at 88.773 222.885 0)
+    (property "Reference" "#PWR0105" (id 0) (at 88.773 222.885 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (id 1) (at 88.773 220.98 0))
@@ -10596,11 +10592,11 @@
     (path "/6e7a06f4-e193-4588-880c-5ca44d724b97"
       (reference "#PWR0104") (unit 1) (value "+3.3VA") (footprint "")
     )
-    (path "/36c52104-9383-4fec-93e5-771b8c41ab2c"
-      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
-    )
     (path "/56dbafc3-2b76-42f6-81d5-b8e8ad40462e"
-      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
+      (reference "#PWR0105") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/36c52104-9383-4fec-93e5-771b8c41ab2c"
+      (reference "#PWR0106") (unit 1) (value "GND") (footprint "")
     )
     (path "/00000000-0000-0000-0000-000062372793"
       (reference "A1") (unit 1) (value "Daisy Seed v4") (footprint "Device_Audio_Electrosmith_Daisy_Seed:Device_Audio_Electrosmith_Daisy_Seed")
