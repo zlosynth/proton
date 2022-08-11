@@ -7,6 +7,14 @@ pub struct State {
     pub title: &'static str,
     pub attributes: Vec<Attribute, 64>,
     pub selected_attribute: usize,
+    pub menu: Menu,
+}
+
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[derive(Copy, Clone, Debug)]
+pub enum Menu {
+    Main,
+    Sub,
 }
 
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
@@ -32,6 +40,7 @@ impl State {
             title,
             attributes: Vec::new(),
             selected_attribute: 0,
+            menu: Menu::Main,
         }
     }
 

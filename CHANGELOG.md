@@ -6,6 +6,8 @@ backwards compatibility.
 
 ## Unreleased
 
+* Replace one of the encoders with a pot.
+
 ## 0.6.0
 
 * Transform the module into two-board design.

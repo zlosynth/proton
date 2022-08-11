@@ -5,61 +5,34 @@ use proton_peripherals::rotary::{Direction, Rotary};
 
 use crate::action::Action;
 
-pub struct Input<A1, B1, C1, A2, B2, C2> {
-    alpha_button: Button<10, C1>,
-    alpha_rotary: Rotary<A1, B1>,
-    beta_button: Button<10, C2>,
-    beta_rotary: Rotary<A2, B2>,
+pub struct Input<A, B, C> {
+    button: Button<10, C>,
+    rotary: Rotary<A, B>,
 }
 
-impl<A1, B1, C1, A2, B2, C2> Input<A1, B1, C1, A2, B2, C2>
+impl<A, B, C> Input<A, B, C>
 where
-    A1: InputPin,
-    B1: InputPin,
-    C1: InputPin,
-    A2: InputPin,
-    B2: InputPin,
-    C2: InputPin,
+    A: InputPin,
+    B: InputPin,
+    C: InputPin,
 {
-    pub fn new(
-        alpha_button: Button<10, C1>,
-        alpha_rotary: Rotary<A1, B1>,
-        beta_button: Button<10, C2>,
-        beta_rotary: Rotary<A2, B2>,
-    ) -> Self {
-        Self {
-            alpha_button,
-            alpha_rotary,
-            beta_button,
-            beta_rotary,
-        }
+    pub fn new(button: Button<10, C>, rotary: Rotary<A, B>) -> Self {
+        Self { button, rotary }
     }
 
     pub fn process(&mut self) -> Vec<Action, 6> {
-        self.alpha_button.sample();
-        self.alpha_rotary.sample().ok().unwrap();
-        self.beta_button.sample();
-        self.beta_rotary.sample().ok().unwrap();
+        self.button.sample();
+        self.rotary.sample().ok().unwrap();
 
         let mut actions = Vec::new();
 
-        if self.alpha_button.clicked() {
-            actions.push(Action::AlphaClick).unwrap();
+        if self.button.clicked() {
+            actions.push(Action::EncoderClick).unwrap();
         }
 
-        match self.alpha_rotary.direction() {
-            Direction::Clockwise => actions.push(Action::AlphaDown).unwrap(),
-            Direction::CounterClockwise => actions.push(Action::AlphaUp).unwrap(),
-            _ => (),
-        }
-
-        if self.beta_button.clicked() {
-            actions.push(Action::BetaClick).unwrap();
-        }
-
-        match self.beta_rotary.direction() {
-            Direction::Clockwise => actions.push(Action::BetaDown).unwrap(),
-            Direction::CounterClockwise => actions.push(Action::BetaUp).unwrap(),
+        match self.rotary.direction() {
+            Direction::Clockwise => actions.push(Action::EncoderDown).unwrap(),
+            Direction::CounterClockwise => actions.push(Action::EncoderUp).unwrap(),
             _ => (),
         }
 

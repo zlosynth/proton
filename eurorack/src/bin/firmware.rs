@@ -33,12 +33,9 @@ mod app {
     use proton_ui::view::View;
 
     type UserInput = proton_ui::input::Input<
-        proton_eurorack::system::encoder::AlphaRotaryPinA,
-        proton_eurorack::system::encoder::AlphaRotaryPinB,
-        proton_eurorack::system::encoder::AlphaButtonPin,
-        proton_eurorack::system::encoder::BetaRotaryPinA,
-        proton_eurorack::system::encoder::BetaRotaryPinB,
-        proton_eurorack::system::encoder::BetaButtonPin,
+        proton_eurorack::system::encoder::EncoderRotaryPinA,
+        proton_eurorack::system::encoder::EncoderRotaryPinB,
+        proton_eurorack::system::encoder::EncoderButtonPin,
     >;
 
     type ControlInput = proton_control::input_processor::InputProcessor<
@@ -97,12 +94,7 @@ mod app {
         let mut audio = system.audio;
         audio.spawn();
 
-        let user_input = UserInput::new(
-            system.alpha_button,
-            system.alpha_rotary,
-            system.beta_button,
-            system.beta_rotary,
-        );
+        let user_input = UserInput::new(system.button, system.rotary);
 
         let control_input = ControlInput::new(
             system.adc_1,

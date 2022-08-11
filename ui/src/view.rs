@@ -13,6 +13,7 @@ pub struct View {
     pub title: &'static str,
     pub attributes: [Option<Attribute>; ATTRIBUTES_CAPACITY],
     pub selected_attribute: usize,
+    pub edit: bool,
 }
 
 impl From<&state::State> for View {
@@ -28,6 +29,7 @@ impl From<&state::State> for View {
                 other.attributes.get(first_index + 3).map(|a| a.into()),
             ],
             selected_attribute: other.selected_attribute % 4,
+            edit: matches!(other.menu, state::Menu::Sub),
         }
     }
 }
@@ -143,6 +145,7 @@ mod tests {
                 None,
             ],
             selected_attribute: 1,
+            edit: false,
         };
 
         let actual_view: View = (&source_state).into();

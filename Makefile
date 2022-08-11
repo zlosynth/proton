@@ -31,7 +31,7 @@ clippy:
 	cd puredata && cargo +nightly clippy --all --features karplus_strong -- -D warnings
 	cd eurorack && cargo +nightly clippy --all --features tape -- -D warnings
 	cd eurorack && cargo +nightly clippy --all --features karplus_strong -- -D warnings
-	cd eurorack && cargo +nightly check --test display --test encoders --features karplus_strong
+	cd eurorack && cargo +nightly check --test display --test encoder --features karplus_strong
 	cd peripherals && cargo +nightly clippy --all --features defmt -- -D warnings
 	cd ui && cargo +nightly clippy --all --features defmt -- -D warnings
 	cd control && cargo +nightly clippy --all --features defmt -- -D warnings
@@ -70,7 +70,7 @@ puredata:
 .PHONY: test-embedded
 test-embedded:
 	cd eurorack && DEFMT_LOG=info cargo +nightly test --test display
-	cd eurorack && DEFMT_LOG=info cargo +nightly test --test encoders
+	cd eurorack && DEFMT_LOG=info cargo +nightly test --test encoder
 
 .PHONY: test-ui
 test-ui:

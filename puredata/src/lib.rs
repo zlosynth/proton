@@ -85,12 +85,9 @@ pub unsafe extern "C" fn proton_tilde_setup() {
     register_float_method(class, "control3", set_control3);
     register_float_method(class, "control4", set_control4);
     register_float_method(class, "control5", set_control5);
-    register_symbol_method(class, "au", alpha_up);
-    register_symbol_method(class, "ad", alpha_down);
-    register_symbol_method(class, "ac", alpha_click);
-    register_symbol_method(class, "bu", beta_up);
-    register_symbol_method(class, "bd", beta_down);
-    register_symbol_method(class, "bc", beta_click);
+    register_symbol_method(class, "u", encoder_up);
+    register_symbol_method(class, "d", encoder_down);
+    register_symbol_method(class, "c", encoder_click);
 
     CLASS = Some(class);
     STATE = Some(state);
@@ -210,38 +207,20 @@ unsafe extern "C" fn set_control5(class: *mut Class, value: pd_sys::t_float) {
         .update_control((*class).input_snapshot);
 }
 
-unsafe extern "C" fn alpha_up(_class: *mut Class) {
-    let reaction = reducer::reduce(Action::AlphaUp, STATE.as_mut().unwrap());
+unsafe extern "C" fn encoder_up(_class: *mut Class) {
+    let reaction = reducer::reduce(Action::EncoderUp, STATE.as_mut().unwrap());
     execute_reaction(reaction);
     update_display();
 }
 
-unsafe extern "C" fn alpha_down(_class: *mut Class) {
-    let reaction = reducer::reduce(Action::AlphaDown, STATE.as_mut().unwrap());
+unsafe extern "C" fn encoder_down(_class: *mut Class) {
+    let reaction = reducer::reduce(Action::EncoderDown, STATE.as_mut().unwrap());
     execute_reaction(reaction);
     update_display();
 }
 
-unsafe extern "C" fn alpha_click(_class: *mut Class) {
-    let reaction = reducer::reduce(Action::AlphaClick, STATE.as_mut().unwrap());
-    execute_reaction(reaction);
-    update_display();
-}
-
-unsafe extern "C" fn beta_up(_class: *mut Class) {
-    let reaction = reducer::reduce(Action::BetaUp, STATE.as_mut().unwrap());
-    execute_reaction(reaction);
-    update_display();
-}
-
-unsafe extern "C" fn beta_down(_class: *mut Class) {
-    let reaction = reducer::reduce(Action::BetaDown, STATE.as_mut().unwrap());
-    execute_reaction(reaction);
-    update_display();
-}
-
-unsafe extern "C" fn beta_click(_class: *mut Class) {
-    let reaction = reducer::reduce(Action::BetaClick, STATE.as_mut().unwrap());
+unsafe extern "C" fn encoder_click(_class: *mut Class) {
+    let reaction = reducer::reduce(Action::EncoderClick, STATE.as_mut().unwrap());
     execute_reaction(reaction);
     update_display();
 }

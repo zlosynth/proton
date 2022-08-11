@@ -23,7 +23,7 @@ where
 {
     reset_screen(target)?;
 
-    draw_status_bar(target, view.title)?;
+    draw_status_bar(target, view.title, view.edit)?;
 
     for (i, attribute) in view
         .attributes
@@ -50,7 +50,7 @@ where
     )
 }
 
-fn draw_status_bar<D>(target: &mut D, text: &str) -> Result<(), D::Error>
+fn draw_status_bar<D>(target: &mut D, text: &str, edit: bool) -> Result<(), D::Error>
 where
     D: DrawTarget<Color = BinaryColor>,
 {
@@ -64,6 +64,15 @@ where
     let x = x_for_centered_text(text);
     let y = FONT_HEIGHT_ABOVE_LINE as i32;
     draw_text(target, text, Point::new(x, y), BinaryColor::On)?;
+
+    if edit {
+        draw_rectangle(
+            target,
+            Point::new(DISPLAY_WIDTH as i32 - 4, 0),
+            Size::new(4, HEADER_HEIGHT),
+            BinaryColor::On,
+        )?;
+    }
 
     Ok(())
 }

@@ -1,21 +1,34 @@
 use super::action::Action;
 use super::reaction::Reaction;
-use super::state::{State, Value, ValueF32, ValueSelect};
+use super::state::{Menu, State, Value, ValueF32, ValueSelect};
 
 pub fn reduce(action: Action, state: &mut State) -> Option<Reaction> {
     match action {
-        Action::AlphaUp => {
-            move_to_previous_attribute(state);
+        Action::EncoderClick => {
+            switch_menu(state);
             None
         }
-        Action::AlphaDown => {
-            move_to_next_attribute(state);
-            None
-        }
-        Action::AlphaClick => None,
-        Action::BetaUp => decrease_attribute_value(state),
-        Action::BetaDown => increase_attribute_value(state),
-        Action::BetaClick => None,
+        Action::EncoderUp => match state.menu {
+            Menu::Main => {
+                move_to_previous_attribute(state);
+                None
+            }
+            Menu::Sub => decrease_attribute_value(state),
+        },
+        Action::EncoderDown => match state.menu {
+            Menu::Main => {
+                move_to_next_attribute(state);
+                None
+            }
+            Menu::Sub => increase_attribute_value(state),
+        },
+    }
+}
+
+fn switch_menu(state: &mut State) {
+    state.menu = match state.menu {
+        Menu::Sub => Menu::Main,
+        Menu::Main => Menu::Sub,
     }
 }
 
@@ -120,23 +133,23 @@ mod tests {
     use super::*;
 
     #[test]
-    fn when_alpha_turns_up_on_middle_attribute_it_scrolls_to_previous_attribute() {
-        assert_attribute_transition(1, Action::AlphaUp, 0);
+    fn when_turns_up_on_middle_attribute_it_scrolls_to_previous_attribute() {
+        assert_attribute_transition(1, Action::EncoderUp, 0);
     }
 
     #[test]
-    fn when_alpha_turns_up_on_first_attribute_it_scrolls_to_last_attribute() {
-        assert_attribute_transition(0, Action::AlphaUp, 2);
+    fn when_turns_up_on_first_attribute_it_scrolls_to_last_attribute() {
+        assert_attribute_transition(0, Action::EncoderUp, 2);
     }
 
     #[test]
-    fn when_alpha_turns_down_on_middle_attribute_it_scrolls_to_next_attribute() {
-        assert_attribute_transition(1, Action::AlphaDown, 2);
+    fn when_turns_down_on_middle_attribute_it_scrolls_to_next_attribute() {
+        assert_attribute_transition(1, Action::EncoderDown, 2);
     }
 
     #[test]
-    fn when_alpha_turns_down_on_last_attribute_it_scrolls_to_first_attribute() {
-        assert_attribute_transition(2, Action::AlphaDown, 0);
+    fn when_turns_down_on_last_attribute_it_scrolls_to_first_attribute() {
+        assert_attribute_transition(2, Action::EncoderDown, 0);
     }
 
     fn assert_attribute_transition(old: usize, action: Action, new: usize) {
@@ -157,84 +170,101 @@ mod tests {
     }
 
     #[test]
-    fn given_f32_attribute_in_middle_when_beta_turns_up_it_decreases_the_value_by_set_step() {
-        assert_value_f32_transition_with_reaction(
+    fn when_clicks_on_selected_attribute_it_enters_submenu() {
+        use crate::state::*;
+
+        let mut state = State::new("Proton");
+        assert!(matches!(state.menu, Menu::Main));
+
+        let reaction = reduce(Action::EncoderClick, &mut state);
+        assert!(reaction.is_none());
+        assert!(matches!(state.menu, Menu::Sub));
+
+        let reaction = reduce(Action::EncoderClick, &mut state);
+        assert!(reaction.is_none());
+        assert!(matches!(state.menu, Menu::Main));
+    }
+
+    #[test]
+    fn given_f32_attribute_in_middle_when_turns_up_in_submenu_it_decreases_the_value_by_set_step() {
+        assert_value_f32_transition_with_reaction_in_submenu(
             ValueF32::new(2.0)
                 .with_min(0.0)
                 .with_max(10.0)
                 .with_step(1.0),
-            Action::BetaUp,
+            Action::EncoderUp,
             1.0,
             true,
         );
     }
 
     #[test]
-    fn given_f32_attribute_almost_on_bottom_when_beta_turns_up_it_does_not_go_below_min() {
-        assert_value_f32_transition_with_reaction(
+    fn given_f32_attribute_almost_on_bottom_when_turns_up_in_submenu_it_does_not_go_below_min() {
+        assert_value_f32_transition_with_reaction_in_submenu(
             ValueF32::new(-9.5)
                 .with_min(-10.0)
                 .with_max(0.0)
                 .with_step(1.0),
-            Action::BetaUp,
+            Action::EncoderUp,
             -10.0,
             true,
         );
     }
 
     #[test]
-    fn given_f32_attribute_on_bottom_when_beta_turns_up_it_does_not_go_below_min() {
-        assert_value_f32_transition_with_reaction(
+    fn given_f32_attribute_on_bottom_when_turns_up_in_submenu_it_does_not_go_below_min() {
+        assert_value_f32_transition_with_reaction_in_submenu(
             ValueF32::new(-10.0)
                 .with_min(-10.0)
                 .with_max(0.0)
                 .with_step(1.0),
-            Action::BetaUp,
+            Action::EncoderUp,
             -10.0,
             false,
         );
     }
 
     #[test]
-    fn given_f32_attribute_in_middle_when_beta_turns_down_it_increases_the_value_by_set_step() {
-        assert_value_f32_transition_with_reaction(
+    fn given_f32_attribute_in_middle_when_turns_down_in_submenu_it_increases_the_value_by_set_step()
+    {
+        assert_value_f32_transition_with_reaction_in_submenu(
             ValueF32::new(1.0)
                 .with_min(0.0)
                 .with_max(10.0)
                 .with_step(1.0),
-            Action::BetaDown,
+            Action::EncoderDown,
             2.0,
             true,
         );
     }
 
     #[test]
-    fn given_f32_attribute_almost_on_top_when_beta_turns_down_it_does_not_go_above_max() {
-        assert_value_f32_transition_with_reaction(
+    fn given_f32_attribute_almost_on_top_when_turns_down_in_submenu_it_does_not_go_above_max() {
+        assert_value_f32_transition_with_reaction_in_submenu(
             ValueF32::new(9.5)
                 .with_min(0.0)
                 .with_max(10.0)
                 .with_step(1.0),
-            Action::BetaDown,
+            Action::EncoderDown,
             10.0,
             true,
         );
     }
 
     #[test]
-    fn given_f32_attribute_on_top_when_beta_turns_down_it_does_not_go_above_max() {
-        assert_value_f32_transition_with_reaction(
+    fn given_f32_attribute_on_top_when_turns_down_in_submenu_it_does_not_go_above_max() {
+        assert_value_f32_transition_with_reaction_in_submenu(
             ValueF32::new(10.0)
                 .with_min(0.0)
                 .with_max(10.0)
                 .with_step(1.0),
-            Action::BetaDown,
+            Action::EncoderDown,
             10.0,
             false,
         );
     }
 
-    fn assert_value_f32_transition_with_reaction(
+    fn assert_value_f32_transition_with_reaction_in_submenu(
         value_f32: ValueF32,
         action: Action,
         new: f32,
@@ -245,6 +275,7 @@ mod tests {
         let mut state = State::new("Proton")
             .with_attributes(&[Attribute::new("a1").with_value_f32(value_f32)])
             .unwrap();
+        reduce(Action::EncoderClick, &mut state);
         let reaction = reduce(action, &mut state);
 
         if let Value::F32(value_f32) = state.attributes[0].value {
@@ -266,26 +297,26 @@ mod tests {
     }
 
     #[test]
-    fn given_select_attribute_on_middle_when_beta_turns_up_it_scrolls_to_previous_value() {
-        assert_value_select_transition(1, Action::BetaUp, 0);
+    fn given_select_attribute_on_middle_when_turns_up_in_submenu_it_scrolls_to_previous_value() {
+        assert_value_select_transition_in_submenu(1, Action::EncoderUp, 0);
     }
 
     #[test]
-    fn given_select_attribute_on_first_when_beta_turns_up_it_scrolls_to_last_value() {
-        assert_value_select_transition(0, Action::BetaUp, 2);
+    fn given_select_attribute_on_first_when_turns_up_in_submenu_it_scrolls_to_last_value() {
+        assert_value_select_transition_in_submenu(0, Action::EncoderUp, 2);
     }
 
     #[test]
-    fn given_select_attribute_on_middle_when_beta_turns_down_it_scrolls_to_previous_value() {
-        assert_value_select_transition(1, Action::BetaDown, 2);
+    fn given_select_attribute_on_middle_when_turns_down_in_submenu_it_scrolls_to_previous_value() {
+        assert_value_select_transition_in_submenu(1, Action::EncoderDown, 2);
     }
 
     #[test]
-    fn given_select_attribute_on_first_when_beta_turns_down_it_scrolls_to_last_value() {
-        assert_value_select_transition(2, Action::BetaDown, 0);
+    fn given_select_attribute_on_first_when_turns_down_in_submenu_it_scrolls_to_last_value() {
+        assert_value_select_transition_in_submenu(2, Action::EncoderDown, 0);
     }
 
-    fn assert_value_select_transition(old: usize, action: Action, new: usize) {
+    fn assert_value_select_transition_in_submenu(old: usize, action: Action, new: usize) {
         use crate::state::*;
 
         let mut state = State::new("Proton")
@@ -295,6 +326,7 @@ mod tests {
                     .with_selected(old),
             )])
             .unwrap();
+        reduce(Action::EncoderClick, &mut state);
         let reaction = reduce(action, &mut state);
 
         if let Value::Select(value_select) = &state.attributes[0].value {

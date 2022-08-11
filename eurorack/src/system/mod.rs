@@ -17,7 +17,7 @@ use systick_monotonic::Systick;
 use audio::Audio;
 use cv_input::{CvInput1, CvInput2, CvInput3, CvInput4, CvInput5};
 use display::{Display, DisplayPins};
-use encoder::{AlphaButton, AlphaRotary, BetaButton, BetaRotary};
+use encoder::{EncoderButton, EncoderRotary};
 use led::Led;
 use randomizer::Randomizer;
 
@@ -26,10 +26,8 @@ pub struct System {
     pub display: Display,
     pub led: Led,
     pub mono: Systick<1000>,
-    pub alpha_button: AlphaButton,
-    pub alpha_rotary: AlphaRotary,
-    pub beta_button: BetaButton,
-    pub beta_rotary: BetaRotary,
+    pub button: EncoderButton,
+    pub rotary: EncoderRotary,
     pub cv_input_1: CvInput1,
     pub cv_input_2: CvInput2,
     pub cv_input_3: CvInput3,
@@ -67,15 +65,10 @@ impl System {
 
         let mono = Systick::new(cp.SYST, 480_000_000);
 
-        let alpha_button = AlphaButton::new(pins.GPIO.PIN_20.into_pull_up_input());
-        let alpha_rotary = AlphaRotary::new(
+        let button = EncoderButton::new(pins.GPIO.PIN_20.into_pull_up_input());
+        let rotary = EncoderRotary::new(
             pins.GPIO.PIN_21.into_pull_up_input(),
             pins.GPIO.PIN_24.into_pull_up_input(),
-        );
-        let beta_button = BetaButton::new(pins.GPIO.PIN_12.into_pull_up_input());
-        let beta_rotary = BetaRotary::new(
-            pins.GPIO.PIN_14.into_pull_up_input(),
-            pins.GPIO.PIN_13.into_pull_up_input(),
         );
 
         let cv_input_1 = CvInput1::new(pins.GPIO.PIN_15);
@@ -111,10 +104,8 @@ impl System {
             display,
             led,
             mono,
-            alpha_button,
-            alpha_rotary,
-            beta_button,
-            beta_rotary,
+            button,
+            rotary,
             cv_input_1,
             cv_input_2,
             cv_input_3,

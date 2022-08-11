@@ -32,9 +32,9 @@ mod tests {
             .unwrap();
         display.flush().unwrap();
 
-        defmt::info!("ACTION REQUIRED: Click Alpha if display displays");
-        while !system.alpha_button.clicked() {
-            system.alpha_button.sample();
+        defmt::info!("ACTION REQUIRED: Click encoder if display displays");
+        while !system.button.clicked() {
+            system.button.sample();
             cortex_m::asm::nop();
         }
     }

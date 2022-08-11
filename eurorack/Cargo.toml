@@ -13,7 +13,7 @@ name = "display"
 harness = false # defined through defmt_test
 
 [[test]]
-name = "encoders"
+name = "encoder"
 harness = false # defined through defmt_test
 
 [dependencies]

@@ -46,10 +46,10 @@ fn main() -> Result<(), core::convert::Infallible> {
                 SimulatorEvent::Quit => break 'running Ok(()),
                 SimulatorEvent::KeyDown { keycode, .. } => {
                     let action = match keycode {
-                        Keycode::Left => Some(Action::BetaUp),
-                        Keycode::Right => Some(Action::BetaDown),
-                        Keycode::Up => Some(Action::AlphaUp),
-                        Keycode::Down => Some(Action::AlphaDown),
+                        Keycode::Left => Some(Action::EncoderClick),
+                        Keycode::Right => Some(Action::EncoderClick),
+                        Keycode::Up => Some(Action::EncoderUp),
+                        Keycode::Down => Some(Action::EncoderDown),
                         _ => None,
                     };
                     if let Some(action) = action {
