@@ -2,7 +2,7 @@ use daisy::hal;
 use proton_peripherals::button::Button;
 use proton_peripherals::rotary::Rotary;
 
-pub type EncoderButtonPin = hal::gpio::gpioc::PC1<hal::gpio::Input>;
+pub type EncoderButtonPin = hal::gpio::gpiod::PD11<hal::gpio::Input>;
 pub type EncoderButton = Button<10, EncoderButtonPin>;
 
 pub type EncoderRotaryPinA = hal::gpio::gpioc::PC4<hal::gpio::Input>;

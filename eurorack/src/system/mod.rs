@@ -15,7 +15,7 @@ use hal::prelude::*;
 use systick_monotonic::Systick;
 
 use audio::Audio;
-use cv_input::{CvInput1, CvInput2, CvInput3, CvInput4, CvInput5};
+use cv_input::{CvInput1, CvInput2, CvInput3, CvInput4, CvInput5, Pot};
 use display::{Display, DisplayPins};
 use encoder::{EncoderButton, EncoderRotary};
 use led::Led;
@@ -28,6 +28,7 @@ pub struct System {
     pub mono: Systick<1000>,
     pub button: EncoderButton,
     pub rotary: EncoderRotary,
+    pub pot: Pot,
     pub cv_input_1: CvInput1,
     pub cv_input_2: CvInput2,
     pub cv_input_3: CvInput3,
@@ -65,12 +66,13 @@ impl System {
 
         let mono = Systick::new(cp.SYST, 480_000_000);
 
-        let button = EncoderButton::new(pins.GPIO.PIN_20.into_pull_up_input());
+        let button = EncoderButton::new(pins.GPIO.PIN_26.into_pull_up_input());
         let rotary = EncoderRotary::new(
             pins.GPIO.PIN_21.into_pull_up_input(),
             pins.GPIO.PIN_24.into_pull_up_input(),
         );
 
+        let pot = Pot::new(pins.GPIO.PIN_20);
         let cv_input_1 = CvInput1::new(pins.GPIO.PIN_15);
         let cv_input_2 = CvInput2::new(pins.GPIO.PIN_16);
         let cv_input_3 = CvInput3::new(pins.GPIO.PIN_17);
@@ -106,6 +108,7 @@ impl System {
             mono,
             button,
             rotary,
+            pot,
             cv_input_1,
             cv_input_2,
             cv_input_3,

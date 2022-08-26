@@ -41,6 +41,7 @@ mod app {
     type ControlInput = proton_control::input_processor::InputProcessor<
         Adc<ADC1, Enabled>,
         Adc<ADC2, Enabled>,
+        proton_eurorack::system::cv_input::Pot,
         proton_eurorack::system::cv_input::CvInput1,
         proton_eurorack::system::cv_input::CvInput2,
         proton_eurorack::system::cv_input::CvInput3,
@@ -99,6 +100,7 @@ mod app {
         let control_input = ControlInput::new(
             system.adc_1,
             system.adc_2,
+            system.pot,
             system.cv_input_1,
             system.cv_input_2,
             system.cv_input_3,
