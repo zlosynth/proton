@@ -5,21 +5,26 @@ use proton_eurorack as _; // memory layout + panic handler
 
 #[defmt_test::tests]
 mod tests {
+    use proton_eurorack::system::System;
+
+    #[init]
+    fn init() -> System {
+        let cp = cortex_m::Peripherals::take().unwrap();
+        let dp = daisy::pac::Peripherals::take().unwrap();
+
+        System::init(cp, dp)
+    }
+
     #[test]
-    fn display_works() {
+    fn display_works(system: &mut System) {
         use embedded_graphics::{
             mono_font::{ascii::FONT_10X20, MonoTextStyleBuilder},
             pixelcolor::BinaryColor,
             prelude::*,
             text::Text,
         };
-        use proton_eurorack::system::System;
 
-        let cp = cortex_m::Peripherals::take().unwrap();
-        let dp = daisy::pac::Peripherals::take().unwrap();
-
-        let mut system = System::init(cp, dp);
-        let mut display = system.display;
+        let display = &mut system.display;
 
         let style = MonoTextStyleBuilder::new()
             .font(&FONT_10X20)
@@ -27,9 +32,7 @@ mod tests {
             .background_color(BinaryColor::On)
             .build();
         let position = Point::new(15, 45);
-        Text::new("TEST", position, style)
-            .draw(&mut display)
-            .unwrap();
+        Text::new("TEST", position, style).draw(display).unwrap();
         display.flush().unwrap();
 
         defmt::info!("ACTION REQUIRED: Click encoder if display displays");
