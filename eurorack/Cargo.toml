@@ -20,6 +20,10 @@ harness = false # defined through defmt_test
 name = "cv_input"
 harness = false # defined through defmt_test
 
+[[test]]
+name = "gate_output"
+harness = false # defined through defmt_test
+
 [dependencies]
 proton-peripherals = { path = "../peripherals" }
 proton-ui = { path = "../ui", features = ["defmt"] }
