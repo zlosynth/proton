@@ -166,7 +166,8 @@ mod app {
         let audio = cx.local.audio;
         let control_input = cx.local.control_input;
 
-        let _control_snapshot = control_input.update();
+        let control_snapshot = control_input.update();
+        instrument.update_control(control_snapshot);
 
         while let Some(action) = input_reactions_consumer.dequeue() {
             let reaction = action.try_into();
