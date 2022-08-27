@@ -20,11 +20,17 @@ mod tests {
     fn gate_output_up_and_down(system: &mut System) {
         macro_rules! test_gate {
             ($i:expr, $gate:ident) => {
-                defmt::info!("ACTION REQUIRED: Confirm that gate {} is up and click encoder to continue", $i);
+                defmt::info!(
+                    "ACTION REQUIRED: Confirm that gate {} is up and click encoder to continue",
+                    $i
+                );
                 system.$gate.set();
                 wait_for_click(&mut system.button);
 
-                defmt::info!("ACTION REQUIRED: Confirm that gate {} is down and click encoder to continue", $i);
+                defmt::info!(
+                    "ACTION REQUIRED: Confirm that gate {} is down and click encoder to continue",
+                    $i
+                );
                 system.$gate.reset();
                 wait_for_click(&mut system.button);
             };
