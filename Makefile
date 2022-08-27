@@ -69,10 +69,10 @@ puredata:
 
 .PHONY: test-embedded
 test-embedded:
-	cd eurorack && DEFMT_LOG=info cargo +nightly test --test display
-	cd eurorack && DEFMT_LOG=info cargo +nightly test --test encoder
-	cd eurorack && DEFMT_LOG=info cargo +nightly test --test cv_input
-	cd eurorack && DEFMT_LOG=info cargo +nightly test --test gate_output
+	cd eurorack && DEFMT_LOG=info cargo +nightly test --test display --features $(INSTRUMENT)
+	cd eurorack && DEFMT_LOG=info cargo +nightly test --test encoder --features $(INSTRUMENT)
+	cd eurorack && DEFMT_LOG=info cargo +nightly test --test cv_input --features $(INSTRUMENT)
+	cd eurorack && DEFMT_LOG=info cargo +nightly test --test gate_output --features $(INSTRUMENT)
 
 .PHONY: test-ui
 test-ui:
