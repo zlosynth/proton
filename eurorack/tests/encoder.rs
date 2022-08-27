@@ -30,15 +30,19 @@ mod tests {
     #[test]
     fn encoder_can_be_turned_clockwise(system: &mut System) {
         use proton_peripherals::rotary::Direction;
-        defmt::info!("ACTION REQUIRED: Turn encoder clockwise");
-        loop {
-            system.rotary.sample().unwrap();
-            match system.rotary.direction() {
-                Direction::Clockwise => {
-                    return;
+
+        'repeats: for i in (1..=10).rev() {
+            defmt::info!("ACTION REQUIRED: Turn encoder {}x clockwise", i);
+            loop {
+                system.rotary.sample().unwrap();
+                cortex_m::asm::delay(480_000_000 / 1000);
+                match system.rotary.direction() {
+                    Direction::Clockwise => {
+                        continue 'repeats;
+                    }
+                    Direction::None => (),
+                    Direction::CounterClockwise => panic!("Reverse direction was detected"),
                 }
-                Direction::None => (),
-                Direction::CounterClockwise => panic!("Reverse direction was detected"),
             }
         }
     }
@@ -46,15 +50,19 @@ mod tests {
     #[test]
     fn encoder_can_be_turned_counter_clockwise(system: &mut System) {
         use proton_peripherals::rotary::Direction;
-        defmt::info!("ACTION REQUIRED: Turn encoder counter clockwise");
-        loop {
-            system.rotary.sample().unwrap();
-            match system.rotary.direction() {
-                Direction::CounterClockwise => {
-                    return;
+
+        'repeats: for i in (1..=10).rev() {
+            defmt::info!("ACTION REQUIRED: Turn encoder {}x counter clockwise", i);
+            loop {
+                system.rotary.sample().unwrap();
+                cortex_m::asm::delay(480_000_000 / 1000);
+                match system.rotary.direction() {
+                    Direction::CounterClockwise => {
+                        continue 'repeats;
+                    }
+                    Direction::None => (),
+                    Direction::Clockwise => panic!("Reverse direction was detected"),
                 }
-                Direction::None => (),
-                Direction::Clockwise => panic!("Reverse direction was detected"),
             }
         }
     }

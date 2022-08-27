@@ -111,16 +111,15 @@ mod tests {
 
         let states = [
             // B A Direction
-            (false, false, None),            // 0
-            (false, true, Clockwise),             // >
-            (true, true, None),              // >
-            (true, false, Clockwise),        // >
-            (false, false, None),            // >, 0
-            (true, false, None),             // <
-            (true, true, CounterClockwise),              // <
-            // (true, true, None),              // _
-            // (false, true, CounterClockwise), // <
-            // (false, false, None),            // <, 0
+            (false, false, None),             // 0
+            (false, true, Clockwise),         // >
+            (true, true, None),               // >
+            (true, false, Clockwise),         // >
+            (false, false, None),             // >, 0
+            (true, false, None),              // <
+            (true, true, CounterClockwise),   // <
+            (false, true, None),              // <
+            (false, false, CounterClockwise), // <, 0
         ];
 
         let a = TestPin::new();
