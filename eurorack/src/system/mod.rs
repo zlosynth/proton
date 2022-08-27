@@ -19,7 +19,7 @@ use audio::Audio;
 use cv_input::{CvInput1, CvInput2, CvInput3, CvInput4, CvInput5, Pot};
 use display::{Display, DisplayPins};
 use encoder::{EncoderButton, EncoderRotary};
-use gate_output::{GateOutput1, GateOutput2};
+use gate_output::{GateOutput1, GateOutput2, GateOutput3};
 use led::Led;
 use randomizer::Randomizer;
 
@@ -38,6 +38,7 @@ pub struct System {
     pub cv_input_5: CvInput5,
     pub gate_1: GateOutput1,
     pub gate_2: GateOutput2,
+    pub gate_3: GateOutput3,
     pub adc_1: Adc<ADC1, Enabled>,
     pub adc_2: Adc<ADC2, Enabled>,
     pub randomizer: Randomizer,
@@ -85,6 +86,7 @@ impl System {
 
         let gate_1 = GateOutput1::new(pins.GPIO.PIN_27.into_push_pull_output());
         let gate_2 = GateOutput2::new(pins.GPIO.PIN_28.into_push_pull_output());
+        let gate_3 = GateOutput3::new(pins.GPIO.PIN_29.into_push_pull_output());
 
         let (adc_1, adc_2) = {
             let mut delay = DelayFromCountDownTimer::new(dp.TIM3.timer(
@@ -123,6 +125,7 @@ impl System {
             cv_input_5,
             gate_1,
             gate_2,
+            gate_3,
             adc_1,
             adc_2,
             randomizer,
