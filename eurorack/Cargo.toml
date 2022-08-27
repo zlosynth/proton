@@ -24,6 +24,10 @@ harness = false # defined through defmt_test
 name = "gate_output"
 harness = false # defined through defmt_test
 
+[[test]]
+name = "cv_output"
+harness = false # defined through defmt_test
+
 [dependencies]
 proton-peripherals = { path = "../peripherals" }
 proton-ui = { path = "../ui", features = ["defmt"] }
@@ -37,7 +41,7 @@ systick-monotonic = "1"
 defmt = "0.3"
 defmt-rtt = "0.3"
 panic-probe = { version = "0.3", features = ["print-defmt"] }
-stm32h7xx-hal = { version = "0.12", features = ["stm32h750v", "rt", "revision_v"] }
+stm32h7xx-hal = { version = "0.12", features = ["stm32h750v", "rt", "revision_v",] }
 daisy = { version = "0.5", features = ["seed"] }
 display-interface-spi = "0.4"
 ssd1306 = "0.7.0"

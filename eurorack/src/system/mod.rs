@@ -1,5 +1,6 @@
 pub mod audio;
 pub mod cv_input;
+pub mod cv_output;
 pub mod display;
 pub mod encoder;
 pub mod gate_output;
@@ -17,6 +18,7 @@ use systick_monotonic::Systick;
 
 use audio::Audio;
 use cv_input::{CvInput1, CvInput2, CvInput3, CvInput4, CvInput5, Pot};
+use cv_output::{CvOutput1, CvOutput2};
 use display::{Display, DisplayPins};
 use encoder::{EncoderButton, EncoderRotary};
 use gate_output::{GateOutput1, GateOutput2, GateOutput3};
@@ -39,6 +41,8 @@ pub struct System {
     pub gate_1: GateOutput1,
     pub gate_2: GateOutput2,
     pub gate_3: GateOutput3,
+    pub cv_output_1: CvOutput1,
+    pub cv_output_2: CvOutput2,
     pub adc_1: Adc<ADC1, Enabled>,
     pub adc_2: Adc<ADC2, Enabled>,
     pub randomizer: Randomizer,
@@ -93,6 +97,13 @@ impl System {
         let gate_2 = GateOutput2::new(pins.GPIO.PIN_28.into_push_pull_output());
         let gate_3 = GateOutput3::new(pins.GPIO.PIN_29.into_push_pull_output());
 
+        let (cv_output_1, cv_output_2) = cv_output::init(
+            (pins.GPIO.PIN_23, pins.GPIO.PIN_22),
+            dp.DAC,
+            ccdr.peripheral.DAC12,
+            &mut delay,
+        );
+
         let (adc_1, adc_2) = {
             let (mut adc_1, mut adc_2) = hal::adc::adc12(
                 dp.ADC1,
@@ -126,6 +137,8 @@ impl System {
             gate_1,
             gate_2,
             gate_3,
+            cv_output_1,
+            cv_output_2,
             adc_1,
             adc_2,
             randomizer,
