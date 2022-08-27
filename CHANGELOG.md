@@ -6,7 +6,11 @@ backwards compatibility.
 
 ## Unreleased
 
+* Known issue: Gate 2 and 3 have reversed output of -10 V.
 * Replace one of the encoders with a pot.
+* Adjust encoder abstraction to the new hardware.
+* Implement gate output.
+* Implement CV output.
 
 ## 0.6.0
 
