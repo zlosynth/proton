@@ -78,10 +78,10 @@ impl System {
 
         let pot = Pot::new(pins.GPIO.PIN_20);
         let cv_input_1 = CvInput1::new(pins.GPIO.PIN_15);
-        let cv_input_2 = CvInput2::new(pins.GPIO.PIN_16);
-        let cv_input_3 = CvInput3::new(pins.GPIO.PIN_17);
-        let cv_input_4 = CvInput4::new(pins.GPIO.PIN_18);
-        let cv_input_5 = CvInput5::new(pins.GPIO.PIN_19);
+        let cv_input_2 = CvInput2::new(pins.GPIO.PIN_17);
+        let cv_input_3 = CvInput3::new(pins.GPIO.PIN_18);
+        let cv_input_4 = CvInput4::new(pins.GPIO.PIN_19);
+        let cv_input_5 = CvInput5::new(pins.GPIO.PIN_16);
 
         let gate_1 = GateOutput1::new(pins.GPIO.PIN_27.into_push_pull_output());
         let gate_2 = GateOutput2::new(pins.GPIO.PIN_28.into_push_pull_output());

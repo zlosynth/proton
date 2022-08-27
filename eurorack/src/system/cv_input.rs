@@ -57,7 +57,7 @@ cv_input!(ADC2);
 
 pub type Pot = CvInput<ADC1, gpio::gpioc::PC1<gpio::Analog>>;
 pub type CvInput1 = CvInput<ADC2, gpio::gpioc::PC0<gpio::Analog>>;
-pub type CvInput2 = CvInput<ADC1, gpio::gpioa::PA3<gpio::Analog>>;
-pub type CvInput3 = CvInput<ADC2, gpio::gpiob::PB1<gpio::Analog>>;
-pub type CvInput4 = CvInput<ADC1, gpio::gpioa::PA7<gpio::Analog>>;
-pub type CvInput5 = CvInput<ADC2, gpio::gpioa::PA6<gpio::Analog>>;
+pub type CvInput2 = CvInput<ADC1, gpio::gpiob::PB1<gpio::Analog>>;
+pub type CvInput3 = CvInput<ADC2, gpio::gpioa::PA7<gpio::Analog>>;
+pub type CvInput4 = CvInput<ADC1, gpio::gpioa::PA6<gpio::Analog>>;
+pub type CvInput5 = CvInput<ADC2, gpio::gpioa::PA3<gpio::Analog>>;
