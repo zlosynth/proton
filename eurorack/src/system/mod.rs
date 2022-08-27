@@ -54,6 +54,12 @@ impl System {
         let led = daisy::board_split_leds!(pins).USER;
         let audio = Audio::init(daisy::board_split_audio!(ccdr, pins));
 
+        let mut delay = DelayFromCountDownTimer::new(dp.TIM3.timer(
+            100.Hz(),
+            ccdr.peripheral.TIM3,
+            &ccdr.clocks,
+        ));
+
         let display = display::init(
             DisplayPins {
                 SCK: pins.GPIO.PIN_8.into_alternate(),
@@ -62,8 +68,7 @@ impl System {
                 RST: pins.GPIO.PIN_30.into_push_pull_output(),
                 DC: pins.GPIO.PIN_9.into_push_pull_output(),
             },
-            dp.TIM2,
-            ccdr.peripheral.TIM2,
+            &mut delay,
             dp.SPI1,
             ccdr.peripheral.SPI1,
             &ccdr.clocks,
@@ -89,11 +94,6 @@ impl System {
         let gate_3 = GateOutput3::new(pins.GPIO.PIN_29.into_push_pull_output());
 
         let (adc_1, adc_2) = {
-            let mut delay = DelayFromCountDownTimer::new(dp.TIM3.timer(
-                100.Hz(),
-                ccdr.peripheral.TIM3,
-                &ccdr.clocks,
-            ));
             let (mut adc_1, mut adc_2) = hal::adc::adc12(
                 dp.ADC1,
                 dp.ADC2,
