@@ -14,12 +14,26 @@ impl<P: OutputPin> GateOutput<P> {
     pub fn pin(&mut self) -> &mut P {
         &mut self.pin
     }
+}
 
-    pub fn set(&mut self) {
+pub trait GateOutputExt {
+    fn set(&mut self);
+    fn reset(&mut self);
+    fn set_value(&mut self, on: bool) {
+        if on {
+            self.set();
+        } else {
+            self.reset();
+        }
+    }
+}
+
+impl<P: OutputPin> GateOutputExt for GateOutput<P> {
+    fn set(&mut self) {
         self.pin.set_high().ok().unwrap();
     }
 
-    pub fn reset(&mut self) {
+    fn reset(&mut self) {
         self.pin.set_low().ok().unwrap();
     }
 }

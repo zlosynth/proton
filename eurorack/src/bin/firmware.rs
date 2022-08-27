@@ -49,6 +49,14 @@ mod app {
         proton_eurorack::system::cv_input::CvInput5,
     >;
 
+    type ControlOutput = proton_control::output_processor::OutputProcessor<
+        proton_eurorack::system::gate_output::GateOutput1,
+        proton_eurorack::system::gate_output::GateOutput2,
+        proton_eurorack::system::gate_output::GateOutput3,
+        proton_eurorack::system::cv_output::CvOutput1,
+        proton_eurorack::system::cv_output::CvOutput2,
+    >;
+
     #[monotonic(binds = SysTick, default = true)]
     type Mono = Systick<1000>; // 1 kHz / 1 ms granularity
 
@@ -63,6 +71,7 @@ mod app {
         led: LedUser,
         user_input: UserInput,
         control_input: ControlInput,
+        _control_output: ControlOutput,
         display: Display,
         state: State,
         input_actions_producer: Producer<'static, InputAction, 6>,
@@ -108,6 +117,14 @@ mod app {
             system.cv_input_5,
         );
 
+        let control_output = ControlOutput::new(
+            system.gate_1,
+            system.gate_2,
+            system.gate_3,
+            system.cv_output_1,
+            system.cv_output_2,
+        );
+
         let instrument = Instrument::new(SAMPLE_RATE);
         let state = instrument.state();
         #[allow(clippy::needless_borrow)] // It's not needless, it fails without it
@@ -127,6 +144,7 @@ mod app {
                 led,
                 user_input,
                 control_input,
+                _control_output: control_output,
                 display,
                 state,
                 input_actions_producer,

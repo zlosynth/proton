@@ -7,6 +7,7 @@ use proton_eurorack as _; // memory layout + panic handler
 mod tests {
     use super::wait_for_click;
     use proton_eurorack::system::System;
+    use proton_peripherals::gate_output::GateOutputExt;
 
     #[init]
     fn init() -> System {
