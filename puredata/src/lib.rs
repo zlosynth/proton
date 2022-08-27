@@ -28,7 +28,7 @@ use proton_ui::reaction::Reaction;
 use proton_ui::reducer;
 use proton_ui::state::*;
 
-use proton_control::input_snapshot::{Cv as CvSnapshot, InputSnapshot};
+use proton_control::input_snapshot::{Cv as CvSnapshot, InputSnapshot, Pot as PotSnapshot};
 
 pub type Display = SimulatorDisplay<BinaryColor>;
 
@@ -80,6 +80,7 @@ pub unsafe extern "C" fn proton_tilde_setup() {
     draw_display(&mut display, &view).unwrap();
     window.update(&display);
 
+    register_float_method(class, "pot", set_pot);
     register_float_method(class, "control1", set_control1);
     register_float_method(class, "control2", set_control2);
     register_float_method(class, "control3", set_control3);
@@ -123,6 +124,7 @@ unsafe extern "C" fn new() -> *mut c_void {
     );
 
     (*class).input_snapshot = InputSnapshot {
+        pot: PotSnapshot { value: 0.0 },
         cv: [
             CvSnapshot { value: 0.0 },
             CvSnapshot { value: 0.0 },
@@ -165,6 +167,14 @@ unsafe fn register_symbol_method(
         pd_sys::gensym(cstr::cstr(symbol).as_ptr()),
         0,
     );
+}
+
+unsafe extern "C" fn set_pot(class: *mut Class, value: pd_sys::t_float) {
+    (*class).input_snapshot.pot.value = value;
+    INSTRUMENT
+        .as_mut()
+        .unwrap()
+        .update_control((*class).input_snapshot);
 }
 
 unsafe extern "C" fn set_control1(class: *mut Class, value: pd_sys::t_float) {

@@ -1,6 +1,6 @@
 use proton_peripherals::cv_input::CvInput;
 
-use crate::input_snapshot::{Cv as CvSnapshot, InputSnapshot};
+use crate::input_snapshot::{Cv as CvSnapshot, InputSnapshot, Pot as PotSnapshot};
 
 pub struct InputProcessor<A1, A2, P, CI1, CI2, CI3, CI4, CI5> {
     pot: P,
@@ -69,6 +69,9 @@ where
 
     fn snapshot(&mut self) -> InputSnapshot {
         InputSnapshot {
+            pot: PotSnapshot {
+                value: self.pot.value(),
+            },
             cv: [
                 CvSnapshot {
                     value: self.cv_input_1.value(),

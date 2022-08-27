@@ -1,6 +1,6 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
-use proton_control::input_snapshot::{Cv as CvSnapshot, InputSnapshot};
+use proton_control::input_snapshot::{Cv as CvSnapshot, InputSnapshot, Pot as PotSnapshot};
 use proton_instruments_tape::{Instrument, Rand};
 
 const SAMPLE_RATE: u32 = 44_100;
@@ -20,6 +20,7 @@ fn criterion_benchmark(c: &mut Criterion) {
         let mut buffer = [0.0; 32];
         b.iter(|| {
             instrument.update_control(InputSnapshot {
+                pot: PotSnapshot { value: 0.5 },
                 cv: [
                     CvSnapshot { value: 0.5 },
                     CvSnapshot { value: 0.5 },
