@@ -3,7 +3,7 @@
 
 use proton_eurorack as _; // global logger + panicking-behavior
 
-#[rtic::app(device = stm32h7xx_hal::pac, peripherals = true, dispatchers = [EXTI0, EXTI1])]
+#[rtic::app(device = stm32h7xx_hal::pac, peripherals = true, dispatchers = [EXTI0, EXTI1, EXTI2])]
 mod app {
     use daisy::led::{Led, LedUser};
 
@@ -15,13 +15,14 @@ mod app {
     use hal::adc::{Adc, Enabled};
     use hal::pac::{ADC1, ADC2};
 
-    #[cfg(feature = "tape")]
-    use proton_instruments_tape::Instrument;
+    #[cfg(feature = "kaseta")]
+    use proton_instruments_kaseta::Instrument;
 
     #[cfg(feature = "karplus_strong")]
     use proton_instruments_karplus_strong::Instrument;
 
-    use proton_eurorack::system::audio::{Audio, BLOCK_LENGTH, SAMPLE_RATE};
+    use proton_control::input_snapshot::InputSnapshot;
+    use proton_eurorack::system::audio::{Audio, SAMPLE_RATE};
     use proton_eurorack::system::display::Display;
     use proton_eurorack::system::randomizer::Randomizer;
     use proton_eurorack::system::System;
@@ -78,12 +79,15 @@ mod app {
         input_actions_consumer: Consumer<'static, InputAction, 6>,
         input_reactions_producer: Producer<'static, InputReaction, 6>,
         input_reactions_consumer: Consumer<'static, InputReaction, 6>,
+        control_input_producer: Producer<'static, InputSnapshot, 6>,
+        control_input_consumer: Consumer<'static, InputSnapshot, 6>,
     }
 
     #[init(
         local = [
             input_actions_queue: Queue<InputAction, 6> = Queue::new(),
             input_reactions_queue: Queue<InputReaction, 6> = Queue::new(),
+            control_input_queue: Queue<InputSnapshot, 6> = Queue::new(),
         ]
     )]
     fn init(cx: init::Context) -> (Shared, Local, init::Monotonics) {
@@ -94,6 +98,7 @@ mod app {
         let (input_actions_producer, input_actions_consumer) = cx.local.input_actions_queue.split();
         let (input_reactions_producer, input_reactions_consumer) =
             cx.local.input_reactions_queue.split();
+        let (control_input_producer, control_input_consumer) = cx.local.control_input_queue.split();
 
         let system = System::init(cx.core, cx.device);
 
@@ -132,7 +137,8 @@ mod app {
 
         update_display::spawn(view).unwrap();
         set_indicator::spawn(true).unwrap();
-        read_controls::spawn().unwrap();
+        read_user_controls::spawn().unwrap();
+        read_control_input::spawn().unwrap();
         update_state::spawn().unwrap();
 
         (
@@ -151,48 +157,59 @@ mod app {
                 input_actions_consumer,
                 input_reactions_producer,
                 input_reactions_consumer,
+                control_input_producer,
+                control_input_consumer,
             },
             init::Monotonics(mono),
         )
     }
 
-    #[task(binds = DMA1_STR1, local = [input_reactions_consumer, randomizer, instrument, audio, control_input], priority = 3)]
+    #[task(binds = DMA1_STR1, local = [input_reactions_consumer, control_input_consumer, randomizer, instrument, audio], priority = 4)]
     fn handle_dsp(cx: handle_dsp::Context) {
         use core::convert::TryInto;
 
         let input_reactions_consumer = cx.local.input_reactions_consumer;
+        let control_input_consumer = cx.local.control_input_consumer;
         let instrument = cx.local.instrument;
         let randomizer = cx.local.randomizer;
         let audio = cx.local.audio;
-        let control_input = cx.local.control_input;
 
-        let control_snapshot = control_input.update();
-        instrument.update_control(control_snapshot);
+        while let Some(control_snapshot) = control_input_consumer.dequeue() {
+            instrument.update_control(control_snapshot);
+        }
 
         while let Some(action) = input_reactions_consumer.dequeue() {
             let reaction = action.try_into();
             instrument.execute(reaction.unwrap());
         }
 
-        let mut buffer = [0.0; BLOCK_LENGTH];
-        instrument.process(&mut buffer, randomizer);
-
-        audio.update_buffer(|audio_buffer| {
-            audio_buffer.iter_mut().enumerate().for_each(|(i, x)| {
-                *x = (buffer[i], buffer[i]);
-            })
+        audio.update_buffer(|buffer| {
+            instrument.process(&mut buffer[..], randomizer);
         });
     }
 
-    #[task(local = [user_input, input_actions_producer], priority = 2)]
-    fn read_controls(cx: read_controls::Context) {
+    #[task(local = [user_input, input_actions_producer], priority = 3)]
+    fn read_user_controls(cx: read_user_controls::Context) {
+        let user_input = cx.local.user_input;
         let input_actions_producer = cx.local.input_actions_producer;
 
-        for action in cx.local.user_input.process() {
+        for action in user_input.process() {
             input_actions_producer.enqueue(action).unwrap();
         }
 
-        read_controls::spawn_after(1.millis()).unwrap();
+        read_user_controls::spawn_after(1.millis()).unwrap();
+    }
+
+    #[task(local = [control_input, control_input_producer], priority = 2)]
+    fn read_control_input(cx: read_control_input::Context) {
+        let control_input = cx.local.control_input;
+        let control_input_producer = cx.local.control_input_producer;
+
+        control_input_producer
+            .enqueue(control_input.update())
+            .unwrap();
+
+        read_control_input::spawn_after(1.millis()).unwrap();
     }
 
     #[task(local = [input_actions_consumer, input_reactions_producer, state])]

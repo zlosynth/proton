@@ -1,0 +1,20 @@
+[package]
+authors = ["Petr Horáček <hrck@protonmail.com>"]
+name = "proton-instruments-kaseta"
+version = "0.6.0" # hack/release.sh
+edition = "2021"
+license = "GPL-3.0-or-later"
+repository = "https://github.com/zlosynth/proton"
+readme = "../../README.md"
+publish = false
+
+[dependencies]
+proton-ui = { path = "../../ui" }
+proton-control = { path = "../../control" }
+
+[dependencies.defmt]
+version  = "0.3"
+optional = true
+
+[features]
+defmt = ["dep:defmt"]

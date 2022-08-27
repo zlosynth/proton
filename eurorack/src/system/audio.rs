@@ -1,9 +1,7 @@
-use daisy::audio::{self, Block, Interface};
+use daisy::audio::{self, Interface};
 
 pub const SAMPLE_RATE: u32 = audio::FS.to_Hz();
 pub const BLOCK_LENGTH: usize = audio::BLOCK_LENGTH;
-
-static mut BUFFER: [(f32, f32); BLOCK_LENGTH] = [(0.0, 0.0); BLOCK_LENGTH];
 
 pub struct Audio {
     interface: Option<Interface>,
@@ -17,23 +15,14 @@ impl Audio {
     }
 
     pub fn spawn(&mut self) {
-        self.interface = Some(self.interface.take().unwrap().spawn(callback).unwrap());
+        self.interface = Some(self.interface.take().unwrap().spawn().unwrap());
     }
 
-    pub fn update_buffer(&mut self, mut callback: impl FnMut(&mut [(f32, f32); BLOCK_LENGTH])) {
-        let buffer: &'static mut [(f32, f32); BLOCK_LENGTH] = unsafe { &mut BUFFER };
-        callback(buffer);
+    pub fn update_buffer(&mut self, callback: impl FnMut(&mut [(f32, f32); BLOCK_LENGTH])) {
         self.interface
             .as_mut()
             .unwrap()
-            .handle_interrupt_dma1_str1()
+            .handle_interrupt_dma1_str1(callback)
             .unwrap();
-    }
-}
-
-fn callback(_fs: f32, block: &mut Block) {
-    let buffer: &'static mut [(f32, f32); BLOCK_LENGTH] = unsafe { &mut BUFFER };
-    for (source, target) in buffer.iter().zip(block.iter_mut()) {
-        *target = *source;
     }
 }

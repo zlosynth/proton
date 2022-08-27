@@ -11,6 +11,8 @@ backwards compatibility.
 * Adjust encoder abstraction to the new hardware.
 * Implement gate output.
 * Implement CV output.
+* Introduce binding to Kaseta.
+* Process input audio.
 
 ## 0.6.0
 

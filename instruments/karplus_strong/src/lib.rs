@@ -199,13 +199,13 @@ impl Instrument {
         }
     }
 
-    pub fn process(&mut self, buffer: &mut [f32], randomizer: &mut impl Rand) {
+    pub fn process(&mut self, buffer: &mut [(f32, f32)], randomizer: &mut impl Rand) {
         let config = self.turing.tick(buffer.len() as u32, randomizer);
         if config.frequency > 0.1 {
             self.frequency = config.frequency;
         }
 
-        for x in buffer.iter_mut() {
+        for (x, _) in buffer.iter_mut() {
             if config.triggered {
                 self.envelope.trigger(
                     AdConfig::new().with_decay_time(self.frequency / self.sample_rate as f32),

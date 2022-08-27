@@ -1,4 +1,4 @@
-INSTRUMENT ?= tape
+INSTRUMENT ?= kaseta
 
 .PHONY: all
 all: format clippy test
@@ -12,7 +12,7 @@ check-format:
 	cd control && cargo +nightly fmt --all -- --check
 	cd primitives && cargo +nightly fmt --all -- --check
 	cd instruments/karplus_strong && cargo +nightly fmt --all -- --check
-	cd instruments/tape && cargo +nightly fmt --all -- --check
+	cd instruments/kaseta && cargo +nightly fmt --all -- --check
 
 .PHONY: format
 format:
@@ -23,13 +23,13 @@ format:
 	cd control && cargo +nightly fmt --all
 	cd primitives && cargo +nightly fmt --all
 	cd instruments/karplus_strong && cargo +nightly fmt --all
-	cd instruments/tape && cargo +nightly fmt --all
+	cd instruments/kaseta && cargo +nightly fmt --all
 
 .PHONY: clippy
 clippy:
-	cd puredata && cargo +nightly clippy --all --features tape -- -D warnings
+	cd puredata && cargo +nightly clippy --all --features kaseta -- -D warnings
 	cd puredata && cargo +nightly clippy --all --features karplus_strong -- -D warnings
-	cd eurorack && cargo +nightly clippy --all --features tape -- -D warnings
+	cd eurorack && cargo +nightly clippy --all --features kaseta -- -D warnings
 	cd eurorack && cargo +nightly clippy --all --features karplus_strong -- -D warnings
 	cd eurorack && cargo +nightly check --test display --test encoder --test cv_input --test gate_output --features karplus_strong
 	cd peripherals && cargo +nightly clippy --all --features defmt -- -D warnings
@@ -37,8 +37,8 @@ clippy:
 	cd control && cargo +nightly clippy --all --features defmt -- -D warnings
 	cd primitives && cargo +nightly clippy --all --features defmt -- -D warnings
 	cd instruments/karplus_strong && cargo +nightly clippy --all --features defmt -- -D warnings
-	cd instruments/tape && cargo +nightly clippy --all --features defmt -- -D warnings
-	cd instruments/tape && cargo +nightly check --benches --all
+	cd instruments/kaseta && cargo +nightly clippy --all --features defmt -- -D warnings
+	cd instruments/kaseta && cargo +nightly check --benches --all
 
 .PHONY: test
 test:
@@ -47,7 +47,7 @@ test:
 	cd control && cargo +nightly test --features defmt --all
 	cd primitives && cargo +nightly test --all --features defmt
 	cd instruments/karplus_strong && cargo +nightly test --all --features defmt
-	cd instruments/tape && cargo +nightly test --all --features defmt
+	cd instruments/kaseta && cargo +nightly test --all --features defmt
 
 .PHONY: update
 update:
@@ -58,7 +58,7 @@ update:
 	cd control && cargo +nightly update
 	cd primitives && cargo +nightly update
 	cd instruments/karplus_strong && cargo +nightly update
-	cd instruments/tape && cargo +nightly update
+	cd instruments/kaseta && cargo +nightly update
 
 .PHONY: puredata
 puredata:

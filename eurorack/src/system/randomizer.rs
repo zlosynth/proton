@@ -4,8 +4,8 @@ use daisy::hal::rng::Rng;
 #[cfg(feature = "karplus_strong")]
 use proton_instruments_karplus_strong::Rand;
 
-#[cfg(feature = "tape")]
-use proton_instruments_tape::Rand;
+#[cfg(feature = "kaseta")]
+use proton_instruments_kaseta::Rand;
 
 pub struct Randomizer {
     pub rng: Rng,

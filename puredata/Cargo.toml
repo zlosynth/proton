@@ -15,7 +15,7 @@ crate-type = ["cdylib"]
 proton-ui = { path = "../ui" }
 proton-control = { path = "../control" }
 proton-instruments-karplus-strong = { path = "../instruments/karplus_strong", optional = true }
-proton-instruments-tape = { path = "../instruments/tape", optional = true }
+proton-instruments-kaseta = { path = "../instruments/kaseta", optional = true }
 pd-sys = "0.1.0"
 field-offset = "0.3"
 embedded-graphics-simulator = "0.3"
@@ -23,5 +23,5 @@ embedded-graphics-core = "0.3"
 rand = "0.8"
 
 [features]
-tape = ["proton-instruments-tape"]
+kaseta = ["proton-instruments-kaseta"]
 karplus_strong = ["proton-instruments-karplus-strong"]

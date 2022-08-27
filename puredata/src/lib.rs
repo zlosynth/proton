@@ -16,8 +16,8 @@ use embedded_graphics_core::geometry::Size;
 use embedded_graphics_core::pixelcolor::BinaryColor;
 use embedded_graphics_simulator::{OutputSettingsBuilder, SimulatorDisplay, Window};
 
-#[cfg(feature = "tape")]
-use proton_instruments_tape::{Instrument, Rand};
+#[cfg(feature = "kaseta")]
+use proton_instruments_kaseta::{Instrument, Rand};
 
 #[cfg(feature = "karplus_strong")]
 use proton_instruments_karplus_strong::{Instrument, Rand};
@@ -257,12 +257,12 @@ unsafe fn perform(
 ) {
     const BUFFER_LEN: usize = 32;
     assert!(number_of_frames % BUFFER_LEN == 0);
-    let mut buffer = [0.0; BUFFER_LEN];
+    let mut buffer = [(0.0, 0.0); BUFFER_LEN];
 
     for chunk_index in 0..number_of_frames / BUFFER_LEN {
         for (i, frame) in buffer.iter_mut().enumerate() {
             let index = chunk_index * BUFFER_LEN + i;
-            *frame = inlets[0][index];
+            *frame = (inlets[0][index], inlets[1][index]);
         }
 
         INSTRUMENT
@@ -272,7 +272,7 @@ unsafe fn perform(
 
         for (i, frame) in buffer.iter().enumerate() {
             let index = chunk_index * BUFFER_LEN + i;
-            outlets[0][index] = *frame;
+            (outlets[0][index], outlets[1][index]) = *frame;
         }
     }
 }

@@ -213,10 +213,8 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7381b67da416b639690ac77c73b86a7b5e64a29e31d1f75fb3b1102301ef355a"
 dependencies = [
  "dasp_frame",
- "dasp_ring_buffer",
  "dasp_sample",
  "dasp_signal",
- "dasp_slice",
  "dasp_window",
 ]
 
@@ -272,16 +270,6 @@ dependencies = [
  "dasp_interpolate",
  "dasp_peak",
  "dasp_ring_buffer",
- "dasp_sample",
-]
-
-[[package]]
-name = "dasp_slice"
-version = "0.11.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4e1c7335d58e7baedafa516cb361360ff38d6f4d3f9d9d5ee2a2fc8e27178fa1"
-dependencies = [
- "dasp_frame",
  "dasp_sample",
 ]
 
@@ -473,12 +461,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5916d2ae698f6de9bfb891ad7a8d65c09d232dc58cc4ac433c7da3b2fd84bc2b"
 
 [[package]]
-name = "libm"
-version = "0.2.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "33a33a362ce288760ec6a508b94caaec573ae7d3bbbd91b87aa0bad4456839db"
-
-[[package]]
 name = "lock_api"
 version = "0.4.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -666,14 +648,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "proton-instruments-tape"
+name = "proton-instruments-kaseta"
 version = "0.6.0"
 dependencies = [
- "dasp",
- "heapless",
- "libm",
  "proton-control",
- "proton-primitives",
  "proton-ui",
 ]
 
@@ -704,7 +682,7 @@ dependencies = [
  "pd-sys",
  "proton-control",
  "proton-instruments-karplus-strong",
- "proton-instruments-tape",
+ "proton-instruments-kaseta",
  "proton-ui",
  "rand 0.8.5",
 ]
