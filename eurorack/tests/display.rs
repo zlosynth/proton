@@ -32,10 +32,18 @@ mod tests {
             .background_color(BinaryColor::On)
             .build();
         let position = Point::new(15, 45);
-        Text::new("TEST", position, style).draw(display).unwrap();
-        display.flush().unwrap();
 
-        defmt::info!("ACTION REQUIRED: Click encoder if display displays");
+        Text::new("TEST 1", position, style).draw(display).unwrap();
+        display.flush().unwrap();
+        defmt::info!("ACTION REQUIRED: Click encoder if display displays TEST 1");
+        while !system.button.clicked() {
+            system.button.sample();
+            cortex_m::asm::nop();
+        }
+
+        Text::new("TEST 2", position, style).draw(display).unwrap();
+        display.flush().unwrap();
+        defmt::info!("ACTION REQUIRED: Click encoder if display displays TEST 2");
         while !system.button.clicked() {
             system.button.sample();
             cortex_m::asm::nop();
