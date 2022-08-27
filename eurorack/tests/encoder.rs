@@ -18,9 +18,12 @@ mod tests {
     #[test]
     fn encoder_can_be_clicked(system: &mut System) {
         defmt::info!("ACTION REQUIRED: Click encoder");
-        while !system.button.clicked() {
+        loop {
             system.button.sample();
-            cortex_m::asm::nop();
+            if system.button.clicked() {
+                return;
+            }
+            cortex_m::asm::delay(480_000_000 / 1000);
         }
     }
 

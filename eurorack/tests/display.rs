@@ -5,6 +5,7 @@ use proton_eurorack as _; // memory layout + panic handler
 
 #[defmt_test::tests]
 mod tests {
+    use super::wait_for_click;
     use proton_eurorack::system::System;
 
     #[init]
@@ -36,17 +37,24 @@ mod tests {
         Text::new("TEST 1", position, style).draw(display).unwrap();
         display.flush().unwrap();
         defmt::info!("ACTION REQUIRED: Click encoder if display displays TEST 1");
-        while !system.button.clicked() {
-            system.button.sample();
-            cortex_m::asm::nop();
-        }
+        wait_for_click(&mut system.button);
 
         Text::new("TEST 2", position, style).draw(display).unwrap();
         display.flush().unwrap();
         defmt::info!("ACTION REQUIRED: Click encoder if display displays TEST 2");
-        while !system.button.clicked() {
-            system.button.sample();
-            cortex_m::asm::nop();
+        wait_for_click(&mut system.button);
+    }
+}
+
+fn wait_for_click<const N: usize, P>(button: &mut proton_peripherals::button::Button<N, P>)
+where
+    P: daisy::embedded_hal::digital::v2::InputPin,
+{
+    loop {
+        button.sample();
+        if button.clicked() {
+            return;
         }
+        cortex_m::asm::delay(480_000_000 / 1000);
     }
 }

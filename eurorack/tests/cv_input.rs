@@ -2,7 +2,6 @@
 #![no_main]
 
 use proton_eurorack as _; // memory layout + panic handler
-use proton_peripherals::button::Button;
 
 #[defmt_test::tests]
 mod tests {
@@ -54,16 +53,10 @@ mod tests {
 
         macro_rules! test_cv {
             ($i:expr, $cv:ident, $adc:ident) => {
-                defmt::info!(
-                    "ACTION REQUIRED: Turn CV {:?} to min and click encoder",
-                    $i + 1
-                );
+                defmt::info!("ACTION REQUIRED: Turn CV {:?} to min and click encoder", $i);
                 measure_cv!($cv, $adc);
 
-                defmt::info!(
-                    "ACTION REQUIRED: Turn CV {:?} to max and click encoder",
-                    $i + 1
-                );
+                defmt::info!("ACTION REQUIRED: Turn CV {:?} to max and click encoder", $i);
                 measure_cv!($cv, $adc);
             };
         }
@@ -79,12 +72,15 @@ mod tests {
     }
 }
 
-fn wait_for_click<const N: usize, P>(button: &mut Button<N, P>)
+fn wait_for_click<const N: usize, P>(button: &mut proton_peripherals::button::Button<N, P>)
 where
     P: daisy::embedded_hal::digital::v2::InputPin,
 {
-    while !button.clicked() {
+    loop {
         button.sample();
-        cortex_m::asm::nop();
+        if button.clicked() {
+            return;
+        }
+        cortex_m::asm::delay(480_000_000 / 1000);
     }
 }
