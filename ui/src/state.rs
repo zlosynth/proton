@@ -163,7 +163,8 @@ impl defmt::Format for ValueF32 {
 }
 
 fn default_writter(destination: &mut dyn fmt::Write, value: f32) {
-    write!(destination, "{:.1}%", value).unwrap();
+    let value = (value * 100.0) as u32;
+    write!(destination, "{}%", value).unwrap();
 }
 
 impl ValueF32 {

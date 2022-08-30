@@ -24,7 +24,8 @@ pub struct Instrument {
 }
 
 fn writter(destination: &mut dyn fmt::Write, value: f32) {
-    write!(destination, "{:.2}%", value).unwrap();
+    let value = (value * 100.0) as u32;
+    write!(destination, "{}%", value).unwrap();
 }
 
 impl Instrument {

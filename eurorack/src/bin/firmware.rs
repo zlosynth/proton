@@ -128,9 +128,9 @@ mod app {
         let instrument = Instrument::new(SAMPLE_RATE);
         let state = instrument.state();
         #[allow(clippy::needless_borrow)] // It's not needless, it fails without it
-        let view = (&state).into();
+        let view: View = (&state).into();
 
-        update_display::spawn(view).unwrap();
+        update_display::spawn(view).ok().unwrap();
         set_indicator::spawn(true).unwrap();
         read_user_controls::spawn().unwrap();
         read_control_input::spawn().unwrap();
@@ -202,6 +202,7 @@ mod app {
 
         control_input_producer
             .enqueue(control_input.update())
+            .ok()
             .unwrap();
 
         read_control_input::spawn_after(1.millis()).unwrap();
@@ -217,15 +218,17 @@ mod app {
         while let Some(action) = input_actions_consumer.dequeue() {
             let reaction = reducer::reduce(action, state);
             if let Some(reaction) = reaction {
+                #[allow(clippy::ok_expect)]
                 input_reactions_producer
                     .enqueue(reaction)
+                    .ok()
                     .expect("the queue is full");
             }
         }
 
         #[allow(clippy::needless_borrow)] // It's not needless, it fails without it
         let view = (&*state).into();
-        update_display::spawn(view).unwrap();
+        update_display::spawn(view).ok().unwrap();
 
         update_state::spawn_after(1.millis()).unwrap();
     }
