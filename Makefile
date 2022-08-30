@@ -5,78 +5,73 @@ all: format clippy test
 
 .PHONY: check-format
 check-format:
-	cd puredata && cargo +nightly fmt --all -- --check
-	cd eurorack && cargo +nightly fmt --all -- --check
-	cd peripherals && cargo +nightly fmt --all -- --check
-	cd ui && cargo +nightly fmt --all -- --check
-	cd control && cargo +nightly fmt --all -- --check
-	cd primitives && cargo +nightly fmt --all -- --check
-	cd instruments/kaseta && cargo +nightly fmt --all -- --check
+	cd puredata && cargo fmt --all -- --check
+	cd eurorack && cargo fmt --all -- --check
+	cd peripherals && cargo fmt --all -- --check
+	cd ui && cargo fmt --all -- --check
+	cd control && cargo fmt --all -- --check
+	cd instruments/kaseta && cargo fmt --all -- --check
 
 .PHONY: format
 format:
-	cd puredata && cargo +nightly fmt --all
-	cd eurorack && cargo +nightly fmt --all
-	cd peripherals && cargo +nightly fmt --all
-	cd ui && cargo +nightly fmt --all
-	cd control && cargo +nightly fmt --all
-	cd primitives && cargo +nightly fmt --all
-	cd instruments/kaseta && cargo +nightly fmt --all
+	cd puredata && cargo fmt --all
+	cd eurorack && cargo fmt --all
+	cd peripherals && cargo fmt --all
+	cd ui && cargo fmt --all
+	cd control && cargo fmt --all
+	cd instruments/kaseta && cargo fmt --all
 
 .PHONY: clippy
 clippy:
-	cd puredata && cargo +nightly clippy --all --features kaseta -- -D warnings
-	cd eurorack && cargo +nightly clippy --all --features kaseta -- -D warnings
-	cd peripherals && cargo +nightly clippy --all --features defmt -- -D warnings
-	cd ui && cargo +nightly clippy --all --features defmt -- -D warnings
-	cd control && cargo +nightly clippy --all --features defmt -- -D warnings
-	cd primitives && cargo +nightly clippy --all --features defmt -- -D warnings
-	cd instruments/kaseta && cargo +nightly clippy --all --features defmt -- -D warnings
-	cd instruments/kaseta && cargo +nightly check --benches --all
+	cd puredata && cargo clippy --all --features kaseta -- -D warnings
+	cd eurorack && cargo clippy --all --features kaseta -- -D warnings
+	cd peripherals && cargo clippy --all --features defmt -- -D warnings
+	cd ui && cargo clippy --all --features defmt -- -D warnings
+	cd control && cargo clippy --all --features defmt -- -D warnings
+	cd instruments/kaseta && cargo clippy --all --features defmt -- -D warnings
+	cd instruments/kaseta && cargo check --benches --all
 
 .PHONY: test
 test:
-	cd peripherals && cargo +nightly test --features defmt --all
-	cd ui && cargo +nightly test --features defmt --all
-	cd control && cargo +nightly test --features defmt --all
-	cd primitives && cargo +nightly test --all --features defmt
-	cd instruments/kaseta && cargo +nightly test --all --features defmt
+	cd peripherals && cargo test --features defmt --all
+	cd ui && cargo test --features defmt --all
+	cd control && cargo test --features defmt --all
+	cd instruments/kaseta && cargo test --all --features defmt
 
 .PHONY: update
 update:
-	cd puredata && cargo +nightly update
-	cd eurorack && cargo +nightly update
-	cd peripherals && cargo +nightly update
-	cd ui && cargo +nightly update
-	cd control && cargo +nightly update
-	cd primitives && cargo +nightly update
-	cd instruments/kaseta && cargo +nightly update
+	cd puredata && cargo update
+	cd eurorack && cargo update
+	cd peripherals && cargo update
+	cd ui && cargo update
+	cd control && cargo update
+	cd instruments/kaseta && cargo update
 
 .PHONY: puredata
 puredata:
 	mkdir -p ~/.local/lib/pd/extra
-	cd puredata && cargo +nightly build --release --features $(INSTRUMENT)
+	cd puredata && cargo build --release --features $(INSTRUMENT)
 	cp puredata/target/release/libproton_puredata.so ~/.local/lib/pd/extra/proton~.pd_linux
 	pd puredata/proton.pd
 
 .PHONY: test-embedded
 test-embedded:
-	cd eurorack && DEFMT_LOG=info cargo +nightly test --test encoder --features $(INSTRUMENT)
-	cd eurorack && DEFMT_LOG=info cargo +nightly test --test display --features $(INSTRUMENT)
-	cd eurorack && DEFMT_LOG=info cargo +nightly test --test cv_input --features $(INSTRUMENT)
-	cd eurorack && DEFMT_LOG=info cargo +nightly test --test gate_output --features $(INSTRUMENT)
+	cd eurorack && DEFMT_LOG=info cargo test --test encoder --features $(INSTRUMENT)
+	cd eurorack && DEFMT_LOG=info cargo test --test display --features $(INSTRUMENT)
+	cd eurorack && DEFMT_LOG=info cargo test --test cv_input --features $(INSTRUMENT)
+	cd eurorack && DEFMT_LOG=info cargo test --test gate_output --features $(INSTRUMENT)
 
 .PHONY: test-ui
 test-ui:
-	cd ui && cargo +nightly run --example display
+	cd ui && cargo run --example display
 
 .PHONY: flash
 flash:
-	cd eurorack && cargo +nightly run --bin firmware $(FLAGS) --features $(INSTRUMENT)
+	cd eurorack && cargo run --bin firmware $(FLAGS) --features $(INSTRUMENT)
 
 .PHONY: flash-dfu
 flash-dfu:
-	cd eurorack && cargo +nightly objcopy $(FLAGS) --features $(INSTRUMENT) -- -O binary target/proton.bin
+	cd eurorack && cargo objcopy $(FLAGS) --features $(INSTRUMENT) -- -O binary target/proton.bin
 	dfu-util -a 0 -s 0x08000000:leave -D eurorack/target/proton.bin -d ,0483:df11
 
 .PHONY: debug-test
