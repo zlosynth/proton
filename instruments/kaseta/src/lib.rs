@@ -3,9 +3,14 @@
 use core::convert::TryFrom;
 use core::fmt;
 
+use sirena::memory_manager::MemoryManager;
+
 use proton_control::input_snapshot::InputSnapshot;
 use proton_ui::reaction::Reaction;
 use proton_ui::state::*;
+
+use kaseta_control::{self, Cache, ControlAction, DSPReaction};
+use kaseta_dsp::processor::Processor;
 
 const NAME: &str = "Kaseta";
 const PRE_AMP_ATTRIBUTE: &str = "pre-amp";
@@ -20,11 +25,13 @@ pub trait Rand {
 }
 
 pub struct Instrument {
-    _sample_rate: u32,
+    processor: Processor,
+    cache: Cache,
 }
 
 fn writter(destination: &mut dyn fmt::Write, value: f32) {
-    write!(destination, "{:.2}%", value).unwrap();
+    // write!(destination, "{:.2}%", value).unwrap();
+    write!(destination, "%").unwrap();
 }
 
 impl Instrument {
@@ -47,13 +54,36 @@ impl Instrument {
             .unwrap()
     }
 
-    pub fn new(sample_rate: u32) -> Self {
-        Self {
-            _sample_rate: sample_rate,
-        }
+    pub fn new(sample_rate: u32, memory_manager: &mut MemoryManager) -> Self {
+        let cache = Cache::default();
+        let processor = {
+            let mut processor = Processor::new(sample_rate as f32, memory_manager);
+            let attributes = kaseta_control::cook_dsp_reaction_from_cache(&cache).into();
+            processor.set_attributes(attributes);
+            processor
+        };
+        Self { processor, cache }
     }
 
-    pub fn process(&mut self, _buffer: &mut [(f32, f32)], _randomizer: &mut impl Rand) {}
+    pub fn process(&mut self, buffer: &mut [(f32, f32)], _randomizer: &mut impl Rand) {
+        const BUFFER_LEN: usize = 32;
+        assert!(buffer.len() % BUFFER_LEN == 0);
+
+        let mut chunk_buffer = [0.0; BUFFER_LEN];
+        for chunk_index in 0..buffer.len() / BUFFER_LEN {
+            for (i, frame) in chunk_buffer.iter_mut().enumerate() {
+                let index = chunk_index * BUFFER_LEN + i;
+                *frame = buffer[index].0;
+            }
+
+            // self.processor.process(&mut chunk_buffer);
+
+            for (i, frame) in chunk_buffer.iter().enumerate() {
+                let index = chunk_index * BUFFER_LEN + i;
+                buffer[index].0 = *frame;
+            }
+        }
+    }
 
     pub fn execute(&mut self, _command: Command) {}
 

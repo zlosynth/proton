@@ -10,11 +10,14 @@ mod wrapper;
 mod cstr;
 mod log;
 
+use core::mem::MaybeUninit;
 use std::os::raw::{c_int, c_void};
 
 use embedded_graphics_core::geometry::Size;
 use embedded_graphics_core::pixelcolor::BinaryColor;
 use embedded_graphics_simulator::{OutputSettingsBuilder, SimulatorDisplay, Window};
+
+use sirena::memory_manager::MemoryManager;
 
 #[cfg(feature = "kaseta")]
 use proton_instruments_kaseta::{Instrument, Rand};
@@ -73,7 +76,12 @@ pub unsafe extern "C" fn proton_tilde_setup() {
     let mut display = SimulatorDisplay::new(Size::new(128, 64));
 
     let sample_rate = pd_sys::sys_getsr() as u32;
-    let instrument = Instrument::new(sample_rate);
+    let instrument = {
+        static mut MEMORY: [MaybeUninit<u32>; 64 * 1024 * 1024 / 4] =
+            unsafe { MaybeUninit::uninit().assume_init() };
+        let mut memory_manager = MemoryManager::from(unsafe { &mut MEMORY[..] });
+        Instrument::new(sample_rate, &mut memory_manager)
+    };
     let state = instrument.state();
     #[allow(clippy::needless_borrow)] // It's not needless, it fails without it
     let view = (&state).into();

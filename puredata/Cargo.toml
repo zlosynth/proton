@@ -16,6 +16,7 @@ proton-ui = { path = "../ui" }
 proton-control = { path = "../control" }
 proton-instruments-karplus-strong = { path = "../instruments/karplus_strong", optional = true }
 proton-instruments-kaseta = { path = "../instruments/kaseta", optional = true }
+sirena = { path = "../../sirena" }
 pd-sys = "0.1.0"
 field-offset = "0.3"
 embedded-graphics-simulator = "0.3"

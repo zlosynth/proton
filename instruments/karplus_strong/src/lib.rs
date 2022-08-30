@@ -9,6 +9,8 @@ use core::fmt;
 use heapless::FnvIndexMap as IndexMap;
 use heapless::Vec;
 
+use sirena::memory_manager::MemoryManager;
+
 use proton_control::input_snapshot::InputSnapshot;
 use proton_primitives::ad_envelope::{Ad, Config as AdConfig};
 use proton_primitives::ring_buffer::RingBuffer;
@@ -160,7 +162,7 @@ impl Instrument {
             .unwrap()
     }
 
-    pub fn new(sample_rate: u32) -> Self {
+    pub fn new(sample_rate: u32, _memory_manager: &mut MemoryManager) -> Self {
         assert!(
             sample_rate <= MAX_SAMPLE_RATE,
             "maximum supported sample rate is 48 kHz"

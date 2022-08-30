@@ -5,9 +5,11 @@ pub mod display;
 pub mod encoder;
 pub mod gate_output;
 pub mod led;
+pub mod memory_manager;
 pub mod randomizer;
 
 use daisy::hal;
+use daisy::sdram::Size;
 use hal::adc::{Adc, AdcSampleTime, Enabled, Resolution};
 use hal::delay::DelayFromCountDownTimer;
 use hal::pac::CorePeripherals;
@@ -23,6 +25,7 @@ use display::{Display, DisplayPins};
 use encoder::{EncoderButton, EncoderRotary};
 use gate_output::{GateOutput1, GateOutput2, GateOutput3};
 use led::Led;
+use memory_manager::MemoryManager;
 use randomizer::Randomizer;
 
 pub struct System {
@@ -46,6 +49,7 @@ pub struct System {
     pub adc_1: Adc<ADC1, Enabled>,
     pub adc_2: Adc<ADC2, Enabled>,
     pub randomizer: Randomizer,
+    pub memory_manager: MemoryManager,
 }
 
 impl System {
@@ -57,10 +61,11 @@ impl System {
         let pins = daisy::board_split_gpios!(board, ccdr, dp);
         let led = daisy::board_split_leds!(pins).USER;
         let audio = Audio::init(daisy::board_split_audio!(ccdr, pins));
+        let sdram = daisy::board_split_sdram!(Size::SixtyFour, cp, dp, ccdr, pins);
 
-        let mut delay = DelayFromCountDownTimer::new(dp.TIM3.timer(
+        let mut delay = DelayFromCountDownTimer::new(dp.TIM4.timer(
             100.Hz(),
-            ccdr.peripheral.TIM3,
+            ccdr.peripheral.TIM4,
             &ccdr.clocks,
         ));
 
@@ -120,6 +125,7 @@ impl System {
         };
 
         let randomizer = Randomizer::new(dp.RNG.constrain(ccdr.peripheral.RNG, &ccdr.clocks));
+        let memory_manager = memory_manager::new(sdram);
 
         Self {
             audio,
@@ -142,6 +148,7 @@ impl System {
             adc_1,
             adc_2,
             randomizer,
+            memory_manager,
         }
     }
 }

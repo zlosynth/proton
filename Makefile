@@ -30,8 +30,8 @@ clippy:
 	cd puredata && cargo +nightly clippy --all --features kaseta -- -D warnings
 	cd puredata && cargo +nightly clippy --all --features karplus_strong -- -D warnings
 	cd eurorack && cargo +nightly clippy --all --features kaseta -- -D warnings
-	cd eurorack && cargo +nightly clippy --all --features karplus_strong -- -D warnings
-	cd eurorack && cargo +nightly check --test display --test encoder --test cv_input --test gate_output --features karplus_strong
+	# cd eurorack && cargo +nightly clippy --all --features karplus_strong -- -D warnings
+	# cd eurorack && cargo +nightly check --test display --test encoder --test cv_input --test gate_output --features karplus_strong
 	cd peripherals && cargo +nightly clippy --all --features defmt -- -D warnings
 	cd ui && cargo +nightly clippy --all --features defmt -- -D warnings
 	cd control && cargo +nightly clippy --all --features defmt -- -D warnings

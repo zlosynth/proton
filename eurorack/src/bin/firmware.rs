@@ -93,7 +93,7 @@ mod app {
     fn init(cx: init::Context) -> (Shared, Local, init::Monotonics) {
         defmt::info!("INIT");
 
-        proton_eurorack::initialize_heap();
+        // proton_eurorack::initialize_heap();
 
         let (input_actions_producer, input_actions_consumer) = cx.local.input_actions_queue.split();
         let (input_reactions_producer, input_reactions_consumer) =
@@ -106,6 +106,7 @@ mod app {
         let led = system.led;
         let mono = system.mono;
         let randomizer = system.randomizer;
+        let mut memory_manager = system.memory_manager;
         let mut audio = system.audio;
         audio.spawn();
 
@@ -130,7 +131,7 @@ mod app {
             system.cv_output_2,
         );
 
-        let instrument = Instrument::new(SAMPLE_RATE);
+        let instrument = Instrument::new(SAMPLE_RATE, &mut memory_manager);
         let state = instrument.state();
         #[allow(clippy::needless_borrow)] // It's not needless, it fails without it
         let view = (&state).into();
