@@ -57,21 +57,21 @@ embedded-graphics = "0.7"
 [profile.dev]
 codegen-units = 1 # better optimizations
 debug = true # symbols are nice and they don't increase the size on flash
-opt-level = 's' # test with the same optimization as released code
+opt-level = 3 # test with the same optimization as released code
 
 [profile.test]
 codegen-units = 1 # better optimizations
 debug = true # symbols are nice and they don't increase the size on flash
-opt-level = 's' # test with the same optimization as released code
+opt-level = 3 # test with the same optimization as released code
 
 [profile.release]
 codegen-units = 1 # better optimizations
 debug = true # symbols are nice and they don't increase the size on flash
 lto = true # better optimizations
-opt-level = 's' # optimize for size
+opt-level = 3 # optimize for size
 
 [profile.bench]
 codegen-units = 1 # better optimizations
 debug = true # symbols are nice and they don't increase the size on flash
 lto = true # better optimizations
-opt-level = 's' # optimize for size
+opt-level = 3 # optimize for size
