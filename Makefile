@@ -5,7 +5,6 @@ all: format clippy test
 
 .PHONY: check-format
 check-format:
-	cd puredata && cargo fmt --all -- --check
 	cd eurorack && cargo fmt --all -- --check
 	cd peripherals && cargo fmt --all -- --check
 	cd ui && cargo fmt --all -- --check
@@ -14,7 +13,6 @@ check-format:
 
 .PHONY: format
 format:
-	cd puredata && cargo fmt --all
 	cd eurorack && cargo fmt --all
 	cd peripherals && cargo fmt --all
 	cd ui && cargo fmt --all
@@ -23,7 +21,6 @@ format:
 
 .PHONY: clippy
 clippy:
-	cd puredata && cargo clippy --all --features kaseta -- -D warnings
 	cd eurorack && cargo clippy --all --features kaseta -- -D warnings
 	cd peripherals && cargo clippy --all --features defmt -- -D warnings
 	cd ui && cargo clippy --all --features defmt -- -D warnings
@@ -40,19 +37,11 @@ test:
 
 .PHONY: update
 update:
-	cd puredata && cargo update
 	cd eurorack && cargo update
 	cd peripherals && cargo update
 	cd ui && cargo update
 	cd control && cargo update
 	cd instruments/kaseta && cargo update
-
-.PHONY: puredata
-puredata:
-	mkdir -p ~/.local/lib/pd/extra
-	cd puredata && cargo build --release --features $(INSTRUMENT)
-	cp puredata/target/release/libproton_puredata.so ~/.local/lib/pd/extra/proton~.pd_linux
-	pd puredata/proton.pd
 
 .PHONY: test-embedded
 test-embedded:
