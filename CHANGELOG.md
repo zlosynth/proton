@@ -13,6 +13,7 @@ backwards compatibility.
 * Implement CV output.
 * Introduce binding to Kaseta.
 * Process input audio.
+* Remove global allocator and archive karplus strong.
 
 ## 0.6.0
 

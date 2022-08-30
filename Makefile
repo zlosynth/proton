@@ -11,7 +11,6 @@ check-format:
 	cd ui && cargo +nightly fmt --all -- --check
 	cd control && cargo +nightly fmt --all -- --check
 	cd primitives && cargo +nightly fmt --all -- --check
-	cd instruments/karplus_strong && cargo +nightly fmt --all -- --check
 	cd instruments/kaseta && cargo +nightly fmt --all -- --check
 
 .PHONY: format
@@ -22,21 +21,16 @@ format:
 	cd ui && cargo +nightly fmt --all
 	cd control && cargo +nightly fmt --all
 	cd primitives && cargo +nightly fmt --all
-	cd instruments/karplus_strong && cargo +nightly fmt --all
 	cd instruments/kaseta && cargo +nightly fmt --all
 
 .PHONY: clippy
 clippy:
 	cd puredata && cargo +nightly clippy --all --features kaseta -- -D warnings
-	cd puredata && cargo +nightly clippy --all --features karplus_strong -- -D warnings
 	cd eurorack && cargo +nightly clippy --all --features kaseta -- -D warnings
-	cd eurorack && cargo +nightly clippy --all --features karplus_strong -- -D warnings
-	cd eurorack && cargo +nightly check --test display --test encoder --test cv_input --test gate_output --features karplus_strong
 	cd peripherals && cargo +nightly clippy --all --features defmt -- -D warnings
 	cd ui && cargo +nightly clippy --all --features defmt -- -D warnings
 	cd control && cargo +nightly clippy --all --features defmt -- -D warnings
 	cd primitives && cargo +nightly clippy --all --features defmt -- -D warnings
-	cd instruments/karplus_strong && cargo +nightly clippy --all --features defmt -- -D warnings
 	cd instruments/kaseta && cargo +nightly clippy --all --features defmt -- -D warnings
 	cd instruments/kaseta && cargo +nightly check --benches --all
 
@@ -46,7 +40,6 @@ test:
 	cd ui && cargo +nightly test --features defmt --all
 	cd control && cargo +nightly test --features defmt --all
 	cd primitives && cargo +nightly test --all --features defmt
-	cd instruments/karplus_strong && cargo +nightly test --all --features defmt
 	cd instruments/kaseta && cargo +nightly test --all --features defmt
 
 .PHONY: update
@@ -57,7 +50,6 @@ update:
 	cd ui && cargo +nightly update
 	cd control && cargo +nightly update
 	cd primitives && cargo +nightly update
-	cd instruments/karplus_strong && cargo +nightly update
 	cd instruments/kaseta && cargo +nightly update
 
 .PHONY: puredata

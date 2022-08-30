@@ -14,7 +14,6 @@ crate-type = ["cdylib"]
 [dependencies]
 proton-ui = { path = "../ui" }
 proton-control = { path = "../control" }
-proton-instruments-karplus-strong = { path = "../instruments/karplus_strong", optional = true }
 proton-instruments-kaseta = { path = "../instruments/kaseta", optional = true }
 pd-sys = "0.1.0"
 field-offset = "0.3"
@@ -24,4 +23,3 @@ rand = "0.8"
 
 [features]
 kaseta = ["proton-instruments-kaseta"]
-karplus_strong = ["proton-instruments-karplus-strong"]

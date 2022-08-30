@@ -19,9 +19,6 @@ use embedded_graphics_simulator::{OutputSettingsBuilder, SimulatorDisplay, Windo
 #[cfg(feature = "kaseta")]
 use proton_instruments_kaseta::{Instrument, Rand};
 
-#[cfg(feature = "karplus_strong")]
-use proton_instruments_karplus_strong::{Instrument, Rand};
-
 use proton_ui::action::Action;
 use proton_ui::display::draw as draw_display;
 use proton_ui::reaction::Reaction;

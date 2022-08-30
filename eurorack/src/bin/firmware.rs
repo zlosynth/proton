@@ -18,9 +18,6 @@ mod app {
     #[cfg(feature = "kaseta")]
     use proton_instruments_kaseta::Instrument;
 
-    #[cfg(feature = "karplus_strong")]
-    use proton_instruments_karplus_strong::Instrument;
-
     use proton_control::input_snapshot::InputSnapshot;
     use proton_eurorack::system::audio::{Audio, SAMPLE_RATE};
     use proton_eurorack::system::display::Display;
@@ -92,8 +89,6 @@ mod app {
     )]
     fn init(cx: init::Context) -> (Shared, Local, init::Monotonics) {
         defmt::info!("INIT");
-
-        proton_eurorack::initialize_heap();
 
         let (input_actions_producer, input_actions_consumer) = cx.local.input_actions_queue.split();
         let (input_reactions_producer, input_reactions_consumer) =
