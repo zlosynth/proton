@@ -5,7 +5,6 @@ pub mod display;
 pub mod encoder;
 pub mod gate_output;
 pub mod led;
-pub mod randomizer;
 
 use daisy::hal;
 use hal::adc::{Adc, AdcSampleTime, Enabled, Resolution};
@@ -23,7 +22,6 @@ use display::{Display, DisplayPins};
 use encoder::{EncoderButton, EncoderRotary};
 use gate_output::{GateOutput1, GateOutput2, GateOutput3};
 use led::Led;
-use randomizer::Randomizer;
 
 pub struct System {
     pub audio: Audio,
@@ -45,7 +43,6 @@ pub struct System {
     pub cv_output_2: CvOutput2,
     pub adc_1: Adc<ADC1, Enabled>,
     pub adc_2: Adc<ADC2, Enabled>,
-    pub randomizer: Randomizer,
 }
 
 impl System {
@@ -119,8 +116,6 @@ impl System {
             (adc_1.enable(), adc_2.enable())
         };
 
-        let randomizer = Randomizer::new(dp.RNG.constrain(ccdr.peripheral.RNG, &ccdr.clocks));
-
         Self {
             audio,
             display,
@@ -141,7 +136,6 @@ impl System {
             cv_output_2,
             adc_1,
             adc_2,
-            randomizer,
         }
     }
 }

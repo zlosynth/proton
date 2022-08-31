@@ -21,7 +21,6 @@ mod app {
     use proton_control::input_snapshot::InputSnapshot;
     use proton_eurorack::system::audio::{Audio, SAMPLE_RATE};
     use proton_eurorack::system::display::Display;
-    use proton_eurorack::system::randomizer::Randomizer;
     use proton_eurorack::system::System;
     use proton_ui::action::Action as InputAction;
     use proton_ui::display::draw as draw_view_on_display;
@@ -64,7 +63,6 @@ mod app {
     #[local]
     struct Local {
         audio: Audio,
-        randomizer: Randomizer,
         instrument: Instrument,
         led: LedUser,
         user_input: UserInput,
@@ -100,7 +98,6 @@ mod app {
         let display = system.display;
         let led = system.led;
         let mono = system.mono;
-        let randomizer = system.randomizer;
         let mut audio = system.audio;
         audio.spawn();
 
@@ -140,7 +137,6 @@ mod app {
             Shared {},
             Local {
                 audio,
-                randomizer,
                 instrument,
                 led,
                 user_input,
@@ -159,14 +155,13 @@ mod app {
         )
     }
 
-    #[task(binds = DMA1_STR1, local = [input_reactions_consumer, control_input_consumer, randomizer, instrument, audio], priority = 4)]
+    #[task(binds = DMA1_STR1, local = [input_reactions_consumer, control_input_consumer, instrument, audio], priority = 4)]
     fn handle_dsp(cx: handle_dsp::Context) {
         use core::convert::TryInto;
 
         let input_reactions_consumer = cx.local.input_reactions_consumer;
         let control_input_consumer = cx.local.control_input_consumer;
         let instrument = cx.local.instrument;
-        let randomizer = cx.local.randomizer;
         let audio = cx.local.audio;
 
         while let Some(control_snapshot) = control_input_consumer.dequeue() {
@@ -179,7 +174,7 @@ mod app {
         }
 
         audio.update_buffer(|buffer| {
-            instrument.process(&mut buffer[..], randomizer);
+            instrument.process(&mut buffer[..]);
         });
     }
 

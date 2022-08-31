@@ -15,10 +15,6 @@ const BIAS_ATTRIBUTE: &str = "bias";
 const WOW_FREQUENCY_ATTRIBUTE: &str = "wow frequency";
 const WOW_DEPTH_ATTRIBUTE: &str = "wow depth";
 
-pub trait Rand {
-    fn generate(&mut self) -> u16;
-}
-
 pub struct Instrument {
     _sample_rate: u32,
 }
@@ -54,7 +50,7 @@ impl Instrument {
         }
     }
 
-    pub fn process(&mut self, _buffer: &mut [(f32, f32)], _randomizer: &mut impl Rand) {}
+    pub fn process(&mut self, _buffer: &mut [(f32, f32)]) {}
 
     pub fn execute(&mut self, _command: Command) {}
 
