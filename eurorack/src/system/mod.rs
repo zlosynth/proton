@@ -7,6 +7,7 @@ pub mod gate_output;
 pub mod led;
 
 use daisy::hal;
+use daisy::sdram::SDRAM;
 use hal::adc::{Adc, AdcSampleTime, Enabled, Resolution};
 use hal::delay::DelayFromCountDownTimer;
 use hal::pac::CorePeripherals;
@@ -43,6 +44,7 @@ pub struct System {
     pub cv_output_2: CvOutput2,
     pub adc_1: Adc<ADC1, Enabled>,
     pub adc_2: Adc<ADC2, Enabled>,
+    pub sdram: SDRAM,
 }
 
 impl System {
@@ -54,10 +56,11 @@ impl System {
         let pins = daisy::board_split_gpios!(board, ccdr, dp);
         let led = daisy::board_split_leds!(pins).USER;
         let audio = Audio::init(daisy::board_split_audio!(ccdr, pins));
+        let sdram = daisy::board_split_sdram!(cp, dp, ccdr, pins);
 
-        let mut delay = DelayFromCountDownTimer::new(dp.TIM3.timer(
+        let mut delay = DelayFromCountDownTimer::new(dp.TIM2.timer(
             100.Hz(),
-            ccdr.peripheral.TIM3,
+            ccdr.peripheral.TIM2,
             &ccdr.clocks,
         ));
 
@@ -136,6 +139,7 @@ impl System {
             cv_output_2,
             adc_1,
             adc_2,
+            sdram,
         }
     }
 }

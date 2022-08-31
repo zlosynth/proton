@@ -5,13 +5,14 @@ use proton_eurorack as _; // global logger + panicking-behavior
 
 #[rtic::app(device = stm32h7xx_hal::pac, peripherals = true, dispatchers = [EXTI0, EXTI1, EXTI2])]
 mod app {
-    use daisy::led::{Led, LedUser};
+    use core::mem::MaybeUninit;
 
     use fugit::ExtU64;
     use heapless::spsc::{Consumer, Producer, Queue};
     use systick_monotonic::Systick;
 
     use daisy::hal;
+    use daisy::led::{Led, LedUser};
     use hal::adc::{Adc, Enabled};
     use hal::pac::{ADC1, ADC2};
 
@@ -22,7 +23,7 @@ mod app {
     use proton_eurorack::system::audio::{Audio, SAMPLE_RATE};
     use proton_eurorack::system::display::Display;
     use proton_eurorack::system::System;
-    use proton_instruments_interface::Instrument as _;
+    use proton_instruments_interface::{Instrument as _, MemoryManager};
     use proton_ui::action::Action as InputAction;
     use proton_ui::display::draw as draw_view_on_display;
     use proton_ui::reaction::Reaction as InputReaction;
@@ -99,6 +100,7 @@ mod app {
         let display = system.display;
         let led = system.led;
         let mono = system.mono;
+        let sdram = system.sdram;
         let mut audio = system.audio;
         audio.spawn();
 
@@ -123,7 +125,17 @@ mod app {
             system.cv_output_2,
         );
 
-        let instrument = Instrument::new(SAMPLE_RATE);
+        let instrument = {
+            let mut memory_manager = {
+                let ram_slice = unsafe {
+                    let ram_items = sdram.size() / core::mem::size_of::<MaybeUninit<u32>>();
+                    let ram_ptr = sdram.base_address as *mut MaybeUninit<u32>;
+                    core::slice::from_raw_parts_mut(ram_ptr, ram_items)
+                };
+                MemoryManager::from(ram_slice)
+            };
+            Instrument::new(SAMPLE_RATE, &mut memory_manager)
+        };
         let state = instrument.state();
         #[allow(clippy::needless_borrow)] // It's not needless, it fails without it
         let view: View = (&state).into();

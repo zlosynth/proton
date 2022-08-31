@@ -4,7 +4,7 @@ use core::convert::TryFrom;
 use core::fmt;
 
 use proton_control::input_snapshot::InputSnapshot;
-use proton_instruments_interface::Instrument as InstrumentTrait;
+use proton_instruments_interface::{Instrument as InstrumentTrait, MemoryManager};
 use proton_ui::reaction::Reaction;
 use proton_ui::state::*;
 
@@ -25,12 +25,10 @@ fn writter(destination: &mut dyn fmt::Write, value: f32) {
     write!(destination, "{}%", value).unwrap();
 }
 
-impl Instrument {}
-
 impl InstrumentTrait for Instrument {
     type Command = Command;
 
-    fn new(sample_rate: u32) -> Self {
+    fn new(sample_rate: u32, _memory_manager: &mut MemoryManager) -> Self {
         Self {
             _sample_rate: sample_rate,
         }
