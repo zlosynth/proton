@@ -4,6 +4,7 @@ use core::convert::TryFrom;
 use core::fmt;
 
 use proton_control::input_snapshot::InputSnapshot;
+use proton_instruments_interface::Instrument as InstrumentTrait;
 use proton_ui::reaction::Reaction;
 use proton_ui::state::*;
 
@@ -24,8 +25,18 @@ fn writter(destination: &mut dyn fmt::Write, value: f32) {
     write!(destination, "{}%", value).unwrap();
 }
 
-impl Instrument {
-    pub fn state(&self) -> State {
+impl Instrument {}
+
+impl InstrumentTrait for Instrument {
+    type Command = Command;
+
+    fn new(sample_rate: u32) -> Self {
+        Self {
+            _sample_rate: sample_rate,
+        }
+    }
+
+    fn state(&self) -> State {
         State::new(NAME)
             .with_attributes(&[
                 Attribute::new(PRE_AMP_ATTRIBUTE)
@@ -44,17 +55,11 @@ impl Instrument {
             .unwrap()
     }
 
-    pub fn new(sample_rate: u32) -> Self {
-        Self {
-            _sample_rate: sample_rate,
-        }
-    }
+    fn process(&mut self, _buffer: &mut [(f32, f32)]) {}
 
-    pub fn process(&mut self, _buffer: &mut [(f32, f32)]) {}
+    fn execute(&mut self, _command: Command) {}
 
-    pub fn execute(&mut self, _command: Command) {}
-
-    pub fn update_control(&mut self, _snapshot: InputSnapshot) {}
+    fn update_control(&mut self, _snapshot: InputSnapshot) {}
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]

@@ -521,6 +521,7 @@ dependencies = [
  "nb 1.0.0",
  "panic-probe",
  "proton-control",
+ "proton-instruments-interface",
  "proton-instruments-kaseta",
  "proton-peripherals",
  "proton-ui",
@@ -530,10 +531,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "proton-instruments-interface"
+version = "0.6.0"
+dependencies = [
+ "proton-control",
+ "proton-ui",
+]
+
+[[package]]
 name = "proton-instruments-kaseta"
 version = "0.6.0"
 dependencies = [
  "proton-control",
+ "proton-instruments-interface",
  "proton-ui",
 ]
 

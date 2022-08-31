@@ -1,6 +1,6 @@
 [package]
 authors = ["Petr Horáček <hrck@protonmail.com>"]
-name = "proton-instruments-kaseta"
+name = "proton-instruments-interface"
 version = "0.6.0" # hack/release.sh
 edition = "2021"
 license = "GPL-3.0-or-later"
@@ -9,13 +9,5 @@ readme = "../../README.md"
 publish = false
 
 [dependencies]
-proton-instruments-interface = { path = "../interface" }
 proton-ui = { path = "../../ui" }
 proton-control = { path = "../../control" }
-
-[dependencies.defmt]
-version  = "0.3"
-optional = true
-
-[features]
-defmt = ["dep:defmt"]

@@ -33,6 +33,7 @@ proton-peripherals = { path = "../peripherals" }
 proton-ui = { path = "../ui", features = ["defmt"] }
 proton-control = { path = "../control", features = ["defmt"] }
 proton-instruments-kaseta = { path = "../instruments/kaseta", optional = true }
+proton-instruments-interface = { path = "../instruments/interface" }
 cortex-m = "0.7"
 cortex-m-rtic = "1"
 systick-monotonic = "1"

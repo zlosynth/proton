@@ -9,6 +9,7 @@ check-format:
 	cd peripherals && cargo fmt --all -- --check
 	cd ui && cargo fmt --all -- --check
 	cd control && cargo fmt --all -- --check
+	cd instruments/interface && cargo fmt --all -- --check
 	cd instruments/kaseta && cargo fmt --all -- --check
 
 .PHONY: format
@@ -17,6 +18,7 @@ format:
 	cd peripherals && cargo fmt --all
 	cd ui && cargo fmt --all
 	cd control && cargo fmt --all
+	cd instruments/interface && cargo fmt --all
 	cd instruments/kaseta && cargo fmt --all
 
 .PHONY: clippy
@@ -25,6 +27,7 @@ clippy:
 	cd peripherals && cargo clippy --all --features defmt -- -D warnings
 	cd ui && cargo clippy --all --features defmt -- -D warnings
 	cd control && cargo clippy --all --features defmt -- -D warnings
+	cd instruments/interface && cargo clippy --all -- -D warnings
 	cd instruments/kaseta && cargo clippy --all --features defmt -- -D warnings
 	cd instruments/kaseta && cargo check --benches --all
 
@@ -41,6 +44,7 @@ update:
 	cd peripherals && cargo update
 	cd ui && cargo update
 	cd control && cargo update
+	cd instruments/interface && cargo update
 	cd instruments/kaseta && cargo update
 
 .PHONY: test-embedded
