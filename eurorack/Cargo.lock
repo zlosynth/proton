@@ -384,6 +384,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "kaseta-control"
+version = "0.1.0"
+dependencies = [
+ "kaseta-dsp",
+ "libm",
+ "micromath 1.1.1",
+]
+
+[[package]]
+name = "kaseta-dsp"
+version = "0.1.0"
+dependencies = [
+ "libm",
+ "sirena",
+]
+
+[[package]]
 name = "lazy_static"
 version = "1.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -567,6 +584,8 @@ dependencies = [
 name = "proton-instruments-kaseta"
 version = "0.6.0"
 dependencies = [
+ "kaseta-control",
+ "kaseta-dsp",
  "proton-control",
  "proton-instruments-interface",
  "proton-ui",

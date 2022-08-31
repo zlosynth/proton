@@ -8,6 +8,8 @@ use proton_instruments_interface::{Instrument as InstrumentTrait, MemoryManager}
 use proton_ui::reaction::Reaction;
 use proton_ui::state::*;
 
+use kaseta_dsp::processor::{Attributes, Processor};
+
 const NAME: &str = "Kaseta";
 const PRE_AMP_ATTRIBUTE: &str = "pre-amp";
 const DRIVE_ATTRIBUTE: &str = "drive";
@@ -17,7 +19,7 @@ const WOW_FREQUENCY_ATTRIBUTE: &str = "wow frequency";
 const WOW_DEPTH_ATTRIBUTE: &str = "wow depth";
 
 pub struct Instrument {
-    _sample_rate: u32,
+    processor: Processor,
 }
 
 fn writter(destination: &mut dyn fmt::Write, value: f32) {
@@ -28,10 +30,17 @@ fn writter(destination: &mut dyn fmt::Write, value: f32) {
 impl InstrumentTrait for Instrument {
     type Command = Command;
 
-    fn new(sample_rate: u32, _memory_manager: &mut MemoryManager) -> Self {
-        Self {
-            _sample_rate: sample_rate,
-        }
+    fn new(sample_rate: u32, memory_manager: &mut MemoryManager) -> Self {
+        let mut processor = Processor::new(sample_rate as f32, memory_manager);
+        processor.set_attributes(Attributes {
+            pre_amp: 0.1,
+            drive: 1.0,
+            saturation: 0.5,
+            width: 0.5,
+            wow_frequency: 0.0,
+            wow_depth: 0.0,
+        });
+        Self { processor }
     }
 
     fn state(&self) -> State {
@@ -53,7 +62,18 @@ impl InstrumentTrait for Instrument {
             .unwrap()
     }
 
-    fn process(&mut self, _buffer: &mut [(f32, f32)]) {}
+    fn process(&mut self, buffer: &mut [(f32, f32)]) {
+        for chunk in buffer.chunks_exact_mut(32) {
+            let mut buffer = [0.0; 32];
+            for (i, x) in chunk.iter_mut().enumerate() {
+                buffer[i] = x.0;
+            }
+            self.processor.process(&mut buffer);
+            for (i, x) in buffer.iter_mut().enumerate() {
+                chunk[i] = (*x, 0.0);
+            }
+        }
+    }
 
     fn execute(&mut self, _command: Command) {}
 

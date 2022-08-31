@@ -12,6 +12,8 @@ publish = false
 proton-instruments-interface = { path = "../interface" }
 proton-ui = { path = "../../ui" }
 proton-control = { path = "../../control" }
+kaseta-dsp = { path = "../../../kaseta/dsp" }
+kaseta-control = { path = "../../../kaseta/control" }
 
 [dependencies.defmt]
 version  = "0.3"
