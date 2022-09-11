@@ -148,4 +148,6 @@ impl System {
 /// data, from both internal andexternal memories.
 fn enable_cache(cp: &mut CorePeripherals) {
     cp.SCB.enable_icache();
+    /// NOTE: This requires cache management around all use of DMA.
+    cp.SCB.enable_dcache(&mut cp.CPUID);
 }
