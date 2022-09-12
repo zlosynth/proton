@@ -197,7 +197,7 @@ mod app {
         let input_actions_producer = cx.local.input_actions_producer;
 
         for action in user_input.process() {
-            input_actions_producer.enqueue(action).unwrap();
+            let _ = input_actions_producer.enqueue(action);
         }
 
         read_user_controls::spawn_after(1.millis()).unwrap();
