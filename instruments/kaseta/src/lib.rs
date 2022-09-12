@@ -74,18 +74,16 @@ impl InstrumentTrait for Instrument {
     }
 
     fn execute(&mut self, command: Command) {
-        self.apply_action(command.into());
+        let dsp_reaction = control::reduce_control_action(command.into(), &mut self.cache);
+        self.processor.set_attributes(dsp_reaction.into());
     }
 
     fn update_control(&mut self, snapshot: InputSnapshot) {
-        self.apply_action(ControlAction::SetDriveCV(1.0 - snapshot.pot.value));
-    }
-}
-
-impl Instrument {
-    fn apply_action(&mut self, action: ControlAction) {
-        let dsp_reaction = control::reduce_control_action(action, &mut self.cache);
-        self.processor.set_attributes(dsp_reaction.into());
+        self.cache.drive_cv = snapshot.cv[0].value;
+        self.cache.saturation_cv = snapshot.cv[1].value;
+        self.cache.bias_cv = snapshot.pot.value;
+        let attributes = control::cook_dsp_reaction_from_cache(&self.cache).into();
+        self.processor.set_attributes(attributes);
     }
 }
 
