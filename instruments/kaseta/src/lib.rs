@@ -8,7 +8,8 @@ use proton_instruments_interface::{Instrument as InstrumentTrait, MemoryManager}
 use proton_ui::reaction::Reaction;
 use proton_ui::state::*;
 
-use kaseta_dsp::processor::{Attributes, Processor};
+use kaseta_control::{self as control, Cache, ControlAction};
+use kaseta_dsp::processor::Processor;
 
 const NAME: &str = "Kaseta";
 const PRE_AMP_ATTRIBUTE: &str = "pre-amp";
@@ -20,6 +21,7 @@ const WOW_DEPTH_ATTRIBUTE: &str = "wow depth";
 
 pub struct Instrument {
     processor: Processor,
+    cache: Cache,
 }
 
 fn writter(destination: &mut dyn fmt::Write, value: f32) {
@@ -32,32 +34,28 @@ impl InstrumentTrait for Instrument {
 
     fn new(sample_rate: u32, memory_manager: &mut MemoryManager) -> Self {
         let mut processor = Processor::new(sample_rate as f32, memory_manager);
-        processor.set_attributes(Attributes {
-            pre_amp: 0.1,
-            drive: 1.0,
-            saturation: 0.5,
-            width: 0.5,
-            wow_frequency: 0.0,
-            wow_depth: 0.0,
-        });
-        Self { processor }
+        let cache = Cache::default();
+        let attributes = control::cook_dsp_reaction_from_cache(&cache).into();
+        processor.set_attributes(attributes);
+        Self { processor, cache }
     }
 
     fn state(&self) -> State {
+        let attributes = control::cook_dsp_reaction_from_cache(&self.cache);
         State::new(NAME)
             .with_attributes(&[
                 Attribute::new(PRE_AMP_ATTRIBUTE)
-                    .with_value_f32(ValueF32::new(0.5).with_writter(writter)),
+                    .with_value_f32(ValueF32::new(attributes.pre_amp).with_writter(writter)),
                 Attribute::new(DRIVE_ATTRIBUTE)
-                    .with_value_f32(ValueF32::new(0.5).with_writter(writter)),
+                    .with_value_f32(ValueF32::new(attributes.drive).with_writter(writter)),
                 Attribute::new(SATURATION_ATTRIBUTE)
-                    .with_value_f32(ValueF32::new(0.5).with_writter(writter)),
+                    .with_value_f32(ValueF32::new(attributes.saturation).with_writter(writter)),
                 Attribute::new(BIAS_ATTRIBUTE)
-                    .with_value_f32(ValueF32::new(0.5).with_writter(writter)),
+                    .with_value_f32(ValueF32::new(attributes.bias).with_writter(writter)),
                 Attribute::new(WOW_FREQUENCY_ATTRIBUTE)
-                    .with_value_f32(ValueF32::new(0.5).with_writter(writter)),
+                    .with_value_f32(ValueF32::new(attributes.wow_frequency).with_writter(writter)),
                 Attribute::new(WOW_DEPTH_ATTRIBUTE)
-                    .with_value_f32(ValueF32::new(0.5).with_writter(writter)),
+                    .with_value_f32(ValueF32::new(attributes.wow_depth).with_writter(writter)),
             ])
             .unwrap()
     }
@@ -75,20 +73,57 @@ impl InstrumentTrait for Instrument {
         }
     }
 
-    fn execute(&mut self, _command: Command) {}
+    fn execute(&mut self, command: Command) {
+        self.apply_action(command.into());
+    }
 
-    fn update_control(&mut self, _snapshot: InputSnapshot) {}
+    fn update_control(&mut self, snapshot: InputSnapshot) {
+        self.apply_action(ControlAction::SetDriveCV(1.0 - snapshot.pot.value));
+    }
 }
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+impl Instrument {
+    fn apply_action(&mut self, action: ControlAction) {
+        let dsp_reaction = control::reduce_control_action(action, &mut self.cache);
+        self.processor.set_attributes(dsp_reaction.into());
+    }
+}
+
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub enum Command {
-    Foo,
+    SetPreAmp(f32),
+    SetDrive(f32),
+    SetSaturation(f32),
+    SetBias(f32),
+    SetWowFrequency(f32),
+    SetWowDepth(f32),
 }
 
 impl TryFrom<Reaction> for Command {
-    type Error = &'static str;
+    type Error = ();
 
-    fn try_from(_other: Reaction) -> Result<Self, Self::Error> {
-        Ok(Command::Foo)
+    fn try_from(other: Reaction) -> Result<Self, Self::Error> {
+        match other {
+            Reaction::SetValue(PRE_AMP_ATTRIBUTE, value) => Ok(Command::SetPreAmp(value)),
+            Reaction::SetValue(DRIVE_ATTRIBUTE, value) => Ok(Command::SetDrive(value)),
+            Reaction::SetValue(SATURATION_ATTRIBUTE, value) => Ok(Command::SetSaturation(value)),
+            Reaction::SetValue(BIAS_ATTRIBUTE, value) => Ok(Command::SetBias(value)),
+            Reaction::SetValue(WOW_FREQUENCY_ATTRIBUTE, value) => Ok(Command::SetWowFrequency(value)),
+            Reaction::SetValue(WOW_DEPTH_ATTRIBUTE, value) => Ok(Command::SetWowDepth(value)),
+            _ => Err(()),
+        }
+    }
+}
+
+impl From<Command> for ControlAction {
+    fn from(other: Command) -> ControlAction {
+        match other {
+            Command::SetPreAmp(value) => ControlAction::SetPreAmpPot(value),
+            Command::SetDrive(value) => ControlAction::SetDrivePot(value),
+            Command::SetSaturation(value) => ControlAction::SetSaturationPot(value),
+            Command::SetBias(value) => ControlAction::SetBiasPot(value),
+            Command::SetWowFrequency(value) => ControlAction::SetWowFrequencyPot(value),
+            Command::SetWowDepth(value) => ControlAction::SetWowDepthPot(value),
+        }
     }
 }
