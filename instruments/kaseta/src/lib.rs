@@ -22,6 +22,9 @@ const WOW_FREQUENCY_ATTRIBUTE: &str = "wow frequency";
 const WOW_DEPTH_ATTRIBUTE: &str = "wow depth";
 const WOW_FILTER_ATTRIBUTE: &str = "wow filter";
 const DELAY_ATTRIBUTE: &str = "delay";
+const DELAY_REWIND_FORWARD_ATTRIBUTE: &str = "rewind <";
+const DELAY_REWIND_BACKWARD_ATTRIBUTE: &str = "rewind >";
+const DELAY_RANGE_ATTRIBUTE: &str = "range";
 const DELAY_1_POSITION_ATTRIBUTE: &str = "position 1";
 const DELAY_2_POSITION_ATTRIBUTE: &str = "position 2";
 const DELAY_3_POSITION_ATTRIBUTE: &str = "position 3";
@@ -34,6 +37,8 @@ const DELAY_1_FEEDBACK_ATTRIBUTE: &str = "feedback 1";
 const DELAY_2_FEEDBACK_ATTRIBUTE: &str = "feedback 2";
 const DELAY_3_FEEDBACK_ATTRIBUTE: &str = "feedback 3";
 const DELAY_4_FEEDBACK_ATTRIBUTE: &str = "feedback 4";
+
+const OFF_ON: [&str; 2] = ["off", "on"];
 
 pub struct Instrument {
     processor: Processor,
@@ -73,8 +78,15 @@ impl InstrumentTrait for Instrument {
                     .with_value_f32(ValueF32::new(attributes.wow_depth).with_writter(writter)),
                 Attribute::new(WOW_FILTER_ATTRIBUTE)
                     .with_value_f32(ValueF32::new(attributes.wow_filter).with_writter(writter)),
+                Attribute::new(""),
                 Attribute::new(DELAY_ATTRIBUTE)
                     .with_value_f32(ValueF32::new(attributes.delay_length).with_writter(writter)),
+                Attribute::new(DELAY_REWIND_FORWARD_ATTRIBUTE)
+                    .with_value_select(ValueSelect::new(&OFF_ON).unwrap()),
+                Attribute::new(DELAY_REWIND_BACKWARD_ATTRIBUTE)
+                    .with_value_select(ValueSelect::new(&OFF_ON).unwrap()),
+                Attribute::new(DELAY_RANGE_ATTRIBUTE)
+                    .with_value_select(ValueSelect::new(&OFF_ON).unwrap()),
                 Attribute::new(DELAY_1_POSITION_ATTRIBUTE).with_value_f32(
                     ValueF32::new(attributes.delay_head_position[0]).with_writter(writter),
                 ),
@@ -100,16 +112,16 @@ impl InstrumentTrait for Instrument {
                     ValueF32::new(attributes.delay_head_volume[3]).with_writter(writter),
                 ),
                 Attribute::new(DELAY_1_FEEDBACK_ATTRIBUTE).with_value_f32(
-                    ValueF32::new(attributes.delay_head_feedback_amount[0]).with_writter(writter),
+                    ValueF32::new(attributes.delay_head_feedback[0]).with_writter(writter),
                 ),
                 Attribute::new(DELAY_2_FEEDBACK_ATTRIBUTE).with_value_f32(
-                    ValueF32::new(attributes.delay_head_feedback_amount[1]).with_writter(writter),
+                    ValueF32::new(attributes.delay_head_feedback[1]).with_writter(writter),
                 ),
                 Attribute::new(DELAY_3_FEEDBACK_ATTRIBUTE).with_value_f32(
-                    ValueF32::new(attributes.delay_head_feedback_amount[2]).with_writter(writter),
+                    ValueF32::new(attributes.delay_head_feedback[2]).with_writter(writter),
                 ),
                 Attribute::new(DELAY_4_FEEDBACK_ATTRIBUTE).with_value_f32(
-                    ValueF32::new(attributes.delay_head_feedback_amount[3]).with_writter(writter),
+                    ValueF32::new(attributes.delay_head_feedback[3]).with_writter(writter),
                 ),
             ])
             .unwrap()
@@ -151,6 +163,9 @@ pub enum Command {
     SetWowDepth(f32),
     SetWowFilter(f32),
     SetDelay(f32),
+    SetDelayRewindForward(bool),
+    SetDelayRewindBackward(bool),
+    SetDelayRange(bool),
     SetDelay1Position(f32),
     SetDelay2Position(f32),
     SetDelay3Position(f32),
@@ -179,6 +194,15 @@ impl TryFrom<Reaction> for Command {
             Reaction::SetValue(WOW_DEPTH_ATTRIBUTE, value) => Ok(Command::SetWowDepth(value)),
             Reaction::SetValue(WOW_FILTER_ATTRIBUTE, value) => Ok(Command::SetWowFilter(value)),
             Reaction::SetValue(DELAY_ATTRIBUTE, value) => Ok(Command::SetDelay(value)),
+            Reaction::SelectValue(DELAY_REWIND_FORWARD_ATTRIBUTE, value) => {
+                Ok(Command::SetDelayRewindForward(value == "on"))
+            }
+            Reaction::SelectValue(DELAY_REWIND_BACKWARD_ATTRIBUTE, value) => {
+                Ok(Command::SetDelayRewindBackward(value == "on"))
+            }
+            Reaction::SelectValue(DELAY_RANGE_ATTRIBUTE, value) => {
+                Ok(Command::SetDelayRange(value == "on"))
+            }
             Reaction::SetValue(DELAY_1_POSITION_ATTRIBUTE, value) => {
                 Ok(Command::SetDelay1Position(value))
             }
@@ -230,6 +254,13 @@ impl From<Command> for ControlAction {
             Command::SetWowDepth(value) => ControlAction::SetWowDepthPot(value),
             Command::SetWowFilter(value) => ControlAction::SetWowFilterPot(value),
             Command::SetDelay(value) => ControlAction::SetDelayLengthPot(value),
+            Command::SetDelayRewindForward(value) => {
+                ControlAction::SetDelayRewindForwardSwitch(value)
+            }
+            Command::SetDelayRewindBackward(value) => {
+                ControlAction::SetDelayRewindBackwardSwitch(value)
+            }
+            Command::SetDelayRange(value) => ControlAction::SetDelayRangeSwitch(value),
             Command::SetDelay1Position(value) => ControlAction::SetDelayHeadPositionPot(0, value),
             Command::SetDelay2Position(value) => ControlAction::SetDelayHeadPositionPot(1, value),
             Command::SetDelay3Position(value) => ControlAction::SetDelayHeadPositionPot(2, value),
