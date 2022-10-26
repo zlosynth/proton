@@ -148,7 +148,7 @@ impl InstrumentTrait for Instrument {
 
     fn update_control(&mut self, snapshot: InputSnapshot) {
         self.cache.hysteresis.drive_cv = snapshot.cv[0].value;
-        self.cache.hysteresis.bias_cv = snapshot.pot.value;
+        self.cache.delay.head_position_cv[0] = snapshot.pot.value;
         let attributes = control::cook_dsp_reaction_from_cache(&self.cache).into();
         self.processor.set_attributes(attributes);
     }
