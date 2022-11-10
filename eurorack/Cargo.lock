@@ -387,7 +387,7 @@ dependencies = [
 
 [[package]]
 name = "kaseta-control"
-version = "0.1.0"
+version = "0.3.0"
 dependencies = [
  "kaseta-dsp",
  "libm",
@@ -396,7 +396,7 @@ dependencies = [
 
 [[package]]
 name = "kaseta-dsp"
-version = "0.1.0"
+version = "0.3.0"
 dependencies = [
  "libm",
  "micromath 2.0.0",

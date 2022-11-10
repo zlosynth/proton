@@ -12,8 +12,8 @@ publish = false
 proton-instruments-interface = { path = "../interface" }
 proton-ui = { path = "../../ui" }
 proton-control = { path = "../../control" }
-kaseta-dsp = { path = "../../../kaseta/dsp" }
-kaseta-control = { path = "../../../kaseta/control" }
+kaseta-dsp = { git = "https://github.com/zlosynth/kaseta", version = "0.3.0" }
+kaseta-control = { git = "https://github.com/zlosynth/kaseta", version = "0.3.0" }
 
 [dependencies.defmt]
 version  = "0.3"
