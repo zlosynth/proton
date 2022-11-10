@@ -9,7 +9,7 @@
    viewBox="0 0 50.5 128.5"
    version="1.1"
    id="svg8"
-   sodipodi:docname="Panel.svg"
+   sodipodi:docname="panel.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -26,9 +26,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.3706234"
-     inkscape:cx="146.2838"
-     inkscape:cy="274.32773"
+     inkscape:zoom="1.3604245"
+     inkscape:cx="-31.240249"
+     inkscape:cy="263.15316"
      inkscape:document-units="mm"
      inkscape:current-layer="layer7"
      inkscape:document-rotation="0"
@@ -250,7 +250,7 @@
          y="0.0016017398" />
       <g
          inkscape:label="Hershey Text"
-         style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         style="fill:none;stroke:#000000;stroke-width:0.28381532;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
          id="g4621"
          transform="matrix(1,0,0,1.1173027,127.1255,-52.444945)"
          inkscape:export-filename="/home/phoracek/code/zlosynth/private/proton/panel/labels.png"
@@ -259,35 +259,35 @@
         <g
            transform="translate(-107.818,52.2845)"
            id="g4619"
-           style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
+           style="stroke-width:0.28381532;stroke-miterlimit:4;stroke-dasharray:none">
           <path
              d="m 220,441 v -661 m 0,566 64,64 62,31 h 95 l 63,-31 63,-64 31,-94 V 189 L 567,94.5 504,31.5 441,0 h -95 l -62,31.5 -64,63"
-             style="stroke-width:56.6929;stroke-miterlimit:4;stroke-dasharray:none"
+             style="stroke-width:80.45153554;stroke-miterlimit:4;stroke-dasharray:none"
              transform="scale(0.00352778,-0.00352778)"
              id="path4607" />
           <path
              d="M 220,441 V 0 m 0,252 32,94 63,64 63,31 h 94"
-             style="stroke-width:56.6929;stroke-miterlimit:4;stroke-dasharray:none"
+             style="stroke-width:80.45153554;stroke-miterlimit:4;stroke-dasharray:none"
              transform="matrix(0.00352778,0,0,-0.00352778,2.10961,0)"
              id="path4609" />
           <path
              d="M 346,441 284,410 220,346 189,252 V 189 L 220,94.5 284,31.5 346,0 h 95 l 63,31.5 63,63 31,94.5 v 63 l -31,94 -63,64 -63,31 h -95"
-             style="stroke-width:56.6929;stroke-miterlimit:4;stroke-dasharray:none"
+             style="stroke-width:80.45153554;stroke-miterlimit:4;stroke-dasharray:none"
              transform="matrix(0.00352778,0,0,-0.00352778,3.556,0)"
              id="path4611" />
           <path
              d="M 252,662 V 126 L 284,31.5 346,0 h 64 M 158,441 h 220"
-             style="stroke-width:56.6929;stroke-miterlimit:4;stroke-dasharray:none"
+             style="stroke-width:80.45153554;stroke-miterlimit:4;stroke-dasharray:none"
              transform="matrix(0.00352778,0,0,-0.00352778,5.66561,0)"
              id="path4613" />
           <path
              d="M 346,441 284,410 220,346 189,252 V 189 L 220,94.5 284,31.5 346,0 h 95 l 63,31.5 63,63 31,94.5 v 63 l -31,94 -63,64 -63,31 h -95"
-             style="stroke-width:56.6929;stroke-miterlimit:4;stroke-dasharray:none"
+             style="stroke-width:80.45153554;stroke-miterlimit:4;stroke-dasharray:none"
              transform="matrix(0.00352778,0,0,-0.00352778,6.99912,0)"
              id="path4615" />
           <path
              d="M 220,441 V 0 m 0,315 95,95 63,31 h 94 l 64,-31 31,-95 V 0"
-             style="stroke-width:56.6929;stroke-miterlimit:4;stroke-dasharray:none"
+             style="stroke-width:80.45153554;stroke-miterlimit:4;stroke-dasharray:none"
              transform="matrix(0.00352778,0,0,-0.00352778,9.10873,0)"
              id="path4617" />
         </g>
@@ -297,107 +297,108 @@
          transform="translate(-23.033139,-1.2631137)"
          inkscape:export-filename="/home/phoracek/code/zlosynth/private/proton/panel/labels.png"
          inkscape:export-xdpi="899.98114"
-         inkscape:export-ydpi="899.98114">
+         inkscape:export-ydpi="899.98114"
+         style="stroke-width:0.3;stroke-miterlimit:4;stroke-dasharray:none">
         <path
            d="M 536,441 189,0 m 0,441 H 536 M 189,0 h 347"
-           style="display:inline;fill:none;stroke:#000000;stroke-width:56.6929;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+           style="display:inline;fill:none;stroke:#000000;stroke-width:85.03931668;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
            transform="matrix(0.00352778,0,0,-0.00352778,57.996489,125.17159)"
            id="path21655" />
         <path
            d="M 220,662 V 0"
-           style="display:inline;fill:none;stroke:#000000;stroke-width:56.6929;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+           style="display:inline;fill:none;stroke:#000000;stroke-width:85.03931668;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
            transform="matrix(0.00352778,0,0,-0.00352778,59.887379,125.17159)"
            id="path21657" />
         <path
            d="M 346,441 284,410 220,346 189,252 V 189 L 220,94.5 284,31.5 346,0 h 95 l 63,31.5 63,63 31,94.5 v 63 l -31,94 -63,64 -63,31 h -95"
-           style="display:inline;fill:none;stroke:#000000;stroke-width:56.6929;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+           style="display:inline;fill:none;stroke:#000000;stroke-width:85.03931668;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
            transform="matrix(0.00352778,0,0,-0.00352778,60.776379,125.17159)"
            id="path21659" />
         <path
            d="m 536,346 -32,64 -94,31 h -95 l -95,-31 -31,-64 31,-62 64,-32 157,-32 63,-31 32,-63 V 94.5 L 504,31.5 410,0 h -95 l -95,31.5 -31,63"
-           style="display:inline;fill:none;stroke:#000000;stroke-width:56.6929;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+           style="display:inline;fill:none;stroke:#000000;stroke-width:85.03931668;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
            transform="matrix(0.00352778,0,0,-0.00352778,62.885989,125.17159)"
            id="path21661" />
         <path
            d="M 158,441 346,0 M 536,441 346,0 l -62,-126 -64,-63 -62,-31 h -32"
-           style="display:inline;fill:none;stroke:#000000;stroke-width:56.6929;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+           style="display:inline;fill:none;stroke:#000000;stroke-width:85.03931668;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
            transform="matrix(0.00352778,0,0,-0.00352778,64.776879,125.17159)"
            id="path21663" />
         <path
            d="M 220,441 V 0 m 0,315 95,95 63,31 h 94 l 64,-31 31,-95 V 0"
-           style="display:inline;fill:none;stroke:#000000;stroke-width:56.6929;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+           style="display:inline;fill:none;stroke:#000000;stroke-width:85.03931668;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
            transform="matrix(0.00352778,0,0,-0.00352778,66.554879,125.17159)"
            id="path21665" />
         <path
            d="M 252,662 V 126 L 284,31.5 346,0 h 64 M 158,441 h 220"
-           style="display:inline;fill:none;stroke:#000000;stroke-width:56.6929;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+           style="display:inline;fill:none;stroke:#000000;stroke-width:85.03931668;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
            transform="matrix(0.00352778,0,0,-0.00352778,68.664489,125.17159)"
            id="path21667" />
         <path
            d="M 12.720094,-2.3353904 V 0 m 0,-1.1112507 0.335139,-0.3351391 0.222251,-0.1093612 h 0.331611 l 0.225778,0.1093612 0.109361,0.3351391 V 0"
-           style="display:inline;fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+           style="display:inline;fill:none;stroke:#000000;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
            id="path21669"
            transform="translate(57.996489,125.17159)" />
         <g
            inkscape:label="Hershey Text"
-           style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+           style="fill:none;stroke:#000000;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
            id="g21699"
            transform="translate(-11.704267,-2.8097416)">
           <g
              transform="translate(63.198,130.865)"
              id="g21697"
-             style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
+             style="stroke-width:0.3;stroke-miterlimit:4;stroke-dasharray:none">
             <path
                d="m 189,662 31,-32 32,32 -32,31 -31,-31 M 220,441 V 0"
-               style="stroke-width:56.6929;stroke-miterlimit:4;stroke-dasharray:none"
+               style="stroke-width:85.03931668;stroke-miterlimit:4;stroke-dasharray:none"
                transform="scale(0.00352778,-0.00352778)"
                id="path21675" />
             <path
                d="M 220,441 V 0 m 0,315 95,95 63,31 h 94 l 64,-31 31,-95 V 0"
-               style="stroke-width:56.6929;stroke-miterlimit:4;stroke-dasharray:none"
+               style="stroke-width:85.03931668;stroke-miterlimit:4;stroke-dasharray:none"
                transform="matrix(0.00352778,0,0,-0.00352778,0.889001,0)"
                id="path21677" />
             <path
                d="m 536,346 -32,64 -94,31 h -95 l -95,-31 -31,-64 31,-62 64,-32 157,-32 63,-31 32,-63 V 94.5 L 504,31.5 410,0 h -95 l -95,31.5 -31,63"
-               style="stroke-width:56.6929;stroke-miterlimit:4;stroke-dasharray:none"
+               style="stroke-width:85.03931668;stroke-miterlimit:4;stroke-dasharray:none"
                transform="matrix(0.00352778,0,0,-0.00352778,2.99861,0)"
                id="path21679" />
             <path
                d="M 252,662 V 126 L 284,31.5 346,0 h 64 M 158,441 h 220"
-               style="stroke-width:56.6929;stroke-miterlimit:4;stroke-dasharray:none"
+               style="stroke-width:85.03931668;stroke-miterlimit:4;stroke-dasharray:none"
                transform="matrix(0.00352778,0,0,-0.00352778,4.8895,0)"
                id="path21681" />
             <path
                d="M 220,441 V 0 m 0,252 32,94 63,64 63,31 h 94"
-               style="stroke-width:56.6929;stroke-miterlimit:4;stroke-dasharray:none"
+               style="stroke-width:85.03931668;stroke-miterlimit:4;stroke-dasharray:none"
                transform="matrix(0.00352778,0,0,-0.00352778,6.223,0)"
                id="path21683" />
             <path
                d="M 220,441 V 126 L 252,31.5 315,0 h 95 l 62,31.5 95,94.5 m 0,315 V 0"
-               style="stroke-width:56.6929;stroke-miterlimit:4;stroke-dasharray:none"
+               style="stroke-width:85.03931668;stroke-miterlimit:4;stroke-dasharray:none"
                transform="matrix(0.00352778,0,0,-0.00352778,7.66939,0)"
                id="path21685" />
             <path
                d="M 220,441 V 0 m 0,315 95,95 63,31 h 94 l 64,-31 31,-95 V 0 m 0,315 95,95 62,31 h 95 l 63,-31 32,-95 V 0"
-               style="stroke-width:56.6929;stroke-miterlimit:4;stroke-dasharray:none"
+               style="stroke-width:85.03931668;stroke-miterlimit:4;stroke-dasharray:none"
                transform="matrix(0.00352778,0,0,-0.00352778,9.77901,0)"
                id="path21687" />
             <path
                d="m 189,252 h 378 v 63 l -31,63 -32,32 -63,31 H 346 L 284,410 220,346 189,252 V 189 L 220,94.5 284,31.5 346,0 h 95 l 63,31.5 63,63"
-               style="stroke-width:56.6929;stroke-miterlimit:4;stroke-dasharray:none"
+               style="stroke-width:85.03931668;stroke-miterlimit:4;stroke-dasharray:none"
                transform="matrix(0.00352778,0,0,-0.00352778,13.1128,0)"
                id="path21689" />
             <path
                d="M 15.844543,-1.555751 V 0 m 0,-1.1112507 0.335139,-0.3351391 0.22225,-0.1093612 h 0.331612 l 0.225778,0.1093612 0.109361,0.3351391 V 0"
-               style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none"
+               style="stroke-width:0.3;stroke-miterlimit:4;stroke-dasharray:none"
                id="path21691" />
             <path
                d="m 18.062363,-2.3353904 v 1.89089012 L 18.175252,-0.11112507 18.393974,0 h 0.225778 m -0.889001,-1.555751 h 0.776112"
-               style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none"
+               style="stroke-width:0.3;stroke-miterlimit:4;stroke-dasharray:none"
                id="path21693" />
             <path
                d="m 536,346 -32,64 -94,31 h -95 l -95,-31 -31,-64 31,-62 64,-32 157,-32 63,-31 32,-63 V 94.5 L 504,31.5 410,0 h -95 l -95,31.5 -31,63"
-               style="stroke-width:56.6929;stroke-miterlimit:4;stroke-dasharray:none"
+               style="stroke-width:85.03931668;stroke-miterlimit:4;stroke-dasharray:none"
                transform="matrix(0.00352778,0,0,-0.00352778,18.5561,0)"
                id="path21695" />
           </g>
@@ -814,7 +815,7 @@
      style="display:inline">
     <g
        inkscape:label="Hershey Text"
-       style="display:inline;fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       style="display:inline;fill:none;stroke:#000000;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="g77873-8-5"
        transform="translate(66.80496,27.055058)"
        inkscape:export-filename="/home/phoracek/code/zlosynth/private/proton/panel/labels.png"
@@ -823,10 +824,10 @@
       <g
          transform="translate(-42.6265,77.0342)"
          id="g77871-1-3"
-         style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
+         style="stroke-width:0.3;stroke-miterlimit:4;stroke-dasharray:none">
         <path
            d="M 252,662 H 598 L 410,410 h 94 l 63,-32 31,-32 32,-94 V 189 L 598,94.5 536,31.5 441,0 H 346 L 252,31.5 220,63 189,126"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+           style="stroke-width:113.38596985;stroke-miterlimit:4;stroke-dasharray:none"
            transform="scale(0.00264583,-0.00264583)"
            id="path77869-2-8" />
       </g>
@@ -1065,7 +1066,7 @@
          style="fill:#000000;stroke:#f6f5f4;stroke-width:1.25" />
     </g>
     <path
-       style="display:inline;fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;fill:none;stroke:#000000;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 24.597951,104.62545 h 1.327953"
        id="path22422-3"
        inkscape:export-filename="/home/phoracek/code/zlosynth/private/proton/panel/labels.png"
@@ -1099,7 +1100,7 @@
          style="display:inline;fill:#000000;stroke:#f6f5f4;stroke-width:1.25" />
     </g>
     <path
-       style="display:inline;fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;fill:none;stroke:#000000;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 34.055293,104.60582 h 2.64244"
        id="path22422-5-6"
        inkscape:export-filename="/home/phoracek/code/zlosynth/private/proton/panel/labels.png"
@@ -1107,7 +1108,7 @@
        inkscape:export-ydpi="899.98114" />
     <g
        inkscape:label="Hershey Text"
-       style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       style="fill:none;stroke:#000000;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="g48617"
        transform="translate(60.658563,3.3232752)"
        inkscape:export-filename="/home/phoracek/code/zlosynth/private/proton/panel/labels.png"
@@ -1116,15 +1117,15 @@
       <g
          transform="translate(-26.7988,100.824)"
          id="g48615"
-         style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
+         style="stroke-width:0.3;stroke-miterlimit:4;stroke-dasharray:none">
         <path
            d="m 520,97.6 -66,-50.4 -89,-31.4 -88,12.6 -82,44 -63,75.6 -31,79 -9.6,119 9.6,111 41,91 63,69 72,35 82,6 73,-15 50,-32 16,-19"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+           style="stroke-width:113.38596985;stroke-miterlimit:4;stroke-dasharray:none"
            transform="scale(0.00264583,-0.00264583)"
            id="path48611" />
         <path
            d="M 44.1,655 255,18.9 466,652"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+           style="stroke-width:113.38596985;stroke-miterlimit:4;stroke-dasharray:none"
            transform="matrix(0.00264583,0,0,-0.00264583,1.55839,0)"
            id="path48613" />
       </g>
@@ -1153,7 +1154,7 @@
        r="2.375" />
     <g
        inkscape:label="Hershey Text"
-       style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       style="fill:none;stroke:#000000;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="g77897"
        transform="translate(82.81342,9.0509099)"
        inkscape:export-filename="/home/phoracek/code/zlosynth/private/proton/panel/labels.png"
@@ -1162,16 +1163,16 @@
       <g
          transform="translate(-38.4267,95.2207)"
          id="g77895"
-         style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
+         style="stroke-width:0.3;stroke-miterlimit:4;stroke-dasharray:none">
         <path
            d="m 220,504 v 32 l 32,62 32,32 62,32 h 126 l 64,-32 31,-32 31,-62 V 472 L 567,410 504,315 189,0 h 441"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+           style="stroke-width:113.38596985;stroke-miterlimit:4;stroke-dasharray:none"
            transform="scale(0.00264583,-0.00264583)"
            id="path77893" />
       </g>
     </g>
     <path
-       style="display:inline;fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;fill:none;stroke:#000000;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 44.820856,104.74613 h 1.327953"
        id="path22422-3-9"
        inkscape:export-filename="/home/phoracek/code/zlosynth/private/proton/panel/labels.png"
@@ -1296,14 +1297,14 @@
        x="5.0646496"
        y="15.671973" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       style="fill:none;stroke:#000000;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
        d="m 47.799682,17.378002 h -1.237048 l -0.471229,0.47123 v 1.503872 h 1.706748 z"
        id="path61782"
        inkscape:export-filename="/home/phoracek/code/zlosynth/private/proton/panel/labels.png"
        inkscape:export-xdpi="899.98114"
        inkscape:export-ydpi="899.98114" />
     <path
-       style="display:inline;fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;fill:none;stroke:#000000;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 32.713483,65.082164 c 0,0 0.01982,-1.279889 -0.01335,-2.300416 -0.03313,-1.020528 2.247162,0.0089 0.491174,0.591722 1.906458,0.184918 0.592955,1.535296 -0.07804,0.962064"
        id="path19050-5"
        sodipodi:nodetypes="czcc"
@@ -1311,7 +1312,7 @@
        inkscape:export-xdpi="899.98114"
        inkscape:export-ydpi="899.98114" />
     <path
-       style="display:inline;fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;fill:none;stroke:#000000;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 11.009273,72.050681 c -0.551996,1.537626 -0.403778,1.878631 -0.899897,2.015308 -1.2512368,0.344702 -0.9081613,-2.423103 0.167559,-1.868874 0.428087,0.220556 0.276646,1.147467 0.547472,1.693758 0.08571,0.17288 0.337773,0.138139 0.337773,0.138139"
        id="path21660-4-8"
        sodipodi:nodetypes="csssc"
@@ -1321,24 +1322,24 @@
     <g
        transform="translate(3.531437,119.20735)"
        id="g48607-6"
-       style="display:inline;fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       style="display:inline;fill:none;stroke:#000000;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        inkscape:export-filename="/home/phoracek/code/zlosynth/private/proton/panel/labels.png"
        inkscape:export-xdpi="899.98114"
        inkscape:export-ydpi="899.98114">
       <path
          d="m 520,97.6 -66,-50.4 -89,-31.4 -88,12.6 -82,44 -63,75.6 -31,79 -9.6,119 9.6,111 41,91 63,69 72,35 82,6 73,-15 50,-32 16,-19"
-         style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+         style="stroke-width:113.38596985;stroke-miterlimit:4;stroke-dasharray:none"
          transform="scale(0.00264583,-0.00264583)"
          id="path48603-5" />
       <path
          d="M 44.1,655 255,18.9 466,652"
-         style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+         style="stroke-width:113.38596985;stroke-miterlimit:4;stroke-dasharray:none"
          transform="matrix(0.00264583,0,0,-0.00264583,1.55839,0)"
          id="path48605-6" />
     </g>
     <g
        inkscape:label="Hershey Text"
-       style="display:inline;fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       style="display:inline;fill:none;stroke:#000000;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="g77867-3"
        transform="translate(68.375592,41.786667)"
        inkscape:export-filename="/home/phoracek/code/zlosynth/private/proton/panel/labels.png"
@@ -1347,17 +1348,17 @@
       <g
          transform="translate(-54.3172,77.4047)"
          id="g77865-9"
-         style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
+         style="stroke-width:0.3;stroke-miterlimit:4;stroke-dasharray:none">
         <path
            d="m 220,504 v 32 l 32,62 32,32 62,32 h 126 l 64,-32 31,-32 31,-62 V 472 L 567,410 504,315 189,0 h 441"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+           style="stroke-width:113.38596985;stroke-miterlimit:4;stroke-dasharray:none"
            transform="scale(0.00264583,-0.00264583)"
            id="path77863-4" />
       </g>
     </g>
     <g
        inkscape:label="Hershey Text"
-       style="display:inline;fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       style="display:inline;fill:none;stroke:#000000;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="g77873-8"
        transform="translate(66.807853,42.016849)"
        inkscape:export-filename="/home/phoracek/code/zlosynth/private/proton/panel/labels.png"
@@ -1366,17 +1367,17 @@
       <g
          transform="translate(-42.6265,77.0342)"
          id="g77871-1"
-         style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
+         style="stroke-width:0.3;stroke-miterlimit:4;stroke-dasharray:none">
         <path
            d="M 252,662 H 598 L 410,410 h 94 l 63,-32 31,-32 32,-94 V 189 L 598,94.5 536,31.5 441,0 H 346 L 252,31.5 220,63 189,126"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+           style="stroke-width:113.38596985;stroke-miterlimit:4;stroke-dasharray:none"
            transform="scale(0.00264583,-0.00264583)"
            id="path77869-2" />
       </g>
     </g>
     <g
        inkscape:label="Hershey Text"
-       style="display:inline;fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       style="display:inline;fill:none;stroke:#000000;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="g77879-9"
        transform="translate(85.068352,31.23135)"
        inkscape:export-filename="/home/phoracek/code/zlosynth/private/proton/panel/labels.png"
@@ -1385,17 +1386,17 @@
       <g
          transform="translate(-50.8303,87.8197)"
          id="g77877-3"
-         style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
+         style="stroke-width:0.3;stroke-miterlimit:4;stroke-dasharray:none">
         <path
            d="M 504,662 189,220 H 662 M 504,662 V 0"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+           style="stroke-width:113.38596985;stroke-miterlimit:4;stroke-dasharray:none"
            transform="scale(0.00264583,-0.00264583)"
            id="path77875-9" />
       </g>
     </g>
     <g
        inkscape:label="Hershey Text"
-       style="display:inline;fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       style="display:inline;fill:none;stroke:#000000;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="g77885-0"
        transform="translate(84.893186,31.745867)"
        inkscape:export-filename="/home/phoracek/code/zlosynth/private/proton/panel/labels.png"
@@ -1404,17 +1405,17 @@
       <g
          transform="translate(-40.4952,87.4455)"
          id="g77883-8"
-         style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
+         style="stroke-width:0.3;stroke-miterlimit:4;stroke-dasharray:none">
         <path
            d="M 567,662 H 252 l -32,-284 32,32 94,31 h 95 l 95,-31 62,-64 32,-94 V 189 L 598,94.5 536,31.5 441,0 H 346 L 252,31.5 220,63 189,126"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+           style="stroke-width:113.38596985;stroke-miterlimit:4;stroke-dasharray:none"
            transform="scale(0.00264583,-0.00264583)"
            id="path77881-8" />
       </g>
     </g>
     <g
        inkscape:label="Hershey Text"
-       style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       style="fill:none;stroke:#000000;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="g48689-1"
        transform="translate(73.092575,33.245921)"
        inkscape:export-filename="/home/phoracek/code/zlosynth/private/proton/panel/labels.png"
@@ -1423,37 +1424,37 @@
       <g
          transform="translate(-61.5348,56.261)"
          id="g48687-5"
-         style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
+         style="stroke-width:0.3;stroke-miterlimit:4;stroke-dasharray:none">
         <path
            d="M 41,15.8 277,662 416,255 H 132 416 L 501,15.8"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+           style="stroke-width:113.38596985;stroke-miterlimit:4;stroke-dasharray:none"
            transform="scale(0.00264583,-0.00264583)"
            id="path48677-9" />
         <path
            d="M 135,655 V 217 l 10,-56 28,-60 38,-41.1 57,-31.5 53,-12.6 66,9.4 67,34.7 47,57.1 22,50 6,69 v 416"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+           style="stroke-width:113.38596985;stroke-miterlimit:4;stroke-dasharray:none"
            transform="matrix(0.00264583,0,0,-0.00264583,1.44991,0)"
            id="path48679-8" />
         <path
            d="M 132,31.5 V 646 h 177 l 72,-19 54,-29 37,-37 45,-73 15,-82 v -50 l -3,-66 -9,-76 -25,-53 -45,-66.5 -69,-40.9 -66,-19 -50,-3.1 H 135"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+           style="stroke-width:113.38596985;stroke-miterlimit:4;stroke-dasharray:none"
            transform="matrix(0.00264583,0,0,-0.00264583,3.20145,0)"
            id="path48681-4" />
         <path
            d="M 132,18.9 V 652"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+           style="stroke-width:113.38596985;stroke-miterlimit:4;stroke-dasharray:none"
            transform="matrix(0.00264583,0,0,-0.00264583,4.86039,0)"
            id="path48683-8" />
         <path
            d="m 334,22.1 82,12.5 82,53.6 56,84.8 29,111 v 103 l -16,85 -31,70 -51,66 -69,41 -70,13 -59,-10 -67,-25 -62,-54 -48,-91 -15.5,-72 -3.1,-108 12.6,-82 31,-75 45,-59.9 50,-41 54,-18.9 50,-3.1"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+           style="stroke-width:113.38596985;stroke-miterlimit:4;stroke-dasharray:none"
            transform="matrix(0.00264583,0,0,-0.00264583,5.56947,0)"
            id="path48685-1" />
       </g>
     </g>
     <g
        inkscape:label="Hershey Text"
-       style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       style="fill:none;stroke:#000000;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="g77903-0"
        transform="translate(70.052715,-14.928278)"
        inkscape:export-filename="/home/phoracek/code/zlosynth/private/proton/panel/labels.png"
@@ -1462,16 +1463,16 @@
       <g
          transform="translate(-45.8745,104.415)"
          id="g77901-3"
-         style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
+         style="stroke-width:0.3;stroke-miterlimit:4;stroke-dasharray:none">
         <path
            d="m 220,504 v 32 l 32,62 32,32 62,32 h 126 l 64,-32 31,-32 31,-62 V 472 L 567,410 504,315 189,0 h 441"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+           style="stroke-width:113.38596985;stroke-miterlimit:4;stroke-dasharray:none"
            transform="scale(0.00264583,-0.00264583)"
            id="path77899-0" />
       </g>
     </g>
     <path
-       style="display:inline;fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;fill:none;stroke:#000000;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 31.867534,89.970705 h 7.028732"
        id="path22422-3-1-9-8-4"
        inkscape:export-filename="/home/phoracek/code/zlosynth/private/proton/panel/labels.png"
@@ -1479,7 +1480,7 @@
        inkscape:export-ydpi="899.98114" />
     <g
        inkscape:label="Hershey Text"
-       style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       style="fill:none;stroke:#000000;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="g48661-4"
        transform="translate(74.795307,38.008421)"
        inkscape:export-filename="/home/phoracek/code/zlosynth/private/proton/panel/labels.png"
@@ -1488,37 +1489,37 @@
       <g
          transform="translate(-43.0209,51.4985)"
          id="g48659-4"
-         style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
+         style="stroke-width:0.3;stroke-miterlimit:4;stroke-dasharray:none">
         <path
            d="M 41,15.8 277,662 416,255 H 132 416 L 501,15.8"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+           style="stroke-width:113.38596985;stroke-miterlimit:4;stroke-dasharray:none"
            transform="scale(0.00264583,-0.00264583)"
            id="path48649-4" />
         <path
            d="M 135,655 V 217 l 10,-56 28,-60 38,-41.1 57,-31.5 53,-12.6 66,9.4 67,34.7 47,57.1 22,50 6,69 v 416"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+           style="stroke-width:113.38596985;stroke-miterlimit:4;stroke-dasharray:none"
            transform="matrix(0.00264583,0,0,-0.00264583,1.44991,0)"
            id="path48651-7" />
         <path
            d="M 132,31.5 V 646 h 177 l 72,-19 54,-29 37,-37 45,-73 15,-82 v -50 l -3,-66 -9,-76 -25,-53 -45,-66.5 -69,-40.9 -66,-19 -50,-3.1 H 135"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+           style="stroke-width:113.38596985;stroke-miterlimit:4;stroke-dasharray:none"
            transform="matrix(0.00264583,0,0,-0.00264583,3.20145,0)"
            id="path48653-6" />
         <path
            d="M 132,18.9 V 652"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+           style="stroke-width:113.38596985;stroke-miterlimit:4;stroke-dasharray:none"
            transform="matrix(0.00264583,0,0,-0.00264583,4.86039,0)"
            id="path48655-3" />
         <path
            d="m 334,22.1 82,12.5 82,53.6 56,84.8 29,111 v 103 l -16,85 -31,70 -51,66 -69,41 -70,13 -59,-10 -67,-25 -62,-54 -48,-91 -15.5,-72 -3.1,-108 12.6,-82 31,-75 45,-59.9 50,-41 54,-18.9 50,-3.1"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+           style="stroke-width:113.38596985;stroke-miterlimit:4;stroke-dasharray:none"
            transform="matrix(0.00264583,0,0,-0.00264583,5.56947,0)"
            id="path48657-1" />
       </g>
     </g>
     <g
        inkscape:label="Hershey Text"
-       style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       style="fill:none;stroke:#000000;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="g77891-7"
        transform="translate(96.184548,-4.861578)"
        inkscape:export-filename="/home/phoracek/code/zlosynth/private/proton/panel/labels.png"
@@ -1527,23 +1528,23 @@
       <g
          transform="translate(-51.7897,94.3483)"
          id="g77889-5"
-         style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
+         style="stroke-width:0.3;stroke-miterlimit:4;stroke-dasharray:none">
         <path
            d="m 220,504 v 32 l 32,62 32,32 62,32 h 126 l 64,-32 31,-32 31,-62 V 472 L 567,410 504,315 189,0 h 441"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+           style="stroke-width:113.38596985;stroke-miterlimit:4;stroke-dasharray:none"
            transform="scale(0.00264583,-0.00264583)"
            id="path77887-9" />
       </g>
     </g>
     <path
-       style="display:inline;fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;fill:none;stroke:#000000;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 44.828984,89.970705 h 1.327953"
        id="path22422-3-6-6"
        inkscape:export-filename="/home/phoracek/code/zlosynth/private/proton/panel/labels.png"
        inkscape:export-xdpi="899.98114"
        inkscape:export-ydpi="899.98114" />
     <path
-       style="display:inline;fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;fill:none;stroke:#000000;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 2.378824,104.72372 H 7.899598"
        id="path22422-3-1-1"
        inkscape:export-filename="/home/phoracek/code/zlosynth/private/proton/panel/labels.png"
@@ -1551,7 +1552,7 @@
        inkscape:export-ydpi="899.98114" />
     <g
        inkscape:label="Hershey Text"
-       style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       style="fill:none;stroke:#000000;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="g48577-7"
        transform="translate(48.232555,21.796461)"
        inkscape:export-filename="/home/phoracek/code/zlosynth/private/proton/panel/labels.png"
@@ -1560,31 +1561,31 @@
       <g
          transform="translate(-46.1021,82.4534)"
          id="g48575-8"
-         style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
+         style="stroke-width:0.3;stroke-miterlimit:4;stroke-dasharray:none">
         <path
            d="M 346,315 H 520 V 81.9 L 479,53.6 391,22.1 328,18.9 265,31.5 208,63 l -66,76 -44.4,94 -9.4,110 12.8,107 41,95 66,72 66,32 76,13 82,-13 50,-28 35,-29"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+           style="stroke-width:113.38596985;stroke-miterlimit:4;stroke-dasharray:none"
            transform="scale(0.00264583,-0.00264583)"
            id="path48567-5" />
         <path
            d="M 41,15.8 277,662 416,255 H 132 416 L 501,15.8"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+           style="stroke-width:113.38596985;stroke-miterlimit:4;stroke-dasharray:none"
            transform="matrix(0.00264583,0,0,-0.00264583,1.651,0)"
            id="path48569-7" />
         <path
            d="M 274,22.1 V 649 H 56.7 495"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+           style="stroke-width:113.38596985;stroke-miterlimit:4;stroke-dasharray:none"
            transform="matrix(0.00264583,0,0,-0.00264583,3.10091,0)"
            id="path48571-4" />
         <path
            d="M 466,31.5 H 132 V 356 H 410 132 v 287 h 322"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+           style="stroke-width:113.38596985;stroke-miterlimit:4;stroke-dasharray:none"
            transform="matrix(0.00264583,0,0,-0.00264583,4.55083,0)"
            id="path48573-1" />
       </g>
     </g>
     <path
-       style="display:inline;fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;fill:none;stroke:#000000;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 14.57728,104.58341 h 1.327953"
        id="path22422-3-8"
        inkscape:export-filename="/home/phoracek/code/zlosynth/private/proton/panel/labels.png"
@@ -1592,7 +1593,7 @@
        inkscape:export-ydpi="899.98114" />
     <g
        inkscape:label="Hershey Text"
-       style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       style="fill:none;stroke:#000000;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="g77909-5"
        transform="translate(45.702816,0.28725788)"
        inkscape:export-filename="/home/phoracek/code/zlosynth/private/proton/panel/labels.png"
@@ -1601,10 +1602,10 @@
       <g
          transform="translate(-31.5534,103.802)"
          id="g77907-9"
-         style="stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none">
+         style="stroke-width:0.3;stroke-miterlimit:4;stroke-dasharray:none">
         <path
            d="m 220,504 v 32 l 32,62 32,32 62,32 h 126 l 64,-32 31,-32 31,-62 V 472 L 567,410 504,315 189,0 h 441"
-           style="stroke-width:75.5906;stroke-miterlimit:4;stroke-dasharray:none"
+           style="stroke-width:113.38596985;stroke-miterlimit:4;stroke-dasharray:none"
            transform="scale(0.00264583,-0.00264583)"
            id="path77905-7" />
       </g>
