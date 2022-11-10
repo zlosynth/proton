@@ -2,6 +2,14 @@
 
 Playground module for eurorack prototyping.
 
+<p align="center">
+   <img src="panel.svg" alt="Panel illustration"/>
+</p>
+
+* This is meant to help to test ideas of new modules before they get their own
+  custom hardware.
+* This is not meant to be stable or simple.
+
 # Development
 
 See [DEVELOPMENT.md](DEVELOPMENT.md) to find some basic commands to interact
