@@ -37,13 +37,12 @@ impl InstrumentTrait for Instrument {
 
     fn process(&mut self, buffer: &mut [(f32, f32)], _randomizer: &mut impl ProtonRandomizer) {
         for chunk in buffer.chunks_exact_mut(32) {
-            let mut buffer = [0.0; 32];
+            let mut buffer = [(0.0, 0.0); 32];
             for (i, x) in chunk.iter_mut().enumerate() {
-                buffer[i] = x.0;
+                buffer[i] = *x;
             }
-            // TODO Process here
             for (i, x) in buffer.iter_mut().enumerate() {
-                chunk[i] = (*x, 0.0);
+                chunk[i] = *x;
             }
         }
     }
