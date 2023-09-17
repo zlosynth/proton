@@ -16,8 +16,8 @@ mod app {
     use hal::adc::{Adc, Enabled};
     use hal::pac::{ADC1, ADC2};
 
-    #[cfg(feature = "kaseta")]
-    use proton_instruments_kaseta::Instrument;
+    #[cfg(feature = "traky")]
+    use proton_instruments_traky::Instrument;
 
     use proton_control::input_snapshot::InputSnapshot;
     use proton_eurorack::system::audio::{Audio, SAMPLE_RATE};

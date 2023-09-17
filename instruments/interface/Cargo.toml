@@ -11,4 +11,4 @@ publish = false
 [dependencies]
 proton-ui = { path = "../../ui" }
 proton-control = { path = "../../control" }
-sirena = { path = "../../../sirena" }
+sirena = { git = "https://github.com/zlosynth/sirena.git" }

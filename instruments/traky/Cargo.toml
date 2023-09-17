@@ -1,6 +1,6 @@
 [package]
 authors = ["Petr Horáček <hrck@protonmail.com>"]
-name = "proton-instruments-kaseta"
+name = "proton-instruments-traky"
 version = "0.6.0" # hack/release.sh
 edition = "2021"
 license = "GPL-3.0-or-later"
@@ -12,8 +12,6 @@ publish = false
 proton-instruments-interface = { path = "../interface" }
 proton-ui = { path = "../../ui" }
 proton-control = { path = "../../control" }
-kaseta-dsp = { git = "https://github.com/zlosynth/kaseta", version = "0.3.0" }
-kaseta-control = { git = "https://github.com/zlosynth/kaseta", version = "0.3.0" }
 
 [dependencies.defmt]
 version  = "0.3"

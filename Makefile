@@ -1,4 +1,4 @@
-INSTRUMENT ?= kaseta
+INSTRUMENT ?= traky
 
 .PHONY: all
 all: format clippy test
@@ -10,7 +10,7 @@ check-format:
 	cd ui && cargo fmt --all -- --check
 	cd control && cargo fmt --all -- --check
 	cd instruments/interface && cargo fmt --all -- --check
-	cd instruments/kaseta && cargo fmt --all -- --check
+	cd instruments/traky && cargo fmt --all -- --check
 
 .PHONY: format
 format:
@@ -19,24 +19,24 @@ format:
 	cd ui && cargo fmt --all
 	cd control && cargo fmt --all
 	cd instruments/interface && cargo fmt --all
-	cd instruments/kaseta && cargo fmt --all
+	cd instruments/traky && cargo fmt --all
 
 .PHONY: clippy
 clippy:
-	cd eurorack && cargo clippy --all --features kaseta -- -D warnings
+	cd eurorack && cargo clippy --all --features traky -- -D warnings
 	cd peripherals && cargo clippy --all --features defmt -- -D warnings
 	cd ui && cargo clippy --all --features defmt -- -D warnings
 	cd control && cargo clippy --all --features defmt -- -D warnings
 	cd instruments/interface && cargo clippy --all -- -D warnings
-	cd instruments/kaseta && cargo clippy --all --features defmt -- -D warnings
-	cd instruments/kaseta && cargo check --benches --all
+	cd instruments/traky && cargo clippy --all --features defmt -- -D warnings
+	cd instruments/traky && cargo check --benches --all
 
 .PHONY: test
 test:
 	cd peripherals && cargo test --features defmt --all
 	cd ui && cargo test --features defmt --all
 	cd control && cargo test --features defmt --all
-	cd instruments/kaseta && cargo test --all --features defmt
+	cd instruments/traky && cargo test --all --features defmt
 
 .PHONY: update
 update:
@@ -45,7 +45,7 @@ update:
 	cd ui && cargo update
 	cd control && cargo update
 	cd instruments/interface && cargo update
-	cd instruments/kaseta && cargo update
+	cd instruments/traky && cargo update
 
 .PHONY: test-embedded
 test-embedded:

@@ -386,24 +386,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "kaseta-control"
-version = "0.3.0"
-dependencies = [
- "kaseta-dsp",
- "libm",
- "micromath 1.1.1",
-]
-
-[[package]]
-name = "kaseta-dsp"
-version = "0.3.0"
-dependencies = [
- "libm",
- "micromath 2.0.0",
- "sirena",
-]
-
-[[package]]
 name = "lazy_static"
 version = "1.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -566,7 +548,7 @@ dependencies = [
  "panic-probe",
  "proton-control",
  "proton-instruments-interface",
- "proton-instruments-kaseta",
+ "proton-instruments-traky",
  "proton-peripherals",
  "proton-ui",
  "ssd1306",
@@ -584,11 +566,9 @@ dependencies = [
 ]
 
 [[package]]
-name = "proton-instruments-kaseta"
+name = "proton-instruments-traky"
 version = "0.6.0"
 dependencies = [
- "kaseta-control",
- "kaseta-dsp",
  "proton-control",
  "proton-instruments-interface",
  "proton-ui",
@@ -735,6 +715,7 @@ checksum = "388a1df253eca08550bef6c72392cfe7c30914bf41df5269b68cbd6ff8f570a3"
 [[package]]
 name = "sirena"
 version = "0.1.0"
+source = "git+https://github.com/zlosynth/sirena.git#0ba4c3212c8aa02eac5feb5bd9b49080886ac0b8"
 dependencies = [
  "heapless",
  "libm",
