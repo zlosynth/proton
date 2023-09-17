@@ -24,6 +24,7 @@ impl InstrumentTrait for Instrument {
     type Command = Command;
 
     fn new(_sample_rate: u32, _memory_manager: &mut MemoryManager) -> Self {
+        defmt::info!("NEW");
         Self {}
     }
 
