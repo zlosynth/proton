@@ -28,7 +28,7 @@ clippy:
 	cd ui && cargo clippy --all --features defmt -- -D warnings
 	cd control && cargo clippy --all --features defmt -- -D warnings
 	cd instruments/interface && cargo clippy --all -- -D warnings
-	cd instruments/traky && cargo clippy --all --features defmt -- -D warnings
+	cd instruments/traky && cargo clippy --all -- -D warnings
 	cd instruments/traky && cargo check --benches --all
 
 .PHONY: test
@@ -36,7 +36,7 @@ test:
 	cd peripherals && cargo test --features defmt --all
 	cd ui && cargo test --features defmt --all
 	cd control && cargo test --features defmt --all
-	cd instruments/traky && cargo test --all --features defmt
+	cd instruments/traky && cargo test --all
 
 .PHONY: update
 update:
