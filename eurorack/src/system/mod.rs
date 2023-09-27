@@ -6,10 +6,12 @@ pub mod encoder;
 pub mod gate_output;
 pub mod led;
 pub mod randomizer;
+pub mod sdmmc;
 
 use daisy::sdram::SDRAM;
 use hal::adc::{Adc, AdcSampleTime, Enabled, Resolution};
 use hal::delay::DelayFromCountDownTimer;
+use hal::gpio::Speed;
 use hal::pac::CorePeripherals;
 use hal::pac::Peripherals as DevicePeripherals;
 use hal::pac::{ADC1, ADC2};
@@ -25,6 +27,7 @@ use encoder::{EncoderButton, EncoderRotary};
 use gate_output::{GateOutput1, GateOutput2, GateOutput3};
 use led::Led;
 use randomizer::Randomizer;
+use sdmmc::SDMMC;
 
 pub struct System {
     pub audio: Audio,
@@ -47,6 +50,7 @@ pub struct System {
     pub adc_1: Adc<ADC1, Enabled>,
     pub adc_2: Adc<ADC2, Enabled>,
     pub sdram: SDRAM,
+    pub sdmmc: SDMMC,
     pub randomizer: Randomizer,
 }
 
@@ -123,6 +127,54 @@ impl System {
             (adc_1.enable(), adc_2.enable())
         };
 
+        let sdmmc = {
+            let (clk, cmd, d0, d1, d2, d3) = (
+                pins.GPIO.PIN_6,
+                pins.GPIO.PIN_5,
+                pins.GPIO.PIN_4,
+                pins.GPIO.PIN_3,
+                pins.GPIO.PIN_2,
+                pins.GPIO.PIN_1,
+            );
+
+            let clk = clk
+                .into_alternate::<12>()
+                .internal_pull_up(false)
+                .speed(Speed::VeryHigh);
+            let clk = clk
+                .into_alternate()
+                .internal_pull_up(false)
+                .speed(Speed::VeryHigh);
+            let cmd = cmd
+                .into_alternate()
+                .internal_pull_up(true)
+                .speed(Speed::VeryHigh);
+            let d0 = d0
+                .into_alternate()
+                .internal_pull_up(true)
+                .speed(Speed::VeryHigh);
+            let d1 = d1
+                .into_alternate()
+                .internal_pull_up(true)
+                .speed(Speed::VeryHigh);
+            let d2 = d2
+                .into_alternate()
+                .internal_pull_up(true)
+                .speed(Speed::VeryHigh);
+            let d3 = d3
+                .into_alternate()
+                .internal_pull_up(true)
+                .speed(Speed::VeryHigh);
+
+            let sdmmc: SDMMC = dp.SDMMC1.sdmmc(
+                (clk, cmd, d0, d1, d2, d3),
+                ccdr.peripheral.SDMMC1,
+                &ccdr.clocks,
+            );
+
+            sdmmc
+        };
+
         let randomizer = Randomizer::new(dp.RNG.constrain(ccdr.peripheral.RNG, &ccdr.clocks));
 
         Self {
@@ -146,6 +198,7 @@ impl System {
             adc_1,
             adc_2,
             sdram,
+            sdmmc,
             randomizer,
         }
     }
