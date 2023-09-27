@@ -166,11 +166,20 @@ impl System {
                 .internal_pull_up(true)
                 .speed(Speed::VeryHigh);
 
-            let sdmmc: SDMMC = dp.SDMMC1.sdmmc(
+            let mut sdmmc: SDMMC = dp.SDMMC1.sdmmc(
                 (clk, cmd, d0, d1, d2, d3),
                 ccdr.peripheral.SDMMC1,
                 &ccdr.clocks,
             );
+
+            let bus_frequency = 50.MHz();
+
+            for _ in 0..10 {
+                if sdmmc.init(bus_frequency).is_ok() {
+                    break;
+                }
+                cortex_m::asm::delay(480_000_000);
+            }
 
             sdmmc
         };
