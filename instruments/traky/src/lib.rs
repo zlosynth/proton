@@ -3,6 +3,7 @@
 use core::convert::TryFrom;
 use core::fmt;
 
+use embedded_sdmmc::blockdevice::BlockDevice;
 use proton_control::input_snapshot::InputSnapshot;
 use proton_instruments_interface::{
     Instrument as InstrumentTrait, MemoryManager, Rand as ProtonRandomizer,
@@ -23,7 +24,11 @@ fn writter(destination: &mut dyn fmt::Write, value: f32) {
 impl InstrumentTrait for Instrument {
     type Command = Command;
 
-    fn new(_sample_rate: u32, _memory_manager: &mut MemoryManager) -> Self {
+    fn new(
+        _sample_rate: u32,
+        _memory_manager: &mut MemoryManager,
+        _sd: &mut impl BlockDevice<Error = impl core::fmt::Debug>,
+    ) -> Self {
         defmt::info!("NEW");
         Self {}
     }

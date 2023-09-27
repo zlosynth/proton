@@ -13,3 +13,4 @@ proton-instruments-interface = { path = "../interface" }
 proton-ui = { path = "../../ui" }
 proton-control = { path = "../../control" }
 defmt = "0.3"
+embedded-sdmmc = "0.4"

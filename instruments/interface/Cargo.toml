@@ -12,3 +12,4 @@ publish = false
 proton-ui = { path = "../../ui" }
 proton-control = { path = "../../control" }
 sirena = { git = "https://github.com/zlosynth/sirena.git" }
+embedded-sdmmc = "0.4"

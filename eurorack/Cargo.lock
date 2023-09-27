@@ -607,6 +607,7 @@ dependencies = [
 name = "proton-instruments-interface"
 version = "0.6.0"
 dependencies = [
+ "embedded-sdmmc",
  "proton-control",
  "proton-ui",
  "sirena",
@@ -617,6 +618,7 @@ name = "proton-instruments-traky"
 version = "0.6.0"
 dependencies = [
  "defmt",
+ "embedded-sdmmc",
  "proton-control",
  "proton-instruments-interface",
  "proton-ui",

@@ -1,12 +1,18 @@
 #![no_std]
 
+use embedded_sdmmc::blockdevice::BlockDevice;
+
 use proton_control::input_snapshot::InputSnapshot;
 use proton_ui::reaction::Reaction;
 use proton_ui::state::State;
 
 pub trait Instrument {
     type Command: TryFrom<Reaction>;
-    fn new(sample_rate: u32, memory_manager: &mut MemoryManager) -> Self;
+    fn new(
+        sample_rate: u32,
+        memory_manager: &mut MemoryManager,
+        sdmmc: &mut impl BlockDevice<Error = impl core::fmt::Debug>,
+    ) -> Self;
     fn state(&self) -> State;
     fn process(&mut self, buffer: &mut [(f32, f32)], randomizer: &mut impl Rand);
     fn execute(&mut self, command: Self::Command);

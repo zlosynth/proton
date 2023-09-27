@@ -137,7 +137,11 @@ mod app {
                 };
                 MemoryManager::from(ram_slice)
             };
-            Instrument::new(SAMPLE_RATE, &mut memory_manager)
+            Instrument::new(
+                SAMPLE_RATE,
+                &mut memory_manager,
+                &mut system.sdmmc.sdmmc_block_device(),
+            )
         };
         let state = instrument.state();
         #[allow(clippy::needless_borrow)] // It's not needless, it fails without it
