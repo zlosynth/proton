@@ -1,5 +1,6 @@
-use daisy::hal::prelude::_stm32h7xx_hal_rng_RngCore;
-use daisy::hal::rng::Rng;
+use hal::prelude::_stm32h7xx_hal_rng_RngCore;
+use hal::rng::Rng;
+use stm32h7xx_hal as hal;
 
 use proton_instruments_interface::Rand;
 

@@ -7,7 +7,6 @@ pub mod gate_output;
 pub mod led;
 pub mod randomizer;
 
-use daisy::hal;
 use daisy::sdram::SDRAM;
 use hal::adc::{Adc, AdcSampleTime, Enabled, Resolution};
 use hal::delay::DelayFromCountDownTimer;
@@ -15,6 +14,7 @@ use hal::pac::CorePeripherals;
 use hal::pac::Peripherals as DevicePeripherals;
 use hal::pac::{ADC1, ADC2};
 use hal::prelude::*;
+use stm32h7xx_hal as hal;
 use systick_monotonic::Systick;
 
 use audio::Audio;
@@ -111,13 +111,14 @@ impl System {
             let (mut adc_1, mut adc_2) = hal::adc::adc12(
                 dp.ADC1,
                 dp.ADC2,
+                4.MHz(),
                 &mut delay,
                 ccdr.peripheral.ADC12,
                 &ccdr.clocks,
             );
-            adc_1.set_resolution(Resolution::SIXTEENBIT);
+            adc_1.set_resolution(Resolution::SixteenBit);
             adc_1.set_sample_time(AdcSampleTime::T_16);
-            adc_2.set_resolution(Resolution::SIXTEENBIT);
+            adc_2.set_resolution(Resolution::SixteenBit);
             adc_2.set_sample_time(AdcSampleTime::T_16);
             (adc_1.enable(), adc_2.enable())
         };

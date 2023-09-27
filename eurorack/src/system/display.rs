@@ -1,4 +1,3 @@
-use daisy::hal;
 use fugit::RateExtU32;
 use hal::gpio;
 use hal::hal::blocking::delay::DelayMs;
@@ -6,6 +5,7 @@ use hal::pac;
 use hal::prelude::_stm32h7xx_hal_spi_SpiExt;
 use hal::spi::{self, Spi};
 use ssd1306::{mode::BufferedGraphicsMode, prelude::*, Ssd1306};
+use stm32h7xx_hal as hal;
 
 pub type Display = Ssd1306<
     SPIInterface<

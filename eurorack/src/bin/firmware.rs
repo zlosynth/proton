@@ -11,10 +11,10 @@ mod app {
     use heapless::spsc::{Consumer, Producer, Queue};
     use systick_monotonic::Systick;
 
-    use daisy::hal;
-    use daisy::led::{Led, LedUser};
+    use daisy::led::LedUser;
     use hal::adc::{Adc, Enabled};
     use hal::pac::{ADC1, ADC2};
+    use stm32h7xx_hal as hal;
 
     #[cfg(feature = "traky")]
     use proton_instruments_traky::Instrument;
@@ -144,7 +144,7 @@ mod app {
         let view: View = (&state).into();
 
         update_display::spawn(view).ok().unwrap();
-        set_indicator::spawn(true).unwrap();
+        toggle_indicator::spawn().unwrap();
         read_user_controls::spawn().unwrap();
         read_control_input::spawn().unwrap();
         update_state::spawn().unwrap();
@@ -254,13 +254,8 @@ mod app {
     }
 
     #[task(local = [led])]
-    fn set_indicator(cx: set_indicator::Context, on: bool) {
-        if on {
-            cx.local.led.on();
-            set_indicator::spawn_after(1.secs(), false).unwrap();
-        } else {
-            cx.local.led.off();
-            set_indicator::spawn_after(1.secs(), true).unwrap();
-        }
+    fn toggle_indicator(cx: toggle_indicator::Context) {
+        cx.local.led.toggle();
+        toggle_indicator::spawn_after(1.secs()).unwrap();
     }
 }
