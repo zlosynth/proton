@@ -361,6 +361,7 @@ version = "0.6.0"
 dependencies = [
  "defmt",
  "embedded-sdmmc",
+ "micromath 2.0.0",
  "proton-control",
  "proton-instruments-interface",
  "proton-ui",

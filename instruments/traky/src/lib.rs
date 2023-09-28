@@ -3,6 +3,8 @@
 use core::convert::TryFrom;
 use core::fmt;
 
+use micromath::F32Ext as _;
+
 use embedded_sdmmc::blockdevice::BlockDevice;
 use embedded_sdmmc::{Controller, Mode, VolumeIdx};
 use proton_control::input_snapshot::InputSnapshot;
@@ -19,7 +21,8 @@ const MAX_SAMPLE_LENGTH_IN_SECONDS: u32 = 20;
 
 pub struct Instrument {
     sample: Sample,
-    pointer: usize,
+    pointer: f32,
+    speed: f32,
 }
 
 fn writter(destination: &mut dyn fmt::Write, value: f32) {
@@ -43,7 +46,11 @@ impl InstrumentTrait for Instrument {
 
         defmt::info!("Initialization complete");
 
-        Self { sample, pointer: 0 }
+        Self {
+            sample,
+            pointer: 0.0,
+            speed: 0.0,
+        }
     }
 
     fn state(&self) -> State {
@@ -55,17 +62,35 @@ impl InstrumentTrait for Instrument {
 
     fn process(&mut self, buffer: &mut [(f32, f32)], _randomizer: &mut impl ProtonRandomizer) {
         for tuple in buffer.iter_mut() {
-            *tuple = self.sample.buffer[self.pointer];
-            self.pointer += 1;
-            if self.pointer == self.sample.length {
-                self.pointer = 0;
+            let pointer_usize = self.pointer as usize;
+            let tuple_a = self.sample.buffer[pointer_usize];
+            let tuple_b = if pointer_usize + 1 >= self.sample.length {
+                self.sample.buffer[0]
+            } else {
+                self.sample.buffer[pointer_usize + 1]
+            };
+
+            let new_tuple = {
+                (
+                    tuple_a.0 + (tuple_b.0 - tuple_a.0) * self.pointer.fract(),
+                    tuple_a.1 + (tuple_b.1 - tuple_a.1) * self.pointer.fract(),
+                )
+            };
+            *tuple = new_tuple;
+
+            // TODO: This should be done based on the pot
+            self.pointer += 0.5 + 0.5 * self.speed;
+            if self.pointer as usize >= self.sample.length {
+                self.pointer = self.pointer.fract();
             }
         }
     }
 
     fn execute(&mut self, _command: Command) {}
 
-    fn update_control(&mut self, _snapshot: InputSnapshot) {}
+    fn update_control(&mut self, snapshot: InputSnapshot) {
+        self.speed = 1.0 - snapshot.pot.value;
+    }
 }
 
 fn prepare_empty_sample(memory_manager: &mut MemoryManager, sample_rate: u32) -> Sample {
