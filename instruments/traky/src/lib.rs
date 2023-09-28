@@ -78,7 +78,6 @@ impl InstrumentTrait for Instrument {
             };
             *tuple = new_tuple;
 
-            // TODO: This should be done based on the pot
             self.pointer += 0.5 + 0.5 * self.speed;
             if self.pointer as usize >= self.sample.length {
                 self.pointer = self.pointer.fract();
