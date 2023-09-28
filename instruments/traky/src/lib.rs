@@ -4,6 +4,7 @@ use core::convert::TryFrom;
 use core::fmt;
 
 use embedded_sdmmc::blockdevice::BlockDevice;
+use embedded_sdmmc::{Controller, Mode, VolumeIdx};
 use proton_control::input_snapshot::InputSnapshot;
 use proton_instruments_interface::{
     Instrument as InstrumentTrait, MemoryManager, Rand as ProtonRandomizer,
@@ -14,7 +15,12 @@ use proton_ui::state::*;
 const NAME: &str = "Traky";
 const VOLUME_ATTRIBUTE: &str = "volume";
 
-pub struct Instrument {}
+const MAX_SAMPLE_LENGTH_IN_SECONDS: u32 = 10;
+
+pub struct Instrument {
+    sample: Sample,
+    pointer: usize,
+}
 
 fn writter(destination: &mut dyn fmt::Write, value: f32) {
     let value = (value * 100.0) as u32;
@@ -25,12 +31,23 @@ impl InstrumentTrait for Instrument {
     type Command = Command;
 
     fn new(
-        _sample_rate: u32,
-        _memory_manager: &mut MemoryManager,
-        _sd: &mut impl BlockDevice<Error = impl core::fmt::Debug>,
+        sample_rate: u32,
+        memory_manager: &mut MemoryManager,
+        sd: &mut impl BlockDevice<Error = impl core::fmt::Debug>,
     ) -> Self {
-        defmt::info!("NEW");
-        Self {}
+        defmt::info!("Allocating buffer");
+        let mut sample = Sample::from_buffer(
+            memory_manager
+                .allocate(upper_power_of_two(sample_rate * MAX_SAMPLE_LENGTH_IN_SECONDS) as usize)
+                .unwrap(),
+        );
+
+        defmt::info!("Loading sample from SD");
+        load_sample_from_sd(sd, &mut sample);
+
+        defmt::info!("Initialization complete");
+
+        Self { sample, pointer: 0 }
     }
 
     fn state(&self) -> State {
@@ -41,13 +58,11 @@ impl InstrumentTrait for Instrument {
     }
 
     fn process(&mut self, buffer: &mut [(f32, f32)], _randomizer: &mut impl ProtonRandomizer) {
-        for chunk in buffer.chunks_exact_mut(32) {
-            let mut buffer = [(0.0, 0.0); 32];
-            for (i, x) in chunk.iter_mut().enumerate() {
-                buffer[i] = *x;
-            }
-            for (i, x) in buffer.iter_mut().enumerate() {
-                chunk[i] = *x;
+        for tuple in buffer.iter_mut() {
+            *tuple = self.sample.buffer[self.pointer];
+            self.pointer += 1;
+            if self.pointer == self.sample.length {
+                self.pointer = 0;
             }
         }
     }
@@ -55,6 +70,36 @@ impl InstrumentTrait for Instrument {
     fn execute(&mut self, _command: Command) {}
 
     fn update_control(&mut self, _snapshot: InputSnapshot) {}
+}
+
+fn load_sample_from_sd(
+    sd: &mut impl BlockDevice<Error = impl core::fmt::Debug>,
+    sample: &mut Sample,
+) {
+    let mut fat = Controller::new(sd, TimeSource);
+    let mut volume = fat.get_volume(VolumeIdx(0)).unwrap();
+    let root_dir = fat.open_root_dir(&volume).unwrap();
+    let mut file = fat
+        .open_file_in_dir(&mut volume, &root_dir, "project.raw", Mode::ReadOnly)
+        .unwrap();
+
+    let mut buffer = [0u8; 512 * 2 * 64];
+    while !file.eof() {
+        let num_read = fat.read(&volume, &mut file, &mut buffer).unwrap();
+        let buffer_tuple = {
+            let pointer = &buffer as *const _ as *const (f32, f32);
+            let buffer_tuple =
+                unsafe { core::slice::from_raw_parts::<(f32, f32)>(pointer, num_read / 8) };
+            buffer_tuple
+        };
+        for pair in buffer_tuple {
+            sample.buffer[sample.length] = *pair;
+            sample.length += 1;
+        }
+    }
+
+    fat.close_file(&volume, file).unwrap();
+    fat.close_dir(&volume, root_dir);
 }
 
 #[derive(Clone, Copy, Debug, PartialEq)]
@@ -69,6 +114,55 @@ impl TryFrom<Reaction> for Command {
         match other {
             Reaction::SetValue(VOLUME_ATTRIBUTE, value) => Ok(Command::SetVolume(value)),
             _ => Err(()),
+        }
+    }
+}
+
+struct Sample {
+    pub buffer: &'static mut [(f32, f32)],
+    pub length: usize,
+}
+
+impl Sample {
+    fn from_buffer(buffer_f32: &'static mut [f32]) -> Self {
+        let pointer = buffer_f32 as *const _ as *mut (f32, f32);
+        let buffer_tuple =
+            unsafe { core::slice::from_raw_parts_mut::<(f32, f32)>(pointer, buffer_f32.len() / 2) };
+        Self {
+            buffer: buffer_tuple,
+            length: 0,
+        }
+    }
+}
+
+fn upper_power_of_two(mut n: u32) -> u32 {
+    if n == 0 {
+        return 0;
+    }
+
+    n -= 1;
+    n |= n >> 1;
+    n |= n >> 2;
+    n |= n >> 4;
+    n |= n >> 8;
+    n |= n >> 16;
+    n += 1;
+    n
+}
+
+pub struct TimeSource;
+
+// This is just a placeholder TimeSource. In a real world application
+// one would probably use the RTC to provide time.
+impl embedded_sdmmc::TimeSource for TimeSource {
+    fn get_timestamp(&self) -> embedded_sdmmc::Timestamp {
+        embedded_sdmmc::Timestamp {
+            year_since_1970: 0,
+            zero_indexed_month: 0,
+            zero_indexed_day: 0,
+            hours: 0,
+            minutes: 0,
+            seconds: 0,
         }
     }
 }
