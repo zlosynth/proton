@@ -15,7 +15,7 @@ use proton_ui::state::*;
 const NAME: &str = "Traky";
 const VOLUME_ATTRIBUTE: &str = "volume";
 
-const MAX_SAMPLE_LENGTH_IN_SECONDS: u32 = 10;
+const MAX_SAMPLE_LENGTH_IN_SECONDS: u32 = 20;
 
 pub struct Instrument {
     sample: Sample,
@@ -36,11 +36,7 @@ impl InstrumentTrait for Instrument {
         sd: &mut impl BlockDevice<Error = impl core::fmt::Debug>,
     ) -> Self {
         defmt::info!("Allocating buffer");
-        let mut sample = Sample::from_buffer(
-            memory_manager
-                .allocate(upper_power_of_two(sample_rate * MAX_SAMPLE_LENGTH_IN_SECONDS) as usize)
-                .unwrap(),
-        );
+        let mut sample = prepare_empty_sample(memory_manager, sample_rate);
 
         defmt::info!("Loading sample from SD");
         load_sample_from_sd(sd, &mut sample);
@@ -70,6 +66,14 @@ impl InstrumentTrait for Instrument {
     fn execute(&mut self, _command: Command) {}
 
     fn update_control(&mut self, _snapshot: InputSnapshot) {}
+}
+
+fn prepare_empty_sample(memory_manager: &mut MemoryManager, sample_rate: u32) -> Sample {
+    Sample::from_buffer(
+        memory_manager
+            .allocate(upper_power_of_two(2 * sample_rate * MAX_SAMPLE_LENGTH_IN_SECONDS) as usize)
+            .unwrap(),
+    )
 }
 
 fn load_sample_from_sd(
