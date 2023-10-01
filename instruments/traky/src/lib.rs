@@ -1,5 +1,7 @@
 #![no_std]
 
+mod dynamic_buffer;
+
 use core::convert::TryFrom;
 use core::fmt;
 
