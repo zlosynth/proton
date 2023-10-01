@@ -1,6 +1,6 @@
 #![no_std]
 
-mod dynamic_buffer;
+mod paginated_buffer;
 
 use core::convert::TryFrom;
 use core::fmt;
