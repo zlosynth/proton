@@ -41,7 +41,8 @@ defmt = "0.3"
 defmt-rtt = "0.3"
 panic-probe = { version = "0.3", features = ["print-defmt"] }
 stm32h7xx-hal = { version = "0.14", features = ["stm32h750v", "rt", "revision_v", "sdmmc", "sdmmc-fatfs"] }
-daisy = { version = "0.8", features = ["seed_1_1"] }
+# daisy = { version = "0.8", features = ["seed_1_1"] }
+daisy = { path = "../../daisy", features = ["seed_1_1", "sampling_rate_96khz"] }
 display-interface-spi = "0.4"
 ssd1306 = "0.7.0"
 fugit = "0.3"

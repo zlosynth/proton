@@ -1,5 +1,9 @@
 #![no_std]
 
+#[cfg(test)]
+#[macro_use]
+extern crate std;
+
 mod paginated_buffer;
 
 use core::convert::TryFrom;
